@@ -98,7 +98,10 @@ SEQUENCES = {
         "s@3.0:0.8",
         "c:0.8",
     ],
-    # Scenario 1 shop, first item selected/purchased-confirm screen.
+    # Scenario 1 shop, first item selected on the fully drawn purchase list.
+    # The list transition is substantially slower than ordinary menu redraws;
+    # wait before a caller starts paging or the same confirmation can spill
+    # into the first item and open its purchase popup.
     "shop-buy-list": [
         "start:2.0",
         "start:1.0",
@@ -110,7 +113,7 @@ SEQUENCES = {
         "down:0.8",
         "down:0.8",
         "c:0.8",
-        "c:0.8",
+        "c:2.5",
     ],
     # Scenario 1 shop, one step past the buy list. This enters the follow-up
     # item/possession path and is not the first shop title check.

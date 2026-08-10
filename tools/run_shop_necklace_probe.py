@@ -30,6 +30,10 @@ ACCEPTED = {
     27: ROOT / "captures/run/shop_overflow_necklace/corrected_id27.png",
     28: ROOT / "captures/run/shop_overflow_necklace/corrected_id28.png",
 }
+ACCEPTED_SHA256 = {
+    27: "a2d886f9b9519513966b7ef7f4c0a93391cae54c48a4796fe02b11bd1119bb87",
+    28: "ddfe81f821aabb7200b2045b1ce3e978e67fad1b702403a0e9875d73168dbfea",
+}
 
 
 def sha256(path: Path) -> str:
@@ -97,16 +101,24 @@ def run_probe(args: argparse.Namespace) -> dict[str, object]:
         for item_id in ITEM_IDS:
             actual = capture_path(prefix, item_id)
             accepted = ACCEPTED[item_id]
+            actual_sha256 = sha256(actual) if actual.is_file() else None
+            accepted_file_sha256 = (
+                sha256(accepted) if accepted.is_file() else None
+            )
+            if (
+                accepted_file_sha256 is not None
+                and accepted_file_sha256 != ACCEPTED_SHA256[item_id]
+            ):
+                raise ValueError(f"accepted shop capture changed: {accepted}")
             rows.append({
                 "item_id": item_id,
                 "label": ITEM_LABELS[item_id],
                 "capture": str(actual.relative_to(ROOT)),
-                "capture_sha256": sha256(actual) if actual.is_file() else None,
+                "capture_sha256": actual_sha256,
                 "accepted_capture": str(accepted.relative_to(ROOT)),
-                "accepted_sha256": sha256(accepted),
-                "pixel_exact": (
-                    actual.is_file() and actual.read_bytes() == accepted.read_bytes()
-                ),
+                "accepted_capture_present": accepted.is_file(),
+                "accepted_sha256": ACCEPTED_SHA256[item_id],
+                "pixel_exact": actual_sha256 == ACCEPTED_SHA256[item_id],
             })
         passed = completed.returncode == 0 and all(
             row["pixel_exact"] for row in rows

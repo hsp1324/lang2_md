@@ -12901,8 +12901,14 @@ contains 57 safe syllables as documented below and in
   `65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4`;
   hard `0635`,
   `5dc9b5502210b2eb86ea16eff3bd8d047fa4b952f817a3366c4cbd6dd3b49dcf`.
-  BPS metadata is `patches/v1.3.4.json`. The patcher, workflow, README,
-  distribution guide, and ROM profile metadata all target v1.3.4.
+  BPS metadata is `patches/v1.3.4.json`. The patcher source, README,
+  distribution guide, and ROM profile metadata all target v1.3.4. The local
+  HTTPS token could not push a workflow edit, so the connected GitHub
+  integration committed the same reviewed update as `62f635a6`; the Windows
+  workflow now builds and verifies the v1.3.4 EXE. Run `31389912475` succeeded
+  from the `v1.3.4` tag, and the public GitHub Release contains the EXE, three
+  BPS files, and `SHA256SUMS.txt`. The EXE SHA-256 is
+  `3f5fb9732e4dbd33b7389e517b8462b467c6990485a13fbe447283ff4923c2f5`.
 - Full historical unittest discovery remains unsuitable as a release gate:
   many audit modules intentionally require ignored old captures/candidate ROMs
   or lock superseded non-release checksums and sprite experiments. Those
@@ -12911,3 +12917,48 @@ contains 57 safe syllables as documented below and in
   patch reconstruction, version checks, and the hash-bound isolated play
   manifest. Do not treat missing archived local evidence as a gameplay
   regression.
+
+### v1.3.4 all-scenario isolated replay follow-up (2026-08-10)
+
+- The release commit is `70be9f5ab24399afda2f4f2844773ae6942261c7` and
+  was confirmed byte-for-byte at `origin/main` before this follow-up.
+- Pure, normal, and hard each entered all 31 scenarios, opened a real player
+  command, ended Turn 1, and reached either Turn 2 or the source-consistent
+  no-action defeat return. This is 93/93 profile-scenario runs. Pure and normal
+  reached Turn 2 in 23 cases and naturally returned from Scenarios
+  6/11/13/25/26/27/30/31; hard reached Turn 2 in 24 cases because Scenario 11
+  survives its first hard turn, and naturally returned from
+  6/13/25/26/27/30/31.
+- Normal and hard each pass all 31 preparation matrices and all 31 real-move
+  gray acted-sprite matrices: 62/62 for each surface family. Scenario identity,
+  preparation glyph ownership, all 16 mercenaries over six pages, Pike and
+  Monk active/acted caches, and the complete battle sprite cache also pass.
+- The separate shop runner had not found a ROM regression. Its fixed startup
+  sequence waited only 0.8 seconds for the item list and let the confirmation
+  spill into the first Dagger purchase. Waiting 2.5 seconds produces fresh
+  normal and hard Cross/Necklace captures that are pixel-exact to the accepted
+  SHA-256 values `a2d886f9...` and `ddfe81f8...`. The validator now uses the
+  tracked acceptance hashes even when ignored historical PNG copies are not
+  present.
+- Fresh v1.3.4 normal/hard completion diagnostics pass Scenarios 1..10,
+  14..17, and 21..31: 50 profile-scenario result/ending pairs including the
+  separate Scenario 28..31 result/SAVE runs. Scenarios 11..13 and 18..20 retain
+  twelve exact-current result/SAVE pairs because their ignored continuation
+  GST inputs are no longer local; the manifest and user-facing claims keep
+  these carried pairs distinct from fresh v1.3.4 completion play. Every one of
+  those six scenarios still has fresh v1.3.4 first-turn and full-surface play.
+- The Scenario 27 runner exposed two automation defects, not ROM defects. It
+  imported an ignored historical `875.png` to detect `Fin`, and its 4,200-frame
+  bound stopped before the expanded v1.3.4 epilogue roster completed. Detection
+  now uses the locked reviewed Fin SHA-256 directly and the bound is 5,200.
+  Fresh uninterrupted normal and hard selector runs defeated Bernhardt through
+  ordinary battle at runtime HP0, traversed all epilogues and credits, and
+  reached the identical Fin at frames 4,750 and 4,718 respectively. One normal
+  run that exhausted eight same-quicksave combat RNG attempts is retained as a
+  failed attempt and contributes no passing coverage.
+- All first-turn, full-surface, focused-probe, result, and ending evidence is
+  bound by `localization/v134_all_scenario_replay.json`; strict local
+  verification checks 92 files and reports 93 first-turn pairs, 62 preparation
+  pairs, 62 gray acted pairs, 15 focused component reports, 50 fresh
+  result/ending pairs, twelve separately carried result pairs, and 62 total
+  normal/hard result-surface pairs.

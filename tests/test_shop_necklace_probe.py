@@ -2,6 +2,7 @@ from pathlib import Path
 import unittest
 
 from tools import run_shop_necklace_probe as probe
+from tools.run_blastem_sequence import SEQUENCES
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,12 +18,17 @@ class ShopNecklaceProbeTests(unittest.TestCase):
 
     def test_accepted_runtime_captures_are_hash_locked(self) -> None:
         self.assertEqual(
-            [probe.sha256(probe.ACCEPTED[item_id]) for item_id in probe.ITEM_IDS],
+            [probe.ACCEPTED_SHA256[item_id] for item_id in probe.ITEM_IDS],
             [
                 "a2d886f9b9519513966b7ef7f4c0a93391cae54c48a4796fe02b11bd1119bb87",
                 "ddfe81f821aabb7200b2045b1ce3e978e67fad1b702403a0e9875d73168dbfea",
             ],
         )
+        for item_id, path in probe.ACCEPTED.items():
+            if path.is_file():
+                self.assertEqual(
+                    probe.sha256(path), probe.ACCEPTED_SHA256[item_id]
+                )
 
     def test_capture_paths_are_deterministic(self) -> None:
         prefix = ROOT / "tmp/shop/item"
@@ -30,6 +36,9 @@ class ShopNecklaceProbeTests(unittest.TestCase):
             probe.capture_path(prefix, 28),
             ROOT / "tmp/shop/item_id28.png",
         )
+
+    def test_shop_list_waits_for_full_redraw(self) -> None:
+        self.assertEqual(SEQUENCES["shop-buy-list"][-1], "c:2.5")
 
 
 if __name__ == "__main__":

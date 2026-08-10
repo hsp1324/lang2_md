@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "release": "v1.3.4",
+  "status": "reviewed_pass",
+  "reviewed_on": "2026-08-10",
+  "method": {
+    "emulator": "BlastEm",
+    "display": "isolated Xvfb",
+    "renderer": "software",
+    "physical_desktop_used": false
+  },
+  "scenarios": [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+    17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+  ],
+  "first_turn_replay": {
+    "description": "Each release profile entered every scenario, opened a real player command, ended Turn 1, and reached either Turn 2 or the scenario's natural no-action defeat return.",
+    "profiles": [
+      {
+        "profile": "pure",
+        "source_summaries": [
+          {
+            "path": "tmp/v134-full-replay/first-turn-pure-observe/summary.json",
+            "sha256": "bbee971c7fe2f7367e251ead0fb9581a584c17684a4abbd487e47fa613aa657e"
+          }
+        ],
+        "passed_scenarios": [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+          17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+        ],
+        "endpoint_counts": {
+          "turn_2_command": 23,
+          "defeat_return_title_turn_1": 8
+        },
+        "natural_defeat_scenarios": [6, 11, 13, 25, 26, 27, 30, 31]
+      },
+      {
+        "profile": "normal",
+        "source_summaries": [
+          {
+            "path": "tmp/v134-full-replay/first-turn2-normal/summary.json",
+            "sha256": "8fa16f6feff580c401a265a878c87fb70866922911a984cee3483487d184a963"
+          },
+          {
+            "path": "tmp/v134-full-replay/first-turn-retry-normal/summary.json",
+            "sha256": "69bd96d64a33e00854606bf8d8c95d94b371784e9255f2a65f159beda2cc8ca5"
+          }
+        ],
+        "passed_scenarios": [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+          17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+        ],
+        "endpoint_counts": {
+          "turn_2_command": 23,
+          "defeat_return_title_turn_1": 8
+        },
+        "natural_defeat_scenarios": [6, 11, 13, 25, 26, 27, 30, 31]
+      },
+      {
+        "profile": "hard",
+        "source_summaries": [
+          {
+            "path": "tmp/v134-full-replay/first-turn2-hard/summary.json",
+            "sha256": "9303369bc775cac7e99ba5cfdaca1ab38c65fe71b39d0fef75e8539e563f81a7"
+          },
+          {
+            "path": "tmp/v134-full-replay/first-turn-retry-hard/summary.json",
+            "sha256": "93e468b35bcde0ca318a146646c854d50a986c505e858895e03bf790dc90c04c"
+          }
+        ],
+        "passed_scenarios": [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+          17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+        ],
+        "endpoint_counts": {
+          "turn_2_command": 24,
+          "defeat_return_title_turn_1": 7
+        },
+        "natural_defeat_scenarios": [6, 13, 25, 26, 27, 30, 31]
+      }
+    ]
+  },
+  "full_surface_replay": {
+    "profiles": ["normal", "hard"],
+    "scenarios": [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+      17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+    ],
+    "component_reports": [
+      {
+        "kind": "preparation",
+        "profile": "normal",
+        "path": "tmp/v134-full-replay/full-surface/v134-final-all31-r2/preparation-normal.json",
+        "sha256": "2c9ef221e634dbb8c57f45fa27cf346034cd79c75de8a18be287cb9fd1454aeb"
+      },
+      {
+        "kind": "preparation",
+        "profile": "hard",
+        "path": "tmp/v134-full-replay/full-surface/v134-final-all31-r2/preparation-hard.json",
+        "sha256": "8e24d1b5c2d709c0d72c32c76c296ade629ebf0d599d9d4d533f404dc217ebd5"
+      },
+      {
+        "kind": "gray_acted",
+        "profile": "normal",
+        "path": "tmp/v134-full-replay/full-surface/v134-final-all31-r2/gray-normal.json",
+        "sha256": "0eddce24937038100e7d25096362800d8c9001adc697f9a43b1cf8df9a46ea6d"
+      },
+      {
+        "kind": "gray_acted",
+        "profile": "hard",
+        "path": "tmp/v134-full-replay/full-surface/v134-final-all31-r2/gray-hard.json",
+        "sha256": "cb4d8ff5b51c3127ca3561b836404550ded9ba91bdaef97f518fcb1a2c51931b"
+      },
+      {
+        "kind": "preparation_glyph_conflicts",
+        "profile": "both",
+        "path": "tmp/v134-full-replay/full-surface/v134-final-all31-r2/preparation-glyph-conflicts.json",
+        "sha256": "313aa1d65edb05e5e30f32abd21560620238fdb3a6ec85494dbd8e0c4ecb3f0e"
+      },
+      {
+        "kind": "preparation_scenario_identity",
+        "profile": "both",
+        "path": "tmp/v134-full-replay/full-surface/v134-final-all31-r2/preparation-scenario-identity.json",
+        "sha256": "2b402b9c18498420a1d33f6707ff28ece0f0b0494040840369653745fe131708"
+      },
+      {
+        "kind": "battle_cache",
+        "profile": "both",
+        "path": "tmp/v134-full-replay/full-surface/v134-final-all31-r2/battle-cache.json",
+        "sha256": "3f852a31e1ae73f369837f8537ec4f7d6d6af7cf84e7a160d8bdc7b1c5442eff"
+      },
+      {
+        "kind": "all_mercenary_hire",
+        "profile": "normal",
+        "path": "captures/run/all_mercenary_hire_probe/v134-final-all31-r2-normal/evidence.json",
+        "sha256": "fd446b5d894a3d794ff9cff3c3fa83bd09b1e7441167e1e4d2508c4ae93ebe9a"
+      },
+      {
+        "kind": "all_mercenary_hire",
+        "profile": "hard",
+        "path": "captures/run/all_mercenary_hire_probe/v134-final-all31-r2-hard/evidence.json",
+        "sha256": "f7b058394bb42e0162a1215369326fb99994bf664f3b5b4ef4bd526a8b89a623"
+      },
+      {
+        "kind": "pike_acted",
+        "profile": "normal",
+        "path": "captures/run/pike_acted_surface_probe/v134-final-all31-r2-normal/evidence.json",
+        "sha256": "4829bd424f69dc966a7462d00d07abf27c68a42fc718a5249683c0dd8d05258e"
+      },
+      {
+        "kind": "pike_acted",
+        "profile": "hard",
+        "path": "captures/run/pike_acted_surface_probe/v134-final-all31-r2-hard/evidence.json",
+        "sha256": "c592a64f72dbb67a812efbcf6461d985d4a9ac096a4356910eb863d853c0fe5d"
+      },
+      {
+        "kind": "monk_acted",
+        "profile": "normal",
+        "path": "captures/run/pike_acted_surface_probe/v134-final-all31-r2-monk-normal/evidence.json",
+        "sha256": "51dc93fa47e554ace61fc83e40b8ecd6a7c44c0e06ab2f69b64790d1f6e2808b"
+      },
+      {
+        "kind": "monk_acted",
+        "profile": "hard",
+        "path": "captures/run/pike_acted_surface_probe/v134-final-all31-r2-monk-hard/evidence.json",
+        "sha256": "e373c5db5e8758c5c182206d526e1d6830e9bb333bde649e19c700969271f564"
+      },
+      {
+        "kind": "shop_necklace",
+        "profile": "normal",
+        "path": "captures/run/shop_necklace_probe/v134-final-all31-r6-normal/evidence.json",
+        "sha256": "07d617c112f93cc7b8bc5678b728acf8274c46c0da9b64e7d281701e14b72627"
+      },
+      {
+        "kind": "shop_necklace",
+        "profile": "hard",
+        "path": "captures/run/shop_necklace_probe/v134-final-all31-r5-hard/evidence.json",
+        "sha256": "066467500c1b77cadb342323696a741d4e5771b9d63118d4eec62aa6c7b60cc8"
+      }
+    ],
+    "note": "The original aggregate process returned fail only because its old shop validator referenced ignored historical PNG files that were absent. Every completed component passed; the shop validator was repaired and both release profiles were freshly recaptured pixel-exact to the locked approval hashes."
+  },
+  "late_result_and_save_replay": [
+    {
+      "profile": "normal",
+      "scenario": 28,
+      "path": "tmp/v134-full-replay/result-replay-smoke/normal/s28/v134-s28-normal-smoke/evidence.json",
+      "sha256": "34f1df93ba3cf8cfe472d7227810a4a0893be9e2efa1ca53deaf4fd4c578f016",
+      "battle_result_frame": 46,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "caad71cc138e1343a9a41feba1367653fb3017a161cf5c746deb02ed86a4b3b7"
+    },
+    {
+      "profile": "hard",
+      "scenario": 28,
+      "path": "tmp/v134-full-replay/result-replay-hard28/hard/s28/v134-s28-hard/evidence.json",
+      "sha256": "655b799926ab1f95da346746afe375c8e3b593250100b0fe8be86a6139fe2a62",
+      "battle_result_frame": 47,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "92f7926c742cfc8b18fe2ef0b580a5a6353251f35dea0dbad3680d428e9f6324"
+    },
+    {
+      "profile": "normal",
+      "scenario": 29,
+      "path": "tmp/v134-full-replay/result-replay-smoke29/normal/s29/v134-s29-normal-smoke/evidence.json",
+      "sha256": "43ba2b560326f7609fcc1e00395b72e152fd1706723d3b5c0e446a2713279d06",
+      "battle_result_frame": 54,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "6524f514023d91078473937fe5952a585c444aa75c683c1b4cdffcc4cc547ca9"
+    },
+    {
+      "profile": "hard",
+      "scenario": 29,
+      "path": "tmp/v134-full-replay/result-replay-hard29/hard/s29/v134-s29-hard/evidence.json",
+      "sha256": "2af1a3cf72cd0dd3689ed93d4af9c80b1eb15cb13ae78d6846318429d7d33876",
+      "battle_result_frame": 54,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "d503c59ffd44692a01d0fdc8662a30110eda9a589086fe9c93f46fc65d0b58e3"
+    },
+    {
+      "profile": "normal",
+      "scenario": 30,
+      "path": "tmp/v134-full-replay/result-replay-smoke30/normal/s30/v134-s30-normal-smoke-r8/evidence.json",
+      "sha256": "cca5720d9b985ab867348812a44aa9caccbfedfd6f8cf3b1bc65b229a70c8d32",
+      "battle_result_frame": 39,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "9cb3c715ffca4aecd1b6be7cf8d38d4b6183580e89649bf00539c7a390137850"
+    },
+    {
+      "profile": "hard",
+      "scenario": 30,
+      "path": "tmp/v134-full-replay/result-replay-final-late/hard/s30/v134-s30-hard-final-r6/evidence.json",
+      "sha256": "4944a131736ad07da3bcb57f6d253a60427173ebafd34283bcd1ac184a881d24",
+      "battle_result_frame": 38,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "dc2c3e35a0731b3e7a27dab4047f896c7043f1035a9b576f3c9c525b3dc25e84"
+    },
+    {
+      "profile": "normal",
+      "scenario": 31,
+      "path": "tmp/v134-full-replay/result-replay-final-late/normal/s31/v134-s31-normal-final-r7/evidence.json",
+      "sha256": "b7df5eace47c1229cffe1f230e7c3cc395fae1d602f5e11f0be74970dd4db6f2",
+      "battle_result_frame": 38,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "c8c55033552a85efedb111ad9d24b3f1bb876618ab03d1897f824b7b8e1e94fb"
+    },
+    {
+      "profile": "hard",
+      "scenario": 31,
+      "path": "tmp/v134-full-replay/result-replay-final-late/hard/s31/v134-s31-hard-final-r7/evidence.json",
+      "sha256": "1abca6a83cd2f64aa7fe1671cf652ef6b79415e0a9359bc78839b9ad59225b09",
+      "battle_result_frame": 38,
+      "save_menu_frame": 1,
+      "probe_rom_sha256": "9e4b1c61a88a3d02266d640ec5d1ab579a763cb7bb8fa56b538e0c67401fb93a"
+    }
+  ],
+  "fresh_result_and_ending_replay": {
+    "description": "Focused completion ROMs change only diagnostic completion conditions or layout, then execute the v1.3.4 release ROM's real result, SAVE, and ending renderers in isolated BlastEm instances.",
+    "profiles": ["normal", "hard"],
+    "scenarios": [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+      14, 15, 16, 17,
+      21, 22, 23, 24, 25, 26, 27
+    ],
+    "profile_scenario_pairs": 42,
+    "probe_manifest": {
+      "path": "tmp/v134-full-replay/result-probes-v134-all31-r2/manifest.json",
+      "sha256": "3dcb9505d0304fcbf7b26bb595db19604b2a9964517cd377bb9fd8748870eb3f"
+    },
+    "source_summaries": [
+      {
+        "path": "tmp/v134-full-replay/result-replay-01-27-summary.json",
+        "sha256": "930e8f85d98bbde0984b34369c1ee59ee499a1c8d612267184bdf95308e64dd1",
+        "profiles": ["normal", "hard"],
+        "scenarios": [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+          14, 15, 16, 17,
+          21, 22, 23, 24, 25, 26, 27
+        ],
+        "allowed_failed_pairs": [["normal", 27], ["hard", 27]]
+      },
+      {
+        "path": "tmp/v134-full-replay/result-replay-27-hard-r2-summary.json",
+        "sha256": "6b431be59a5d8d9920c4812acde59ae3624b582480aaea6e360ae855111dc8cb",
+        "profiles": ["hard"],
+        "scenarios": [27],
+        "allowed_failed_pairs": []
+      },
+      {
+        "path": "tmp/v134-full-replay/result-replay-27-normal-r6-summary.json",
+        "sha256": "64ca6cb3c50b815f7b0813d3a18114228b557fdd66ff855403988f97eb60b703",
+        "profiles": ["normal"],
+        "scenarios": [27],
+        "allowed_failed_pairs": []
+      }
+    ],
+    "evidence_set_sha256": "8eee4aecbb8c3d1d94ed7621c4e28d605fb96d1d44fae944fcfde1f571a8dddb",
+    "discarded_attempts": [
+      {
+        "path": "tmp/v134-full-replay/result-replay-27-r2-summary.json",
+        "sha256": "ec4b49212182c70068f9858568d19d38141cab2b2154cc7d856278945ff59353",
+        "reason": "A fresh normal run left diagnostic Bernhardt at HP2 through all eight same-quicksave combat retries. It is retained as a failed RNG attempt and contributes no passing coverage."
+      }
+    ],
+    "scenario_27": {
+      "normal_fin_frame": 4750,
+      "hard_fin_frame": 4718,
+      "fin_sha256": "4cb7db62c30ace38e0d8b2fa1a34fc7ba31586104f5b59c9663b6ad9564a46b0",
+      "note": "The old 4200-frame automation bound cut off the expanded v1.3.4 epilogue roster before Fin. The repaired 5200-frame bound completed both fresh selector-to-Fin runs; each defeated Bernhardt by an ordinary attack and recorded runtime HP0."
+    }
+  },
+  "carried_result_and_save_regression": {
+    "description": "Exact-current normal/hard result and SAVE evidence is retained for six scenarios whose ignored continuation GST inputs are no longer present locally. These twelve pairs are reported separately and are not described as fresh v1.3.4 completion runs.",
+    "profiles": ["normal", "hard"],
+    "scenarios": [11, 12, 13, 18, 19, 20],
+    "profile_scenario_pairs": 12,
+    "source_report": {
+      "path": "localization/current_result_surface_regression.json",
+      "sha256": "d5d2dfa035453016631c37636ee0e263bd2bbc59b43903ff3108d342ac1f93fb"
+    }
+  },
+  "coverage_assertions": {
+    "first_turn_profile_scenario_pairs": 93,
+    "preparation_profile_scenario_pairs": 62,
+    "gray_acted_profile_scenario_pairs": 62,
+    "late_result_profile_scenario_pairs": 8,
+    "fresh_result_and_ending_profile_scenario_pairs": 50,
+    "carried_result_profile_scenario_pairs": 12,
+    "all_result_profile_scenario_pairs": 62
+  }
+}

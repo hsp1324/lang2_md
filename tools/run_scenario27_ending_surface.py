@@ -28,9 +28,12 @@ from tools import run_scenario21_result_surface as shared
 DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/current_s27_ending"
 DEFAULT_ATTACK_ATTEMPTS = 8
 DEFAULT_RETRY_RNG_DELAY = 0.11
-DEFAULT_MAX_ENDING_FRAMES = 4200
+DEFAULT_MAX_ENDING_FRAMES = 5200
 STATIC_CAPTION_CONFIRM_FRAMES = 3
-FIN_REFERENCE = ROOT / "captures/run/e93e_s27_ending_watch/875.png"
+FIN_SHA256 = (
+    "4cb7db62c30ace38e0d8b2fa1a34fc7b"
+    "a31586104f5b59c9663b6ad9564a46b0"
+)
 GST_WORK_RAM_OFFSET = 0x2478
 WORK_RAM_BYTES = 0x10000
 RUNTIME_GROUP_BASE = 0xFFFF603C
@@ -41,34 +44,9 @@ RUNTIME_X_OFFSET = 0x06
 BERNHARDT_RUNTIME_GROUP = 18
 
 
-def fin_template_pixels() -> tuple[tuple[int, int], ...]:
-    with Image.open(FIN_REFERENCE).convert("RGB") as source:
-        return tuple(
-            (x, y)
-            for y in range(40, 170)
-            for x in range(90, 230)
-            if (
-                source.getpixel((x, y))[0] >= 240
-                and source.getpixel((x, y))[1] >= 220
-                and source.getpixel((x, y))[2] <= 40
-            )
-        )
-
-
-FIN_TEMPLATE_PIXELS = fin_template_pixels()
-
-
 def fin_visible(path: Path) -> bool:
-    with Image.open(path).convert("RGB") as source:
-        if source.size != (320, 240):
-            return False
-        matches = sum(
-            source.getpixel(point)[0] >= 240
-            and source.getpixel(point)[1] >= 220
-            and source.getpixel(point)[2] <= 40
-            for point in FIN_TEMPLATE_PIXELS
-        )
-    return bool(FIN_TEMPLATE_PIXELS) and matches * 100 >= len(FIN_TEMPLATE_PIXELS) * 98
+    """Recognize the reviewed terminal Fin frame without an ignored fixture."""
+    return path.is_file() and shared.sha256(path) == FIN_SHA256
 
 
 def ending_caption_visible(path: Path) -> bool:
@@ -430,7 +408,7 @@ def main() -> int:
         type=int,
         default=DEFAULT_MAX_ENDING_FRAMES,
         help=(
-            "bounded ending-capture limit; 4200 allows stable-frame caption "
+            "bounded ending-capture limit; 5200 allows stable-frame caption "
             "confirmation without truncating the terminal cinematic"
         ),
     )
