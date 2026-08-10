@@ -5,15 +5,19 @@
 프로젝트 개발자: **hsp1324**
 
 > 최신 공개 버전은 `v1.3.4`입니다. 세 가지 완성판은
-> GitHub Releases의 패처(EXE)로 일본판 ROM에 적용해 사용합니다.  
+> GitHub Releases의 Windows·Linux·macOS 패처로 일본판 ROM에 적용해 사용합니다.
 > 동작은 `RetroArch`(Genesis Plus GX 기준) 환경에서 검증되었으므로 우선적으로
 > `RetroArch` 사용을 권장합니다.
 
 ## 가장 간단한 다운로드
 
-원하는 버전은 다음 패처를 받아 일본판 ROM에 적용합니다.
+사용 중인 운영체제와 CPU에 맞는 패처를 받아 일본판 ROM에 적용합니다.
 
-- [Langrisser-II-Korean-Patcher-v1.3.4.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4.exe)
+- **Windows**: [Langrisser-II-Korean-Patcher-v1.3.4.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4.exe)
+- **Linux x86_64**: [Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz)
+- **Linux ARM64**: [Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64.tar.gz)
+- **macOS Apple Silicon**: [Langrisser-II-Korean-Patcher-v1.3.4-macos-arm64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-macos-arm64.app.zip)
+- **macOS Intel**: [Langrisser-II-Korean-Patcher-v1.3.4-macos-x86_64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-macos-x86_64.app.zip)
 
 검증값은 [v1.3.4 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.4)에서 확인할 수 있습니다.
 
@@ -42,7 +46,7 @@
 - **최신 디자인 일반판**: `New 디자인`의 최신 사용자 디자인과 한국어화를 적용하며 난이도는 원작 기준입니다.
 - **최신 디자인 하드판**: 최신 사용자 디자인과 한국어화에 적 지휘관·용병 강화 밸런스를 더합니다.
 
-Windows 패처는 일본판 ROM 또는 ZIP 하나를 고르면 위 세 ROM을 모두 생성합니다.
+패처는 일본판 ROM 또는 ZIP 하나를 고르면 위 세 ROM을 모두 생성합니다.
 
 ```text
 Langrisser II (Korean Original v1.3.4).md
@@ -50,32 +54,57 @@ Langrisser II (Korean Normal v1.3.4).md
 Langrisser II (Korean Hard v1.3.4).md
 ```
 
-## macOS에서 패치하기
+## Windows에서 패치하기
 
-macOS에서는 EXE 대신 저장소의 Python 패처를 바로 실행할 수 있습니다. 별도
-Python 패키지는 필요하지 않습니다.
+EXE를 실행하고 일본판 ROM 또는 ZIP, 결과 폴더를 고른 뒤 `패치 시작`을
+누릅니다. 기존 게임 내 저장을 새 ROM 이름으로 연결하려면 `.srm` 파일과
+대상 버전도 함께 고릅니다.
+
+## Linux에서 패치하기
+
+사용 중인 CPU에 맞는 `linux-x86_64.tar.gz` 또는 `linux-arm64.tar.gz`를
+받아 압축을 풉니다. 파일 관리자에서 실행하거나 터미널에서 다음과 같이
+실행합니다.
 
 ```bash
-git clone https://github.com/hsp1324/lang2_md.git
-cd lang2_md
-python3 patcher/langrisser_ii_korean_patcher.py \
+tar -xzf Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz
+chmod +x Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64
+./Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64
+```
+
+화면 없이 명령줄로도 실행할 수 있습니다.
+
+```bash
+./Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64 \
   --rom "/path/to/Langrisser II (Japan).md" \
   --output-dir "/path/to/output"
 ```
 
-일본판 ROM이 ZIP 안에 있어도 `--rom`에 ZIP 경로를 지정하면 됩니다. 기존
-게임 내 저장도 함께 연결하려면 `--save`와 연결할 버전을 지정합니다.
+ARM64에서는 명령의 파일명을 `Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64`로
+바꿉니다.
+
+## macOS에서 패치하기
+
+M1 이후 Mac은 `macos-arm64.app.zip`, Intel Mac은 `macos-x86_64.app.zip`을
+받습니다. ZIP을 풀고 `Langrisser II Korean Patcher v1.3.4.app`을 실행합니다.
+이 패처는 Apple Developer ID로 공증되지 않았으므로 처음 한 번은 Finder에서
+앱을 오른쪽 클릭한 뒤 `열기`를 선택해야 할 수 있습니다. macOS 보안을
+전체적으로 끄지는 마세요.
+
+터미널에서 실행하려면 앱 내부 실행 파일을 사용합니다.
 
 ```bash
-python3 patcher/langrisser_ii_korean_patcher.py \
+"./Langrisser II Korean Patcher v1.3.4.app/Contents/MacOS/Langrisser II Korean Patcher v1.3.4" \
   --rom "/path/to/Langrisser II (Japan).zip" \
   --output-dir "/path/to/output" \
   --save "/path/to/old-save.srm" \
   --save-target normal
 ```
 
-`--save-target`은 `pure`, `normal`, `hard` 중 하나입니다. 상태 저장 파일이
-아니라 게임 안에서 저장한 `.srm`을 사용해야 합니다.
+Linux와 macOS 모두 일본판 ROM이 ZIP 안에 있어도 `--rom`에 ZIP 경로를
+지정할 수 있습니다. `--save-target`은 `pure`, `normal`, `hard` 중
+하나입니다. 상태 저장 파일이 아니라 게임 안에서 저장한 `.srm`을 사용해야
+합니다.
 
 ## 게임 데이터 에디터 사용법
 

@@ -1,8 +1,0 @@
-{
-  "sample_id": "01",
-  "label": "세로 장창형",
-  "source_campaign": "sample-class-variants-v1/jessica-zarvera",
-  "logical_source": "editor/static/sample-class-sprites/jessica-zarvera/logical16/01.png",
-  "locked": true,
-  "note": "사용자 확정안. 재생성하거나 덮어쓰지 않는다."
-}

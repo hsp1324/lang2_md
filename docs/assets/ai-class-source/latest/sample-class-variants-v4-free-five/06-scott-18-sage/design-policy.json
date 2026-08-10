@@ -1,8 +1,0 @@
-{
-  "mode": "preserved-rom-original",
-  "source": "editor/static/class-sprites/commanders/6/18-p1.png",
-  "sample_label": "원본 유지",
-  "sample_description": "스코트 세이지는 공통형을 적용하지 않고 원본 ROM 디자인 유지",
-  "group_description": "사용자 지정 예외: 스코트 세이지 원본 ROM 디자인 유지",
-  "diversity_mode": "preserved-original"
-}

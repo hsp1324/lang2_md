@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Windows GUI and command-line patcher for Langrisser II Korean v1.3.4."""
+"""Cross-platform GUI and CLI patcher for Langrisser II Korean v1.3.4."""
 
 from __future__ import annotations
 

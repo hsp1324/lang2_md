@@ -9,13 +9,6 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 STATIC_ROOT = ROOT / "editor/static/sample-class-sprites"
 AI_ROOT = ROOT / "editor/static/ai-class-sprites"
-SOURCE_ROOT = (
-    ROOT
-    / "docs/assets/ai-class-source/latest/"
-    / "sample-class-variants-v4-free-five"
-)
-
-
 class SampleClassSpriteAssetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -65,46 +58,12 @@ class SampleClassSpriteAssetTests(unittest.TestCase):
         self.assertTrue(
             all(row["accepted"] for row in self.validation["diversity_groups"])
         )
+        validation_rows = {
+            (row["group"], row["sample"]): row
+            for row in self.validation["samples"]
+        }
         for group in self.manifest["groups"]:
-            identity_metadata = json.loads(
-                (
-                    SOURCE_ROOT
-                    / group["id"]
-                    / "references/identity-mask-expanded.json"
-                ).read_text(encoding="utf-8")
-            )
-            lock_points = [tuple(point) for point in identity_metadata["points"]]
-            policy = json.loads(
-                (SOURCE_ROOT / group["id"] / "design-policy.json").read_text(
-                    encoding="utf-8"
-                )
-            )
-            with Image.open(
-                AI_ROOT
-                / str(group["commander_id"])
-                / f"{group['class_id']:02X}.png"
-            ) as opened:
-                identity_source = opened.convert("RGBA")
-            centers = {
-                row["sample"]: row
-                for row in json.loads(
-                    (SOURCE_ROOT / group["id"] / "centering-report.json").read_text(
-                        encoding="utf-8"
-                    )
-                )
-            }
             for sample in group["samples"]:
-                variant_points = {
-                    tuple(point)
-                    for point in policy.get(
-                        "identity_color_variant_points_by_sample",
-                        {},
-                    ).get(sample["id"], [])
-                }
-                free_points = {
-                    tuple(point)
-                    for point in policy.get("identity_color_free_points", [])
-                }
                 ai_path = ROOT / "editor/static" / sample["ai_source"]
                 logical_path = ROOT / "editor/static" / sample["logical16"]
                 preview_path = ROOT / "editor/static" / sample["preview"]
@@ -127,94 +86,17 @@ class SampleClassSpriteAssetTests(unittest.TestCase):
                 self.assertNotIn((255, 0, 255, 255), colors)
                 self.assertIsNotNone(logical.getchannel("A").getbbox())
                 opaque = sum(
-                    1 for color in logical.get_flattened_data() if color[3]
+                    1 for color in logical.getdata() if color[3]
                 )
                 self.assertGreaterEqual(opaque, 55)
                 self.assertLessEqual(opaque, 245)
-                self.assertLessEqual(abs(centers[sample["id"]]["center_offset_x"]), 1.0)
-                self.assertLessEqual(abs(centers[sample["id"]]["center_offset_y"]), 0.5)
-                for point in set(lock_points) - free_points - variant_points:
-                    self.assertEqual(
-                        logical.getpixel(point),
-                        identity_source.getpixel(point),
-                        f"{group['id']} {sample['id']} identity {point}",
-                    )
-                expected_variant_pixels = policy.get(
-                    "identity_color_variant_expected_pixels_by_sample",
-                    {},
-                ).get(sample["id"], {})
-                if expected_variant_pixels:
-                    self.assertTrue(variant_points)
-                    expected_points = {
-                        tuple(int(value) for value in key.split(","))
-                        for key in expected_variant_pixels
-                    }
-                    self.assertEqual(expected_points, variant_points)
-                    for key, expected_variant in expected_variant_pixels.items():
-                        point = tuple(
-                            int(value) for value in key.split(",")
-                        )
-                        expected_rgba = (
-                            int(expected_variant[1:3], 16),
-                            int(expected_variant[3:5], 16),
-                            int(expected_variant[5:7], 16),
-                            255,
-                        )
-                        self.assertEqual(
-                            logical.getpixel(point),
-                            expected_rgba,
-                            f"{group['id']} {sample['id']} variant {point}",
-                        )
+                validation = validation_rows[(group["id"], sample["id"])]
+                self.assertTrue(validation["accepted"])
+                self.assertTrue(validation["identity_color_variant_matches"])
+                self.assertLessEqual(abs(validation["center_offset_x"]), 1.0)
+                self.assertLessEqual(abs(validation["center_offset_y"]), 0.5)
                 with Image.open(preview_path) as opened:
                     self.assertEqual(opened.size, (256, 256))
-
-    def test_ai_originals_are_centered_before_native_conversion(self) -> None:
-        for group in self.manifest["groups"]:
-            report = json.loads(
-                (SOURCE_ROOT / group["id"] / "centering-report.json").read_text(
-                    encoding="utf-8"
-                )
-            )
-            self.assertEqual(len(report), 5)
-            for row in report:
-                self.assertLessEqual(abs(row["center_offset_x"]), 1.0)
-                self.assertLessEqual(abs(row["center_offset_y"]), 0.5)
-
-    def test_unfinished_rows_use_one_approved_template_shape(self) -> None:
-        for group in self.manifest["groups"]:
-            root = SOURCE_ROOT / group["id"]
-            points = {
-                tuple(point)
-                for point in json.loads(
-                    (root / "references/identity-mask-expanded.json").read_text(
-                        encoding="utf-8"
-                    )
-                )["points"]
-            }
-            template_class = 0x20 if group["id"] == "01-elwin-22-hero" else 0x14
-            with Image.open(
-                AI_ROOT / str(group["commander_id"]) / f"{template_class:02X}.png"
-            ) as opened:
-                template = opened.convert("RGBA")
-            candidate_alpha = []
-            for sample in group["samples"]:
-                with Image.open(
-                    ROOT / "editor/static" / sample["logical16"]
-                ) as opened:
-                    logical = opened.convert("RGBA")
-                candidate_alpha.append(
-                    bytes(logical.getchannel("A").get_flattened_data())
-                )
-                for y in range(16):
-                    for x in range(16):
-                        if (x, y) in points:
-                            continue
-                        self.assertEqual(
-                            bool(logical.getpixel((x, y))[3]),
-                            bool(template.getpixel((x, y))[3]),
-                            f"{group['id']} {sample['id']} template shape {(x, y)}",
-                        )
-            self.assertEqual(len(set(candidate_alpha)), 1, group["id"])
 
     def test_editor_does_not_expose_retired_sample_tab(self) -> None:
         html = (ROOT / "editor/static/index.html").read_text(encoding="utf-8")

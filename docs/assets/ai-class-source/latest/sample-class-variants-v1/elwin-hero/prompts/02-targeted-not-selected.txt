@@ -1,8 +1,0 @@
-Use case: precise-object-edit
-Asset type: Mega Drive tactical-RPG logical 16x16 pixel-art character source
-Input images: Image 1 is the Variant 02 edit target. Image 2 is the original ROM silhouette/color reference. Image 3 is the exact Elwin face-and-hair identity anchor.
-Primary request: change only the framing of Image 1 so the top of Elwin's hair is fully visible and not cut by the canvas. Move or scale the whole character down by approximately one logical pixel cell, preserving the same broad-shouldered one-handed-longsword design.
-Invariants: preserve the exact Variant 02 equipment concept, wide silver pauldrons, short inward-leaning image-left longsword, hands, legs, compact right cape, three-quarter pose, face direction, hair mass, eye and sclera pattern, palette, and hard logical-pixel rendering. Keep all limbs and weapon connected. Do not redesign the armor or weapon.
-Composition: full character completely inside the square with a clear flat-green margin above the highest hair pixel; boots and cape remain fully visible; no cropping.
-Scene/backdrop: perfectly flat uniform #00ff00 chroma-key background, no gradient, shadow, texture, border, reflection, or floor plane; do not use #00ff00 within the character.
-Constraints: exactly one character, no new object, no extra limb, no second weapon, no horse, no shield, no pure black, no purple/magenta outline, no text, logo, or watermark.
