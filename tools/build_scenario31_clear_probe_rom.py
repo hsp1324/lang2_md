@@ -60,7 +60,13 @@ COMPLETION_TARGET_RECORD_INDEX = 0
 COMPLETION_RECORD_COUNT = 1
 COMPLETION_ACTIVE_POSITION = (14, 60)
 COMPLETION_AT = 0xF4
-COMPLETION_DF = 0xFC
+# Keep the one-enemy completion probe two points below the old 0xFC defense so
+# the bounded stock damage roll in both release profiles still reaches HP0.
+# Larger
+# negative-looking byte values wrap the stock unsigned battle arithmetic and
+# can instead turn the hit into zero damage.  This is diagnostic ROM data
+# only; production Scenario 31 remains untouched.
+COMPLETION_DF = 0xFA
 BRANCH_TARGET_INDICES = tuple(range(0, 9))
 ALL_FIXED_RECORD_INDICES = tuple(
     range(FIRST_COMBAT_RECORD_INDEX, LAST_COMBAT_RECORD_INDEX + 1)

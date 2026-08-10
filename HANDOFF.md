@@ -12848,3 +12848,66 @@ contains 57 safe syllables as documented below and in
   No release ROM, SRAM, save state, title version, or desktop file changed.
   Complete battle-result acceptance for Scenario 10 and Scenarios 12..27 is
   still pending, so do not promote a release or version from this checkpoint.
+
+### v1.3.4 release regression repair and isolated play verification (2026-08-10)
+
+- Released BPS files identify the regression boundary. v1.3.1 stored Keith and
+  Lester as Fighter LV10 and still contained their Fighter transition, so the
+  stock exact-LV10 gate at `0x014848` opened class choice. v1.3.2 introduced
+  dedicated Hawk Lord `0x2B` and Croco Lord `0x2C`, changed fresh records to
+  Hawk Knight/Crocoknight LV10, and reused the old Fighter transition slots.
+  Its legacy migration was located behind the exact-LV10 comparison. A broken
+  Fighter LV11/LV12 record therefore skipped both migration and class choice
+  forever. v1.3.3 retained the same routine.
+- v1.3.4 dispatches Keith/Lester identity before the exact level gate. On or
+  after each first player scenario, and only at real on-map coordinates, a
+  legacy Fighter LV10+ is restored to the clean tier-1 class, MP, LV10,
+  residual EXP, AT, and DF boundary. Pre-join NPCs, preparation `(0,0)`,
+  off-map `(255,255)`, non-Fighter choices, and Fighter below LV10 remain
+  untouched. The injected routine occupies `0x31E200..0x31E315` and
+  disassembles as 278 complete 68000 bytes without overlapping the experience
+  wrapper.
+- Applying the released v1.3.3 and new v1.3.4 BPS files to the same Japanese
+  ROM proves transitive release inheritance for pure and normal: each changes
+  225 bytes, confined to version text, ROM checksum, and
+  `0x31E200..0x31E315`. The same comparison exposed a separate release error:
+  v1.3.3's hard-profile localization build changed the title identity but did
+  not invoke `tools/build_hard_mode_rom.py`, so it omitted the entire approved
+  Standard Hard balance layer that v1.3.2 contained. v1.3.4 deliberately
+  differs from v1.3.3 hard at 1,628 bytes to restore the hook, correction
+  routine/table, and all 300 planned enemy records as well as the join repair.
+  `tools/build_v132_release_patches.py` now fails closed unless those bytes are
+  present. This contract is locked by `tests/test_v134_release_inheritance.py`.
+- Isolated BlastEm/Xvfb play runs, with software rendering and no physical
+  desktop input, pass all three join paths. Lester Scenario 11 repairs Fighter
+  LV12/EXP15 at `(18,14)`, opens Knight/Croco Lord/Shaman, and reaches the
+  default Knight LV8. Keith Scenario 8 repairs Fighter LV12/EXP5 at `(6,18)`
+  to Hawk Knight LV10, opens Lord/Hawk Lord/Healer, and reaches Lord LV4.
+  Jessica Scenario 12 stays Warlock LV10 at hidden preparation `(0,0)`, opens
+  Healer/Sorcerer/Lord only after deployment to `(15,29)`, and reaches Healer
+  LV8. Every named screenshot and GST hash is recorded in
+  `localization/v134_release_regression.json`; the local verifier checks 28
+  files and eight runtime states.
+- Carried release play checks also pass: Scenario 6 ordinary movement to
+  `(7,4)` renders `룬스톤을 찾았다!`; Scenario 10 reaches TURN 3 and renders
+  `승리조건 - 적 전멸 / 패배조건 - 주인공 사망`; Scenario 11 equipment
+  lists `룬스톤 / 크로스 / 넥클리스 / 오브 / 스피드부츠` intact. The
+  equipment runner now reports the visible `cycle_02` frame instead of its
+  later blink frame, and the Scenario 10 runner can use isolated BlastEm speed
+  slot 4 for its long enemy phase.
+- Final ROM identities are pure checksum `604B`, SHA-256
+  `96ebbdd3970ae21f78067f83d077062657fd7757b7dc45c6f6257b150e19682d`;
+  normal `E92A`,
+  `65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4`;
+  hard `0635`,
+  `5dc9b5502210b2eb86ea16eff3bd8d047fa4b952f817a3366c4cbd6dd3b49dcf`.
+  BPS metadata is `patches/v1.3.4.json`. The patcher, workflow, README,
+  distribution guide, and ROM profile metadata all target v1.3.4.
+- Full historical unittest discovery remains unsuitable as a release gate:
+  many audit modules intentionally require ignored old captures/candidate ROMs
+  or lock superseded non-release checksums and sprite experiments. Those
+  failures were classified separately and do not change the current release
+  ROM. The v1.3.4 release gate uses current structural tests, BPS inheritance,
+  patch reconstruction, version checks, and the hash-bound isolated play
+  manifest. Do not treat missing archived local evidence as a gameplay
+  regression.

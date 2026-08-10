@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build current-source normal/hard result probes for Scenarios 1..27."""
+"""Build current-source normal/hard result probes for Scenarios 1..31."""
 
 from __future__ import annotations
 
@@ -43,10 +43,16 @@ from tools import build_scenario24_clear_probe_rom as scenario24
 from tools import build_scenario25_clear_probe_rom as scenario25
 from tools import build_scenario26_clear_probe_rom as scenario26
 from tools import build_scenario27_ending_probe_rom as scenario27
+from tools import build_scenario28_clear_probe_rom as scenario28
+from tools import build_scenario29_clear_probe_rom as scenario29
+from tools import build_scenario30_clear_probe_rom as scenario30
+from tools import build_scenario31_clear_probe_rom as scenario31
 
 
-DEFAULT_NORMAL_ROM = ROOT / "tmp/current-source-audit-normal.md"
-DEFAULT_HARD_ROM = ROOT / "tmp/current-source-audit-hard.md"
+DEFAULT_NORMAL_ROM = (
+    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.4).md"
+)
+DEFAULT_HARD_ROM = ROOT / "roms/builds/Langrisser II (Korean Hard v1.3.4).md"
 DEFAULT_OUTPUT_ROOT = ROOT / "tmp/current-source-result-probes"
 DEFAULT_SOURCE_ROM = ROOT / korean_builder.IN_ROM
 
@@ -188,6 +194,26 @@ PROBE_DEFINITIONS: dict[int, dict[str, object]] = {
         "module": scenario27,
         "filename": "s27-ending.md",
         "kwargs": {"allow_balanced_input": False},
+    },
+    28: {
+        "module": scenario28,
+        "filename": "s28-completion.md",
+        "kwargs": {"completion_target_only": True},
+    },
+    29: {
+        "module": scenario29,
+        "filename": "s29-completion.md",
+        "kwargs": {"completion_target_only": True},
+    },
+    30: {
+        "module": scenario30,
+        "filename": "s30-completion.md",
+        "kwargs": {"completion_target_only": True},
+    },
+    31: {
+        "module": scenario31,
+        "filename": "s31-completion.md",
+        "kwargs": {"completion_layout": True},
     },
 }
 SCENARIOS = tuple(PROBE_DEFINITIONS)

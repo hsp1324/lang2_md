@@ -19,13 +19,13 @@ if str(ROOT) not in sys.path:
 
 from scripts import build_korean_jp_probe as korean_builder
 from tools import hard_mode_approval
-from tools import hard_mode_plan
 from tools import rom_update
 from tools.rom_version import get_profile
 
 
 DEFAULT_OUTPUT = ROOT / "roms/builds" / get_profile("hard")["rom_filename"]
 DEFAULT_BUILD_MANIFEST = ROOT / "localization/hard_mode_build.json"
+DEFAULT_APPLIED_PLAN = ROOT / "localization/hard_mode_plan.json"
 
 FIXED_RECORD_SIZE = 0x24
 COMMANDER_AT_OFFSET = 0x12
@@ -126,6 +126,77 @@ def validate_plan_approval(
         != approval["proposal_sha256"]
     ):
         raise ValueError("hard-mode plan changed after approval")
+
+
+def load_applied_plan(path: Path = DEFAULT_APPLIED_PLAN) -> dict[str, Any]:
+    """Load the tracked approved plan without requiring an old local ROM."""
+    plan = json.loads(path.read_text(encoding="utf-8"))
+    if plan.get("schema_version") != 1:
+        raise ValueError("unsupported hard-mode plan schema")
+    if (
+        plan.get("status") != "approved_balance_plan"
+        or plan.get("approval", {}).get("status") != "approved"
+    ):
+        raise ValueError("hard-mode plan is not approved")
+    scenarios = plan.get("scenarios", [])
+    if [int(row["number"]) for row in scenarios] != list(range(1, 32)):
+        raise ValueError("hard-mode plan must contain scenarios 1..31")
+    return plan
+
+
+def verify_applied_hard_mode(
+    payload: bytes,
+    plan: dict[str, Any] | None = None,
+) -> None:
+    """Fail closed unless all approved hard-balance bytes are present."""
+    plan = plan or load_applied_plan()
+    if payload[
+        SOLDIER_CORRECTION_HOOK:
+        SOLDIER_CORRECTION_HOOK + len(correction_hook())
+    ] != correction_hook():
+        raise ValueError("Standard Hard soldier-correction hook is absent")
+    routine = correction_routine()
+    if payload[
+        SOLDIER_CORRECTION_ROUTINE:
+        SOLDIER_CORRECTION_ROUTINE + len(routine)
+    ] != routine:
+        raise ValueError("Standard Hard soldier-correction routine is absent")
+    pairs = _correction_pairs(plan)
+    table = b"".join(
+        bytes((_encoded_byte(at), _encoded_byte(df))) for at, df in pairs
+    )
+    if payload[
+        SOLDIER_CORRECTION_TABLE:
+        SOLDIER_CORRECTION_TABLE + len(table)
+    ] != table:
+        raise ValueError("Standard Hard soldier-correction table differs")
+    pair_index = {pair: index for index, pair in enumerate(pairs)}
+    for scenario_number, record in _planned_records(plan):
+        offset = int(str(record["offset"]), 16)
+        commander = record["commander"]
+        soldier = record["enemy_soldier_correction"]
+        expected = {
+            "at": _encoded_byte(int(commander["at"]["planned"])),
+            "df": _encoded_byte(int(commander["df"]["planned"])),
+            "tag": pair_index[(
+                int(soldier["at"]["planned"]),
+                int(soldier["df"]["planned"]),
+            )],
+            "mercenaries": bytes(record["mercenaries"]["planned"]),
+        }
+        actual = {
+            "at": payload[offset + COMMANDER_AT_OFFSET],
+            "df": payload[offset + COMMANDER_DF_OFFSET],
+            "tag": payload[offset + HARD_CORRECTION_INDEX_OFFSET],
+            "mercenaries": payload[
+                offset + MERCENARY_OFFSET:offset + FIXED_RECORD_SIZE
+            ],
+        }
+        if actual != expected:
+            raise ValueError(
+                f"Scenario {scenario_number} hard record differs at "
+                f"0x{offset:06X}: {actual!r} != {expected!r}"
+            )
 
 
 def apply_hard_mode(
@@ -403,7 +474,7 @@ def build_hard_rom(
     if base_rom is not None:
         base_rom = base_rom.resolve()
     approval = hard_mode_approval.require_approved()
-    plan = hard_mode_plan.build_plan()
+    plan = load_applied_plan()
     profile = (
         get_profile("hard")
         if version_registry is None
@@ -420,6 +491,7 @@ def build_hard_rom(
             plan,
             approval,
         )
+    verify_applied_hard_mode(payload, plan)
     model["release"] = {
         "release_id": profile["release_id"],
         "translation_version": profile["translation_version"],

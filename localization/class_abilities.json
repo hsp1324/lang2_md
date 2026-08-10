@@ -1649,7 +1649,7 @@
       "class": {
         "id": 43,
         "jp": "ﾘｰﾀﾞｰ",
-        "ko": "라이더"
+        "ko": "호크로드"
       },
       "record_offset": "0x05F290",
       "ability_offset": "0x05F2A6",
@@ -1663,7 +1663,7 @@
       "class": {
         "id": 44,
         "jp": "ﾊﾞﾝﾊﾟｲｱ",
-        "ko": "뱀파이어"
+        "ko": "크로코로드"
       },
       "record_offset": "0x05F2AC",
       "ability_offset": "0x05F2C2",

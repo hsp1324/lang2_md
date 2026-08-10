@@ -214,6 +214,29 @@ def normalized_korean_range(
             )
         relative = offset - start
         normalized[relative : relative + 4] = source_value
+    offset = builder.JOIN_CLASS_CHOICE_VISIBILITY_HOOK
+    hook_size = len(builder.JOIN_CLASS_CHOICE_VISIBILITY_HOOK_ORIGINAL)
+    if start <= offset < end:
+        if offset + hook_size > end:
+            raise ValueError(
+                f"join visibility hook at 0x{offset:06X} crosses range boundary"
+            )
+        source_value = source[offset : offset + hook_size]
+        if source_value != builder.JOIN_CLASS_CHOICE_VISIBILITY_HOOK_ORIGINAL:
+            raise ValueError(
+                f"source join visibility hook changed at 0x{offset:06X}"
+            )
+        declared_value = bytes.fromhex("4E B9") + (
+            builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD.to_bytes(4, "big")
+        )
+        korean_value = korean[offset : offset + hook_size]
+        if korean_value not in (source_value, declared_value):
+            raise ValueError(
+                f"unexpected join visibility hook at 0x{offset:06X}: "
+                f"{korean_value.hex().upper()}"
+            )
+        relative = offset - start
+        normalized[relative : relative + hook_size] = source_value
     return bytes(normalized)
 
 

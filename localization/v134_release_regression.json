@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "release": "v1.3.4",
+  "status": "reviewed_pass",
+  "method": {
+    "emulator": "BlastEm",
+    "display": "isolated Xvfb",
+    "renderer": "software",
+    "physical_desktop_used": false,
+    "reviewed_at": "2026-08-10"
+  },
+  "release_roms": [
+    {
+      "id": "pure",
+      "path": "roms/builds/Langrisser II (Korean Original v1.3.4).md",
+      "md_checksum": "604B",
+      "sha256": "96ebbdd3970ae21f78067f83d077062657fd7757b7dc45c6f6257b150e19682d"
+    },
+    {
+      "id": "normal",
+      "path": "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+      "md_checksum": "E92A",
+      "sha256": "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
+    },
+    {
+      "id": "hard",
+      "path": "roms/builds/Langrisser II (Korean Hard v1.3.4).md",
+      "md_checksum": "0635",
+      "sha256": "5dc9b5502210b2eb86ea16eff3bd8d047fa4b952f817a3366c4cbd6dd3b49dcf"
+    }
+  ],
+  "patches": [
+    {
+      "id": "pure",
+      "path": "patches/original-v1.3.4.bps",
+      "sha256": "598a22ad2fa35ed3a0fefc9f460ad6bec998bf675c0fb64e7b07740d76626aaa"
+    },
+    {
+      "id": "normal",
+      "path": "patches/normal-v1.3.4.bps",
+      "sha256": "156f39bb8f2c23ac2ec8a1af6af07e41ce6bae5b2f8d5af2116eb9d073aced2e"
+    },
+    {
+      "id": "hard",
+      "path": "patches/hard-v1.3.4.bps",
+      "sha256": "13e3eae045207f239fd971a15122a163a2b2f1034cd4050d34b487c3ae20192d"
+    }
+  ],
+  "join_class_choice": [
+    {
+      "character": "Keith",
+      "commander_id": 7,
+      "scenario": 8,
+      "case": "legacy Fighter LV12 save recovery",
+      "states": [
+        {
+          "phase": "before_recovery",
+          "path": "captures/run/v134_release_regression/keith_fighter12_s08_retry/states/before_recovery.gst",
+          "sha256": "aa9f96028090fa807853cb0fb0e1f6894b1bb1a8b257e6246234e922b2efc119",
+          "runtime": {"class_id": 1, "level": 12, "experience": 5, "x": 6, "y": 18, "mp": 1, "at": 26, "df": 22}
+        },
+        {
+          "phase": "recovered_tier1",
+          "path": "captures/run/v134_release_regression/keith_fighter12_s08_retry/states/recovered_tier1.gst",
+          "sha256": "1bc6d0664ac42816e94a665f4fa18426550117a125ba7000e38ca38f8c88171d",
+          "runtime": {"class_id": 6, "level": 10, "experience": 5, "x": 6, "y": 18, "mp": 1, "at": 22, "df": 20}
+        },
+        {
+          "phase": "after_class_change",
+          "path": "captures/run/v134_release_regression/keith_fighter12_s08_retry/states/after_class_change.gst",
+          "sha256": "5048a47a6b973c237811ec97217ea545973a314a34e5541426cf295571bb9440",
+          "runtime": {"class_id": 4, "level": 4, "experience": 231, "x": 6, "y": 18, "mp": 2, "at": 23, "df": 22}
+        }
+      ],
+      "captures": [
+        {"path": "captures/run/v134_release_regression/keith_fighter12_s08_retry/keith_class_change_candidates.png", "sha256": "fcadb146bf6cc7987931d550f45e4c9a3ef988783950bb0b04961ee8c94c84fd"},
+        {"path": "captures/run/v134_release_regression/keith_fighter12_s08_retry/keith_post_choice_levelup.png", "sha256": "cfc042e072e149fad10d12a56347d869445fbff30419ca1fc1845c14bac4ec7d"}
+      ]
+    },
+    {
+      "character": "Lester",
+      "commander_id": 9,
+      "scenario": 11,
+      "case": "reported legacy Fighter LV12 save recovery",
+      "states": [
+        {
+          "phase": "before_recovery",
+          "path": "captures/run/v134_lester_regression/s11b/states/after_deploy.gst",
+          "sha256": "8246e7ec77f6b6ae863a27459d1584e715da8337e00650287146b3e055e237ba",
+          "runtime": {"class_id": 1, "level": 12, "experience": 15, "x": 18, "y": 14, "mp": 2, "at": 26, "df": 22}
+        },
+        {
+          "phase": "after_class_change",
+          "path": "captures/run/v134_lester_regression/s11b/states/after_class_change.gst",
+          "sha256": "9588a9a44272316317cb98e813142975cb27ca640b7fde73c74d8f45982f51a4",
+          "runtime": {"class_id": 5, "level": 8, "experience": 0, "x": 18, "y": 14, "mp": 3, "at": 27, "df": 23}
+        }
+      ],
+      "captures": [
+        {"path": "captures/run/v134_lester_regression/s11b/lester_class_change_available.png", "sha256": "554b11ed4e45c17a44024ec8e3f605029fee1bd4c56d1ed0dab22881316aec95"},
+        {"path": "captures/run/v134_lester_regression/s11b/lester_class_change_candidates.png", "sha256": "6fea6cfb49c6feaf53a90a7dd37655341c1d3936532fa848634a75b990e55b9b"},
+        {"path": "captures/run/v134_lester_regression/s11b/lester_post_choice_levelup.png", "sha256": "81e9f302e214bb9bacf2201dcdd3230b6e1e5ba1ac70e40a91f47f4e60468323"}
+      ]
+    },
+    {
+      "character": "Jessica",
+      "commander_id": 10,
+      "scenario": 12,
+      "case": "fresh tier-1 LV10 join",
+      "states": [
+        {
+          "phase": "preparation_hidden",
+          "path": "captures/run/v134_release_regression/jessica_warlock10_s12/states/preparation.gst",
+          "sha256": "6f223a86c6ceec4f167a6f76f6d6809d06eeeab89afdc9ae1fafa0a6ae9fe951",
+          "runtime": {"class_id": 3, "level": 10, "experience": 0, "x": 0, "y": 0, "mp": 14, "at": 27, "df": 15}
+        },
+        {
+          "phase": "after_deploy",
+          "path": "captures/run/v134_release_regression/jessica_warlock10_s12/states/after_deploy.gst",
+          "sha256": "0d843106c94b4b51f59a800eee587a99039184990694a36e2f3d98aed78a011a",
+          "runtime": {"class_id": 3, "level": 10, "experience": 0, "x": 15, "y": 29, "mp": 14, "at": 27, "df": 15}
+        },
+        {
+          "phase": "after_class_change",
+          "path": "captures/run/v134_release_regression/jessica_warlock10_s12/states/after_class_change.gst",
+          "sha256": "dbf5fd9650ca74910d44241de1958b9d4d99f40db21c81722c172bc0f011b5f6",
+          "runtime": {"class_id": 8, "level": 8, "experience": 239, "x": 15, "y": 29, "mp": 19, "at": 29, "df": 20}
+        }
+      ],
+      "captures": [
+        {"path": "captures/run/v134_release_regression/jessica_warlock10_s12/jessica_class_change_available.png", "sha256": "0457a6bb0cd6d801c05dc2f5c8654c66df326808ab9aa5e5ffd860436df92057"},
+        {"path": "captures/run/v134_release_regression/jessica_warlock10_s12/jessica_class_change_candidates.png", "sha256": "706090628d2d1ead0e42721bee7757369fc906f5c1ec3c1c814074c914ce6b3f"},
+        {"path": "captures/run/v134_release_regression/jessica_warlock10_s12/jessica_post_choice_levelup.png", "sha256": "ad18a55a3b9d3b9a2989ce9b97210d5f678b78334f8151a7f69fe629d69b5407"}
+      ]
+    }
+  ],
+  "carried_release_surfaces": [
+    {
+      "id": "scenario6_runestone",
+      "scenario": 6,
+      "capture": {"path": "captures/run/v134_release_regression/s06_runestone_retry/battle/runestone_found.png", "sha256": "cbda720ee2c7923a501a610d1d3791601e164845d36b9903d345be379f446151"},
+      "gst": {"path": "captures/run/v134_release_regression/s06_runestone_retry/states/runestone_found.gst", "sha256": "e673952a689dab9bf7c32e6ac9aaf77ce624eea705a1c8b192c4f8c792e77f44"}
+    },
+    {
+      "id": "scenario10_turn3_conditions",
+      "scenario": 10,
+      "capture": {"path": "captures/run/v134_release_regression/s10_turn3_fast/battle/turn3_conditions.png", "sha256": "6b71cc69c3fa781afba2bd5e8bbd39f1be1d9a1c65d75282b7869ac4128362b0"},
+      "gst": {"path": "captures/run/v134_release_regression/s10_turn3_fast/states/turn3_conditions.gst", "sha256": "f862e51647fe1525a1809d0857e9964c6ca66776728cfaf4fffa2e9283e1cd7b"}
+    },
+    {
+      "id": "equipment_item_names",
+      "scenario": 11,
+      "capture": {"path": "captures/run/v134_release_regression/equipment_item_names/equipment/korean_item_list.png", "sha256": "63ed45804ee0e6d36d832d65df187e069f4bcd08a7216ad40c0de82160d1416d"},
+      "gst": {"path": "captures/run/v134_release_regression/equipment_item_names/states/equipment_item_names.gst", "sha256": "e4107217a7a5c96bd94c91b280efafd092b67480c7264fa40f6e81a348d46db4"}
+    }
+  ]
+}

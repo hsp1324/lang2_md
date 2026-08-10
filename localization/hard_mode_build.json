@@ -5,13 +5,13 @@
   "approval_confirmation": "표준 하드로 해줘",
   "base": {
     "size": 4194304,
-    "sha256": "8cd231526fd88cb1c47c9f9b0de6d77c4d99d5fa2e5feeee2224a498b68beb70",
+    "sha256": "450d6b78ad01a999145531328e4dd3b7c26be2998d3ea658ae893949249ecfc4",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "hard": {
     "size": 4194304,
-    "header_checksum": "F8E7",
-    "sha256": "46f0d4f9ca37798efcb6de90ab9a5f2af3ae75923f27dce311f01e650c83911a",
+    "header_checksum": "0635",
+    "sha256": "5dc9b5502210b2eb86ea16eff3bd8d047fa4b952f817a3366c4cbd6dd3b49dcf",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "implementation": {
@@ -86,11 +86,11 @@
     "save_states_supported": false
   },
   "release": {
-    "release_id": "ko-hard-t1.3.2-b1.3.2",
-    "translation_version": "1.3.2",
-    "balance_version": "1.3.2",
-    "rom_filename": "Langrisser II (Korean Hard T1.3.2 B1.3.2).md",
-    "header_title": "LANGRISSER II KOREAN T1.3.2 B1.3.2 BY HSP1324",
-    "output": "roms/builds/Langrisser II (Korean Hard T1.3.2 B1.3.2).md"
+    "release_id": "ko-hard-1.3.4",
+    "translation_version": "1.3.4",
+    "balance_version": "1.3.4",
+    "rom_filename": "Langrisser II (Korean Hard v1.3.4).md",
+    "header_title": "LANGRISSER II KOREAN T1.3.4 B1.3.4 BY HSP1324",
+    "output": "roms/builds/Langrisser II (Korean Hard v1.3.4).md"
   }
 }

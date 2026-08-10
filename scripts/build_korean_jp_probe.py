@@ -6666,50 +6666,28 @@ def build_join_class_choice_visibility_guard() -> bytes:
     in preparation at (0,0), or waiting off-map at an FF coordinate returns Z
     clear.  A later stock progression pass can then open class choice after the
     reinforcement has appeared and the player selects it.
+
+    v1.3.0 saves can contain Keith or Lester as Fighter LV10.  v1.3.2 removed
+    Fighter from their class-change chains and tried to migrate only records
+    that were still exactly LV10.  Once the broken chain let either commander
+    reach LV11, every later scan skipped that migration at the initial LV10
+    compare and the invalid Fighter continued to level forever.  Dispatch the
+    two legacy records before the level compare, and restore every joining
+    progression field to its clean LV10 boundary once the commander is really
+    on the player's map.  This repairs LV10 and already-damaged LV11+ saves
+    while leaving pre-join NPCs and ordinary Runestone progression untouched.
     """
     code = _M68KCode()
-    code.emit("0C 28 00 0A 00 2E")  # cmpi.b #10,$2E(a0)
-    code.branch_word(0x6600, "return")  # bne.w return
     for commander_id in JOIN_CLASS_CHOICE_RECORDS:
         code.emit(bytes.fromhex("0C 28 00") + bytes((commander_id, 0x00, 0x01)))
         code.branch_word(0x6700, f"target_{commander_id}")
 
-    # A non-target LV10 commander keeps the stock comparison result (Z set).
+    # Every non-target commander keeps the stock comparison result.
     code.emit("0C 28 00 0A 00 2E")
     code.branch_word(0x6000, "return")
 
     for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
         code.label(f"target_{commander_id}")
-        legacy_class = row.get("legacy_tier1_class")
-        if legacy_class is not None:
-            first_appearance = int(row["first_appearance_scenario"])
-            first_player = int(row["first_player_scenario"])
-            # Saves created before v1.3.2 can still contain Fighter here even
-            # though the ROM's initial roster is fixed. Migrate only during the
-            # character's join window so a later intentional Runestone Fighter
-            # is never rewritten.
-            code.emit(
-                bytes.fromhex("0C 78")
-                + first_appearance.to_bytes(2, "big")
-                + JOIN_CLASS_CHOICE_CURRENT_SCENARIO.to_bytes(2, "big")
-            )
-            code.branch_word(0x6500, f"migration_done_{commander_id}")
-            code.emit(
-                bytes.fromhex("0C 78")
-                + first_player.to_bytes(2, "big")
-                + JOIN_CLASS_CHOICE_CURRENT_SCENARIO.to_bytes(2, "big")
-            )
-            code.branch_word(0x6200, f"migration_done_{commander_id}")
-            code.emit(
-                bytes.fromhex("0C 28 00")
-                + bytes((int(legacy_class), 0x00, 0x00))
-            )
-            code.branch_word(0x6600, f"migration_done_{commander_id}")
-            code.emit(
-                bytes.fromhex("11 7C 00")
-                + bytes((int(row["tier1_class"]), 0x00, 0x00))
-            )
-            code.label(f"migration_done_{commander_id}")
         first_scenario = int(row["first_player_scenario"])
         code.emit(
             bytes.fromhex("0C 78")
@@ -6729,6 +6707,41 @@ def build_join_class_choice_visibility_guard() -> bytes:
     code.emit("4A 28 00 07")        # X=0: reject only when Y is also zero
     code.branch_word(0x6700, "hidden")
     code.label("visible")
+    for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
+        if row.get("legacy_tier1_class") is None:
+            continue
+        code.emit(bytes.fromhex("0C 28 00") + bytes((commander_id, 0x00, 0x01)))
+        code.branch_word(0x6700, f"legacy_{commander_id}")
+    code.branch_word(0x6000, "compare_level")
+
+    for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
+        legacy_class = row.get("legacy_tier1_class")
+        if legacy_class is None:
+            continue
+        target = bytes(row["target"])
+        code.label(f"legacy_{commander_id}")
+        code.emit(
+            bytes.fromhex("0C 28 00")
+            + bytes((int(legacy_class), 0x00, 0x00))
+        )  # cmpi.b #legacy_class,0(a0)
+        code.branch_word(0x6600, "compare_level")
+        code.emit("0C 28 00 0A 00 2E")  # cmpi.b #10,$2E(a0)
+        code.branch_word(0x6500, "compare_level")  # bcs: below LV10
+        for value, runtime_offset in (
+            (int(row["tier1_class"]), 0x00),
+            (target[1], 0x39),
+            (10, 0x2E),
+            (target[3], 0x2F),
+            (target[4], 0x3A),
+            (target[5], 0x3B),
+        ):
+            code.emit(
+                bytes.fromhex("11 7C 00")
+                + bytes((value, 0x00, runtime_offset))
+            )  # move.b #value,runtime_offset(a0)
+        code.branch_word(0x6000, "compare_level")
+
+    code.label("compare_level")
     code.emit("0C 28 00 0A 00 2E")  # visible: restore stock Z flag
     code.branch_word(0x6000, "return")
 

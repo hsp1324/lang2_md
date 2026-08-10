@@ -38,6 +38,7 @@ MANUAL_SLOT_COMMANDER_ROSTER_OFFSET = 0x030
 MANUAL_SLOT_COMMANDER_RECORD_SIZE = 0x018
 MANUAL_SLOT_COMMANDER_COUNT = 10
 MANUAL_SLOT_COMMANDER_CLASS_OFFSET = 0x00
+MANUAL_SLOT_COMMANDER_MP_OFFSET = 0x01
 MANUAL_SLOT_COMMANDER_LEVEL_OFFSET = 0x02
 MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET = 0x03
 MANUAL_SLOT_COMMANDER_AT_OFFSET = 0x04
@@ -207,7 +208,6 @@ SEQUENCES = {
 
 # Same regression path, stopped on the sell list before confirming the dagger.
 SEQUENCES["shop-sell-list"] = list(SEQUENCES["shop-buy-sell"][:-1])
-
 # This sequence uses the deploy/dialogue inputs, then advances one confirmation
 # at a time until the full command menu is detected. Fixed confirmation counts
 # are timing-sensitive and can accidentally choose Move on faster hosts.
@@ -307,6 +307,57 @@ def running_blastem_pids(
                 continue
             pids.append(int(entry.name))
     return sorted(pids)
+
+
+def dismiss_virtual_software_renderer_notice(timeout: float = 2.0) -> bool:
+    """Dismiss BlastEm's software-vsync notice on the isolated Xvfb.
+
+    The bundled SDL renderer opens a modal ``BlastEm Info`` window before
+    emulation starts when software vsync cannot be disabled.  It is a host
+    notice, not a ROM error, but blocks screen-guided virtual-display tests.
+    Send Return only to that exact modal title on the already isolated display.
+    """
+    from Xlib import X, XK
+    from Xlib.display import Display
+    from Xlib.protocol import event
+
+    deadline = time.monotonic() + timeout
+    display = Display()
+    try:
+        root = display.screen().root
+        while time.monotonic() <= deadline:
+            stack = list(root.query_tree().children)
+            while stack:
+                window = stack.pop()
+                try:
+                    if (window.get_wm_name() or "") == "BlastEm Info":
+                        keycode = display.keysym_to_keycode(XK.XK_Return)
+                        for event_class in (event.KeyPress, event.KeyRelease):
+                            window.send_event(
+                                event_class(
+                                    time=X.CurrentTime,
+                                    root=root,
+                                    window=window,
+                                    same_screen=1,
+                                    child=X.NONE,
+                                    root_x=0,
+                                    root_y=0,
+                                    event_x=10,
+                                    event_y=10,
+                                    state=0,
+                                    detail=keycode,
+                                ),
+                                propagate=True,
+                            )
+                            display.sync()
+                        return True
+                    stack.extend(window.query_tree().children)
+                except Exception:
+                    continue
+            time.sleep(0.05)
+        return False
+    finally:
+        display.close()
 
 
 def terminate_blastem_processes(
@@ -473,6 +524,7 @@ def patch_manual_slot_commander_progress(
     slot_index: int = 0,
     expected_class: int | None = None,
     new_class: int | None = None,
+    new_mp: int | None = None,
     new_at: int | None = None,
     new_df: int | None = None,
     hire_mask_or: int | None = None,
@@ -481,13 +533,13 @@ def patch_manual_slot_commander_progress(
         raise ValueError(
             f"commander ID must be 1..{MANUAL_SLOT_COMMANDER_COUNT}"
         )
-    if not 1 <= level <= 10:
-        raise ValueError("commander level must be 1..10")
+    if not 1 <= level <= 99:
+        raise ValueError("commander level must be 1..99")
     if not 0 <= experience <= 0xFF:
         raise ValueError("commander experience must be 0..255")
     if new_class is not None and not 0 <= new_class <= 0x9C:
         raise ValueError("commander class must be 0..156")
-    for label, value in (("AT", new_at), ("DF", new_df)):
+    for label, value in (("MP", new_mp), ("AT", new_at), ("DF", new_df)):
         if value is not None and not 0 <= value <= 99:
             raise ValueError(f"commander {label} must be 0..99")
     if hire_mask_or is not None and not 0 <= hire_mask_or <= 0xFFFF:
@@ -513,6 +565,8 @@ def patch_manual_slot_commander_progress(
         )
     if new_class is not None:
         data[record + MANUAL_SLOT_COMMANDER_CLASS_OFFSET] = new_class
+    if new_mp is not None:
+        data[record + MANUAL_SLOT_COMMANDER_MP_OFFSET] = new_mp
     if new_at is not None:
         data[record + MANUAL_SLOT_COMMANDER_AT_OFFSET] = new_at
     if new_df is not None:
@@ -1362,6 +1416,7 @@ def main() -> int:
         type=lambda value: int(value, 0),
         help="set the selected commander's class in the recovered manual slot",
     )
+    parser.add_argument("--manual-slot-mp", type=int)
     parser.add_argument("--manual-slot-at", type=int)
     parser.add_argument("--manual-slot-df", type=int)
     parser.add_argument(
@@ -1493,6 +1548,7 @@ def main() -> int:
                     args.manual_slot_experience,
                     expected_class=args.manual_slot_expected_class,
                     new_class=args.manual_slot_class,
+                    new_mp=args.manual_slot_mp,
                     new_at=args.manual_slot_at,
                     new_df=args.manual_slot_df,
                     hire_mask_or=args.manual_slot_hire_mask_or,
@@ -1508,6 +1564,11 @@ def main() -> int:
                 f"class {class_summary} progress "
                 f"LV{old_level}/EXP{old_experience} -> "
                 f"LV{args.manual_slot_level}/EXP{args.manual_slot_experience}"
+                + (
+                    f", MP {args.manual_slot_mp}"
+                    if args.manual_slot_mp is not None
+                    else ""
+                )
                 + (
                     f", AT {args.manual_slot_at}"
                     if args.manual_slot_at is not None
@@ -1577,6 +1638,12 @@ def main() -> int:
                     stderr=subprocess.STDOUT,
                     start_new_session=True,
                 )
+            if isolated_display and args.software_renderer:
+                if dismiss_virtual_software_renderer_notice():
+                    print(
+                        "dismissed isolated BlastEm software-renderer notice",
+                        flush=True,
+                    )
             time.sleep(args.initial_delay)
             if process.poll() is not None:
                 log_tail = log_path.read_text(encoding="utf-8", errors="replace")[-4000:]

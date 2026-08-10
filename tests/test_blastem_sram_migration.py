@@ -15,6 +15,7 @@ from tools.run_blastem_sequence import (
     MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET,
     MANUAL_SLOT_COMMANDER_HIRE_MASK_OFFSET,
     MANUAL_SLOT_COMMANDER_LEVEL_OFFSET,
+    MANUAL_SLOT_COMMANDER_MP_OFFSET,
     MANUAL_SLOT_COMMANDER_RECORD_SIZE,
     MANUAL_SLOT_COMMANDER_ROSTER_OFFSET,
     MANUAL_SLOT_HERO_DIALOGUE_NAME_OFFSET,
@@ -291,6 +292,45 @@ class BlastEmSramMigrationTests(unittest.TestCase):
             },
         )
 
+    def test_patches_regressed_commander_level_above_class_boundary(self):
+        data, base = self.make_sram()
+        data[base : base + 2] = (11).to_bytes(2, "big")
+        record = (
+            base
+            + MANUAL_SLOT_COMMANDER_ROSTER_OFFSET
+            + 8 * MANUAL_SLOT_COMMANDER_RECORD_SIZE
+        )
+        data[record + MANUAL_SLOT_COMMANDER_CLASS_OFFSET] = 1
+        data[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET] = 10
+        data[record + MANUAL_SLOT_COMMANDER_EXPERIENCE_OFFSET] = 15
+        data[
+            SRAM_FORMAT_MARKER_OFFSET : SRAM_FORMAT_MARKER_OFFSET + 2
+        ] = SRAM_FORMAT_MARKER.to_bytes(2, "big")
+        data[SRAM_VALID_FLAGS_OFFSET : SRAM_VALID_FLAGS_OFFSET + 2] = (
+            2
+        ).to_bytes(2, "big")
+        checksum_offset = base + MANUAL_SLOT_CHECKSUM_OFFSET
+        data[checksum_offset : checksum_offset + 2] = manual_slot_checksum(
+            data, base
+        ).to_bytes(2, "big")
+
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "save.sram"
+            path.write_bytes(data)
+            old = patch_manual_slot_commander_progress(
+                path, 9, 12, 15, expected_class=1
+            )
+            patched = path.read_bytes()
+
+        self.assertEqual(old, (1, 10, 15))
+        self.assertEqual(
+            patched[record + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET], 12
+        )
+        self.assertEqual(
+            int.from_bytes(patched[checksum_offset : checksum_offset + 2], "big"),
+            manual_slot_checksum(patched, base),
+        )
+
     def test_commander_progress_uses_24_byte_roster_records(self):
         self.assertEqual(MANUAL_SLOT_COMMANDER_RECORD_SIZE, 0x18)
 
@@ -363,6 +403,7 @@ class BlastEmSramMigrationTests(unittest.TestCase):
                 0xFF,
                 expected_class=1,
                 new_class=0x22,
+                new_mp=97,
                 new_at=99,
                 new_df=98,
             )
@@ -372,6 +413,7 @@ class BlastEmSramMigrationTests(unittest.TestCase):
         self.assertEqual(
             patched[record + MANUAL_SLOT_COMMANDER_CLASS_OFFSET], 0x22
         )
+        self.assertEqual(patched[record + MANUAL_SLOT_COMMANDER_MP_OFFSET], 97)
         self.assertEqual(patched[record + MANUAL_SLOT_COMMANDER_AT_OFFSET], 99)
         self.assertEqual(patched[record + MANUAL_SLOT_COMMANDER_DF_OFFSET], 98)
         self.assertEqual(

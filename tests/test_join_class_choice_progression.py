@@ -252,6 +252,64 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                 routine,
             )
 
+    def test_legacy_lester_above_level_ten_is_restored_before_the_gate(self) -> None:
+        routine = builder.build_join_class_choice_visibility_guard()
+
+        # Regression contract for v1.3.2/v1.3.3 saves: target identity must be
+        # dispatched before the stock exact-LV10 comparison.  Otherwise a
+        # Fighter that already reached LV11 or LV12 can never be migrated.
+        first_identity = bytes.fromhex("0C 28 00 07 00 01")
+        level_gate = bytes.fromhex("0C 28 00 0A 00 2E")
+        self.assertEqual(routine[: len(first_identity)], first_identity)
+        self.assertGreater(routine.index(level_gate), 0)
+
+        lester = builder.JOIN_CLASS_CHOICE_RECORDS[9]
+        target = lester["target"]
+        restored_boundary = b"".join(
+            bytes.fromhex("11 7C 00") + bytes((value, 0x00, offset))
+            for value, offset in (
+                (lester["tier1_class"], 0x00),
+                (target[1], 0x39),
+                (10, 0x2E),
+                (target[3], 0x2F),
+                (target[4], 0x3A),
+                (target[5], 0x3B),
+            )
+        )
+        self.assertIn(restored_boundary, routine)
+
+    def test_legacy_fighter_recovery_requires_the_real_player_map(self) -> None:
+        def recovered(
+            commander_id: int,
+            scenario: int,
+            x: int,
+            y: int,
+            class_id: int,
+            level: int,
+        ) -> bool:
+            row = builder.JOIN_CLASS_CHOICE_RECORDS[commander_id]
+            return (
+                row.get("legacy_tier1_class") == class_id
+                and level >= 10
+                and scenario >= row["first_player_scenario"]
+                and x != 0xFF
+                and y != 0xFF
+                and (x != 0 or y != 0)
+            )
+
+        # The reported broken saves are recovered at both LV11 and LV12.
+        self.assertTrue(recovered(9, 11, 0, 12, 0x01, 11))
+        self.assertTrue(recovered(9, 11, 0, 12, 0x01, 12))
+        # A player who already saved in a later scenario is repaired on the
+        # next real on-map progression scan as well, not only in Scenario 11.
+        self.assertTrue(recovered(9, 20, 14, 18, 0x01, 12))
+        # Lester stays Fighter before joining and is not rewritten while his
+        # preparation/runtime record is hidden.
+        self.assertFalse(recovered(9, 10, 0, 12, 0x01, 12))
+        self.assertFalse(recovered(9, 11, 0, 0, 0x01, 12))
+        self.assertFalse(recovered(9, 11, 0xFF, 0xFF, 0x01, 12))
+        self.assertFalse(recovered(9, 11, 0, 12, 0x01, 9))
+
     def test_join_scenario_is_each_commanders_first_player_roster(self) -> None:
         for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
             appearances = []

@@ -16,7 +16,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools import hard_mode_plan
 from tools import verify_hard_mode_runtime_evidence as runtime_evidence
 
 
@@ -45,11 +44,17 @@ def sha256(path: Path) -> str:
 
 
 def seed_for_scenario(scenario_number: int) -> Path:
-    if scenario_number <= 10:
-        return EARLYGAME_SEED
-    if scenario_number < 25:
-        return MIDGAME_SEED
-    return LATEGAME_SEED
+    preferred = (
+        EARLYGAME_SEED
+        if scenario_number <= 10
+        else MIDGAME_SEED
+        if scenario_number < 25
+        else LATEGAME_SEED
+    )
+    # Scenario Select can target every scenario from any valid manual slot.
+    # Some historical mid/late captures are intentionally untracked, so use
+    # the retained early-game slot instead of failing before gameplay.
+    return preferred if preferred.is_file() else EARLYGAME_SEED
 
 
 def run(command: list[str], *, env: dict[str, str] | None = None) -> None:
@@ -103,7 +108,7 @@ def matching_player_group_count(gst: bytes, scenario_number: int) -> int:
 
 
 def scenario_record_indexes(scenario_number: int) -> list[int]:
-    plan = hard_mode_plan.build_plan()
+    plan = runtime_evidence.load_applied_plan()
     scenario = next(
         row for row in plan["scenarios"]
         if int(row["number"]) == scenario_number
@@ -197,6 +202,7 @@ def verify_scenario(
     runtime_name: str | None = None,
     evidence_tag: str | None = None,
     entry_source_gst: Path | None = None,
+    verify_hard_runtime: bool = True,
 ) -> dict:
     runtime_name = runtime_name or f"hard-matrix-s{scenario_number:02d}"
     evidence_tag = evidence_tag or f"hard_matrix_s{scenario_number:02d}"
@@ -265,20 +271,27 @@ def verify_scenario(
     ], env=env)
     gst = locate_quicksave(runtime_name)
     gst_bytes = gst.read_bytes()
-    player_group_count = matching_player_group_count(
-        gst_bytes,
-        scenario_number,
+    player_group_count = (
+        matching_player_group_count(gst_bytes, scenario_number)
+        if verify_hard_runtime
+        else None
     )
     retained_gst = retain_entry_gst(
         scenario_number,
         gst_bytes,
         evidence_tag=evidence_tag,
     )
-    indexes = scenario_record_indexes(scenario_number)
-    exception_indexes = scenario_runtime_exception_indexes(
-        scenario_number
+    indexes = (
+        scenario_record_indexes(scenario_number)
+        if verify_hard_runtime
+        else []
     )
-    return {
+    exception_indexes = (
+        scenario_runtime_exception_indexes(scenario_number)
+        if verify_hard_runtime
+        else []
+    )
+    result = {
         "number": scenario_number,
         "status": "runtime_loader_smoke_verified",
         "endpoint": "자동 배치 후 출격",
@@ -289,10 +302,7 @@ def verify_scenario(
         ),
         "runtime_exception_record_count": len(exception_indexes),
         "runtime_exception_indexes": exception_indexes,
-        "runtime_group_range": [
-            player_group_count + min(indexes),
-            player_group_count + max(indexes),
-        ],
+        "runtime_group_range": None,
         "seed": str(seed.relative_to(ROOT)),
         "seed_sha256": sha256(seed),
         "gst": str(retained_gst.relative_to(ROOT)),
@@ -302,6 +312,12 @@ def verify_scenario(
         "capture": str(capture.relative_to(ROOT)),
         "capture_sha256": sha256(capture),
     }
+    if verify_hard_runtime:
+        result["runtime_group_range"] = [
+            player_group_count + min(indexes),
+            player_group_count + max(indexes),
+        ]
+    return result
 
 
 def parse_args() -> argparse.Namespace:
@@ -345,6 +361,14 @@ def parse_args() -> argparse.Namespace:
         "--entry-source-gst",
         type=Path,
         help="GST used to recover the saved slot for this scenario entry",
+    )
+    parser.add_argument(
+        "--skip-hard-runtime-check",
+        action="store_true",
+        help=(
+            "capture a current-ROM Turn-1 entry without comparing the "
+            "Standard Hard enemy plan; intended for normal/pure playback"
+        ),
     )
     return parser.parse_args()
 
@@ -402,14 +426,23 @@ def main() -> int:
             runtime_name=runtime_name,
             evidence_tag=evidence_tag,
             entry_source_gst=args.entry_source_gst,
+            verify_hard_runtime=not args.skip_hard_runtime_check,
         )
         save_result(results_path, results, result)
-        first_group, last_group = result["runtime_group_range"]
-        print(
-            f"Scenario {scenario_number}: {result['target_record_count']} "
-            f"targets match in runtime groups {first_group}..{last_group}",
-            flush=True,
-        )
+        if result["runtime_group_range"] is None:
+            print(
+                f"Scenario {scenario_number}: current-ROM Turn-1 entry "
+                "captured",
+                flush=True,
+            )
+        else:
+            first_group, last_group = result["runtime_group_range"]
+            print(
+                f"Scenario {scenario_number}: "
+                f"{result['target_record_count']} targets match in runtime "
+                f"groups {first_group}..{last_group}",
+                flush=True,
+            )
     return 0
 
 

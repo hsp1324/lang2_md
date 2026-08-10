@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Windows GUI and command-line patcher for Langrisser II Korean v1.3.3."""
+"""Windows GUI and command-line patcher for Langrisser II Korean v1.3.4."""
 
 from __future__ import annotations
 
@@ -28,9 +28,9 @@ from tools.rom_update import (
 )
 
 
-APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.3"
-MANIFEST_FILENAME = "v1.3.3.json"
-PATCHER_RELEASE = "v1.3.3"
+APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.4"
+MANIFEST_FILENAME = "v1.3.4.json"
+PATCHER_RELEASE = "v1.3.4"
 ROM_SUFFIXES = frozenset({".md", ".bin", ".gen", ".smd", ".zip"})
 
 

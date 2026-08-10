@@ -6,7 +6,6 @@ import unittest
 from tools import build_hard_mode_rom as hard_builder
 from tools import hard_mode_approval
 from tools import hard_mode_baseline
-from tools import hard_mode_plan
 from tools import rom_version
 from tools import rom_update
 
@@ -43,13 +42,17 @@ SUPERSEDED_123_PLAYTEST_ROM = (
     ROOT / "roms/builds/"
     "Langrisser II (Korean Hard T1.2.3 B1.2.3).md"
 )
+SUPERSEDED_132_PLAYTEST_ROM = (
+    ROOT / "roms/builds/"
+    "Langrisser II (Korean Hard T1.3.2 B1.3.2).md"
+)
 
 
 class HardModeBuildTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.base = BASE_ROM.read_bytes()
-        cls.plan = hard_mode_plan.build_plan()
+        cls.plan = hard_builder.load_applied_plan()
         cls.approval = hard_mode_approval.require_approved()
         cls.hard, cls.manifest = hard_builder.apply_hard_mode(
             cls.base,
@@ -250,7 +253,24 @@ class HardModeBuildTests(unittest.TestCase):
             UPDATE_REGISTRY.read_text(encoding="utf-8")
         )
         history = registry["candidate_history"]
-        self.assertEqual(len(history), 6)
+        self.assertEqual(len(history), 7)
+        for predecessor, successor in zip(history, history[1:]):
+            self.assertEqual(predecessor["superseded_by"], successor["sha256"])
+        self.assertEqual(
+            history[-1]["superseded_by"],
+            registry["releases"][0]["sha256"],
+        )
+        retained = (
+            SUPERSEDED_PLAYTEST_ROM,
+            SUPERSEDED_5BE8_PLAYTEST_ROM,
+            SUPERSEDED_120_PLAYTEST_ROM,
+            SUPERSEDED_121_PLAYTEST_ROM,
+            SUPERSEDED_122_PLAYTEST_ROM,
+            SUPERSEDED_123_PLAYTEST_ROM,
+            SUPERSEDED_132_PLAYTEST_ROM,
+        )
+        if not all(path.is_file() for path in retained):
+            self.skipTest("ignored superseded hard ROMs are absent")
         predecessor = history[0]
         payload = SUPERSEDED_PLAYTEST_ROM.read_bytes()
         self.assertEqual(predecessor["md_checksum"], "1011")
@@ -339,6 +359,21 @@ class HardModeBuildTests(unittest.TestCase):
         )
         self.assertEqual(
             predecessor_123["superseded_by"],
+            history[6]["sha256"],
+        )
+        predecessor_132 = history[6]
+        payload_132 = SUPERSEDED_132_PLAYTEST_ROM.read_bytes()
+        self.assertEqual(predecessor_132["md_checksum"], "F8E7")
+        self.assertEqual(
+            predecessor_132["sha256"],
+            hashlib.sha256(payload_132).hexdigest(),
+        )
+        self.assertEqual(
+            predecessor_132["sram_descriptor"],
+            rom_update.md_sram_descriptor(payload_132).hex().upper(),
+        )
+        self.assertEqual(
+            predecessor_132["superseded_by"],
             registry["releases"][0]["sha256"],
         )
 

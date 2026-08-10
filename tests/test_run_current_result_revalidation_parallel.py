@@ -11,6 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CurrentResultRevalidationParallelTests(unittest.TestCase):
+    def test_runner_matrix_covers_all_scenarios(self):
+        self.assertEqual(tuple(runner.RUNNERS), tuple(range(1, 32)))
+
     def args(self) -> argparse.Namespace:
         return argparse.Namespace(
             profiles=["normal", "hard"],
@@ -138,6 +141,15 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
         self.assertTrue(command[1].endswith("run_scenario11_result_surface.py"))
         self.assertIn(str(runner.SCENARIO_SEED_OVERRIDES[11]), command)
         self.assertNotIn("--scenario", command)
+        command = runner.task_command(args, "hard", 30, ":610")
+        self.assertTrue(
+            command[1].endswith("run_scenario28_31_result_surface.py")
+        )
+        self.assertIn(
+            str(args.probe_root / "hard/s30-completion.md"),
+            command,
+        )
+        self.assertEqual(command[-2:], ["--scenario", "30"])
 
 
 if __name__ == "__main__":

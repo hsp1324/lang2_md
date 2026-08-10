@@ -40,8 +40,16 @@ The live probe changed only Elwin's Scenario 6 deployment from `(4,26)` to
 
 `룬스톤을 찾았다!`
 
-The accepted screen is `captures/run/v132_s06_runestone_reachable.png`; the
-matching GST is recorded in `localization/scenario6_runestone_runtime.json`.
+The original accepted screen is
+`captures/run/v132_s06_runestone_reachable.png`; the matching GST is recorded
+in `localization/scenario6_runestone_runtime.json`.
+
+v1.3.4 was replayed independently on an isolated Xvfb display.  The normal
+release was wrapped only to place Elwin at `(6,4)`; an ordinary move to
+`(7,4)` again rendered `룬스톤을 찾았다!`.  The reviewed screen and GST are
+`captures/run/v134_release_regression/s06_runestone_retry/battle/runestone_found.png`
+and `captures/run/v134_release_regression/s06_runestone_retry/states/runestone_found.gst`.
+Their hashes are locked by `localization/v134_release_regression.json`.
 
 ## Hard-Mode Cheat Check
 

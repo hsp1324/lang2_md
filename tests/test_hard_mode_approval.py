@@ -133,6 +133,8 @@ class HardModeApprovalTests(unittest.TestCase):
         )
 
     def test_gate_work_does_not_change_the_normal_release(self):
+        if not NORMAL_ROM.is_file():
+            self.skipTest("ignored v1.0.0 normal reference ROM is absent")
         self.assertEqual(
             hashlib.sha256(NORMAL_ROM.read_bytes()).hexdigest(),
             hard_mode_baseline.NORMAL_SHA256,

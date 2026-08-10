@@ -4,7 +4,7 @@
 
 프로젝트 개발자: **hsp1324**
 
-> 최신 공개 버전은 `v1.3.3`입니다. 세 가지 완성판은
+> 최신 공개 버전은 `v1.3.4`입니다. 세 가지 완성판은
 > GitHub Releases의 패처(EXE)로 일본판 ROM에 적용해 사용합니다.  
 > 동작은 `RetroArch`(Genesis Plus GX 기준) 환경에서 검증되었으므로 우선적으로
 > `RetroArch` 사용을 권장합니다.
@@ -13,9 +13,25 @@
 
 원하는 버전은 다음 패처를 받아 일본판 ROM에 적용합니다.
 
-- [Langrisser-II-Korean-Patcher-v1.3.3.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.3/Langrisser-II-Korean-Patcher-v1.3.3.exe)
+- [Langrisser-II-Korean-Patcher-v1.3.4.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4.exe)
 
-검증값은 [v1.3.3 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.3)에서 확인할 수 있습니다.
+검증값은 [v1.3.4 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.4)에서 확인할 수 있습니다.
+
+### v1.3.4 변경 사항
+
+- v1.3.2부터 발생한 키스·레스터 구 세이브 회귀를 수정했습니다. 합류 시점에
+  파이터 레벨 10을 이미 지나 11·12 이상이 된 기록도 정상 1차 클래스 레벨
+  10 경계로 복구한 뒤 기존 클래스 선택 화면을 엽니다.
+- 새 게임의 키스·레스터·제시카는 각자의 1차 클래스 레벨 10으로 등장합니다.
+  준비 화면이나 합류 전 NPC 상태에서는 전직하지 않으며, 실제 아군 합류·배치
+  시점에 바로 클래스 선택을 한 뒤 선택한 클래스에서 정상적으로 레벨이 오릅니다.
+- v1.3.1~v1.3.3의 번역, New 디자인, 룬스톤 접근성, 시나리오 조건 및
+  UI 수정은 이전 공개 결과와 바이트 단위로 대조해 유지했습니다. v1.3.3
+  하드판에서 빠졌던 승인된 Standard Hard 밸런스 계층은 v1.3.2 기준으로
+  복구했으며, 릴리스 검사에서 300개 적 기록과 보정 루틴을 모두 확인합니다.
+- 화면 검증은 실제 데스크톱 입력을 쓰지 않는 격리 Xvfb/BlastEm 환경에서
+  진행했습니다. 세 버전의 시나리오 1~31 진입과 첫 턴, 세 인물의 실제 합류
+  전직, 후반 시나리오 28~31의 전투 결과·저장을 확인했습니다.
 
 ## 세 가지 버전
 
@@ -26,9 +42,9 @@
 Windows 패처는 일본판 ROM 또는 ZIP 하나를 고르면 위 세 ROM을 모두 생성합니다.
 
 ```text
-Langrisser II (Korean Original v1.3.3).md
-Langrisser II (Korean Normal v1.3.3).md
-Langrisser II (Korean Hard v1.3.3).md
+Langrisser II (Korean Original v1.3.4).md
+Langrisser II (Korean Normal v1.3.4).md
+Langrisser II (Korean Hard v1.3.4).md
 ```
 
 ## macOS에서 패치하기
@@ -111,7 +127,9 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 쓰는 실제 시작 클래스도 함께 바뀝니다. 별도의 `실제 시작 클래스` 선택기로
 이미 경로에 있는 상위 클래스부터 시작하게 할 수도 있습니다. 기존 `.srm`에
 이미 생성된 지휘관은 초기 로스터 변경이 소급되지 않으므로 새 게임에서
-확인해 주세요. `다음 클래스`를 바꾸면 해당 클래스만 교체되며 그 뒤에
+확인해 주세요. 단, 정식 v1.3.4 ROM은 v1.3.0~v1.3.3 구 세이브의 키스·레스터가
+파이터 레벨 10 이상에서 막힌 경우를 게임 안에서 자동 복구합니다. `다음 클래스`를
+바꾸면 해당 클래스만 교체되며 그 뒤에
 연결된 기존 전직 선택지는 유지됩니다.
 
 `클래스 체인지 → New 디자인`의 16×16 디자인 편집 결과는 현재 편집 ROM에
@@ -130,11 +148,11 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 4. 복사본의 기본 파일명을 새 ROM과 똑같이 맞춥니다.
 5. 새 ROM을 실행하고 게임 안의 `불러오기`로 저장을 엽니다.
 
-예를 들어 새 ROM이 `Langrisser II (Korean Normal v1.3.3).md`이면 다음 저장
+예를 들어 새 ROM이 `Langrisser II (Korean Normal v1.3.4).md`이면 다음 저장
 파일이 생성됩니다.
 
 ```text
-Langrisser II (Korean Normal v1.3.3).srm
+Langrisser II (Korean Normal v1.3.4).srm
 ```
 
 에뮬레이터의 상태 저장 파일(`.state`, `.state*`, `.gst`)은 ROM 내부 코드와 실행 중 메모리를 포함하므로 다른 빌드와의 호환을 보장하지 않습니다. 업데이트 후 문제가 보이면 상태 저장 대신 게임 내 저장인 `.srm`으로 다시 시작해 주세요.

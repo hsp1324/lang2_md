@@ -51,6 +51,8 @@ def run_one(
     xvfb: Path,
     xvfb_library_path: Path,
     emulator_speed: int,
+    profile: str,
+    allow_unapproved_defeat: bool,
 ) -> dict[str, object]:
     started = time.monotonic()
     scenario_text = f"{scenario:02d}"
@@ -66,9 +68,7 @@ def run_one(
     )
     outputs: list[str] = []
     try:
-        outputs.append(
-            run(
-                [
+        loader_command = [
                     sys.executable,
                     str(ROOT / "tools/verify_hard_mode_scenario_runtime.py"),
                     "--scenario",
@@ -82,11 +82,10 @@ def run_one(
                     "--evidence-prefix",
                     f"{prefix}-loader",
                 ]
-            )
-        )
-        outputs.append(
-            run(
-                [
+        if profile != "hard":
+            loader_command.append("--skip-hard-runtime-check")
+        outputs.append(run(loader_command))
+        first_turn_command = [
                     sys.executable,
                     str(ROOT / "tools/verify_hard_mode_first_turn.py"),
                     "--scenario",
@@ -116,8 +115,11 @@ def run_one(
                     "--evidence-prefix",
                     f"{prefix}-first-turn",
                 ]
-            )
-        )
+        if profile != "hard":
+            first_turn_command.append("--skip-hard-runtime-check")
+        if allow_unapproved_defeat:
+            first_turn_command.append("--allow-unapproved-defeat")
+        outputs.append(run(first_turn_command))
         result = json.loads(first_turn_results.read_text(encoding="utf-8"))
         row = next(
             row
@@ -153,6 +155,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rom", type=Path, required=True)
     parser.add_argument(
+        "--profile",
+        choices=("normal", "hard", "pure"),
+        required=True,
+    )
+    parser.add_argument(
         "--scenarios",
         type=parallel.parse_scenarios,
         default=list(range(1, 32)),
@@ -168,6 +175,17 @@ def parse_args() -> argparse.Namespace:
         default=parallel.DEFAULT_XVFB_LIBRARY_PATH,
     )
     parser.add_argument("--emulator-speed", type=int, default=4)
+    parser.add_argument(
+        "--attempts",
+        type=int,
+        default=2,
+        help="isolated emulator attempts per scenario for transient startup failures",
+    )
+    parser.add_argument(
+        "--allow-unapproved-defeat",
+        action="store_true",
+        help="record natural defeat endpoints for cross-profile diagnosis",
+    )
     return parser.parse_args()
 
 
@@ -177,6 +195,8 @@ def main() -> int:
         raise ValueError(
             f"--workers must be 1..{parallel.MAX_WORKERS}"
         )
+    if not 1 <= args.attempts <= 4:
+        raise ValueError("--attempts must be 1..4")
     if not args.rom.is_file():
         raise FileNotFoundError(args.rom)
     if args.output_root.exists():
@@ -192,16 +212,30 @@ def main() -> int:
     def assigned(scenario: int) -> dict[str, object]:
         display = displays.get()
         try:
-            return run_one(
-                scenario,
-                rom=args.rom.resolve(),
-                display=display,
-                output_root=args.output_root.resolve(),
-                evidence_prefix=args.evidence_prefix,
-                xvfb=args.xvfb,
-                xvfb_library_path=args.xvfb_library_path,
-                emulator_speed=args.emulator_speed,
-            )
+            errors: list[str] = []
+            for attempt in range(1, args.attempts + 1):
+                row = run_one(
+                    scenario,
+                    rom=args.rom.resolve(),
+                    display=display,
+                    output_root=args.output_root.resolve(),
+                    evidence_prefix=args.evidence_prefix,
+                    xvfb=args.xvfb,
+                    xvfb_library_path=args.xvfb_library_path,
+                    emulator_speed=args.emulator_speed,
+                    profile=args.profile,
+                    allow_unapproved_defeat=args.allow_unapproved_defeat,
+                )
+                row["attempt"] = attempt
+                if row["status"] == "pass":
+                    if errors:
+                        row["previous_errors"] = errors
+                    return row
+                errors.append(str(row.get("error", "unknown failure")))
+                if attempt < args.attempts:
+                    time.sleep(1.0)
+            row["previous_errors"] = errors[:-1]
+            return row
         finally:
             displays.put(display)
 
@@ -225,6 +259,8 @@ def main() -> int:
         "schema_version": 1,
         "status": "pass" if passed else "fail",
         "rom": str(args.rom.resolve().relative_to(ROOT)),
+        "profile": args.profile,
+        "attempts_per_scenario": args.attempts,
         "scenarios": rows,
         "coverage": {
             "requested": args.scenarios,

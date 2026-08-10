@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class BuildCurrentResultProbeMatrixTests(unittest.TestCase):
     def test_early_and_scenario11_definitions_use_deterministic_completion(self):
-        self.assertEqual(tuple(range(1, 28)), matrix.SCENARIOS)
+        self.assertEqual(tuple(range(1, 32)), matrix.SCENARIOS)
         for scenario in (1, 2, 3, 4, 6, 7, 8, 9):
             self.assertTrue(
                 matrix.PROBE_DEFINITIONS[scenario]["filename"].endswith(
@@ -32,6 +32,14 @@ class BuildCurrentResultProbeMatrixTests(unittest.TestCase):
         self.assertEqual(
             matrix.PROBE_DEFINITIONS[11]["kwargs"],
             {"safe_clear_layout": True, "safe_jessica": True},
+        )
+        self.assertEqual(
+            matrix.PROBE_DEFINITIONS[30]["kwargs"],
+            {"completion_target_only": True},
+        )
+        self.assertEqual(
+            matrix.PROBE_DEFINITIONS[31]["kwargs"],
+            {"completion_layout": True},
         )
 
     def test_scenario14_and_15_current_probes_are_valid_and_source_bound(self):

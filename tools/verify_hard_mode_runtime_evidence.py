@@ -15,8 +15,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools import hard_mode_plan
-
 DEFAULT_GST = ROOT / "captures/analysis/0718_hard_s01_turn1_command.gst"
 SCENARIO_TEN_GST = (
     ROOT / "captures/analysis/0718_hard_s10_early_seed_turn1.gst"
@@ -33,6 +31,7 @@ SCENARIO_TWENTY_SEVEN_GST = (
 RUNTIME_EXCEPTIONS = (
     ROOT / "localization/hard_mode_runtime_exceptions.json"
 )
+APPLIED_PLAN = ROOT / "localization/hard_mode_plan.json"
 
 GST_WORK_RAM_FILE_OFFSET = 0x2478
 RUNTIME_GROUP_BASE = 0x603C
@@ -214,6 +213,27 @@ def load_runtime_exceptions(
     return result
 
 
+def load_applied_plan(path: Path = APPLIED_PLAN) -> dict:
+    """Load the reviewed plan that was actually used to build Hard ROMs.
+
+    Runtime replay must stay usable after the private/ignored v1.0.0 ROM
+    used to derive the plan is removed from a checkout. Rebuilding the plan
+    here made valid emulator evidence depend on that old local ROM.
+    """
+    plan = json.loads(path.read_text(encoding="utf-8"))
+    if plan.get("schema_version") != 1:
+        raise ValueError("unsupported hard-mode plan schema")
+    scenarios = plan.get("scenarios", [])
+    if [int(row["number"]) for row in scenarios] != list(range(1, 32)):
+        raise ValueError("hard-mode plan must contain scenarios 1..31")
+    if (
+        plan.get("status") != "approved_balance_plan"
+        or plan.get("approval", {}).get("status") != "approved"
+    ):
+        raise ValueError("hard-mode plan is not the approved balance plan")
+    return plan
+
+
 def runtime_exception_for(
     scenario_number: int,
     fixed_record_index: int,
@@ -255,7 +275,7 @@ def verify_planned_scenario(
     scenario_number: int,
     player_group_count: int,
 ) -> tuple[RuntimeGroup, ...]:
-    plan = hard_mode_plan.build_plan()
+    plan = load_applied_plan()
     scenario = next(
         row for row in plan["scenarios"]
         if int(row["number"]) == scenario_number
@@ -423,7 +443,7 @@ def main() -> int:
             args.gst or retained_path
         )
         scenario = next(
-            row for row in hard_mode_plan.build_plan()["scenarios"]
+            row for row in load_applied_plan()["scenarios"]
             if int(row["number"]) == scenario_number
         )
         record_indexes = [int(record["index"]) for record in scenario["records"]]

@@ -6,7 +6,7 @@
 일본판 ROM에 적용하는 것을 기본 흐름으로 삼는다. 원하면 BPS를 직접
 적용할 수도 있다.
 
-1. `Langrisser-II-Korean-Patcher-v1.3.3.exe`를 내려받는다.
+1. `Langrisser-II-Korean-Patcher-v1.3.4.exe`를 내려받는다.
 2. 일본판 `Langrisser II` ROM 또는 해당 ROM이 든 ZIP과 같은 폴더에 둔다.
 3. 패처를 실행한다.
 4. 폴더에서 지원 원본을 자동으로 찾지 못했을 때만 파일 선택창으로 ROM을
@@ -14,9 +14,9 @@
 5. 패처가 원작 디자인판, 최신 디자인 일반판, 최신 디자인 하드판을 각각 새 파일로 만든다.
 
 ```text
-Langrisser II (Korean Original v1.3.3).md
-Langrisser II (Korean Normal v1.3.3).md
-Langrisser II (Korean Hard v1.3.3).md
+Langrisser II (Korean Original v1.3.4).md
+Langrisser II (Korean Normal v1.3.4).md
+Langrisser II (Korean Hard v1.3.4).md
 ```
 
 원본 ROM, SRAM 저장, 에뮬레이터 상태 저장은 수정하지 않는다. 결과를 쓰기
@@ -25,7 +25,7 @@ Langrisser II (Korean Hard v1.3.3).md
 
 ## 지원 원본
 
-현재 1.3.3 결과를 만들 때 사용한 일본판 원본은 다음과 같다.
+현재 1.3.4 결과를 만들 때 사용한 일본판 원본은 다음과 같다.
 
 ```text
 크기:    2,097,152 bytes
@@ -37,20 +37,20 @@ SHA-256: a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b
 있는 덤프를 지원하려면 헤더를 제외한 내용이 위 해시와 일치할 때만 자동으로
 정규화한다.
 
-## 1.3.3 결과 검증값
+## 1.3.4 결과 검증값
 
 ```text
 원작 디자인판
 크기:    4,194,304 bytes
-SHA-256: b090a4cef0940211cea412c972f872927f6dbebea3b297583592b06ddc24ad77
+SHA-256: 96ebbdd3970ae21f78067f83d077062657fd7757b7dc45c6f6257b150e19682d
 
 최신 디자인 일반판
 크기:    4,194,304 bytes
-SHA-256: 085c65fed8c2de286e3a6b3260173a573cae0d6e4102afba0ee7debfc6bc04a5
+SHA-256: 65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4
 
 최신 디자인 하드판
 크기:    4,194,304 bytes
-SHA-256: 15b07113d00c993fd79fded4add0f1dbdca913f1de9dd5f6eb8219de232a146c
+SHA-256: 5dc9b5502210b2eb86ea16eff3bd8d047fa4b952f817a3366c4cbd6dd3b49dcf
 ```
 
 패처는 세 결과를 각각 검증한다. 한 결과라도 다르면 생성된 임시 파일을 최종
@@ -66,16 +66,16 @@ GitHub Release 자산으로만 제공한다.
 README.md
 patcher/
 patches/
-  original-v1.3.3.bps
-  normal-v1.3.3.bps
-  hard-v1.3.3.bps
+  original-v1.3.4.bps
+  normal-v1.3.4.bps
+  hard-v1.3.4.bps
   .github/workflows/build-v1.3-patcher.yml
 ```
 
-`v1.3.3` Release에는 다음 파일을 올린다.
+`v1.3.4` Release에는 다음 파일을 올린다.
 
 ```text
-Langrisser-II-Korean-Patcher-v1.3.3.exe
+Langrisser-II-Korean-Patcher-v1.3.4.exe
 SHA256SUMS.txt
 ```
 

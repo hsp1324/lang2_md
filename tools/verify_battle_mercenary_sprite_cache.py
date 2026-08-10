@@ -15,7 +15,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts import build_korean_jp_probe as builder
-from tools import hard_mode_baseline
 from tools import hard_mode_plan
 from tools import run_preparation_surface_matrix as preparation
 from tools.run_preparation_surface_parallel import parse_scenarios
@@ -35,6 +34,8 @@ SECOND_FRAME_TILE_DELTA = 0x100
 GRAY_VRAM_START = 0x9600
 DEFAULT_CAPTURE_ROOT = ROOT / "captures/run/gray_acted_surface_matrix"
 DEFAULT_OUTPUT = ROOT / "localization/battle_mercenary_sprite_cache.json"
+TRACKED_BASELINE = ROOT / "localization/hard_mode_baseline.json"
+TRACKED_PLAN = ROOT / "localization/hard_mode_plan.json"
 
 
 def parse_run_id_overrides(value: str) -> dict[int, str]:
@@ -304,11 +305,10 @@ def profile_report(
 
 
 def build_report(args: argparse.Namespace) -> dict[str, object]:
-    baseline = hard_mode_baseline.build_inventory(
-        hard_mode_baseline.DEFAULT_SOURCE_ROM,
-        hard_mode_baseline.DEFAULT_NORMAL_ROM,
-    )
-    plan = hard_mode_plan.build_plan()
+    # Runtime cache checks consume the reviewed tracked inventories. Rebuilding
+    # them here made playback require an old private v1.0.0 comparison ROM.
+    baseline = json.loads(TRACKED_BASELINE.read_text(encoding="utf-8"))
+    plan = json.loads(TRACKED_PLAN.read_text(encoding="utf-8"))
     baseline_by_number = {
         int(row["number"]): row for row in baseline["scenarios"]
     }

@@ -44,6 +44,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--runtime-root", type=Path, default=DEFAULT_RUNTIME_ROOT)
     parser.add_argument("--run-id", default="current")
     parser.add_argument("--max-confirmations", type=int, default=240)
+    parser.add_argument(
+        "--emulator-speed",
+        type=int,
+        choices=range(8),
+        default=4,
+        metavar="0..7",
+        help=(
+            "BlastEm host speed slot used while the long TURN 3 enemy phase "
+            "runs; slot 4 is 400%% and slot 0 restores normal speed"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -81,6 +92,8 @@ def main() -> int:
         # monsters and switch its alternate condition record.
         recorder.send(["down", "down", "down", "down"], delay=0.45)
         recorder.send(["c"], delay=1.5)
+        if args.emulator_speed:
+            recorder.send([str(args.emulator_speed)], delay=0.5)
         recorder.run_command(
             [
                 sys.executable,
@@ -101,6 +114,8 @@ def main() -> int:
                 "--send-event",
             ]
         )
+        if args.emulator_speed:
+            recorder.send(["0"], delay=0.5)
         recorder.capture("battle/turn3_command.png")
 
         # Close the commander panel, open Start, and choose 승리조건 (row 3).
@@ -127,6 +142,7 @@ def main() -> int:
             "condition_gst": str(state.resolve().relative_to(ROOT)),
             "condition_gst_sha256": sha256(state),
             "elapsed_seconds": round(time.monotonic() - started, 3),
+            "emulator_speed_slot": args.emulator_speed,
             "captures": recorder.captures,
             "actions": recorder.actions,
         }

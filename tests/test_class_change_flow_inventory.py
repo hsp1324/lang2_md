@@ -107,6 +107,15 @@ class ClassChangeFlowInventoryTests(unittest.TestCase):
         ):
             inventory(self.jp, bytes(mutated))
 
+    def test_join_visibility_hook_accepts_only_the_declared_guard(self):
+        mutated = bytearray(self.ko)
+        mutated[0x014848 + 5] ^= 1
+        with self.assertRaisesRegex(
+            ValueError,
+            "unexpected join visibility hook",
+        ):
+            inventory(self.jp, bytes(mutated))
+
     def test_generated_files_match(self):
         self.assertEqual(
             json.loads(INVENTORY_JSON.read_text(encoding="utf-8")),

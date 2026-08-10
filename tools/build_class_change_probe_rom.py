@@ -250,7 +250,11 @@ def patch_probe(
         resume_offset = CLASS_CHANGE_RESUME_OPERAND
         if source[resume_offset : resume_offset + 4] != resume_expected:
             raise ValueError("Japanese class-change resume operand changed")
-        if probe[resume_offset : resume_offset + 4] != resume_expected:
+        production_resume = probe[resume_offset : resume_offset + 4]
+        declared_join_wrapper = (
+            builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER.to_bytes(4, "big")
+        )
+        if production_resume not in (resume_expected, declared_join_wrapper):
             raise ValueError("input class-change resume operand changed")
         post_code = post_apply_wrapper_code(
             runtime_record_index,

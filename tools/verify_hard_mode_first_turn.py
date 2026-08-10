@@ -80,15 +80,26 @@ def load_json(path: Path) -> dict:
 
 
 def validate_expected_endpoint(row: dict) -> dict:
-    normal_rom = row["normal_rom"]
-    normal_path = ROOT / normal_rom["path"]
-    if not normal_path.is_file():
-        raise FileNotFoundError(normal_path)
-    if sha256(normal_path) != normal_rom["sha256"]:
-        raise ValueError(
-            f"normal comparison ROM hash changed for {normal_path}"
-        )
-    for evidence_group in ("normal_evidence", "hard_evidence"):
+    for rom_key in ("normal_rom", "hard_rom", "pure_rom"):
+        edition_rom = row.get(rom_key)
+        if edition_rom is None:
+            continue
+        edition_path = ROOT / edition_rom["path"]
+        # Old comparison ROMs are private/ignored and may be absent in a clean
+        # checkout. Retained screenshots remain mandatory and hash-locked; if
+        # an edition ROM is locally available, lock it too.
+        if (
+            edition_path.is_file()
+            and sha256(edition_path) != edition_rom["sha256"]
+        ):
+            raise ValueError(
+                f"comparison ROM hash changed for {edition_path}"
+            )
+    for evidence_group in (
+        "normal_evidence",
+        "hard_evidence",
+        "pure_evidence",
+    ):
         for evidence in row.get(evidence_group, []):
             evidence_path = ROOT / evidence["path"]
             if not evidence_path.is_file():
@@ -183,6 +194,8 @@ def direct_entry_evidence(path: Path, *, rom_digest: str) -> dict:
 def validate_entry_evidence(
     scenario_number: int,
     evidence: dict,
+    *,
+    verify_hard_runtime: bool = True,
 ) -> tuple[Path, str, int | None]:
     path = Path(evidence["path"])
     if not path.is_file():
@@ -200,7 +213,7 @@ def validate_entry_evidence(
             f"{actual} != {evidence['sha256']}"
         )
     player_group_count = None
-    if evidence["kind"] == "loader_smoke":
+    if evidence["kind"] == "loader_smoke" and verify_hard_runtime:
         player_group_count = loader_verifier.matching_player_group_count(
             gst,
             scenario_number,
@@ -244,6 +257,7 @@ def prepare_runtime(
     *,
     rom: Path,
     evidence: dict,
+    verify_hard_runtime: bool = True,
 ) -> tuple[str, Path, str, int | None]:
     runtime_name = f"hard-first-turn-s{scenario_number:02d}"
     runtime_home = RUNTIME_ROOT / runtime_name
@@ -253,6 +267,7 @@ def prepare_runtime(
     source, digest, player_group_count = validate_entry_evidence(
         scenario_number,
         evidence,
+        verify_hard_runtime=verify_hard_runtime,
     )
     shutil.copy2(source, destination)
     return runtime_name, destination, digest, player_group_count
@@ -264,6 +279,7 @@ def prepare_running_runtime(
     rom: Path,
     evidence: dict,
     display: str,
+    verify_hard_runtime: bool = True,
 ) -> tuple[str, Path, str, int | None]:
     pids = sequence_runner.running_blastem_pids(display=display)
     if len(pids) != 1:
@@ -280,6 +296,7 @@ def prepare_running_runtime(
     _, digest, player_group_count = validate_entry_evidence(
         scenario_number,
         evidence,
+        verify_hard_runtime=verify_hard_runtime,
     )
     live_gst = quicksave.read_bytes()
     if turn_counter(live_gst) != 1:
@@ -287,9 +304,10 @@ def prepare_running_runtime(
             f"Scenario {scenario_number} running GST is on turn "
             f"{turn_counter(live_gst)}, not turn 1"
         )
-    live_player_group_count = loader_verifier.matching_player_group_count(
-        live_gst,
-        scenario_number,
+    live_player_group_count = (
+        loader_verifier.matching_player_group_count(live_gst, scenario_number)
+        if verify_hard_runtime
+        else None
     )
     if (
         player_group_count is not None
@@ -876,6 +894,7 @@ def classify_endpoint(
     counter: int,
     *,
     expected: dict | None = None,
+    allow_unapproved_defeat: bool = False,
 ) -> str:
     if detector_endpoint == "turn_command":
         if counter != 2:
@@ -889,15 +908,21 @@ def classify_endpoint(
                 f"first-turn GAME OVER has unexpected turn counter {counter}"
             )
         endpoint = f"game_over_turn_{counter}"
-        if expected is None or expected.get("endpoint") != endpoint:
+        if (
+            not allow_unapproved_defeat
+            and (expected is None or expected.get("endpoint") != endpoint)
+        ):
             raise ValueError(
                 "GAME OVER is not an approved first-turn endpoint"
             )
         return endpoint
     if detector_endpoint == "title_screen":
         if (
-            expected is None
-            or expected.get("endpoint") != "defeat_return_title_turn_1"
+            not allow_unapproved_defeat
+            and (
+                expected is None
+                or expected.get("endpoint") != "defeat_return_title_turn_1"
+            )
         ):
             raise ValueError(
                 "title-screen return is not an approved first-turn endpoint"
@@ -1094,6 +1119,8 @@ def verify_scenario(
     skip_title_wait: bool = False,
     pre_turn_move_direction: str | None = None,
     evidence_prefix: str = "hard_first_turn",
+    verify_hard_runtime: bool = True,
+    allow_unapproved_defeat: bool = False,
 ) -> dict:
     rom_digest = sha256(rom)
     evidence = (
@@ -1127,6 +1154,7 @@ def verify_scenario(
             rom=rom,
             evidence=evidence,
             display=display,
+            verify_hard_runtime=verify_hard_runtime,
         )
     else:
         (
@@ -1138,6 +1166,7 @@ def verify_scenario(
             scenario_number,
             rom=rom,
             evidence=evidence,
+            verify_hard_runtime=verify_hard_runtime,
         )
     env = os.environ.copy()
     env["DISPLAY"] = display
@@ -1276,6 +1305,7 @@ def verify_scenario(
             detector_endpoint,
             counter,
             expected=approved_endpoint,
+            allow_unapproved_defeat=allow_unapproved_defeat,
         )
         endpoint_gst = retain_endpoint_gst(
             scenario_number,
@@ -1361,6 +1391,22 @@ def parse_args() -> argparse.Namespace:
         help=(
             "reject entry evidence unless its manifest names the selected "
             "ROM SHA-256"
+        ),
+    )
+    parser.add_argument(
+        "--skip-hard-runtime-check",
+        action="store_true",
+        help=(
+            "play a normal/pure Turn-1 entry without comparing Standard "
+            "Hard enemy runtime groups"
+        ),
+    )
+    parser.add_argument(
+        "--allow-unapproved-defeat",
+        action="store_true",
+        help=(
+            "record a current-ROM defeat endpoint for cross-profile diagnosis; "
+            "release verification should use the reviewed endpoint manifest"
         ),
     )
     parser.add_argument("--virtual-display", default=":114")
@@ -1467,6 +1513,8 @@ def main() -> int:
         skip_title_wait=args.skip_title_wait,
         pre_turn_move_direction=args.pre_turn_move_direction,
         evidence_prefix=evidence_prefix,
+        verify_hard_runtime=not args.skip_hard_runtime_check,
+        allow_unapproved_defeat=args.allow_unapproved_defeat,
     )
     save_result(results_path, results, result)
     if args.documentation is not None:

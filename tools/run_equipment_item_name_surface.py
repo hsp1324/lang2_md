@@ -91,13 +91,22 @@ def main() -> int:
         recorder.send(["c"], delay=1.4)
         recorder.capture("equipment/category.png")
         equipment = None
+        item_list = None
         for index in range(1, 9):
             recorder.send(["c"], delay=1.4)
             equipment = recorder.capture(
                 f"equipment/cycle_{index:02d}.png"
             )
+            # The second stable cycle is the five-row saved-item list.  Later
+            # cycles intentionally exercise equip/unequip and END surfaces,
+            # so reporting only the final frame loses the surface this runner
+            # was created to verify.
+            if index == 2:
+                item_list = equipment
         if equipment is None:
             raise AssertionError("equipment cycle did not run")
+        if item_list is None:
+            raise AssertionError("equipment item-list capture was not retained")
         state = recorder.save_gst("states/equipment_item_names.gst")
 
         report = {
@@ -114,8 +123,8 @@ def main() -> int:
                 {"item_id": item_id, "expected_name": name}
                 for item_id, name in zip(ITEM_IDS, ITEM_NAMES)
             ],
-            "capture": str(equipment.resolve().relative_to(ROOT)),
-            "capture_sha256": sha256(equipment),
+            "capture": str(item_list.resolve().relative_to(ROOT)),
+            "capture_sha256": sha256(item_list),
             "gst": str(state.resolve().relative_to(ROOT)),
             "gst_sha256": sha256(state),
             "elapsed_seconds": round(time.monotonic() - started, 3),

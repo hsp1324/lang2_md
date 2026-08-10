@@ -54,6 +54,10 @@ RUNNERS: dict[int, str] = {
     25: "run_scenario25_result_surface.py",
     26: "run_scenario26_result_surface.py",
     27: "run_scenario27_ending_surface.py",
+    28: "run_scenario28_31_result_surface.py",
+    29: "run_scenario28_31_result_surface.py",
+    30: "run_scenario28_31_result_surface.py",
+    31: "run_scenario28_31_result_surface.py",
 }
 SCENARIOS = tuple(RUNNERS)
 SCENARIO_SEED_OVERRIDES = {
@@ -101,7 +105,9 @@ def task_rom(probe_root: Path, profile: str, scenario: int) -> Path:
 
 
 def runner_output_root(output_root: Path, scenario: int) -> Path:
-    if scenario in (*range(1, 10), 11, 14, 15, 16, 18, 19, 20):
+    if scenario in (
+        *range(1, 10), 11, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
+    ):
         return output_root
     return output_root / f"s{scenario:02d}"
 
@@ -113,7 +119,9 @@ def task_output(
     run_id: str,
 ) -> Path:
     root = runner_output_root(output_root, scenario)
-    if scenario in (*range(1, 10), 11, 14, 15, 16, 18, 19, 20):
+    if scenario in (
+        *range(1, 10), 11, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
+    ):
         return root / profile / f"s{scenario:02d}" / run_id
     return root / profile / run_id
 
@@ -146,7 +154,9 @@ def task_command(
         "--run-id",
         args.run_id,
     ]
-    if scenario in (*range(1, 10), 14, 15, 16, 18, 19, 20):
+    if scenario in (
+        *range(1, 10), 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
+    ):
         command.extend(("--scenario", str(scenario)))
     return command
 

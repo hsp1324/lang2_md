@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the public v1.3.3 Japanese-ROM BPS patches."""
+"""Build and verify the public v1.3.4 Japanese-ROM BPS patches."""
 
 from __future__ import annotations
 
@@ -14,16 +14,17 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.rom_update import bps_apply, bps_create, sha256_bytes
+from tools.build_hard_mode_rom import verify_applied_hard_mode
 
 
-VERSION = "v1.3.3"
+VERSION = "v1.3.4"
 SOURCE_PATH = ROOT / "roms/original/Langrisser II (Japan).md"
 SOURCE_SIZE = 2_097_152
 SOURCE_SHA256 = (
     "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b"
 )
 PATCH_DIR = ROOT / "patches"
-MANIFEST_PATH = PATCH_DIR / "v1.3.3.json"
+MANIFEST_PATH = PATCH_DIR / "v1.3.4.json"
 
 TARGETS = (
     {
@@ -33,24 +34,24 @@ TARGETS = (
             "원작 맵 디자인과 밸런스에 한국어화 및 공통 진행 수정 적용"
         ),
         "rom_path": ROOT
-        / "roms/builds/Langrisser II (Korean Original v1.3.3).md",
-        "output_filename": "Langrisser II (Korean Original v1.3.3).md",
-        "patch_filename": "original-v1.3.3.bps",
+        / "roms/builds/Langrisser II (Korean Original v1.3.4).md",
+        "output_filename": "Langrisser II (Korean Original v1.3.4).md",
+        "patch_filename": "original-v1.3.4.bps",
         "size": 4_194_304,
         "sha256": (
-            "b090a4cef0940211cea412c972f872927f6dbebea3b297583592b06ddc24ad77"
+            "96ebbdd3970ae21f78067f83d077062657fd7757b7dc45c6f6257b150e19682d"
         ),
     },
     {
         "id": "normal",
         "label_ko": "최신 디자인 일반판",
         "description_ko": "최신 New 클래스 디자인과 한국어화 적용",
-        "rom_path": ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.3).md",
-        "output_filename": "Langrisser II (Korean Normal v1.3.3).md",
-        "patch_filename": "normal-v1.3.3.bps",
+        "rom_path": ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+        "output_filename": "Langrisser II (Korean Normal v1.3.4).md",
+        "patch_filename": "normal-v1.3.4.bps",
         "size": 4_194_304,
         "sha256": (
-            "085c65fed8c2de286e3a6b3260173a573cae0d6e4102afba0ee7debfc6bc04a5"
+            "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
         ),
     },
     {
@@ -58,12 +59,12 @@ TARGETS = (
         "label_ko": "최신 디자인 하드판",
         "description_ko": "최신 New 클래스 디자인·한국어화·하드 밸런스 적용",
         "rom_path": ROOT
-        / "roms/builds/Langrisser II (Korean Hard v1.3.3).md",
-        "output_filename": "Langrisser II (Korean Hard v1.3.3).md",
-        "patch_filename": "hard-v1.3.3.bps",
+        / "roms/builds/Langrisser II (Korean Hard v1.3.4).md",
+        "output_filename": "Langrisser II (Korean Hard v1.3.4).md",
+        "patch_filename": "hard-v1.3.4.bps",
         "size": 4_194_304,
         "sha256": (
-            "15b07113d00c993fd79fded4add0f1dbdca913f1de9dd5f6eb8219de232a146c"
+            "5dc9b5502210b2eb86ea16eff3bd8d047fa4b952f817a3366c4cbd6dd3b49dcf"
         ),
     },
 )
@@ -93,6 +94,8 @@ def build(*, check: bool = False) -> dict[str, object]:
             str(target_spec["sha256"]),
             str(target_spec["label_ko"]),
         )
+        if target_spec["id"] == "hard":
+            verify_applied_hard_mode(target)
         target_hash = str(target_spec["sha256"])
         metadata = json.dumps(
             {

@@ -39,6 +39,27 @@
       ]
     },
     {
+      "number": 11,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 시 일반판과 원작 디자인판에서 보호 대상이 전사해 타이틀로 돌아가는 원작 밸런스 경로이며, 표준 하드판은 같은 입력에서 2턴으로 진행됨",
+      "normal_rom": {
+        "path": "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+        "sha256": "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/v134_normal_s11_no_action_defeat_title.png",
+          "sha256": "3a006a821b68de6f43aa99bd3fbf88ff8baa8199e0fafb8a892fbf2108869963"
+        }
+      ],
+      "pure_evidence": [
+        {
+          "path": "captures/analysis/v134_pure_s11_no_action_defeat_title.png",
+          "sha256": "82ced267607b97ed4ec6b7dab74d3bbcfbde9f9abca3a7f605b16295acf8316a"
+        }
+      ]
+    },
+    {
       "number": 13,
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 시 엘윈이 적 공격으로 전사하고 게임이 재부팅된 뒤 타이틀로 돌아가는 원작 패배 경로",
@@ -72,6 +93,141 @@
         {
           "path": "captures/analysis/hard_s13_first_turn_defeat_title.png",
           "sha256": "e3f69f6fe10b60bbe2a1d6ed8a9195724b8c634e6d57ab992e3fe588f0d8c96b"
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
+      "normal_rom": {
+        "path": "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+        "sha256": "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/v134_normal_s25_no_action_defeat_title.png",
+          "sha256": "82ced267607b97ed4ec6b7dab74d3bbcfbde9f9abca3a7f605b16295acf8316a"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/v134_hard_s25_no_action_defeat_title.png",
+          "sha256": "d18fa9049a161f9d24290105e02726e30de093db139c3e9725517c1ae93d68c3"
+        }
+      ],
+      "pure_evidence": [
+        {
+          "path": "captures/analysis/v134_pure_s25_no_action_defeat_title.png",
+          "sha256": "3a006a821b68de6f43aa99bd3fbf88ff8baa8199e0fafb8a892fbf2108869963"
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
+      "normal_rom": {
+        "path": "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+        "sha256": "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/v134_normal_s26_no_action_defeat_title.png",
+          "sha256": "82ced267607b97ed4ec6b7dab74d3bbcfbde9f9abca3a7f605b16295acf8316a"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/v134_hard_s26_no_action_defeat_title.png",
+          "sha256": "d18fa9049a161f9d24290105e02726e30de093db139c3e9725517c1ae93d68c3"
+        }
+      ],
+      "pure_evidence": [
+        {
+          "path": "captures/analysis/v134_pure_s26_no_action_defeat_title.png",
+          "sha256": "3a006a821b68de6f43aa99bd3fbf88ff8baa8199e0fafb8a892fbf2108869963"
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
+      "normal_rom": {
+        "path": "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+        "sha256": "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/v134_normal_s27_no_action_defeat_title.png",
+          "sha256": "82ced267607b97ed4ec6b7dab74d3bbcfbde9f9abca3a7f605b16295acf8316a"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/v134_hard_s27_no_action_defeat_title.png",
+          "sha256": "d18fa9049a161f9d24290105e02726e30de093db139c3e9725517c1ae93d68c3"
+        }
+      ],
+      "pure_evidence": [
+        {
+          "path": "captures/analysis/v134_pure_s27_no_action_defeat_title.png",
+          "sha256": "3a006a821b68de6f43aa99bd3fbf88ff8baa8199e0fafb8a892fbf2108869963"
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
+      "normal_rom": {
+        "path": "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+        "sha256": "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/v134_normal_s30_no_action_defeat_title.png",
+          "sha256": "82ced267607b97ed4ec6b7dab74d3bbcfbde9f9abca3a7f605b16295acf8316a"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/v134_hard_s30_no_action_defeat_title.png",
+          "sha256": "d18fa9049a161f9d24290105e02726e30de093db139c3e9725517c1ae93d68c3"
+        }
+      ],
+      "pure_evidence": [
+        {
+          "path": "captures/analysis/v134_pure_s30_no_action_defeat_title.png",
+          "sha256": "3a006a821b68de6f43aa99bd3fbf88ff8baa8199e0fafb8a892fbf2108869963"
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "endpoint": "defeat_return_title_turn_1",
+      "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
+      "normal_rom": {
+        "path": "roms/builds/Langrisser II (Korean Normal v1.3.4).md",
+        "sha256": "65d7458a3e4aa993c107ff15cda9152b206cf96c0a7ac3e32dfcf6365f4d99a4"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/v134_normal_s31_no_action_defeat_title.png",
+          "sha256": "82ced267607b97ed4ec6b7dab74d3bbcfbde9f9abca3a7f605b16295acf8316a"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/v134_hard_s31_no_action_defeat_title.png",
+          "sha256": "d18fa9049a161f9d24290105e02726e30de093db139c3e9725517c1ae93d68c3"
+        }
+      ],
+      "pure_evidence": [
+        {
+          "path": "captures/analysis/v134_pure_s31_no_action_defeat_title.png",
+          "sha256": "3a006a821b68de6f43aa99bd3fbf88ff8baa8199e0fafb8a892fbf2108869963"
         }
       ]
     }
