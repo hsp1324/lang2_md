@@ -1,0 +1,164 @@
+name: Build v1.3.4 Linux and macOS patchers
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-patcher:
+    name: Linux ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            arch: x86_64
+            executable: Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64
+            archive: Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz
+            checksum: SHA256SUMS-linux-x86_64.txt
+          - runner: ubuntu-22.04-arm
+            arch: arm64
+            executable: Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64
+            archive: Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64.tar.gz
+            checksum: SHA256SUMS-linux-arm64.txt
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install builder
+        run: >-
+          python -m pip install --disable-pip-version-check
+          pyinstaller==6.21.0
+
+      - name: Verify packaged assets
+        run: >-
+          python -c "from patcher.langrisser_ii_korean_patcher import
+          load_release_manifest; m=load_release_manifest();
+          assert m['release']=='v1.3.4'; assert len(m['targets'])==3"
+
+      - name: Build and smoke-test Linux patcher
+        shell: bash
+        env:
+          PATCHER_EXECUTABLE: ${{ matrix.executable }}
+          PATCHER_ARCHIVE: ${{ matrix.archive }}
+          PATCHER_CHECKSUM: ${{ matrix.checksum }}
+          PATCHER_ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          pyinstaller             --noconfirm             --clean             --onefile             --console             --name "$PATCHER_EXECUTABLE"             --paths "."             --add-data "patches:patches"             "patcher/langrisser_ii_korean_patcher.py"
+
+          binary="dist/$PATCHER_EXECUTABLE"
+          test -x "$binary"
+          "$binary" --help >/dev/null
+
+          printf 'not a supported ROM' > "$RUNNER_TEMP/unsupported.md"
+          set +e
+          output="$("$binary" --rom "$RUNNER_TEMP/unsupported.md" 2>&1)"
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -F "지원하는 일본판 ROM이 아닙니다" <<<"$output"
+
+          description="$(file "$binary")"
+          echo "$description"
+          if [[ "$PATCHER_ARCH" == "x86_64" ]]; then
+            grep -q "x86-64" <<<"$description"
+          else
+            grep -Eq "ARM aarch64|aarch64" <<<"$description"
+          fi
+
+          tar -C dist -czf "dist/$PATCHER_ARCHIVE" "$PATCHER_EXECUTABLE"
+          sha256sum "dist/$PATCHER_ARCHIVE"             | sed 's#  dist/#  #' > "dist/$PATCHER_CHECKSUM"
+          cat "dist/$PATCHER_CHECKSUM"
+
+      - name: Upload Linux release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: Langrisser-II-Korean-Patcher-v1.3.4-linux-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/${{ matrix.archive }}
+            dist/${{ matrix.checksum }}
+
+  macos-patcher:
+    name: macOS ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-14
+            arch: arm64
+            archive: Langrisser-II-Korean-Patcher-v1.3.4-macos-arm64.app.zip
+            checksum: SHA256SUMS-macos-arm64.txt
+          - runner: macos-15-intel
+            arch: x86_64
+            archive: Langrisser-II-Korean-Patcher-v1.3.4-macos-x86_64.app.zip
+            checksum: SHA256SUMS-macos-x86_64.txt
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install builder
+        run: >-
+          python -m pip install --disable-pip-version-check
+          pyinstaller==6.21.0
+
+      - name: Verify packaged assets
+        run: >-
+          python -c "from patcher.langrisser_ii_korean_patcher import
+          load_release_manifest; m=load_release_manifest();
+          assert m['release']=='v1.3.4'; assert len(m['targets'])==3"
+
+      - name: Build and smoke-test macOS app
+        shell: bash
+        env:
+          PATCHER_ARCHIVE: ${{ matrix.archive }}
+          PATCHER_CHECKSUM: ${{ matrix.checksum }}
+          PATCHER_ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          app_name="Langrisser II Korean Patcher v1.3.4"
+          pyinstaller             --noconfirm             --clean             --onefile             --windowed             --name "$app_name"             --paths "."             --add-data "patches:patches"             "patcher/langrisser_ii_korean_patcher.py"
+
+          app="dist/$app_name.app"
+          binary="$app/Contents/MacOS/$app_name"
+          test -d "$app"
+          test -x "$binary"
+          "$binary" --help
+          codesign --verify --deep --strict "$app"
+
+          description="$(file "$binary")"
+          echo "$description"
+          if [[ "$PATCHER_ARCH" == "arm64" ]]; then
+            grep -q "arm64" <<<"$description"
+          else
+            grep -q "x86_64" <<<"$description"
+          fi
+
+          ditto -c -k --sequesterRsrc --keepParent             "$app" "dist/$PATCHER_ARCHIVE"
+          unzip -tq "dist/$PATCHER_ARCHIVE"
+          shasum -a 256 "dist/$PATCHER_ARCHIVE"             | sed 's#  dist/#  #' > "dist/$PATCHER_CHECKSUM"
+          cat "dist/$PATCHER_CHECKSUM"
+
+      - name: Upload macOS release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: Langrisser-II-Korean-Patcher-v1.3.4-macos-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/${{ matrix.archive }}
+            dist/${{ matrix.checksum }}
