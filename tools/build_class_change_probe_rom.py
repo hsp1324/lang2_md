@@ -44,6 +44,8 @@ PLAYER_RUNTIME_RECORD_COUNT = 10
 ELWIN_CLASS_OFFSET = 0x00
 ELWIN_LEVEL_OFFSET = 0x2E
 ELWIN_EXPERIENCE_OFFSET = 0x2F
+EQUIPPED_ITEM_OFFSET = 0x0B
+RUNESTONE_ITEM_ID = 0x1A
 ELWIN_FIGHTER_CLASS = 0x01
 PROBE_LEVEL = 9
 PROBE_EXPERIENCE = 16
@@ -73,6 +75,7 @@ def wrapper_code(
     forced_commander_id: int | None = None,
     probe_level: int = PROBE_LEVEL,
     probe_experience: int = PROBE_EXPERIENCE,
+    equipped_item: int | None = None,
 ) -> bytes:
     if not 0 <= expected_class <= 0xFF:
         raise ValueError("expected class ID must fit one byte")
@@ -82,13 +85,17 @@ def wrapper_code(
         raise ValueError("probe level must be 1..9")
     if not 0 <= probe_experience <= 0xFF:
         raise ValueError("probe experience must fit one byte")
+    if equipped_item is not None and not 0 <= equipped_item <= 0xFF:
+        raise ValueError("equipped item ID must fit one byte")
     record = runtime_record_address(runtime_record_index)
     code = bytearray()
     if forced_commander_id is None:
         code.extend(bytes.fromhex("0C 39"))
         code.extend(expected_class.to_bytes(2, "big"))
         code.extend(record.to_bytes(4, "big"))
-        code.extend(bytes.fromhex("66 00 00 12"))
+        skip_state_writes = 0x12 + (8 if equipped_item is not None else 0)
+        code.extend(bytes.fromhex("66 00"))
+        code.extend(skip_state_writes.to_bytes(2, "big"))
     else:
         for value, field_offset in (
             (expected_class, ELWIN_CLASS_OFFSET),
@@ -104,6 +111,10 @@ def wrapper_code(
         code.extend(bytes.fromhex("13 FC"))
         code.extend(value.to_bytes(2, "big"))
         code.extend((record + field_offset).to_bytes(4, "big"))
+    if equipped_item is not None:
+        code.extend(bytes.fromhex("13 FC"))
+        code.extend(equipped_item.to_bytes(2, "big"))
+        code.extend((record + EQUIPPED_ITEM_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9 00 01 48 0C"))
     return bytes(code)
 
@@ -210,17 +221,27 @@ def patch_probe(
     force_runtime_context: bool = False,
     restore_commander_id: int = 1,
     preferred_candidate: int | None = None,
+    runestone_restart: bool = False,
 ) -> int:
     if force_runtime_context and enable_start_menu_probe:
         raise ValueError(
             "forced runtime context requires the end-turn-only probe"
         )
+    if runestone_restart and current_class is None:
+        raise ValueError("Runestone restart requires a current class")
     transition = prefer_transition_candidate(
         probe,
         source,
         commander_id,
-        selected_transition(source, commander_id, current_class),
+        (
+            read_class_change_chain(source, commander_id)[0]
+            if runestone_restart
+            else selected_transition(source, commander_id, current_class)
+        ),
         preferred_candidate,
+    )
+    trigger_class = (
+        int(current_class) if runestone_restart else transition.current_class
     )
     expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
     offset = END_TURN_LEVEL_UP_ENTRY_OPERAND
@@ -231,12 +252,13 @@ def patch_probe(
 
     code = wrapper_code(
         runtime_record_index=runtime_record_index,
-        expected_class=transition.current_class,
+        expected_class=trigger_class,
         forced_commander_id=commander_id if force_runtime_context else None,
         probe_experience=class_change_experience(
             source,
-            transition.current_class,
+            trigger_class,
         ),
+        equipped_item=RUNESTONE_ITEM_ID if runestone_restart else None,
     )
     wrapper_end = PROBE_WRAPPER + len(code)
     if probe[PROBE_WRAPPER:wrapper_end] != b"\xFF" * len(code):
@@ -248,12 +270,13 @@ def patch_probe(
     if force_runtime_context:
         resume_expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
         resume_offset = CLASS_CHANGE_RESUME_OPERAND
-        if source[resume_offset : resume_offset + 4] != resume_expected:
-            raise ValueError("Japanese class-change resume operand changed")
-        production_resume = probe[resume_offset : resume_offset + 4]
         declared_join_wrapper = (
             builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER.to_bytes(4, "big")
         )
+        source_resume = source[resume_offset : resume_offset + 4]
+        if source_resume not in (resume_expected, declared_join_wrapper):
+            raise ValueError("source class-change resume operand changed")
+        production_resume = probe[resume_offset : resume_offset + 4]
         if production_resume not in (resume_expected, declared_join_wrapper):
             raise ValueError("input class-change resume operand changed")
         post_code = post_apply_wrapper_code(
@@ -412,6 +435,14 @@ def parse_args() -> argparse.Namespace:
             "candidate to the first row so held confirm input selects it"
         ),
     )
+    parser.add_argument(
+        "--runestone-restart",
+        action="store_true",
+        help=(
+            "diagnostic only: equip a Rune Stone on the current class and "
+            "verify that the stock LV10 handler restarts at the first row"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -454,7 +485,13 @@ def main() -> int:
     if args.probe_level != 1:
         raise ValueError("--probe-level is only valid with --level-up-only")
 
-    transition = selected_transition(source, args.commander_id, args.current_class)
+    if args.runestone_restart and args.current_class is None:
+        raise ValueError("--runestone-restart requires --current-class")
+    transition = (
+        read_class_change_chain(source, args.commander_id)[0]
+        if args.runestone_restart
+        else selected_transition(source, args.commander_id, args.current_class)
+    )
     checksum = patch_probe(
         probe,
         source,
@@ -465,15 +502,21 @@ def main() -> int:
         force_runtime_context=args.force_runtime_context,
         restore_commander_id=args.restore_commander_id,
         preferred_candidate=args.preferred_candidate,
+        runestone_restart=args.runestone_restart,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
+    trigger_class = int(
+        args.current_class if args.runestone_restart else transition.current_class
+    )
     print(
         "end-turn level-up handler redirected through runtime record "
-        f"{args.runtime_record_index} class 0x{transition.current_class:02X} "
+        f"{args.runtime_record_index} class 0x{trigger_class:02X} "
         f"LV{PROBE_LEVEL}/EXP"
-        f"{class_change_experience(source, transition.current_class)} probe"
+        f"{class_change_experience(source, trigger_class)} probe"
     )
+    if args.runestone_restart:
+        print("real Rune Stone item 0x1A equipped for stock restart handling")
     candidates = "/".join(f"0x{value:02X}" for value in transition.candidates)
     if args.preferred_candidate is not None:
         print(

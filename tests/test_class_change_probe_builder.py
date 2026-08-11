@@ -241,6 +241,49 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
         self.assertIn(bytes.fromhex("13 FC 00 10 FF FF 60 6B"), code)
         self.assertEqual(code[-6:], bytes.fromhex("4E F9 00 01 48 0C"))
 
+    def test_runestone_wrapper_equips_the_real_item(self):
+        code = probe_builder.wrapper_code(
+            runtime_record_index=0,
+            expected_class=0x24,
+            forced_commander_id=7,
+            probe_experience=64,
+            equipped_item=probe_builder.RUNESTONE_ITEM_ID,
+        )
+        self.assertIn(bytes.fromhex("13 FC 00 1A FF FF 60 47"), code)
+
+        guarded = probe_builder.wrapper_code(
+            expected_class=0x24,
+            probe_experience=64,
+            equipped_item=probe_builder.RUNESTONE_ITEM_ID,
+        )
+        self.assertEqual(guarded[8:12], bytes.fromhex("66 00 00 1A"))
+
+    def test_runestone_probe_accepts_a_terminal_fifth_tier_class(self):
+        probe = bytearray(self.production)
+        checksum = probe_builder.patch_probe(
+            probe,
+            self.source,
+            commander_id=7,
+            current_class=0x24,
+            runtime_record_index=0,
+            enable_start_menu_probe=False,
+            force_runtime_context=True,
+            restore_commander_id=1,
+            runestone_restart=True,
+        )
+        self.assertIsInstance(checksum, int)
+        code = probe_builder.wrapper_code(
+            runtime_record_index=0,
+            expected_class=0x24,
+            forced_commander_id=7,
+            probe_experience=probe_builder.class_change_experience(
+                self.source, 0x24
+            ),
+            equipped_item=probe_builder.RUNESTONE_ITEM_ID,
+        )
+        start = probe_builder.PROBE_WRAPPER
+        self.assertEqual(probe[start:start + len(code)], code)
+
     def test_forced_wrapper_rejects_invalid_commander(self):
         for commander_id in (0, 11):
             with self.subTest(commander_id=commander_id):

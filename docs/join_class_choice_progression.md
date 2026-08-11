@@ -76,3 +76,35 @@ were exercised on isolated Xvfb/BlastEm displays:
 
 Keith's Hard-mode test also equipped and consumed a real Runestone before the
 class-choice screen was inspected; this was not only a menu-table check.
+
+## Mounted Lord display and combat repair
+
+The first v1.3.5 build gave the new Hawk Lord and Croco Lord IDs the complete
+Dragon Knight and Serpent Knight class records.  Their status stats, EXP gauge,
+and custom map appearance therefore belonged to those later classes.  The
+otherwise-unused generic combat entries for the new IDs still pointed at
+Cleric and Vampire graphics, which made Keith's Hawk Lord attack as a Sister.
+
+The repaired build makes each named Lord an alias of its intended mounted
+branch: Hawk Lord uses Keith's Hawk Knight class data, stronger Hawk Lord map
+design, and Keith-specific Hawk Knight combat animation; Croco Lord likewise
+uses Lester's Crocoknight data, stronger Croco Lord map design, and
+Lester-specific Crocoknight combat animation.  Generic fallback combat
+descriptors are corrected as well.
+
+The Runestone restart row now uses the same second-tier choices as the join
+boundary.  Keith therefore sees `로드 / 호크로드 / 힐러`, Lester sees
+`나이트 / 크로코로드 / 샤먼`, and Jessica retains
+`힐러 / 소서러 / 로드`, regardless of whether the stone is consumed from a
+second-, third-, fourth-, or fifth-tier class.
+
+The repaired normal candidate (MD checksum `1E84`) was exercised on isolated
+virtual display `:622`.  A real item `0x1A` was equipped before the stock
+level-up handler for all twelve representative states: Keith
+`호크로드/매직나이트/드래곤로드/드래곤마스터`, Lester
+`크로코로드/서펜나이트/서펜로드/서펜마스터`, and Jessica
+`소서러/비숍/아크메이지/자베라`.  Every run displayed the three expected
+second-tier choices, consumed the item, and applied the first choice at
+`LV1/EXP0`.  Separate fifth-tier runs navigated the unmodified live UI to the
+second row and applied Keith's Hawk Lord (`0x2B`) and Lester's Croco Lord
+(`0x2C`) at `LV1/EXP0`.

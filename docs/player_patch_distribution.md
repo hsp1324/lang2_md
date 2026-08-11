@@ -6,7 +6,7 @@
 CPU에 맞는 패처를 받아 일본판 ROM에 적용한다. 원하면 BPS를 직접 적용할 수도
 있다.
 
-1. Windows는 `Langrisser-II-Korean-Patcher-v1.3.5.exe`, Linux와 macOS는
+1. Windows는 `Langrisser-II-Korean-Patcher-v1.3.6.exe`, Linux와 macOS는
    README에 표시된 아키텍처별 압축 파일을 내려받는다.
 2. 일본판 `Langrisser II` ROM 또는 해당 ROM이 든 ZIP과 같은 폴더에 둔다.
 3. 패처를 실행한다.
@@ -15,9 +15,9 @@ CPU에 맞는 패처를 받아 일본판 ROM에 적용한다. 원하면 BPS를 �
 5. 패처가 원작 디자인판, 최신 디자인 일반판, 최신 디자인 하드판을 각각 새 파일로 만든다.
 
 ```text
-Langrisser II (Korean Original v1.3.5).md
-Langrisser II (Korean Normal v1.3.5).md
-Langrisser II (Korean Hard v1.3.5).md
+Langrisser II (Korean Original v1.3.6).md
+Langrisser II (Korean Normal v1.3.6).md
+Langrisser II (Korean Hard v1.3.6).md
 ```
 
 원본 ROM, SRAM 저장, 에뮬레이터 상태 저장은 수정하지 않는다. 결과를 쓰기
@@ -26,7 +26,7 @@ Langrisser II (Korean Hard v1.3.5).md
 
 ## 지원 원본
 
-현재 1.3.5 결과를 만들 때 사용한 일본판 원본은 다음과 같다.
+현재 1.3.6 결과를 만들 때 사용한 일본판 원본은 다음과 같다.
 
 ```text
 크기:    2,097,152 bytes
@@ -38,20 +38,20 @@ SHA-256: a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b
 있는 덤프를 지원하려면 헤더를 제외한 내용이 위 해시와 일치할 때만 자동으로
 정규화한다.
 
-## 1.3.5 결과 검증값
+## 1.3.6 결과 검증값
 
 ```text
 원작 디자인판
 크기:    4,194,304 bytes
-SHA-256: f1ed872dbe191e836f4414ae204994f096c1fb8568aa0449e80a7d4b9e804110
+SHA-256: 05e6c77e138040f2c3b2cf7fe8cd6c1b1f05247a2afca1f1b36b4c838d406a03
 
 최신 디자인 일반판
 크기:    4,194,304 bytes
-SHA-256: 724304a728ad9b3202b8d69b4c2afff284291c02e3bc419891e22e5e7f535abd
+SHA-256: b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a
 
 최신 디자인 하드판
 크기:    4,194,304 bytes
-SHA-256: 792ea989db144625902e4c9e9f4b50740cf0ced17ca7ccbda46cea3a4671a086
+SHA-256: a9e607aa0d117742f8bbb2f3a3d756205b14ff33a72d18f3dc4bdccc15525aa1
 ```
 
 패처는 세 결과를 각각 검증한다. 한 결과라도 다르면 생성된 임시 파일을 최종
@@ -67,20 +67,20 @@ GitHub Release 자산으로만 제공한다.
 README.md
 patcher/
 patches/
-  original-v1.3.5.bps
-  normal-v1.3.5.bps
-  hard-v1.3.5.bps
+  original-v1.3.6.bps
+  normal-v1.3.6.bps
+  hard-v1.3.6.bps
   .github/workflows/build-v1.3-patcher.yml
 ```
 
-`v1.3.5` Release에는 다음 패처와 아키텍처별 체크섬을 올린다.
+`v1.3.6` Release에는 다음 패처와 아키텍처별 체크섬을 올린다.
 
 ```text
-Langrisser-II-Korean-Patcher-v1.3.5.exe
-Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64.tar.gz
-Langrisser-II-Korean-Patcher-v1.3.5-linux-arm64.tar.gz
-Langrisser-II-Korean-Patcher-v1.3.5-macos-arm64.app.zip
-Langrisser-II-Korean-Patcher-v1.3.5-macos-x86_64.app.zip
+Langrisser-II-Korean-Patcher-v1.3.6.exe
+Langrisser-II-Korean-Patcher-v1.3.6-linux-x86_64.tar.gz
+Langrisser-II-Korean-Patcher-v1.3.6-linux-arm64.tar.gz
+Langrisser-II-Korean-Patcher-v1.3.6-macos-arm64.app.zip
+Langrisser-II-Korean-Patcher-v1.3.6-macos-x86_64.app.zip
 SHA256SUMS.txt
 ```
 

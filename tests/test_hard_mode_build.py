@@ -256,7 +256,7 @@ class HardModeBuildTests(unittest.TestCase):
             UPDATE_REGISTRY.read_text(encoding="utf-8")
         )
         history = registry["candidate_history"]
-        self.assertEqual(len(history), 8)
+        self.assertEqual(len(history), 9)
         for predecessor, successor in zip(history, history[1:]):
             self.assertEqual(predecessor["superseded_by"], successor["sha256"])
         self.assertEqual(

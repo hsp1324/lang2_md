@@ -89,6 +89,10 @@ SCENARIO18_RELOCATED_DIALOGUE = 0x3FEE00
 # bank or the tables that follow it.
 GENERIC_CLASS_SPRITE_TABLE = 0x05DDE6
 COMMANDER_SPRITE_POINTER_TABLE = 0x05DB80
+COMMANDER_COMBAT_POINTER_TABLE = 0x087726
+COMMANDER_COMBAT_RECORD_SIZE = 0x12
+GENERIC_COMBAT_DESCRIPTOR_TABLE = 0x08840A
+GENERIC_COMBAT_DESCRIPTOR_SIZE = 0x10
 MAP_SPRITE_FRAME_BASES = (0x052980, 0x058280)
 MAP_SPRITE_BYTES = 0x80
 BALD_CLASS_ID = 0x2E
@@ -1992,15 +1996,19 @@ JOIN_CLASS_CHOICE_ACTIVE_MARKER = 0x5A
 JOIN_CLASS_CHOICE_HAWK_LORD = 0x2B
 JOIN_CLASS_CHOICE_CROCO_LORD = 0x2C
 JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES = {
-    JOIN_CLASS_CHOICE_HAWK_LORD: 0x0F,   # Dragon Knight: flying tier movement
-    JOIN_CLASS_CHOICE_CROCO_LORD: 0x10,  # Serpent Knight: naval tier movement
+    # These are named aliases for the stronger tier-mounted designs already
+    # installed in Keith's Hawk Knight and Lester's Crocoknight slots.  Copying
+    # Dragon/Serpent Knight here made the status stats and EXP gauge belong to
+    # those later classes instead of the selected Hawk/Croco Lord branch.
+    JOIN_CLASS_CHOICE_HAWK_LORD: 0x06,
+    JOIN_CLASS_CHOICE_CROCO_LORD: 0x07,
 }
 # Keith and Lester need one additional transition beyond the ten stock
-# records.  Reusing their Fighter record made a Runestone restart begin from
-# Hawk/Croco Lord and skip the stock tier-one choice.  The stock scanner walks
-# records until its 0xFFFF sentinel, so relocate the two variable-length chains
-# and their sentinel-terminated commander sprite maps into reserved expansion
-# space instead of deleting the Fighter entries.
+# records.  The stock Runestone handler restarts from the first (Fighter)
+# record, so both that row and the join-time mounted starter row must offer the
+# same custom Hawk/Croco Lord branch.  The stock scanner walks records until
+# its 0xFFFF sentinel, so relocate the variable-length chains and keep a
+# dedicated transition for each custom class.
 JOIN_CLASS_CHOICE_CHAIN_RELOCATIONS = {
     7: 0x31E400,
     9: 0x31E480,
@@ -2011,6 +2019,16 @@ JOIN_CLASS_CHOICE_SPRITE_RELOCATIONS = {
     9: 0x31E580,
 }
 JOIN_CLASS_CHOICE_SPRITE_RELOCATED_SIZE = 0x80
+# The unused generic combat descriptors for class IDs 0x2B/0x2C point to
+# Cleric/Vampire graphics.  Relocate the two commander-specific override lists
+# and append aliases for their mounted source classes, so side-view combat
+# keeps Keith/Lester's own animation instead of falling through to those
+# unrelated generic sprites.
+JOIN_CLASS_CHOICE_COMBAT_RELOCATIONS = {
+    7: 0x31E600,
+    9: 0x31E780,
+}
+JOIN_CLASS_CHOICE_COMBAT_RELOCATED_SIZE = 0x180
 JOIN_CLASS_CHOICE_RECORDS = {
     7: {
         "name": "Keith",
@@ -2056,7 +2074,9 @@ JOIN_CLASS_CHOICE_RECORDS = {
         "experience_policy": "fixed_grant",
         "fixed_experience_by_class": {
             0x05: 0xE0,
-            JOIN_CLASS_CHOICE_CROCO_LORD: 0xE0,
+            # Crocoknight/Croco Lord uses a 24-EXP gauge; seven complete
+            # gauges reach the same LV8 branch target as Knight's 7 * 32.
+            JOIN_CLASS_CHOICE_CROCO_LORD: 0xA8,
             0x0A: 0xC0,
         },
         "first_appearance_scenario": 10,
@@ -3557,13 +3577,13 @@ def patch_ai_class_map_sprites(data: bytearray) -> None:
         if record_offset is not None:
             put16(data, record_offset + 1, custom_sprite_id)
 
-    # The dedicated Hawk/Croco Lord class IDs share the accepted map designs
-    # of Keith's Dragon Knight and Lester's Serpent Knight.  Their classic
-    # profile records keep the stock sprites; only custom-design profiles copy
-    # the already-installed expansion sprite IDs here.
+    # The dedicated Hawk/Croco Lord class IDs share the accepted stronger
+    # mounted designs already installed in Keith's Hawk Knight and Lester's
+    # Crocoknight slots.  Their classic profile records keep the stock mounted
+    # sprites; only custom-design profiles copy the expansion sprite IDs here.
     for commander_id, custom_class, design_class in (
-        (7, JOIN_CLASS_CHOICE_HAWK_LORD, 0x0F),
-        (9, JOIN_CLASS_CHOICE_CROCO_LORD, 0x10),
+        (7, JOIN_CLASS_CHOICE_HAWK_LORD, 0x06),
+        (9, JOIN_CLASS_CHOICE_CROCO_LORD, 0x07),
     ):
         custom_record = commander_sprite_record_offset(
             data, commander_id, custom_class
@@ -6555,6 +6575,28 @@ def patch_join_class_choice_class_data(
             source_offset : source_offset + CLASS_RECORD_SIZE
         ]
 
+        custom_combat = (
+            GENERIC_COMBAT_DESCRIPTOR_TABLE
+            + custom_class * GENERIC_COMBAT_DESCRIPTOR_SIZE
+        )
+        source_combat = (
+            GENERIC_COMBAT_DESCRIPTOR_TABLE
+            + source_class * GENERIC_COMBAT_DESCRIPTOR_SIZE
+        )
+        if data[
+            custom_combat : custom_combat + GENERIC_COMBAT_DESCRIPTOR_SIZE
+        ] != source[
+            custom_combat : custom_combat + GENERIC_COMBAT_DESCRIPTOR_SIZE
+        ]:
+            raise ValueError(
+                f"input generic combat descriptor 0x{custom_class:02X} changed"
+            )
+        data[
+            custom_combat : custom_combat + GENERIC_COMBAT_DESCRIPTOR_SIZE
+        ] = source[
+            source_combat : source_combat + GENERIC_COMBAT_DESCRIPTOR_SIZE
+        ]
+
     lineage_specs = {
         7: {
             "starter": 0x06,
@@ -6605,6 +6647,14 @@ def patch_join_class_choice_class_data(
             tuple(legacy_transitions),
         )
 
+        _replace_join_class_transition(
+            source_transitions,
+            current_class=0x01,
+            replacement=ClassTransition(
+                0x01,
+                tuple(int(value) for value in spec["starter_candidates"]),
+            ),
+        )
         _replace_join_class_transition(
             source_transitions,
             current_class=starter,
@@ -6704,6 +6754,68 @@ def patch_join_class_choice_class_data(
             )
         data[sprite_target : sprite_target + len(sprite_payload)] = sprite_payload
         put32(data, sprite_pointer_offset, sprite_target)
+
+        combat_pointer_offset = (
+            COMMANDER_COMBAT_POINTER_TABLE + (commander_id - 1) * 4
+        )
+        source_combat_pointer = be32(source, combat_pointer_offset)
+        data_combat_pointer = be32(data, combat_pointer_offset)
+        source_combat_records = bytearray()
+        mounted_combat_record = None
+        source_class = int(JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES[custom])
+        while be16(source, source_combat_pointer) != 0xFFFF:
+            record = bytes(
+                source[
+                    source_combat_pointer:
+                    source_combat_pointer + COMMANDER_COMBAT_RECORD_SIZE
+                ]
+            )
+            if len(record) != COMMANDER_COMBAT_RECORD_SIZE:
+                raise ValueError(
+                    f"commander {commander_id} combat override is truncated"
+                )
+            source_combat_records.extend(record)
+            if be16(record, 0) == source_class:
+                mounted_combat_record = record
+            source_combat_pointer += COMMANDER_COMBAT_RECORD_SIZE
+        source_combat_records.extend(b"\xFF\xFF")
+        if mounted_combat_record is None:
+            raise ValueError(
+                f"commander {commander_id} has no mounted combat override "
+                f"0x{source_class:02X}"
+            )
+        if data[
+            data_combat_pointer:
+            data_combat_pointer + len(source_combat_records)
+        ] != source_combat_records:
+            raise ValueError(
+                f"input combat overrides for commander {commander_id} changed"
+            )
+
+        custom_combat_record = (
+            custom.to_bytes(2, "big") + mounted_combat_record[2:]
+        )
+        combat_payload = (
+            source_combat_records[:-2]
+            + custom_combat_record
+            + b"\xFF\xFF"
+        )
+        combat_target = JOIN_CLASS_CHOICE_COMBAT_RELOCATIONS[commander_id]
+        combat_limit = (
+            combat_target + JOIN_CLASS_CHOICE_COMBAT_RELOCATED_SIZE
+        )
+        if combat_target + len(combat_payload) > combat_limit:
+            raise ValueError(
+                f"commander {commander_id} relocated combat overrides are too large"
+            )
+        if any(value != 0xFF for value in data[combat_target:combat_limit]):
+            raise ValueError(
+                f"commander {commander_id} relocated combat area is occupied"
+            )
+        data[
+            combat_target : combat_target + len(combat_payload)
+        ] = combat_payload
+        put32(data, combat_pointer_offset, combat_target)
 
 
 SCENARIO6_RUNESTONE_TRIGGER = 0x18D768

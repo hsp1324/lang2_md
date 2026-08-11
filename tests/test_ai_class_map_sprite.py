@@ -109,8 +109,8 @@ class AiClassMapSpriteTests(unittest.TestCase):
                 pointer += 3
 
         for commander_id, custom_class, design_class in (
-            (7, builder.JOIN_CLASS_CHOICE_HAWK_LORD, 0x0F),
-            (9, builder.JOIN_CLASS_CHOICE_CROCO_LORD, 0x10),
+            (7, builder.JOIN_CLASS_CHOICE_HAWK_LORD, 0x06),
+            (9, builder.JOIN_CLASS_CHOICE_CROCO_LORD, 0x07),
         ):
             with self.subTest(
                 commander_id=commander_id,

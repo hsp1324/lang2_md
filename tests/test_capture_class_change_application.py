@@ -45,8 +45,42 @@ class CaptureClassChangeApplicationTests(unittest.TestCase):
                 runtime_record_index=0,
                 restore_commander_id=1,
             )
-            self.assertEqual(checksum, 0x80F9)
+            self.assertEqual(checksum, 0x4BBB)
             self.assertEqual(expected_class, 0x08)
+            self.assertEqual(len(output.read_bytes()), 0x400000)
+
+    def test_build_probe_can_prefer_a_nonfirst_source_candidate(self):
+        with TemporaryDirectory() as directory:
+            output = Path(directory) / "apply.md"
+            checksum, expected_class = application_tool.build_probe(
+                probe_builder.DEFAULT_INPUT_ROM,
+                probe_builder.DEFAULT_SOURCE_ROM,
+                output,
+                commander_id=10,
+                current_class=0x03,
+                runtime_record_index=0,
+                restore_commander_id=1,
+                preferred_candidate=0x09,
+            )
+            self.assertIsInstance(checksum, int)
+            self.assertEqual(expected_class, 0x09)
+            self.assertEqual(len(output.read_bytes()), 0x400000)
+
+    def test_build_probe_can_restart_from_a_fifth_tier_runestone(self):
+        with TemporaryDirectory() as directory:
+            output = Path(directory) / "runestone.md"
+            checksum, expected_class = application_tool.build_probe(
+                probe_builder.DEFAULT_INPUT_ROM,
+                probe_builder.DEFAULT_SOURCE_ROM,
+                output,
+                commander_id=7,
+                current_class=0x24,
+                runtime_record_index=0,
+                restore_commander_id=1,
+                runestone_restart=True,
+            )
+            self.assertIsInstance(checksum, int)
+            self.assertEqual(expected_class, 0x04)
             self.assertEqual(len(output.read_bytes()), 0x400000)
 
 

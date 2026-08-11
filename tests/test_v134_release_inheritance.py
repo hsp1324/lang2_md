@@ -18,7 +18,7 @@ SOURCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 
 
 class V134ReleaseInheritanceTests(unittest.TestCase):
-    """Lock the v1.3.1 through v1.3.5 regression and repair boundaries."""
+    """Lock the v1.3.1 through v1.3.6 regression and repair boundaries."""
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -36,6 +36,7 @@ class V134ReleaseInheritanceTests(unittest.TestCase):
             "v1.3.3": self.release_rom("normal-v1.3.3.bps"),
             "v1.3.4": self.release_rom("normal-v1.3.4.bps"),
             "v1.3.5": self.release_rom("normal-v1.3.5.bps"),
+            "v1.3.6": self.release_rom("normal-v1.3.6.bps"),
         }
         roster = 0x05E64A
         size = 0x0E
@@ -53,7 +54,13 @@ class V134ReleaseInheritanceTests(unittest.TestCase):
         # v1.3.1 is the last release with the legacy Fighter LV10 records.
         self.assertEqual(records["v1.3.1"][7][0:3], bytes.fromhex("01 01 0A"))
         self.assertEqual(records["v1.3.1"][9][0:3], bytes.fromhex("01 01 0A"))
-        for release in ("v1.3.2", "v1.3.3", "v1.3.4", "v1.3.5"):
+        for release in (
+            "v1.3.2",
+            "v1.3.3",
+            "v1.3.4",
+            "v1.3.5",
+            "v1.3.6",
+        ):
             self.assertEqual(records[release][7][0:3], bytes.fromhex("06 01 0A"))
             self.assertEqual(records[release][9][0:3], bytes.fromhex("07 01 0A"))
             self.assertEqual(records[release][10][0:3], bytes.fromhex("03 0E 0A"))
@@ -68,6 +75,7 @@ class V134ReleaseInheritanceTests(unittest.TestCase):
             self.assertEqual(releases[release][guard : guard + 6], level_compare)
         self.assertEqual(releases["v1.3.4"][guard : guard + 6], keith_identity)
         self.assertEqual(releases["v1.3.5"][guard : guard + 6], keith_identity)
+        self.assertEqual(releases["v1.3.6"][guard : guard + 6], keith_identity)
 
         # The Rune Stone always restarts from the first class-chain record.
         # v1.3.2 replaced that Fighter record to make room for the join-only
@@ -107,8 +115,21 @@ class V134ReleaseInheritanceTests(unittest.TestCase):
                     transition.current_class for transition in repaired
                 })
 
+        expected_v136 = {
+            7: (0x04, 0x2B, 0x08),
+            9: (0x05, 0x2C, 0x0A),
+        }
+        for commander_id, expected in expected_v136.items():
+            with self.subTest(commander_id=commander_id, release="v1.3.6"):
+                repaired = read_class_change_chain(
+                    releases["v1.3.6"], commander_id
+                )
+                self.assertEqual(repaired[0].current_class, 0x01)
+                self.assertEqual(repaired[0].candidates, expected)
+
         self.assertEqual(releases["v1.3.4"][0x1838F8], 0x65)
         self.assertEqual(releases["v1.3.5"][0x1838F8], 0x66)
+        self.assertEqual(releases["v1.3.6"][0x1838F8], 0x66)
 
     def test_v133_release_content_is_preserved_byte_for_byte(self) -> None:
         profiles = {

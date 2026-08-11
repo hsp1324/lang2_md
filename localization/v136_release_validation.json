@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "release": "v1.3.6",
+  "status": "reviewed_pass_release_ready",
+  "validated_at": "2026-08-11",
+  "method": "isolated virtual-display BlastEm execution with real Rune Stone consumption and focused release regression",
+  "source": {
+    "path": "roms/original/Langrisser II (Japan).md",
+    "size": 2097152,
+    "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b"
+  },
+  "release_roms": {
+    "pure": {
+      "filename": "Langrisser II (Korean Original v1.3.6).md",
+      "size": 4194304,
+      "sha256": "05e6c77e138040f2c3b2cf7fe8cd6c1b1f05247a2afca1f1b36b4c838d406a03",
+      "md_checksum": "D4E7"
+    },
+    "normal": {
+      "filename": "Langrisser II (Korean Normal v1.3.6).md",
+      "size": 4194304,
+      "sha256": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
+      "md_checksum": "1F84"
+    },
+    "hard": {
+      "filename": "Langrisser II (Korean Hard v1.3.6).md",
+      "size": 4194304,
+      "sha256": "a9e607aa0d117742f8bbb2f3a3d756205b14ff33a72d18f3dc4bdccc15525aa1",
+      "md_checksum": "3E8F"
+    }
+  },
+  "runtime_checks": {
+    "status": "pass",
+    "virtual_display": ":622",
+    "runestone_matrix": {
+      "commanders": [
+        "Keith",
+        "Lester",
+        "Jessica"
+      ],
+      "tiers_per_commander": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passed": 12,
+      "total": 12,
+      "item_id": "0x1A",
+      "item_consumed_in_all_runs": true,
+      "applied_state": "LV1/EXP0"
+    },
+    "custom_choice_application": {
+      "keith": "fifth tier -> Hawk Lord 0x2B -> LV1/EXP0",
+      "lester": "fifth tier -> Croco Lord 0x2C -> LV1/EXP0"
+    },
+    "keith_hawk_lord_battle": {
+      "status": "pass",
+      "result": "mounted flying attack animation; Sister fallback absent"
+    }
+  },
+  "final_vs_runtime_candidate": {
+    "status": "pass",
+    "description": "Only version digits and resulting Mega Drive checksum differ; gameplay code is byte-identical.",
+    "pure_changed_bytes": 3,
+    "normal_changed_bytes": 3,
+    "hard_changed_bytes": 5
+  },
+  "release_delta": {
+    "status": "pass",
+    "previous_release": "v1.3.5",
+    "pure_changed_bytes": 723,
+    "normal_changed_bytes": 725,
+    "hard_changed_bytes": 727,
+    "unexpected_changed_bytes": 0
+  },
+  "automated_tests": {
+    "status": "pass",
+    "focused_release_tests_passed": 122,
+    "missing_archived_rom_tests_skipped": 1,
+    "bps_round_trip_profiles_passed": 3,
+    "hard_balance_verification": "pass"
+  },
+  "cross_platform_builds": {
+    "status": "workflow_ready",
+    "targets": [
+      "Windows x86_64",
+      "Linux x86_64",
+      "Linux ARM64",
+      "macOS Apple Silicon",
+      "macOS Intel"
+    ],
+    "packaged_assets": "v1.3.6 manifest and three current BPS files only"
+  }
+}

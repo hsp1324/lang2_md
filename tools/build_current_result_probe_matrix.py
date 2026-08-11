@@ -50,9 +50,9 @@ from tools import build_scenario31_clear_probe_rom as scenario31
 
 
 DEFAULT_NORMAL_ROM = (
-    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.5).md"
+    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.6).md"
 )
-DEFAULT_HARD_ROM = ROOT / "roms/builds/Langrisser II (Korean Hard v1.3.5).md"
+DEFAULT_HARD_ROM = ROOT / "roms/builds/Langrisser II (Korean Hard v1.3.6).md"
 DEFAULT_OUTPUT_ROOT = ROOT / "tmp/current-source-result-probes"
 DEFAULT_SOURCE_ROM = ROOT / korean_builder.IN_ROM
 
