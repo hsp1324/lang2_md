@@ -24,11 +24,16 @@ SOURCE_PLAYER_DEPLOYMENTS = (
     (9, 7), (6, 11), (12, 11), (7, 14),
     (11, 14), (7, 18), (11, 18), (9, 21),
 )
+PLAYER_DEPLOYMENT_COUNT = len(SOURCE_PLAYER_DEPLOYMENTS)
 COMPLETION_ELWIN_POSITION = (22, 22)
 FIAS_POSITION = (22, 23)
 FIRST_ENEMY_RECORD_INDEX = 0
 LAST_ENEMY_RECORD_INDEX = 9
 FIAS_RECORD_INDEX = 5
+FIAS_NAME_ID = 0x73
+FIAS_CLASS_ID = 0x5D
+FIAS_RUNTIME_GROUP = PLAYER_DEPLOYMENT_COUNT + FIAS_RECORD_INDEX
+COMPLETION_HP = 1
 HIDDEN_ENEMY_RECORD_INDEXES = (7, 8, 9)
 COMPLETION_HIDDEN_RECORD_INDEXES = (0, 1, 2, 3, 4, 6, 7, 8, 9)
 PROTAGONIST_DEATH_TRIGGER = 0x1A78D4
@@ -125,6 +130,7 @@ RUNTIME_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
+RUNTIME_NAME_OFFSET = 0x01
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
@@ -154,6 +160,28 @@ def protagonist_death_wrapper_code() -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def completion_hp_wrapper_code() -> bytes:
+    """Lower only the identity-checked source Fias to one HP."""
+
+    record = RUNTIME_GROUP_BASE + FIAS_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    code = bytearray(bytes.fromhex("0C 39 00"))
+    code.extend(FIAS_NAME_ID.to_bytes(1, "big"))
+    code.extend((record + RUNTIME_NAME_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 12"))
+    code.extend(bytes.fromhex("0C 39 00"))
+    code.extend(FIAS_CLASS_ID.to_bytes(1, "big"))
+    code.extend(record.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 08"))
+    code.extend(bytes.fromhex("13 FC 00"))
+    code.extend(COMPLETION_HP.to_bytes(1, "big"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -326,6 +354,11 @@ def patch_probe(
         for index in COMPLETION_HIDDEN_RECORD_INDEXES:
             enemy = layout.records_offset + index * FIXED_RECORD_SIZE
             probe[enemy] |= 0x80
+        install_start_wrapper(
+            probe,
+            source,
+            completion_hp_wrapper_code(),
+        )
     return builder.update_md_checksum(probe)
 
 

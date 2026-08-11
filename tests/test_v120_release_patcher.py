@@ -5,7 +5,7 @@ import unittest
 import zipfile
 
 from patcher import langrisser_ii_korean_patcher as patcher
-from tools.build_v132_release_patches import (
+from tools.build_v135_release_patches import (
     SOURCE_PATH,
     TARGETS,
     build,
@@ -15,7 +15,7 @@ from tools.build_v132_release_patches import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-class V134ReleasePatcherTests(unittest.TestCase):
+class V135ReleasePatcherTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if not SOURCE_PATH.is_file():
@@ -23,7 +23,7 @@ class V134ReleasePatcherTests(unittest.TestCase):
 
     def test_committed_bps_assets_are_reproducible(self):
         manifest = build(check=True)
-        self.assertEqual(manifest["release"], "v1.3.4")
+        self.assertEqual(manifest["release"], "v1.3.5")
         self.assertEqual(
             {record["id"] for record in manifest["targets"]},
             {"pure", "normal", "hard"},
@@ -44,9 +44,9 @@ class V134ReleasePatcherTests(unittest.TestCase):
             self.assertEqual(
                 {result.output_path.name for result in results},
                 {
-                    "Langrisser II (Korean Original v1.3.4).md",
-                    "Langrisser II (Korean Normal v1.3.4).md",
-                    "Langrisser II (Korean Hard v1.3.4).md",
+                    "Langrisser II (Korean Original v1.3.5).md",
+                    "Langrisser II (Korean Normal v1.3.5).md",
+                    "Langrisser II (Korean Hard v1.3.5).md",
                 },
             )
             for spec in TARGETS:

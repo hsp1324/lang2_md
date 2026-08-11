@@ -14,6 +14,7 @@ class Scenario12ClearProbeTests(unittest.TestCase):
         self,
         *,
         compact_layout: bool = False,
+        completion_layout: bool = False,
         protagonist_death: bool = False,
     ) -> bytearray:
         data = bytearray(self.production)
@@ -21,11 +22,17 @@ class Scenario12ClearProbeTests(unittest.TestCase):
             data,
             self.source,
             compact_layout=compact_layout,
+            completion_layout=completion_layout,
             protagonist_death=protagonist_death,
         )
         return data
 
-    def allowed_probe_offsets(self, *, compact_layout: bool = False) -> set[int]:
+    def allowed_probe_offsets(
+        self,
+        *,
+        compact_layout: bool = False,
+        completion_layout: bool = False,
+    ) -> set[int]:
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         allowed = {0x18E, 0x18F}
         for index in range(
@@ -50,12 +57,35 @@ class Scenario12ClearProbeTests(unittest.TestCase):
                         base + FIELD_OFFSETS["y"],
                     }
                 )
-        if compact_layout:
+            if completion_layout:
+                allowed.add(base)
+                if index == probe_builder.COMPLETION_TARGET_RECORD_INDEX:
+                    allowed.update(
+                        {
+                            base + FIELD_OFFSETS["x"],
+                            base + FIELD_OFFSETS["y"],
+                        }
+                    )
+        if compact_layout or completion_layout:
             allowed.update(
                 range(
                     probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET,
                     probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
                     + probe_builder.PLAYER_DEPLOYMENT_COUNT * 4,
+                )
+            )
+        if completion_layout:
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.RUNTIME_WRAPPER,
+                    probe_builder.RUNTIME_WRAPPER + len(wrapper),
                 )
             )
         return allowed
@@ -135,6 +165,8 @@ class Scenario12ClearProbeTests(unittest.TestCase):
     def test_diagnostic_modes_conflict(self):
         for kwargs in (
             {"compact_layout": True, "protagonist_death": True},
+            {"completion_layout": True, "protagonist_death": True},
+            {"compact_layout": True, "completion_layout": True},
         ):
             with self.subTest(kwargs=kwargs):
                 with self.assertRaisesRegex(ValueError, "conflict"):
@@ -145,7 +177,10 @@ class Scenario12ClearProbeTests(unittest.TestCase):
                     )
 
     def test_diagnostic_checksums_are_valid(self):
-        for kwargs in ({"protagonist_death": True},):
+        for kwargs in (
+            {"protagonist_death": True},
+            {"completion_layout": True},
+        ):
             with self.subTest(kwargs=kwargs):
                 data = self.patched(**kwargs)
                 expected = sum(
@@ -156,7 +191,8 @@ class Scenario12ClearProbeTests(unittest.TestCase):
                     int.from_bytes(data[0x18E:0x190], "big"),
                     expected,
                 )
-                self.assertEqual(expected, 0xA973)
+                if kwargs.get("protagonist_death"):
+                    self.assertEqual(expected, 0x4B91)
 
     def test_base_probe_changes_only_enemy_combat_fields_and_checksum(self):
         data = self.patched()
@@ -247,6 +283,58 @@ class Scenario12ClearProbeTests(unittest.TestCase):
             len(enemies), probe_builder.LAST_VISIBLE_ENEMY_RECORD_INDEX + 1
         )
         self.assertFalse(players & enemies)
+
+    def test_completion_layout_retains_only_identity_checked_final_armor(self):
+        data = self.patched(completion_layout=True)
+        self.assertLessEqual(
+            self.changed_offsets(data),
+            self.allowed_probe_offsets(completion_layout=True),
+        )
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in range(layout.record_count):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            if index == probe_builder.COMPLETION_TARGET_RECORD_INDEX:
+                self.assertFalse(bool(data[base] & 0x80))
+                self.assertEqual(
+                    (
+                        data[base + FIELD_OFFSETS["x"]],
+                        data[base + FIELD_OFFSETS["y"]],
+                    ),
+                    probe_builder.COMPLETION_TARGET_POSITION,
+                )
+                self.assertEqual(
+                    data[base + FIELD_OFFSETS["name_id"]],
+                    probe_builder.COMPLETION_TARGET_NAME_ID,
+                )
+                self.assertEqual(
+                    data[base + FIELD_OFFSETS["class_id"]],
+                    probe_builder.COMPLETION_TARGET_CLASS_ID,
+                )
+            else:
+                self.assertTrue(bool(data[base] & 0x80))
+
+    def test_completion_wrapper_targets_only_final_armor_hp(self):
+        wrapper = probe_builder.completion_hp_wrapper_code()
+        target_group = (
+            probe_builder.PLAYER_DEPLOYMENT_COUNT
+            + probe_builder.COMPLETION_TARGET_RECORD_INDEX
+        )
+        record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + target_group * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertNotIn(
+            (record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4,
+                "big",
+            ),
+            wrapper,
+        )
 
     def test_rejects_non_source_enemy_record(self):
         damaged = bytearray(self.production)

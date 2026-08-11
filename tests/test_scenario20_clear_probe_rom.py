@@ -53,6 +53,19 @@ class Scenario20ClearProbeTests(unittest.TestCase):
             )
             for index in probe_builder.COMPLETION_HIDDEN_RECORD_INDEXES:
                 allowed.add(layout.records_offset + index * FIXED_RECORD_SIZE)
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.RUNTIME_WRAPPER,
+                    probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                )
+            )
         return allowed
 
     def test_changes_only_declared_enemy_fields_and_checksum(self):
@@ -169,6 +182,31 @@ class Scenario20ClearProbeTests(unittest.TestCase):
         for index in probe_builder.COMPLETION_HIDDEN_RECORD_INDEXES:
             enemy = layout.records_offset + index * FIXED_RECORD_SIZE
             self.assertTrue(bool(data[enemy] & 0x80))
+
+    def test_completion_wrapper_targets_only_source_fias(self):
+        wrapper = probe_builder.completion_hp_wrapper_code()
+        record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.FIAS_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("0C 39 00")
+            + probe_builder.FIAS_NAME_ID.to_bytes(1, "big")
+            + (record + probe_builder.RUNTIME_NAME_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertIn(
+            bytes.fromhex("0C 39 00")
+            + probe_builder.FIAS_CLASS_ID.to_bytes(1, "big")
+            + record.to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
 
     def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
         data = self.patched(protagonist_death=True)
@@ -394,7 +432,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
         conditional = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xADE5,
+            0x5003,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -402,7 +440,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xAE01,
+            0x2532,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -410,7 +448,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0xA973,
+            0x4B91,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -418,7 +456,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 kraken_event=True,
             ),
-            0xADDC,
+            0x4FFA,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -426,7 +464,7 @@ class Scenario20ClearProbeTests(unittest.TestCase):
                 self.source,
                 conditional_dialogues=True,
             ),
-            0xADE2,
+            0x5000,
         )
 
     def test_rejects_non_source_fixed_record(self):

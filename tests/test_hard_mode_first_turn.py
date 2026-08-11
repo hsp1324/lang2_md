@@ -9,6 +9,14 @@ from tools import verify_hard_mode_first_turn as first_turn
 
 
 class HardModeFirstTurnTests(unittest.TestCase):
+    def require_legacy_file(self, path):
+        resolved = Path(path)
+        if not resolved.is_absolute():
+            resolved = first_turn.ROOT / resolved
+        if not resolved.is_file():
+            self.skipTest("ignored legacy emulator evidence is absent")
+        return resolved
+
     @staticmethod
     def current_entry_evidence(number):
         return first_turn.entry_evidence(
@@ -26,6 +34,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
     def test_retained_entry_hashes_match_manifests(self):
         for number in (1, 2, 16, 25, 27):
             evidence = self.current_entry_evidence(number)
+            self.require_legacy_file(evidence["path"])
             path, digest, _ = first_turn.validate_entry_evidence(
                 number,
                 evidence,
@@ -42,6 +51,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
 
     def test_mutable_loader_entry_is_validated_by_runtime_data(self):
         source = self.current_entry_evidence(31)
+        self.require_legacy_file(source["path"])
         with tempfile.TemporaryDirectory() as directory:
             manifest = Path(directory) / "loader.json"
             manifest.write_text(
@@ -141,6 +151,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
 
     def test_direct_entry_is_hash_locked_to_selected_rom(self):
         source = self.current_entry_evidence(3)["path"]
+        self.require_legacy_file(source)
         evidence = first_turn.direct_entry_evidence(
             Path(source),
             rom_digest="fresh-rom-sha256",
@@ -226,8 +237,14 @@ class HardModeFirstTurnTests(unittest.TestCase):
             first_turn.ROOT
             / "captures/run/hard_8674_s03_turn_end_cursor.png"
         )
-        self.assertEqual(first_turn.start_menu_cursor_row(first_row), 0)
-        self.assertEqual(first_turn.start_menu_cursor_row(last_row), 4)
+        self.assertEqual(
+            first_turn.start_menu_cursor_row(self.require_legacy_file(first_row)),
+            0,
+        )
+        self.assertEqual(
+            first_turn.start_menu_cursor_row(self.require_legacy_file(last_row)),
+            4,
+        )
 
     def test_retain_endpoint_gst_replaces_snapshot_atomically(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -309,6 +326,42 @@ class HardModeFirstTurnTests(unittest.TestCase):
         self.assertIsNone(first_turn.expected_endpoint(7))
         self.assertIsNone(first_turn.expected_endpoint(12))
         self.assertIsNone(first_turn.expected_endpoint(14))
+
+    def test_unapproved_mode_uses_missing_legacy_evidence_only_as_hint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "endpoints.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "scenarios": [
+                            {
+                                "number": 31,
+                                "endpoint": "defeat_return_title_turn_1",
+                                "normal_evidence": [
+                                    {
+                                        "path": "captures/missing.png",
+                                        "sha256": "0" * 64,
+                                    }
+                                ],
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(FileNotFoundError):
+                first_turn.expected_endpoint_context(
+                    31,
+                    allow_unapproved_defeat=False,
+                    path=path,
+                )
+            approved, hint = first_turn.expected_endpoint_context(
+                31,
+                allow_unapproved_defeat=True,
+                path=path,
+            )
+            self.assertIsNone(approved)
+            self.assertEqual(hint["endpoint"], "defeat_return_title_turn_1")
 
     def test_save_result_replaces_scenario_and_updates_coverage(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -484,6 +537,17 @@ class HardModeFirstTurnTests(unittest.TestCase):
             sorted(by_number),
             data["coverage"]["verified_scenarios"],
         )
+        retained_paths = [
+            first_turn.ROOT / row[path_key]
+            for row in by_number.values()
+            for path_key in (
+                "opening_capture",
+                "endpoint_capture",
+                "endpoint_gst",
+            )
+        ]
+        if not all(path.is_file() for path in retained_paths):
+            self.skipTest("ignored legacy first-turn captures are absent")
         for number, row in sorted(by_number.items()):
             for path_key, digest_key in (
                 ("opening_capture", "opening_capture_sha256"),

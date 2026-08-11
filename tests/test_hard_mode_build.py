@@ -46,6 +46,9 @@ SUPERSEDED_132_PLAYTEST_ROM = (
     ROOT / "roms/builds/"
     "Langrisser II (Korean Hard T1.3.2 B1.3.2).md"
 )
+SUPERSEDED_134_PLAYTEST_ROM = (
+    ROOT / "roms/builds/Langrisser II (Korean Hard v1.3.4).md"
+)
 
 
 class HardModeBuildTests(unittest.TestCase):
@@ -253,7 +256,7 @@ class HardModeBuildTests(unittest.TestCase):
             UPDATE_REGISTRY.read_text(encoding="utf-8")
         )
         history = registry["candidate_history"]
-        self.assertEqual(len(history), 7)
+        self.assertEqual(len(history), 8)
         for predecessor, successor in zip(history, history[1:]):
             self.assertEqual(predecessor["superseded_by"], successor["sha256"])
         self.assertEqual(
@@ -268,6 +271,7 @@ class HardModeBuildTests(unittest.TestCase):
             SUPERSEDED_122_PLAYTEST_ROM,
             SUPERSEDED_123_PLAYTEST_ROM,
             SUPERSEDED_132_PLAYTEST_ROM,
+            SUPERSEDED_134_PLAYTEST_ROM,
         )
         if not all(path.is_file() for path in retained):
             self.skipTest("ignored superseded hard ROMs are absent")

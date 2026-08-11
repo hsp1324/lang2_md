@@ -19,7 +19,7 @@ class TitleMainScreenTests(unittest.TestCase):
         cls.version_patch = bytearray(cls.jp)
         builder.expand_rom(cls.version_patch)
         builder.patch_byte_ui_strings(cls.version_patch)
-        cls.hard_version_text = "번역/밸런스:1.3.4/1.3.4"
+        cls.hard_version_text = "번역/밸런스:1.3.5/1.3.5"
         cls.hard_version_patch = bytearray(cls.jp)
         builder.expand_rom(cls.hard_version_patch)
         builder.patch_byte_ui_strings(
@@ -190,10 +190,10 @@ class TitleMainScreenTests(unittest.TestCase):
         )
 
     def test_version_record_is_installed_in_new_builds(self):
-        self.assertEqual(builder.TITLE_VERSION_TEXT, "번역:1.3.4")
+        self.assertEqual(builder.TITLE_VERSION_TEXT, "번역:1.3.5")
         self.assertEqual(
             builder.TITLE_VERSION_RENDER_POSITION,
-            builder.title_version_render_position("번역:1.3.4"),
+            builder.title_version_render_position("번역:1.3.5"),
         )
         self.assertEqual(
             self.version_patch[
@@ -206,7 +206,7 @@ class TitleMainScreenTests(unittest.TestCase):
 
     def test_hard_version_text_fits_reserved_record_and_title_row(self):
         lines = builder.split_hard_title_version_text(self.hard_version_text)
-        self.assertEqual(lines, ("번역:1.3.4", "하드:1.3.4"))
+        self.assertEqual(lines, ("번역:1.3.5", "하드:1.3.5"))
         self.assertIsNotNone(lines)
         translation_text, balance_text = lines
         translation_record = builder.build_title_version_record(
@@ -318,7 +318,7 @@ class TitleMainScreenTests(unittest.TestCase):
         ]
         self.assertEqual(
             metadata.rstrip(b" "),
-            b"LANGRISSER II KOREAN T1.3.4 BY HSP1324",
+            b"LANGRISSER II KOREAN T1.3.5 BY HSP1324",
         )
 
     def test_credit_font_is_a_separate_resource_with_exact_overrides(self):
@@ -392,12 +392,12 @@ class TitleMainScreenTests(unittest.TestCase):
         )
         self.assertLessEqual(
             builder.TITLE_HARD_TRANSLATION_TEXT_RECORD
-            + len(builder.build_title_version_record("번역:1.3.4")),
+            + len(builder.build_title_version_record("번역:1.3.5")),
             builder.TITLE_HARD_BALANCE_TEXT_RECORD,
         )
         self.assertLessEqual(
             builder.TITLE_HARD_BALANCE_TEXT_RECORD
-            + len(builder.build_title_version_record("하드:1.3.4")),
+            + len(builder.build_title_version_record("하드:1.3.5")),
             builder.TITLE_HARD_CREDIT_RENDER_ROUTINE,
         )
         self.assertLessEqual(

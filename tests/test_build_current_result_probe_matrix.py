@@ -31,7 +31,7 @@ class BuildCurrentResultProbeMatrixTests(unittest.TestCase):
         )
         self.assertEqual(
             matrix.PROBE_DEFINITIONS[11]["kwargs"],
-            {"safe_clear_layout": True, "safe_jessica": True},
+            {"completion_layout": True},
         )
         self.assertEqual(
             matrix.PROBE_DEFINITIONS[30]["kwargs"],

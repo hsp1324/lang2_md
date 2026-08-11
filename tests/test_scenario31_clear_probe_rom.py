@@ -74,6 +74,19 @@ class Scenario31ClearProbeTests(unittest.TestCase):
                 * FIXED_RECORD_SIZE
             )
             allowed.update(range(active, active + FIXED_RECORD_SIZE))
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.BRANCH_HP_WRAPPER,
+                    probe_builder.BRANCH_HP_WRAPPER + len(wrapper),
+                )
+            )
         if compact_layout:
             allowed.update(
                 range(
@@ -113,7 +126,10 @@ class Scenario31ClearProbeTests(unittest.TestCase):
                 FIELD_OFFSETS["x"],
                 FIELD_OFFSETS["y"],
             ):
-                self.assertEqual(data[base + offset], self.source[base + offset])
+                self.assertEqual(
+                    data[base + offset],
+                    self.production[base + offset],
+                )
 
     def test_preserves_named_commanders_and_original_high_stats(self):
         data = self.patched()
@@ -285,7 +301,38 @@ class Scenario31ClearProbeTests(unittest.TestCase):
         self.assertEqual(data[active + FIELD_OFFSETS["class_id"]], 0x4E)
         self.assertFalse(bool(data[active] & 0x80))
 
-    def test_branch_targets_preserve_all_original_fixed_data(self):
+    def test_completion_layout_sets_only_target_runtime_hp_to_one(self):
+        data = self.patched(completion_layout=True)
+        wrapper = probe_builder.completion_hp_wrapper_code()
+        self.assertEqual(
+            data[
+                probe_builder.BRANCH_HP_WRAPPER :
+                probe_builder.BRANCH_HP_WRAPPER + len(wrapper)
+            ],
+            wrapper,
+        )
+        target_group = (
+            probe_builder.FIRST_FIXED_RUNTIME_GROUP
+            + probe_builder.COMPLETION_TARGET_RECORD_INDEX
+        )
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + target_group * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertNotIn(
+            (target + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4,
+                "big",
+            ),
+            wrapper,
+        )
+
+    def test_branch_targets_preserve_all_production_fixed_data(self):
         source_layout = scenario_layout(
             self.source, probe_builder.SCENARIO_NUMBER
         )
@@ -305,7 +352,7 @@ class Scenario31ClearProbeTests(unittest.TestCase):
                         source_layout.records_offset
                         + source_layout.record_count * FIXED_RECORD_SIZE
                     ],
-                    self.source[
+                    self.production[
                         source_layout.record_list_offset :
                         source_layout.records_offset
                         + source_layout.record_count * FIXED_RECORD_SIZE
@@ -439,7 +486,7 @@ class Scenario31ClearProbeTests(unittest.TestCase):
                 data = self.patched(player_branch_target=target_group)
                 self.assertEqual(
                     data[fixed_start:fixed_end],
-                    self.source[fixed_start:fixed_end],
+                    self.production[fixed_start:fixed_end],
                 )
                 code = probe_builder.player_branch_death_wrapper_code(
                     target_group
@@ -509,7 +556,7 @@ class Scenario31ClearProbeTests(unittest.TestCase):
             + FIELD_OFFSETS["name_id"]
         )
         self.assertEqual(self.source[record_eight], 0x65)
-        self.assertEqual(self.production[record_eight], 0x65)
+        self.assertEqual(self.production[record_eight], 0x66)
         self.assertEqual(probe_builder.BRANCH_EVENT_SPECS[8][0], 0x66)
         for target_index, (
             trigger_name_id,
@@ -625,13 +672,13 @@ class Scenario31ClearProbeTests(unittest.TestCase):
             int.from_bytes(data[offset : offset + 2], "big")
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
-        self.assertEqual(expected, 0xE2C8)
+        self.assertEqual(expected, 0x4E60)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_optional_layout_checksums_are_current_and_valid(self):
         for data, expected in (
-            (self.patched(compact_layout=True), 0xE3F0),
-            (self.patched(completion_layout=True), 0x2164),
+            (self.patched(compact_layout=True), 0x4F88),
+            (self.patched(completion_layout=True), 0xB14F),
         ):
             actual = sum(
                 int.from_bytes(data[offset : offset + 2], "big")

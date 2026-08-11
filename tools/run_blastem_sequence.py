@@ -14,6 +14,25 @@ from pathlib import Path
 from PIL import Image
 
 
+# Pillow 11 renamed the non-deprecated pixel iterator to
+# ``get_flattened_data``.  Ubuntu/macOS package managers can still provide
+# Pillow 9 or 10, whose equivalent API is ``getdata``.  Runtime validation is
+# deliberately usable with either version because every emulator subprocess
+# imports this module before applying its screen detectors.
+if not hasattr(Image.Image, "get_flattened_data"):
+    Image.Image.get_flattened_data = Image.Image.getdata  # type: ignore[attr-defined]
+if not hasattr(Image, "Resampling"):
+    class _Resampling:
+        NEAREST = Image.NEAREST
+        BOX = Image.BOX
+        BILINEAR = Image.BILINEAR
+        HAMMING = Image.HAMMING
+        BICUBIC = Image.BICUBIC
+        LANCZOS = Image.LANCZOS
+
+    Image.Resampling = _Resampling  # type: ignore[attr-defined]
+
+
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))

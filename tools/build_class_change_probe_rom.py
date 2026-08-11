@@ -298,16 +298,23 @@ def patch_level_up_only_probe(
     current_class: int,
     runtime_record_index: int,
     probe_level: int = 1,
+    start_menu_trigger: bool = False,
 ) -> int:
     if not 0 <= current_class < CLASS_COUNT:
         raise ValueError(f"class ID must be 0..{CLASS_COUNT - 1}")
 
-    expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
-    offset = END_TURN_LEVEL_UP_ENTRY_OPERAND
+    if start_menu_trigger:
+        expected = START_MENU_ENTRY.to_bytes(4, "big")
+        offset = START_MENU_ENTRY_OPERAND
+        label = "Start-menu entry"
+    else:
+        expected = LEVEL_UP_HANDLER.to_bytes(4, "big")
+        offset = END_TURN_LEVEL_UP_ENTRY_OPERAND
+        label = "end-turn level-up"
     if source[offset : offset + 4] != expected:
-        raise ValueError("Japanese end-turn level-up operand changed")
+        raise ValueError(f"Japanese {label} operand changed")
     if probe[offset : offset + 4] != expected:
-        raise ValueError("input end-turn level-up operand changed")
+        raise ValueError(f"input {label} operand changed")
 
     code = wrapper_code(
         runtime_record_index=runtime_record_index,
@@ -358,6 +365,15 @@ def parse_args() -> argparse.Namespace:
         help=(
             "preserve the normal Start menu and perform one stock level-up "
             "without requiring a class-change transition"
+        ),
+    )
+    parser.add_argument(
+        "--start-level-up",
+        action="store_true",
+        help=(
+            "with --level-up-only, trigger the guarded stock level-up from "
+            "Start instead of waiting through the enemy phase; useful for "
+            "an already equipped Rune Stone application probe"
         ),
     )
     parser.add_argument(
@@ -418,11 +434,13 @@ def main() -> int:
             current_class=args.current_class,
             runtime_record_index=args.runtime_record_index,
             probe_level=args.probe_level,
+            start_menu_trigger=args.start_level_up,
         )
         args.output_rom.parent.mkdir(parents=True, exist_ok=True)
         args.output_rom.write_bytes(probe)
         print(
-            "end-turn level-up handler redirected through runtime record "
+            ("Start" if args.start_level_up else "end-turn level-up handler")
+            + " redirected through runtime record "
             f"{args.runtime_record_index} class 0x{args.current_class:02X} "
             f"LV{args.probe_level}/EXP"
             f"{class_change_experience(source, args.current_class)} probe"
@@ -431,6 +449,8 @@ def main() -> int:
         print(f"checksum: {checksum:04X}")
         print(args.output_rom)
         return 0
+    if args.start_level_up:
+        raise ValueError("--start-level-up requires --level-up-only")
     if args.probe_level != 1:
         raise ValueError("--probe-level is only valid with --level-up-only")
 

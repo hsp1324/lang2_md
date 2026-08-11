@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "release": "v1.3.5",
+  "status": "reviewed_pass_release_ready",
+  "validated_at": "2026-08-11",
+  "method": "per-scenario isolated Xvfb/BlastEm replay with identity-preserving focused completion probes; not one continuous campaign save",
+  "source": {
+    "path": "roms/original/Langrisser II (Japan).md",
+    "size": 2097152,
+    "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b"
+  },
+  "release_roms": {
+    "pure": {
+      "filename": "Langrisser II (Korean Original v1.3.5).md",
+      "size": 4194304,
+      "sha256": "f1ed872dbe191e836f4414ae204994f096c1fb8568aa0449e80a7d4b9e804110",
+      "md_checksum": "3833"
+    },
+    "normal": {
+      "filename": "Langrisser II (Korean Normal v1.3.5).md",
+      "size": 4194304,
+      "sha256": "724304a728ad9b3202b8d69b4c2afff284291c02e3bc419891e22e5e7f535abd",
+      "md_checksum": "54C2"
+    },
+    "hard": {
+      "filename": "Langrisser II (Korean Hard v1.3.5).md",
+      "size": 4194304,
+      "sha256": "792ea989db144625902e4c9e9f4b50740cf0ced17ca7ccbda46cea3a4671a086",
+      "md_checksum": "72CD"
+    }
+  },
+  "final_vs_gameplay_candidate": {
+    "status": "pass",
+    "description": "Final ROMs differ from the fully replayed gameplay candidates only in version digits and the resulting Mega Drive checksum.",
+    "pure_changed_bytes": 3,
+    "normal_changed_bytes": 3,
+    "hard_changed_bytes": 5
+  },
+  "static_scenario_audit": {
+    "status": "pass",
+    "scenario_count": 31,
+    "fixed_record_count": 340,
+    "pure_normal_source_difference": "Scenario 31 fixed record 8 name ID 0x65 to 0x66 only",
+    "hard_difference_policy": "approved Standard Hard AT/DF, mercenary, correction tag and Scenario 31 ID fix only"
+  },
+  "first_turn_replay": {
+    "status": "pass",
+    "passed": 93,
+    "total": 93,
+    "profiles": {
+      "pure": {
+        "passed": 31,
+        "summary_sha256": "16fb585245a47fb4519af43f32de35c83328fea2d279c453c5f73bcaab2efa30"
+      },
+      "normal": {
+        "passed": 31,
+        "summary_sha256": "fc6cff4c19b6fb9033f62cd41de6a4ccaf9f33fd45e8827fd6f2735ad274dfd6"
+      },
+      "hard": {
+        "passed": 31,
+        "primary_summary_sha256": "834fc3bd2d0bead2703b29c7d1469596a45615218e64fd1fa2847f0d5fcb70c6",
+        "six_scenario_rerun_summary_sha256": "d8617a74ec5d7a83205f55f7f9c665c282ffa14d36778a8bf3c49ce394ef94df"
+      }
+    }
+  },
+  "normal_hard_result_replay": {
+    "status": "pass",
+    "passed": 62,
+    "total": 62,
+    "initial_full_run": {
+      "passed": 60,
+      "total": 62,
+      "summary_sha256": "b294b00c08fddaa157bfed24bcc4d368ec1bbcfb0c5a105aa7be830349a10f2a",
+      "diagnostic_failures": [
+        "normal Scenario 18 target survived the old probability-dependent completion probe",
+        "hard Scenario 20 target survived the old probability-dependent completion probe"
+      ]
+    },
+    "deterministic_recheck": {
+      "status": "pass",
+      "passed": 4,
+      "total": 4,
+      "summary_sha256": "13a703471be72b2312df940dbd5df8df2996472b787818d3092d4ecdfa68d23a",
+      "replacement_passes": [
+        "normal Scenario 18",
+        "hard Scenario 20"
+      ],
+      "additional_confirmation_passes": [
+        "hard Scenario 18",
+        "normal Scenario 20"
+      ],
+      "runtime_assertion": "identity and class match, HP 1 before real attack, HP 0 and defeated flag 0x80 afterward"
+    },
+    "scenario27": {
+      "normal_fin_frame": 4955,
+      "hard_fin_frame": 5000,
+      "normal_evidence_sha256": "6013ed115fb0874d99361c423f18d6a2d71cea41214b383d160a96c51492c70c",
+      "hard_evidence_sha256": "5fe25940f5cc9a03095824bc9bdbb18ac3e29ba096b2635b49a88394b6a51f74"
+    }
+  },
+  "focused_runtime_checks": {
+    "runestone_well": {
+      "pure_capture_sha256": "a4617bcbf8011483974c95dfc9ec0c721d1050208ae2eb3baa7d6c5669f079a5",
+      "hard_capture_sha256": "c22daee4479ea9394ac6cde01afbd24f881c41b8ce1b366ded9537d9c0846878"
+    },
+    "keith_actual_hard_runestone_application_gst_sha256": "448dde03c53950b59d9f80f0b65232fef10229d218abca2f3a54546cdd9e791f",
+    "class_choice_captures": {
+      "keith_fighter_sha256": "9d4165b98d0257e2af5f10b5365284e6cf863ee37c1c0f1c07e837ba07d95e25",
+      "lester_fighter_sha256": "10e87a2db980114924dfaea66dcc08645688a7df54a042b5dadacf4cc4e83b4b",
+      "jessica_warlock_sha256": "483b7fcc3d948dffe33bc3126265188781aa6494abb25d65e0169603de353822"
+    },
+    "scenario31_demon_lord_death_capture_sha256": "485b99127c4b232de6dc48bc7c6b9762cf1001ec39e28c5fe45de811ff6b0c21"
+  },
+  "automated_tests": {
+    "status": "pass",
+    "focused_tests_run": 593,
+    "focused_tests_passed": 586,
+    "legacy_evidence_tests_skipped": 7,
+    "scenario_probe_tests_run": 507,
+    "scenario_probe_tests_passed": 507,
+    "release_integrity_tests_passed": 5,
+    "production_probe_input": {
+      "path": "roms/builds/Langrisser II (Korean).md",
+      "profile": "normal",
+      "sha256": "724304a728ad9b3202b8d69b4c2afff284291c02e3bc419891e22e5e7f535abd"
+    },
+    "diagnostic_checksum_locks": "updated and rerun against final v1.3.5 header/checksum and Scenario 31 event ID 0x66",
+    "full_repository_audit": {
+      "status": "non_gate_legacy_failures",
+      "tests_run": 1720,
+      "passed": 1559,
+      "failures": 61,
+      "errors": 89,
+      "skipped": 11,
+      "classification": "missing archived ROM/GST/PNG inputs, pre-v1.3 release identities, obsolete runtime hashes and pre-cleanup design/inventory reports; not represented as a green release suite"
+    }
+  },
+  "linux_x86_64_local_patcher": {
+    "status": "pass",
+    "binary_size": 11284176,
+    "binary_sha256": "7ffe32efb428f2030f2f7159afa8eb9003dc0c35cde7d4e6936107168de538d0",
+    "archive_size": 11140836,
+    "archive_sha256": "44f8b9fba84dc7588746d0e075c89ba28cca350215d61aab66209abfdc7c8fab",
+    "smoke_result": "generated all three release ROMs with manifest-matching SHA-256 values"
+  },
+  "cross_platform_builds": {
+    "status": "workflow_ready",
+    "targets": [
+      "Windows x86_64",
+      "Linux x86_64",
+      "Linux ARM64",
+      "macOS Apple Silicon",
+      "macOS Intel"
+    ],
+    "packaged_assets": "v1.3.5 manifest and three current BPS files only"
+  },
+  "publication": {
+    "release_promoted": false,
+    "blocker": "GitHub CLI (gh) is not installed in the current environment"
+  }
+}

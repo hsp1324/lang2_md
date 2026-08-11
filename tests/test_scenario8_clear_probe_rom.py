@@ -153,7 +153,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(checksum, expected)
-        self.assertEqual(checksum, 0x0617)
+        self.assertEqual(checksum, 0xA835)
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
 
     def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
@@ -233,7 +233,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0xA973)
+        self.assertEqual(expected, 0x4B91)
 
     def test_runtime_clear_targets_only_kramer_and_preserves_fixed_records(self):
         data = self.runtime_clear_patched()
@@ -648,7 +648,7 @@ class Scenario8ClearProbeRomTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0x1902)
+        self.assertEqual(expected, 0xBB20)
 
     def test_turn_event_checksums_are_valid(self):
         for turn in probe_builder.TURN_EVENT_COUNTER_VALUES:

@@ -56,6 +56,7 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
 
     def test_patched_chains_offer_the_requested_tier_two_branches(self) -> None:
         patched = bytearray(self.source)
+        builder.expand_rom(patched)
         builder.patch_join_class_choice_class_data(patched, self.source)
         for commander_id, row in builder.JOIN_CLASS_CHOICE_RECORDS.items():
             with self.subTest(commander_id=commander_id):
@@ -71,6 +72,7 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
 
     def test_custom_hawk_and_croco_lord_class_records_use_tier_movement(self) -> None:
         patched = bytearray(self.source)
+        builder.expand_rom(patched)
         builder.patch_join_class_choice_class_data(patched, self.source)
         for custom_class, source_class in (
             builder.JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES.items()
@@ -110,6 +112,7 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
 
     def test_custom_lord_transitions_continue_to_original_promoted_routes(self) -> None:
         patched = bytearray(self.source)
+        builder.expand_rom(patched)
         builder.patch_join_class_choice_class_data(patched, self.source)
         for commander_id, starter, custom in (
             (7, 0x06, builder.JOIN_CLASS_CHOICE_HAWK_LORD),
@@ -123,14 +126,86 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                     patched, commander_id, custom
                 ).candidates
                 self.assertEqual(custom_next, original_next)
-                self.assertNotIn(
-                    0x01,
-                    tuple(
-                        transition.current_class
-                        for transition in read_class_change_chain(
-                            patched, commander_id
-                        )
+                self.assertEqual(
+                    transition_for_class(
+                        patched, commander_id, 0x01
                     ),
+                    transition_for_class(
+                        self.source, commander_id, 0x01
+                    ),
+                )
+
+    def test_runestone_fighter_routes_and_sprite_records_are_preserved(self) -> None:
+        patched = bytearray(self.source)
+        builder.expand_rom(patched)
+        builder.patch_join_class_choice_class_data(patched, self.source)
+
+        for commander_id, relocation in (
+            builder.JOIN_CLASS_CHOICE_CHAIN_RELOCATIONS.items()
+        ):
+            with self.subTest(commander_id=commander_id):
+                source_chain = read_class_change_chain(
+                    self.source, commander_id
+                )
+                patched_chain = read_class_change_chain(
+                    patched, commander_id
+                )
+                self.assertEqual(len(patched_chain), len(source_chain) + 1)
+                self.assertEqual(
+                    transition_for_class(patched, commander_id, 0x01),
+                    transition_for_class(self.source, commander_id, 0x01),
+                )
+                pointer_offset = (
+                    builder.CLASS_CHANGE_POINTER_TABLE
+                    + (commander_id - 1) * 4
+                )
+                self.assertEqual(
+                    builder.be32(patched, pointer_offset), relocation
+                )
+
+                fighter_sprite = builder.commander_sprite_record_offset(
+                    patched, commander_id, 0x01
+                )
+                source_fighter_sprite = builder.commander_sprite_record_offset(
+                    self.source, commander_id, 0x01
+                )
+                self.assertEqual(
+                    patched[fighter_sprite + 1 : fighter_sprite + 3],
+                    self.source[
+                        source_fighter_sprite + 1 : source_fighter_sprite + 3
+                    ],
+                )
+                custom = (
+                    builder.JOIN_CLASS_CHOICE_HAWK_LORD
+                    if commander_id == 7
+                    else builder.JOIN_CLASS_CHOICE_CROCO_LORD
+                )
+                builder.commander_sprite_record_offset(
+                    patched, commander_id, custom
+                )
+
+    def test_stock_runestone_handler_restarts_from_the_first_chain_record(self) -> None:
+        # At LV10, equipped item 0x1A is the Rune Stone.  The stock routine
+        # consumes it and replaces the current-class lookup key with (A2),
+        # the first current-class word in this commander's chain.
+        self.assertEqual(
+            self.source[0x014B4A:0x014B5A],
+            bytes.fromhex(
+                "0C 28 00 1A 00 0B "
+                "66 00 00 08 "
+                "61 00 01 D6 "
+                "34 12"
+            ),
+        )
+
+        patched = bytearray(self.source)
+        builder.expand_rom(patched)
+        builder.patch_join_class_choice_class_data(patched, self.source)
+        for commander_id in (7, 9):
+            with self.subTest(commander_id=commander_id):
+                self.assertEqual(
+                    read_class_change_chain(patched, commander_id)[0],
+                    read_class_change_chain(self.source, commander_id)[0],
                 )
 
     def test_identity_and_residual_experience_are_preserved(self) -> None:
@@ -470,6 +545,7 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
 
     def test_lester_fixed_grants_naturally_end_at_branch_specific_levels(self) -> None:
         patched = bytearray(self.source)
+        builder.expand_rom(patched)
         builder.patch_join_class_choice_class_data(patched, self.source)
         row = builder.JOIN_CLASS_CHOICE_RECORDS[9]
         expected_levels = {

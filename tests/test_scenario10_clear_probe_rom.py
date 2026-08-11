@@ -202,7 +202,7 @@ class Scenario10ClearProbeTests(unittest.TestCase):
             for offset in range(0x200, len(data), 2)
         ) & 0xFFFF
         self.assertEqual(int.from_bytes(data[0x18E:0x190], "big"), expected)
-        self.assertEqual(expected, 0xABDE)
+        self.assertEqual(expected, 0x4B91)
 
     def test_runtime_finish_changes_only_wrapper_and_checksum(self):
         data = self.runtime_finish_patched()

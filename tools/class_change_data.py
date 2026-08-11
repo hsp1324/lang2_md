@@ -7,6 +7,7 @@ from dataclasses import dataclass
 CLASS_CHANGE_POINTER_TABLE = 0x08253A
 COMMANDER_COUNT = 10
 REGULAR_TRANSITION_COUNT = 9
+MAX_TRANSITION_COUNT = 32
 CLASS_COUNT = 157
 
 
@@ -16,11 +17,11 @@ class ClassTransition:
     candidates: tuple[int, ...]
 
 
-# The ten writable chain records contain only one terminal fifth-tier route
-# per commander. The stock commander sprite tables and original class trees
-# expose these additional fifth-tier destinations too. Keep them as read-only
-# editor metadata; patch_class_change_chain() must continue writing exactly
-# the ten physical ROM records.
+# The Japanese chains contain ten records and only one terminal fifth-tier
+# route per commander. Relocated patched chains may contain additional
+# records, so the parser follows the actual sentinel. The stock commander
+# sprite tables and original class trees expose these extra fifth-tier
+# destinations too; keep them as read-only editor metadata.
 HIDDEN_CLASS_ROUTES: dict[int, tuple[ClassTransition, ...]] = {
     1: (
         ClassTransition(0x1A, (0x22,)),  # Sword Master -> Hero
@@ -86,7 +87,7 @@ def class_change_chain_pointer(
         raise ValueError(f"commander ID must be 1..{COMMANDER_COUNT}")
     offset = CLASS_CHANGE_POINTER_TABLE + (commander_id - 1) * 4
     pointer = be32(source, offset)
-    if not 0 <= pointer <= len(source) - 0x4E:
+    if not 0 <= pointer <= len(source) - 6:
         raise ValueError(
             f"commander {commander_id} class-change pointer is out of range: "
             f"0x{pointer:06X}"
@@ -99,30 +100,44 @@ def read_class_change_chain(
 ) -> tuple[ClassTransition, ...]:
     pointer = class_change_chain_pointer(source, commander_id)
     transitions: list[ClassTransition] = []
-    for index in range(REGULAR_TRANSITION_COUNT):
+    for index in range(MAX_TRANSITION_COUNT):
         offset = pointer + index * 8
-        values = tuple(be16(source, offset + word * 2) for word in range(4))
+        if offset + 6 > len(source):
+            raise ValueError(
+                f"commander {commander_id} class-change chain ends outside ROM"
+            )
+        current_class = be16(source, offset)
+        first_candidate = be16(source, offset + 2)
+        sentinel_or_second = be16(source, offset + 4)
+        if sentinel_or_second == 0xFFFF:
+            if current_class >= CLASS_COUNT or first_candidate >= CLASS_COUNT:
+                raise ValueError(
+                    f"commander {commander_id} terminal transition {index} "
+                    "contains an invalid class ID"
+                )
+            transitions.append(
+                ClassTransition(current_class, (first_candidate,))
+            )
+            break
+
+        third_candidate = be16(source, offset + 6)
+        values = (
+            current_class,
+            first_candidate,
+            sentinel_or_second,
+            third_candidate,
+        )
         if any(value >= CLASS_COUNT for value in values):
             raise ValueError(
-                f"commander {commander_id} regular transition {index} "
+                f"commander {commander_id} transition {index} "
                 "contains an invalid class ID"
             )
-        transitions.append(ClassTransition(values[0], values[1:]))
-
-    terminal_offset = pointer + REGULAR_TRANSITION_COUNT * 8
-    terminal = ClassTransition(
-        be16(source, terminal_offset),
-        (be16(source, terminal_offset + 2),),
-    )
-    if terminal.current_class >= CLASS_COUNT or terminal.candidates[0] >= CLASS_COUNT:
+        transitions.append(ClassTransition(current_class, values[1:]))
+    else:
         raise ValueError(
-            f"commander {commander_id} terminal transition contains an invalid class ID"
+            f"commander {commander_id} class-change chain has no terminal "
+            f"sentinel within {MAX_TRANSITION_COUNT} records"
         )
-    if be16(source, terminal_offset + 4) != 0xFFFF:
-        raise ValueError(
-            f"commander {commander_id} class-change chain has no terminal sentinel"
-        )
-    transitions.append(terminal)
 
     current_classes = [transition.current_class for transition in transitions]
     if len(set(current_classes)) != len(current_classes):
@@ -150,10 +165,11 @@ def patch_class_change_chain(
     transitions: list[dict[str, object]] | tuple[ClassTransition, ...],
 ) -> None:
     pointer = class_change_chain_pointer(data, commander_id)
-    if len(transitions) != REGULAR_TRANSITION_COUNT + 1:
+    current_transition_count = len(read_class_change_chain(data, commander_id))
+    if len(transitions) != current_transition_count:
         raise ValueError(
             f"commander {commander_id} needs "
-            f"{REGULAR_TRANSITION_COUNT + 1} transitions"
+            f"{current_transition_count} transitions"
         )
 
     normalized: list[ClassTransition] = []
@@ -165,7 +181,7 @@ def patch_class_change_chain(
                 int(source_transition["current_class"]),
                 tuple(int(value) for value in source_transition["candidates"]),
             )
-        expected_candidates = 3 if index < REGULAR_TRANSITION_COUNT else 1
+        expected_candidates = 3 if index < len(transitions) - 1 else 1
         if len(transition.candidates) != expected_candidates:
             raise ValueError(
                 f"commander {commander_id} transition {index} needs "
@@ -185,7 +201,7 @@ def patch_class_change_chain(
             f"commander {commander_id} class-change chain repeats a current class"
         )
 
-    for index, transition in enumerate(normalized[:REGULAR_TRANSITION_COUNT]):
+    for index, transition in enumerate(normalized[:-1]):
         offset = pointer + index * 8
         values = (transition.current_class, *transition.candidates)
         data[offset : offset + 8] = b"".join(
@@ -193,7 +209,7 @@ def patch_class_change_chain(
         )
 
     terminal = normalized[-1]
-    terminal_offset = pointer + REGULAR_TRANSITION_COUNT * 8
+    terminal_offset = pointer + (len(normalized) - 1) * 8
     data[terminal_offset : terminal_offset + 6] = (
         terminal.current_class.to_bytes(2, "big")
         + terminal.candidates[0].to_bytes(2, "big")

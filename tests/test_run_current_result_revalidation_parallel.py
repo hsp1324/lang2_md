@@ -54,7 +54,7 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
         }
         self.assertEqual(len(paths), 8)
         self.assertIn(
-            args.output_root / "s12/normal/unit-test",
+            args.output_root / "normal/s12/unit-test",
             paths,
         )
         self.assertIn(
@@ -100,34 +100,29 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
         )
         self.assertNotIn("--scenario", command)
         command = runner.task_command(args, "hard", 12, ":604")
-        self.assertTrue(command[1].endswith("run_scenario12_result_surface.py"))
-        self.assertIn(
-            str(runner.SCENARIO_SEED_OVERRIDES[12]),
-            command,
+        self.assertTrue(
+            command[1].endswith("run_scenario28_31_result_surface.py")
         )
-        self.assertNotIn(str(args.seed_gst), command)
+        self.assertIn(str(args.seed_gst), command)
+        self.assertEqual(command[-2:], ["--scenario", "12"])
         command = runner.task_command(args, "normal", 13, ":605")
-        self.assertTrue(command[1].endswith("run_scenario13_result_surface.py"))
-        self.assertIn(
-            str(runner.SCENARIO_SEED_OVERRIDES[13]),
-            command,
+        self.assertTrue(
+            command[1].endswith("run_scenario28_31_result_surface.py")
         )
-        self.assertNotIn(str(args.seed_gst), command)
+        self.assertIn(str(args.seed_gst), command)
+        self.assertEqual(command[-2:], ["--scenario", "13"])
         command = runner.task_command(args, "normal", 18, ":606")
         self.assertTrue(
-            command[1].endswith("run_scenario18_20_result_surface.py")
+            command[1].endswith("run_scenario28_31_result_surface.py")
         )
         self.assertEqual(command[-2:], ["--scenario", "18"])
-        self.assertIn(str(runner.SCENARIO_SEED_OVERRIDES[18]), command)
+        self.assertIn(str(args.seed_gst), command)
         command = runner.task_command(args, "hard", 19, ":607")
         self.assertTrue(
-            command[1].endswith("run_scenario18_20_result_surface.py")
+            command[1].endswith("run_scenario28_31_result_surface.py")
         )
         self.assertEqual(command[-2:], ["--scenario", "19"])
-        self.assertIn(
-            str(runner.SCENARIO_SEED_OVERRIDES[19]),
-            command,
-        )
+        self.assertIn(str(args.seed_gst), command)
         command = runner.task_command(args, "normal", 4, ":608")
         self.assertTrue(
             command[1].endswith("run_scenario01_09_result_surface.py")
@@ -138,9 +133,11 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
         )
         self.assertEqual(command[-2:], ["--scenario", "4"])
         command = runner.task_command(args, "hard", 11, ":609")
-        self.assertTrue(command[1].endswith("run_scenario11_result_surface.py"))
-        self.assertIn(str(runner.SCENARIO_SEED_OVERRIDES[11]), command)
-        self.assertNotIn("--scenario", command)
+        self.assertTrue(
+            command[1].endswith("run_scenario28_31_result_surface.py")
+        )
+        self.assertIn(str(args.seed_gst), command)
+        self.assertEqual(command[-2:], ["--scenario", "11"])
         command = runner.task_command(args, "hard", 30, ":610")
         self.assertTrue(
             command[1].endswith("run_scenario28_31_result_surface.py")

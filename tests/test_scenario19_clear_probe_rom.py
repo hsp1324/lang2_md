@@ -50,6 +50,19 @@ class Scenario19ClearProbeTests(unittest.TestCase):
                     probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + 3,
                 }
             )
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.RUNTIME_WRAPPER,
+                    probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                )
+            )
         return allowed
 
     def test_changes_only_declared_enemy_fields_and_checksum(self):
@@ -149,6 +162,37 @@ class Scenario19ClearProbeTests(unittest.TestCase):
             )
         )
         self.assertEqual(data[start : start + len(expected)], expected)
+
+    def test_completion_layout_sets_only_imelda_runtime_hp_to_one(self):
+        data = self.patched(completion_layout=True)
+        wrapper = probe_builder.completion_hp_wrapper_code()
+        self.assertEqual(
+            data[
+                probe_builder.RUNTIME_WRAPPER :
+                probe_builder.RUNTIME_WRAPPER + len(wrapper)
+            ],
+            wrapper,
+        )
+        target_group = (
+            probe_builder.PLAYER_DEPLOYMENT_COUNT
+            + probe_builder.IMELDA_RECORD_INDEX
+        )
+        target = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + target_group * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (target + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertNotIn(
+            (target + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4,
+                "big",
+            ),
+            wrapper,
+        )
 
     def test_protagonist_death_changes_only_start_wrapper_and_checksum(self):
         data = self.patched(protagonist_death=True)
@@ -418,7 +462,7 @@ class Scenario19ClearProbeTests(unittest.TestCase):
         protagonist = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xFC25,
+            0x9E43,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -426,7 +470,7 @@ class Scenario19ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xFC55,
+            0xC2C9,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -434,15 +478,15 @@ class Scenario19ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0xA973,
+            0x4B91,
         )
         for target_turn, checksum in (
-            (2, 0xE06B),
-            (13, 0xE083),
-            (18, 0xE08D),
-            (19, 0xE08F),
-            (21, 0xE093),
-            (23, 0xE097),
+            (2, 0x8289),
+            (13, 0x82A1),
+            (18, 0x82AB),
+            (19, 0x82AD),
+            (21, 0x82B1),
+            (23, 0x82B5),
         ):
             with self.subTest(target_turn=target_turn):
                 turn_event = bytearray(self.production)

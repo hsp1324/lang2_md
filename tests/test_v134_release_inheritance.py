@@ -2,6 +2,7 @@ from pathlib import Path
 import unittest
 
 from tools.rom_update import bps_apply
+from tools.class_change_data import read_class_change_chain
 from tools.build_hard_mode_rom import (
     FIXED_RECORD_SIZE,
     SOLDIER_CORRECTION_AREA_END,
@@ -17,7 +18,7 @@ SOURCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 
 
 class V134ReleaseInheritanceTests(unittest.TestCase):
-    """Keep v1.3.3 fixes while restoring its omitted Standard Hard layer."""
+    """Lock the v1.3.1 through v1.3.5 regression and repair boundaries."""
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -34,6 +35,7 @@ class V134ReleaseInheritanceTests(unittest.TestCase):
             "v1.3.2": self.release_rom("new-design-normal-v1.3.2.bps"),
             "v1.3.3": self.release_rom("normal-v1.3.3.bps"),
             "v1.3.4": self.release_rom("normal-v1.3.4.bps"),
+            "v1.3.5": self.release_rom("normal-v1.3.5.bps"),
         }
         roster = 0x05E64A
         size = 0x0E
@@ -51,7 +53,7 @@ class V134ReleaseInheritanceTests(unittest.TestCase):
         # v1.3.1 is the last release with the legacy Fighter LV10 records.
         self.assertEqual(records["v1.3.1"][7][0:3], bytes.fromhex("01 01 0A"))
         self.assertEqual(records["v1.3.1"][9][0:3], bytes.fromhex("01 01 0A"))
-        for release in ("v1.3.2", "v1.3.3", "v1.3.4"):
+        for release in ("v1.3.2", "v1.3.3", "v1.3.4", "v1.3.5"):
             self.assertEqual(records[release][7][0:3], bytes.fromhex("06 01 0A"))
             self.assertEqual(records[release][9][0:3], bytes.fromhex("07 01 0A"))
             self.assertEqual(records[release][10][0:3], bytes.fromhex("03 0E 0A"))
@@ -65,6 +67,48 @@ class V134ReleaseInheritanceTests(unittest.TestCase):
         for release in ("v1.3.1", "v1.3.2", "v1.3.3"):
             self.assertEqual(releases[release][guard : guard + 6], level_compare)
         self.assertEqual(releases["v1.3.4"][guard : guard + 6], keith_identity)
+        self.assertEqual(releases["v1.3.5"][guard : guard + 6], keith_identity)
+
+        # The Rune Stone always restarts from the first class-chain record.
+        # v1.3.2 replaced that Fighter record to make room for the join-only
+        # Lord classes, so the later releases reproduce the reported wrong
+        # first choices even though their join roster is otherwise repaired.
+        self.assertEqual(
+            read_class_change_chain(releases["v1.3.1"], 7)[0],
+            read_class_change_chain(self.source, 7)[0],
+        )
+        self.assertEqual(
+            read_class_change_chain(releases["v1.3.1"], 9)[0],
+            read_class_change_chain(self.source, 9)[0],
+        )
+        for release in ("v1.3.2", "v1.3.3", "v1.3.4"):
+            with self.subTest(release=release, commander="Keith"):
+                first = read_class_change_chain(releases[release], 7)[0]
+                self.assertEqual(first.current_class, 0x2B)
+                self.assertEqual(first.candidates, (0x0D, 0x0F, 0x12))
+            with self.subTest(release=release, commander="Lester"):
+                first = read_class_change_chain(releases[release], 9)[0]
+                self.assertEqual(first.current_class, 0x2C)
+                self.assertEqual(first.candidates, (0x0D, 0x10, 0x12))
+
+        # v1.3.5 relocates the longer join-only chains. Their live first rows
+        # are once again the stock Runestone Fighter transitions, while the
+        # new Hawk/Croco Lord rows remain reachable later in each chain.
+        for commander_id, custom_class in ((7, 0x2B), (9, 0x2C)):
+            with self.subTest(commander_id=commander_id):
+                repaired = read_class_change_chain(
+                    releases["v1.3.5"], commander_id
+                )
+                self.assertEqual(
+                    repaired[0],
+                    read_class_change_chain(self.source, commander_id)[0],
+                )
+                self.assertIn(custom_class, {
+                    transition.current_class for transition in repaired
+                })
+
+        self.assertEqual(releases["v1.3.4"][0x1838F8], 0x65)
+        self.assertEqual(releases["v1.3.5"][0x1838F8], 0x66)
 
     def test_v133_release_content_is_preserved_byte_for_byte(self) -> None:
         profiles = {

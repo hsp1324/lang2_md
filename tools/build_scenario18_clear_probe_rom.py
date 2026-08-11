@@ -35,6 +35,7 @@ SOURCE_PLAYER_DEPLOYMENTS = (
     (22, 30),
     (30, 31),
 )
+PLAYER_DEPLOYMENT_COUNT = len(SOURCE_PLAYER_DEPLOYMENTS)
 COMPLETION_ELWIN_POSITION = (35, 5)
 DARK_PRINCESS_ELWIN_POSITION = (37, 3)
 RESIDENT_PROBE_ELWIN_POSITION = SOURCE_PLAYER_DEPLOYMENTS[0]
@@ -47,6 +48,12 @@ LAST_RESIDENT_RECORD_INDEX = 1
 FIRST_ENEMY_RECORD_INDEX = 2
 LAST_ENEMY_RECORD_INDEX = 10
 GREAT_DRAGON_RECORD_INDEX = 5
+GREAT_DRAGON_NAME_ID = 0x54
+GREAT_DRAGON_CLASS_ID = 0x5E
+GREAT_DRAGON_RUNTIME_GROUP = (
+    PLAYER_DEPLOYMENT_COUNT + GREAT_DRAGON_RECORD_INDEX
+)
+COMPLETION_HP = 1
 LANA_RECORD_INDEX = 6
 PROTAGONIST_DEATH_TRIGGER = 0x1A4268
 PROTAGONIST_DEATH_TRIGGER_BYTES = bytes.fromhex(
@@ -162,6 +169,30 @@ def mark_runtime_groups_defeated_code(groups: tuple[int, ...]) -> bytes:
 
 def protagonist_death_wrapper_code() -> bytes:
     return mark_runtime_groups_defeated_code((PROTAGONIST_RUNTIME_GROUP,))
+
+
+def completion_hp_wrapper_code() -> bytes:
+    """Lower only the identity-checked source Great Dragon to one HP."""
+    record = (
+        RUNTIME_GROUP_BASE
+        + GREAT_DRAGON_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+    )
+    code = bytearray(bytes.fromhex("0C 39 00"))
+    code.extend(GREAT_DRAGON_NAME_ID.to_bytes(1, "big"))
+    code.extend((record + RUNTIME_NAME_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 12"))
+    code.extend(bytes.fromhex("0C 39 00"))
+    code.extend(GREAT_DRAGON_CLASS_ID.to_bytes(1, "big"))
+    code.extend(record.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 08"))
+    code.extend(bytes.fromhex("13 FC 00"))
+    code.extend(COMPLETION_HP.to_bytes(1, "big"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
 
 
 def resident_annihilation_wrapper_code() -> bytes:
@@ -607,6 +638,12 @@ def patch_probe(
             FIRST_PLAYER_DEPLOYMENT_OFFSET :
             FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
         ] = elwin
+    if completion_layout:
+        install_start_wrapper(
+            probe,
+            source,
+            completion_hp_wrapper_code(),
+        )
     return builder.update_md_checksum(probe)
 
 

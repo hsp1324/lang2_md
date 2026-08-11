@@ -37,16 +37,16 @@ RUNNERS: dict[int, str] = {
     8: "run_scenario01_09_result_surface.py",
     9: "run_scenario01_09_result_surface.py",
     10: "run_scenario10_result_surface.py",
-    11: "run_scenario11_result_surface.py",
-    12: "run_scenario12_result_surface.py",
-    13: "run_scenario13_result_surface.py",
+    11: "run_scenario28_31_result_surface.py",
+    12: "run_scenario28_31_result_surface.py",
+    13: "run_scenario28_31_result_surface.py",
     14: "run_scenario14_15_result_surface.py",
     15: "run_scenario14_15_result_surface.py",
     16: "run_scenario14_15_result_surface.py",
     17: "run_scenario17_result_surface.py",
-    18: "run_scenario18_20_result_surface.py",
-    19: "run_scenario18_20_result_surface.py",
-    20: "run_scenario18_20_result_surface.py",
+    18: "run_scenario28_31_result_surface.py",
+    19: "run_scenario28_31_result_surface.py",
+    20: "run_scenario28_31_result_surface.py",
     21: "run_scenario21_result_surface.py",
     22: "run_scenario22_result_surface.py",
     23: "run_scenario23_result_surface.py",
@@ -61,36 +61,6 @@ RUNNERS: dict[int, str] = {
 }
 SCENARIOS = tuple(RUNNERS)
 SCENARIO_SEED_OVERRIDES = {
-    11: (
-        ROOT
-        / "captures/runtime/s11-safe-jessica-d091/.local/share/blastem/"
-        "Langrisser II (Scenario 11 Safe Jessica Clear Probe)/quicksave.gst"
-    ),
-    12: (
-        ROOT
-        / "captures/runtime/s12-load-old-40bc/.local/share/blastem/"
-        "Langrisser II (Scenario 12 Compact Clear Probe)/quicksave.gst"
-    ),
-    13: (
-        ROOT
-        / "captures/runtime/s13-completion-0ce6/.local/share/blastem/"
-        "Langrisser II (Scenario 13 Completion Probe)/quicksave.gst"
-    ),
-    18: (
-        ROOT
-        / "captures/runtime/s18_completion_17f2/.local/share/blastem/"
-        "Langrisser II (Scenario 18 Completion Probe)/quicksave.gst"
-    ),
-    19: (
-        ROOT
-        / "captures/runtime/current-s19-hard-result06/.local/share/blastem/"
-        "s19/quicksave.gst"
-    ),
-    20: (
-        ROOT
-        / "captures/runtime/s20_completion_d2f9_hidden/.local/share/blastem/"
-        "Langrisser II (Scenario 20 Completion Probe)/quicksave.gst"
-    ),
 }
 SCENARIO_PROFILE_SEED_OVERRIDES = {}
 
@@ -106,7 +76,7 @@ def task_rom(probe_root: Path, profile: str, scenario: int) -> Path:
 
 def runner_output_root(output_root: Path, scenario: int) -> Path:
     if scenario in (
-        *range(1, 10), 11, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
+        *range(1, 10), 11, 12, 13, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
     ):
         return output_root
     return output_root / f"s{scenario:02d}"
@@ -120,7 +90,7 @@ def task_output(
 ) -> Path:
     root = runner_output_root(output_root, scenario)
     if scenario in (
-        *range(1, 10), 11, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
+        *range(1, 10), 11, 12, 13, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
     ):
         return root / profile / f"s{scenario:02d}" / run_id
     return root / profile / run_id
@@ -155,7 +125,7 @@ def task_command(
         args.run_id,
     ]
     if scenario in (
-        *range(1, 10), 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
+        *range(1, 10), 11, 12, 13, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
     ):
         command.extend(("--scenario", str(scenario)))
     return command

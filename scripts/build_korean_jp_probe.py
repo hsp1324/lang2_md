@@ -14,8 +14,15 @@ import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
+# Pillow 11 added ``get_flattened_data`` as the replacement for ``getdata``.
+# Distribution Python environments used by the Linux patch/build workflow can
+# still ship Pillow 9 or 10, so expose the equivalent iterator there as well.
+if not hasattr(Image.Image, "get_flattened_data"):
+    Image.Image.get_flattened_data = Image.Image.getdata  # type: ignore[attr-defined]
+
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from tools.class_change_data import (
+    CLASS_CHANGE_POINTER_TABLE,
     ClassTransition,
     patch_class_change_chain,
     read_class_change_chain,
@@ -1988,6 +1995,22 @@ JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES = {
     JOIN_CLASS_CHOICE_HAWK_LORD: 0x0F,   # Dragon Knight: flying tier movement
     JOIN_CLASS_CHOICE_CROCO_LORD: 0x10,  # Serpent Knight: naval tier movement
 }
+# Keith and Lester need one additional transition beyond the ten stock
+# records.  Reusing their Fighter record made a Runestone restart begin from
+# Hawk/Croco Lord and skip the stock tier-one choice.  The stock scanner walks
+# records until its 0xFFFF sentinel, so relocate the two variable-length chains
+# and their sentinel-terminated commander sprite maps into reserved expansion
+# space instead of deleting the Fighter entries.
+JOIN_CLASS_CHOICE_CHAIN_RELOCATIONS = {
+    7: 0x31E400,
+    9: 0x31E480,
+}
+JOIN_CLASS_CHOICE_CHAIN_RELOCATED_SIZE = 0x80
+JOIN_CLASS_CHOICE_SPRITE_RELOCATIONS = {
+    7: 0x31E500,
+    9: 0x31E580,
+}
+JOIN_CLASS_CHOICE_SPRITE_RELOCATED_SIZE = 0x80
 JOIN_CLASS_CHOICE_RECORDS = {
     7: {
         "name": "Keith",
@@ -6517,7 +6540,7 @@ def patch_join_class_choice_class_data(
     data: bytearray,
     source: bytes,
 ) -> None:
-    """Install the dedicated Hawk/Croco first and second tier lineages."""
+    """Install join-only lineages without breaking Runestone restarts."""
 
     for custom_class, source_class in JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES.items():
         custom_offset = CLASS_RECORD_TABLE + custom_class * CLASS_RECORD_SIZE
@@ -6558,11 +6581,30 @@ def patch_join_class_choice_class_data(
             for transition in source_transitions
             if transition.current_class == starter
         )
+        # Keep the now-unreferenced stock-location bytes identical to the
+        # v1.3.3/v1.3.4 layout.  This makes the release delta contain only the
+        # new pointers and relocated tables while the live pointer below uses
+        # the complete Runestone-safe chain.
+        legacy_transitions = list(source_transitions)
         _replace_join_class_transition(
-            source_transitions,
+            legacy_transitions,
             current_class=0x01,
             replacement=ClassTransition(custom, promoted_candidates),
         )
+        _replace_join_class_transition(
+            legacy_transitions,
+            current_class=starter,
+            replacement=ClassTransition(
+                starter,
+                tuple(int(value) for value in spec["starter_candidates"]),
+            ),
+        )
+        patch_class_change_chain(
+            data,
+            commander_id,
+            tuple(legacy_transitions),
+        )
+
         _replace_join_class_transition(
             source_transitions,
             current_class=starter,
@@ -6571,18 +6613,97 @@ def patch_join_class_choice_class_data(
                 tuple(int(value) for value in spec["starter_candidates"]),
             ),
         )
-        patch_class_change_chain(data, commander_id, tuple(source_transitions))
+        source_transitions.insert(
+            -1,
+            ClassTransition(custom, promoted_candidates),
+        )
 
-        legacy_sprite_record = commander_sprite_record_offset(data, commander_id, 0x01)
+        chain_payload = bytearray()
+        for transition in source_transitions[:-1]:
+            chain_payload.extend(
+                b"".join(
+                    value.to_bytes(2, "big")
+                    for value in (
+                        transition.current_class,
+                        *transition.candidates,
+                    )
+                )
+            )
+        terminal = source_transitions[-1]
+        chain_payload.extend(
+            terminal.current_class.to_bytes(2, "big")
+            + terminal.candidates[0].to_bytes(2, "big")
+            + b"\xFF\xFF"
+        )
+        chain_target = JOIN_CLASS_CHOICE_CHAIN_RELOCATIONS[commander_id]
+        chain_limit = chain_target + JOIN_CLASS_CHOICE_CHAIN_RELOCATED_SIZE
+        if chain_target + len(chain_payload) > chain_limit:
+            raise ValueError(
+                f"commander {commander_id} relocated class chain is too large"
+            )
+        if any(value != 0xFF for value in data[chain_target:chain_limit]):
+            raise ValueError(
+                f"commander {commander_id} relocated class-chain area is occupied"
+            )
+        data[chain_target : chain_target + len(chain_payload)] = chain_payload
+        put32(
+            data,
+            CLASS_CHANGE_POINTER_TABLE + (commander_id - 1) * 4,
+            chain_target,
+        )
+
+        sprite_pointer_offset = (
+            COMMANDER_SPRITE_POINTER_TABLE + (commander_id - 1) * 4
+        )
+        source_sprite_pointer = be32(source, sprite_pointer_offset)
+        data_sprite_pointer = be32(data, sprite_pointer_offset)
+        source_sprite_records = bytearray()
+        while source[source_sprite_pointer] != 0xFF:
+            source_sprite_records.extend(
+                source[source_sprite_pointer : source_sprite_pointer + 3]
+            )
+            source_sprite_pointer += 3
+        source_sprite_records.append(0xFF)
+        if (
+            data[data_sprite_pointer : data_sprite_pointer + len(source_sprite_records)]
+            != source_sprite_records
+        ):
+            raise ValueError(
+                f"input commander sprite map for commander {commander_id} changed"
+            )
         promoted_sprite_record = commander_sprite_record_offset(
             data,
             commander_id,
             int(JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES[custom]),
         )
+        promoted_sprite = bytes(
+            data[promoted_sprite_record + 1 : promoted_sprite_record + 3]
+        )
+        legacy_sprite_record = commander_sprite_record_offset(
+            data, commander_id, 0x01
+        )
         data[legacy_sprite_record] = custom
-        data[legacy_sprite_record + 1 : legacy_sprite_record + 3] = data[
-            promoted_sprite_record + 1 : promoted_sprite_record + 3
-        ]
+        data[legacy_sprite_record + 1 : legacy_sprite_record + 3] = (
+            promoted_sprite
+        )
+        sprite_payload = (
+            source_sprite_records[:-1]
+            + bytes((custom,))
+            + promoted_sprite
+            + b"\xFF"
+        )
+        sprite_target = JOIN_CLASS_CHOICE_SPRITE_RELOCATIONS[commander_id]
+        sprite_limit = sprite_target + JOIN_CLASS_CHOICE_SPRITE_RELOCATED_SIZE
+        if sprite_target + len(sprite_payload) > sprite_limit:
+            raise ValueError(
+                f"commander {commander_id} relocated sprite map is too large"
+            )
+        if any(value != 0xFF for value in data[sprite_target:sprite_limit]):
+            raise ValueError(
+                f"commander {commander_id} relocated sprite-map area is occupied"
+            )
+        data[sprite_target : sprite_target + len(sprite_payload)] = sprite_payload
+        put32(data, sprite_pointer_offset, sprite_target)
 
 
 SCENARIO6_RUNESTONE_TRIGGER = 0x18D768
@@ -6591,6 +6712,20 @@ SCENARIO6_RUNESTONE_TRIGGER_SOURCE = bytes.fromhex(
 )
 SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE = bytes.fromhex(
     "D8 AC 08 F0 00 00 05 04 07 04 00 18 D8 D8 FF FF"
+)
+
+# Scenario 31 fixed commander record 8 is the left-hand Demon Lord on the
+# upper floor.  The Japanese data accidentally repeats name ID 0x65 from
+# record 6, while the stock death-event table has a distinct, otherwise
+# unreachable trigger for ID 0x66 at 0x1B8426.  Both IDs render the same
+# Demon Lord label; correcting the record therefore changes no visible name
+# or class and only restores the intended per-commander death event.
+SCENARIO31_DEMON_LORD_NAME_OFFSET = 0x1838F8
+SCENARIO31_DEMON_LORD_SOURCE_NAME_ID = 0x65
+SCENARIO31_DEMON_LORD_EVENT_NAME_ID = 0x66
+SCENARIO31_DEMON_LORD_EVENT_TRIGGER = 0x1B8426
+SCENARIO31_DEMON_LORD_EVENT_TRIGGER_BYTES = bytes.fromhex(
+    "1A 02 66 00 00 1B 87 82"
 )
 
 
@@ -6607,6 +6742,30 @@ def patch_scenario6_runestone_accessibility(
     if data[start:end] != SCENARIO6_RUNESTONE_TRIGGER_SOURCE:
         raise ValueError("input Scenario 6 Rune Stone trigger changed")
     data[start:end] = SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE
+
+
+def patch_scenario31_demon_lord_identity(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    """Connect the upper-left Demon Lord to its stock ID-0x66 death event."""
+
+    offset = SCENARIO31_DEMON_LORD_NAME_OFFSET
+    if source[offset] != SCENARIO31_DEMON_LORD_SOURCE_NAME_ID:
+        raise ValueError("Japanese Scenario 31 Demon Lord name ID changed")
+    if data[offset] != SCENARIO31_DEMON_LORD_SOURCE_NAME_ID:
+        raise ValueError("input Scenario 31 Demon Lord name ID changed")
+    trigger = SCENARIO31_DEMON_LORD_EVENT_TRIGGER
+    trigger_end = trigger + len(SCENARIO31_DEMON_LORD_EVENT_TRIGGER_BYTES)
+    for label, payload in (("Japanese", source), ("input", data)):
+        if (
+            payload[trigger:trigger_end]
+            != SCENARIO31_DEMON_LORD_EVENT_TRIGGER_BYTES
+        ):
+            raise ValueError(
+                f"{label} Scenario 31 Demon Lord death trigger changed"
+            )
+    data[offset] = SCENARIO31_DEMON_LORD_EVENT_NAME_ID
 
 
 def profile_includes_user_patches(profile_name: str) -> bool:
@@ -6636,6 +6795,7 @@ def patch_profile_user_customizations(
     patch_join_class_choice_visibility_guard(data, source)
     patch_join_class_choice_target_levels(data, source)
     patch_scenario6_runestone_accessibility(data, source)
+    patch_scenario31_demon_lord_identity(data, source)
     if not profile_includes_user_patches(profile_name):
         return
     patch_bald_map_sprite(data)

@@ -119,8 +119,22 @@ class Scenario11ClearProbeTests(unittest.TestCase):
                 jessica_death=True,
             )
 
+    def test_completion_layout_conflicts_with_other_diagnostic_modes(self):
+        for kwargs in (
+            {"completion_layout": True, "safe_jessica": True},
+            {"completion_layout": True, "safe_clear_layout": True},
+            {"completion_layout": True, "protagonist_death": True},
+        ):
+            with self.subTest(kwargs=kwargs):
+                with self.assertRaisesRegex(ValueError, "conflict"):
+                    probe_builder.patch_probe(
+                        bytearray(self.production),
+                        self.source,
+                        **kwargs,
+                    )
+
     def test_death_mode_checksums_are_valid(self):
-        for mode, checksum in (("protagonist", 0xA973), ("jessica", 0xB033)):
+        for mode, checksum in (("protagonist", 0x4B91), ("jessica", 0x5251)):
             with self.subTest(mode=mode):
                 data = self.death_patched(mode)
                 expected = sum(
@@ -400,6 +414,144 @@ class Scenario11ClearProbeTests(unittest.TestCase):
         self.assertNotIn(
             probe_builder.SAFE_JESSICA_POSITION,
             probe_builder.SAFE_CLEAR_VISIBLE_POSITIONS.values(),
+        )
+
+    def test_completion_layout_keeps_jessica_and_final_reinforcement(self):
+        data = bytearray(self.production)
+        probe_builder.patch_probe(
+            data,
+            self.source,
+            completion_layout=True,
+        )
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        allowed = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET,
+                probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET
+                + probe_builder.PLAYER_DEPLOYMENT_COUNT * 4,
+            ),
+        }
+        for index in range(
+            probe_builder.FIRST_ENEMY_RECORD_INDEX,
+            probe_builder.LAST_ENEMY_RECORD_INDEX + 1,
+        ):
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            allowed.update(
+                {
+                    base,
+                    base + FIELD_OFFSETS["at"],
+                    base + FIELD_OFFSETS["df"],
+                    *(
+                        base + FIELD_OFFSETS["mercenaries"] + slot
+                        for slot in range(6)
+                    ),
+                }
+            )
+            if index == probe_builder.COMPLETION_TARGET_RECORD_INDEX:
+                allowed.update(
+                    {
+                        base + FIELD_OFFSETS["x"],
+                        base + FIELD_OFFSETS["y"],
+                    }
+                )
+        jessica = layout.records_offset
+        allowed.update(
+            {
+                jessica + FIELD_OFFSETS["x"],
+                jessica + FIELD_OFFSETS["y"],
+            }
+        )
+        wrapper = probe_builder.completion_hp_wrapper_code()
+        allowed.update(
+            range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            )
+        )
+        allowed.update(
+            range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER + len(wrapper),
+            )
+        )
+        changed = {
+            offset
+            for offset, (before, after) in enumerate(zip(self.production, data))
+            if before != after
+        }
+        self.assertLessEqual(changed, allowed)
+        self.assertEqual(
+            (
+                data[jessica + FIELD_OFFSETS["x"]],
+                data[jessica + FIELD_OFFSETS["y"]],
+            ),
+            probe_builder.SAFE_JESSICA_POSITION,
+        )
+        for index in probe_builder.COMPLETION_HIDDEN_ENEMY_INDEXES:
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            self.assertTrue(bool(data[base] & 0x80))
+        target = (
+            layout.records_offset
+            + probe_builder.COMPLETION_TARGET_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        self.assertFalse(bool(data[target] & 0x80))
+        self.assertEqual(
+            (
+                data[target + FIELD_OFFSETS["x"]],
+                data[target + FIELD_OFFSETS["y"]],
+            ),
+            probe_builder.COMPLETION_TARGET_POSITION,
+        )
+        self.assertEqual(
+            data[target + FIELD_OFFSETS["name_id"]],
+            probe_builder.COMPLETION_TARGET_NAME_ID,
+        )
+        self.assertEqual(
+            data[target + FIELD_OFFSETS["class_id"]],
+            probe_builder.COMPLETION_TARGET_CLASS_ID,
+        )
+
+    def test_completion_wrapper_retires_prior_groups_and_preserves_final_identity(self):
+        wrapper = probe_builder.completion_hp_wrapper_code()
+        for group in probe_builder.COMPLETION_DEFEATED_RUNTIME_GROUPS:
+            prior = (
+                probe_builder.RUNTIME_GROUP_BASE
+                + group * probe_builder.RUNTIME_GROUP_SIZE
+            )
+            self.assertIn(
+                bytes.fromhex("00 39 00 80")
+                + (prior + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                    4,
+                    "big",
+                ),
+                wrapper,
+            )
+            self.assertIn(
+                bytes.fromhex("13 FC 00 00")
+                + (prior + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+                wrapper,
+            )
+        target_group = (
+            probe_builder.PLAYER_DEPLOYMENT_COUNT
+            + probe_builder.COMPLETION_TARGET_RECORD_INDEX
+        )
+        record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + target_group * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertNotIn(
+            (record + probe_builder.RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(
+                4,
+                "big",
+            ),
+            wrapper,
         )
 
     def test_current_safe_jessica_build_checksum(self):

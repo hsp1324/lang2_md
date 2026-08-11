@@ -4,7 +4,7 @@
 
 프로젝트 개발자: **hsp1324**
 
-> 최신 공개 버전은 `v1.3.4`입니다. 세 가지 완성판은
+> 최신 공개 버전은 `v1.3.5`입니다. 세 가지 완성판은
 > GitHub Releases의 Windows·Linux·macOS 패처로 일본판 ROM에 적용해 사용합니다.
 > 동작은 `RetroArch`(Genesis Plus GX 기준) 환경에서 검증되었으므로 우선적으로
 > `RetroArch` 사용을 권장합니다.
@@ -13,32 +13,32 @@
 
 사용 중인 운영체제와 CPU에 맞는 패처를 받아 일본판 ROM에 적용합니다.
 
-- **Windows**: [Langrisser-II-Korean-Patcher-v1.3.4.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4.exe)
-- **Linux x86_64**: [Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz)
-- **Linux ARM64**: [Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64.tar.gz)
-- **macOS Apple Silicon**: [Langrisser-II-Korean-Patcher-v1.3.4-macos-arm64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-macos-arm64.app.zip)
-- **macOS Intel**: [Langrisser-II-Korean-Patcher-v1.3.4-macos-x86_64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.4/Langrisser-II-Korean-Patcher-v1.3.4-macos-x86_64.app.zip)
+- **Windows**: [Langrisser-II-Korean-Patcher-v1.3.5.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.5/Langrisser-II-Korean-Patcher-v1.3.5.exe)
+- **Linux x86_64**: [Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.5/Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64.tar.gz)
+- **Linux ARM64**: [Langrisser-II-Korean-Patcher-v1.3.5-linux-arm64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.5/Langrisser-II-Korean-Patcher-v1.3.5-linux-arm64.tar.gz)
+- **macOS Apple Silicon**: [Langrisser-II-Korean-Patcher-v1.3.5-macos-arm64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.5/Langrisser-II-Korean-Patcher-v1.3.5-macos-arm64.app.zip)
+- **macOS Intel**: [Langrisser-II-Korean-Patcher-v1.3.5-macos-x86_64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.5/Langrisser-II-Korean-Patcher-v1.3.5-macos-x86_64.app.zip)
 
-검증값은 [v1.3.4 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.4)에서 확인할 수 있습니다.
+검증값은 [v1.3.5 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.5)에서 확인할 수 있습니다.
 
-### v1.3.4 변경 사항
+### v1.3.5 변경 사항
 
-- v1.3.2부터 발생한 키스·레스터 구 세이브 회귀를 수정했습니다. 합류 시점에
-  파이터 레벨 10을 이미 지나 11·12 이상이 된 기록도 정상 1차 클래스 레벨
-  10 경계로 복구한 뒤 기존 클래스 선택 화면을 엽니다.
-- 새 게임의 키스·레스터·제시카는 각자의 1차 클래스 레벨 10으로 등장합니다.
-  준비 화면이나 합류 전 NPC 상태에서는 전직하지 않으며, 실제 아군 합류·배치
-  시점에 바로 클래스 선택을 한 뒤 선택한 클래스에서 정상적으로 레벨이 오릅니다.
-- v1.3.1~v1.3.3의 번역, New 디자인, 룬스톤 접근성, 시나리오 조건 및
-  UI 수정은 이전 공개 결과와 바이트 단위로 대조해 유지했습니다. v1.3.3
-  하드판에서 빠졌던 승인된 Standard Hard 밸런스 계층은 v1.3.2 기준으로
-  복구했으며, 릴리스 검사에서 300개 적 기록과 보정 루틴을 모두 확인합니다.
-- 화면 검증은 실제 데스크톱 입력을 쓰지 않는 격리 Xvfb/BlastEm 환경에서
-  진행했습니다. 세 버전의 시나리오 1~31 진입과 첫 턴, normal/hard의 31개
-  준비 화면과 실제 이동 후 회색 스프라이트, 세 인물의 실제 합류 전직,
-  시나리오 1~10·14~17·21~31의 새 전투 결과(지원 장은 저장)와 27장의 전체
-  엔딩을 확인했습니다. 11~13·18~20의 결과·저장은 이전 exact-current
-  증거를 별도 이월했으며, 이 여섯 장도 v1.3.4 첫 턴은 새로 실행했습니다.
+- 룬스톤 사용 뒤 키스가 `매직나이트 / 드래곤나이트 / 비숍`으로 잘못
+  전직하던 v1.3.2~v1.3.4 회귀를 수정했습니다. 파이터에서 키스는
+  `로드 / 호크나이트 / 힐러`, 레스터는 `나이트 / 크로코나이트 / 샤먼`이
+  다시 표시됩니다. 제시카의 워록 경로도 함께 검증했습니다.
+- 합류 전용 호크로드·크로코로드 경로를 확장 영역으로 분리했습니다. 따라서
+  새 게임의 키스·레스터·제시카는 레벨 10으로 등장하고 실제 아군 합류 때
+  즉시 클래스 선택을 하며, v1.3.4의 파이터 레벨 11·12 구 세이브 복구도
+  그대로 유지됩니다.
+- 시나리오 31의 데몬로드 하나가 중복 ID 때문에 사망 이벤트와 연결되지 않던
+  원본 데이터 오류를 수정했습니다. 화면 이름과 클래스는 그대로입니다.
+- 격리 Xvfb/BlastEm 가상 화면에서 세 판본의 시나리오 1~31 진입·첫 턴
+  93건과 Normal/Hard 전 장의 실제 전투 결과·저장·분기·엔딩을 새로
+  검증했습니다. 시나리오 6 우물 룬스톤 획득, 27장 전체 엔딩, 지휘관
+  이름·클래스·배치와 증원·승패 조건도 별도로 확인했습니다.
+- Windows·Linux·macOS 패처에는 1.3.5에 필요한 BPS 세 개만 포함해 과거
+  버전 패치가 실행 파일 용량을 불필요하게 늘리지 않도록 정리했습니다.
 
 ## 세 가지 버전
 
@@ -49,9 +49,9 @@
 패처는 일본판 ROM 또는 ZIP 하나를 고르면 위 세 ROM을 모두 생성합니다.
 
 ```text
-Langrisser II (Korean Original v1.3.4).md
-Langrisser II (Korean Normal v1.3.4).md
-Langrisser II (Korean Hard v1.3.4).md
+Langrisser II (Korean Original v1.3.5).md
+Langrisser II (Korean Normal v1.3.5).md
+Langrisser II (Korean Hard v1.3.5).md
 ```
 
 ## Windows에서 패치하기
@@ -67,26 +67,26 @@ EXE를 실행하고 일본판 ROM 또는 ZIP, 결과 폴더를 고른 뒤 `패�
 실행합니다.
 
 ```bash
-tar -xzf Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz
-chmod +x Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64
-./Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64
+tar -xzf Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64.tar.gz
+chmod +x Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64
+./Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64
 ```
 
 화면 없이 명령줄로도 실행할 수 있습니다.
 
 ```bash
-./Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64 \
+./Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64 \
   --rom "/path/to/Langrisser II (Japan).md" \
   --output-dir "/path/to/output"
 ```
 
-ARM64에서는 명령의 파일명을 `Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64`로
+ARM64에서는 명령의 파일명을 `Langrisser-II-Korean-Patcher-v1.3.5-linux-arm64`로
 바꿉니다.
 
 ## macOS에서 패치하기
 
 M1 이후 Mac은 `macos-arm64.app.zip`, Intel Mac은 `macos-x86_64.app.zip`을
-받습니다. ZIP을 풀고 `Langrisser II Korean Patcher v1.3.4.app`을 실행합니다.
+받습니다. ZIP을 풀고 `Langrisser II Korean Patcher v1.3.5.app`을 실행합니다.
 이 패처는 Apple Developer ID로 공증되지 않았으므로 처음 한 번은 Finder에서
 앱을 오른쪽 클릭한 뒤 `열기`를 선택해야 할 수 있습니다. macOS 보안을
 전체적으로 끄지는 마세요.
@@ -94,7 +94,7 @@ M1 이후 Mac은 `macos-arm64.app.zip`, Intel Mac은 `macos-x86_64.app.zip`을
 터미널에서 실행하려면 앱 내부 실행 파일을 사용합니다.
 
 ```bash
-"./Langrisser II Korean Patcher v1.3.4.app/Contents/MacOS/Langrisser II Korean Patcher v1.3.4" \
+"./Langrisser II Korean Patcher v1.3.5.app/Contents/MacOS/Langrisser II Korean Patcher v1.3.5" \
   --rom "/path/to/Langrisser II (Japan).zip" \
   --output-dir "/path/to/output" \
   --save "/path/to/old-save.srm" \
@@ -159,7 +159,7 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 쓰는 실제 시작 클래스도 함께 바뀝니다. 별도의 `실제 시작 클래스` 선택기로
 이미 경로에 있는 상위 클래스부터 시작하게 할 수도 있습니다. 기존 `.srm`에
 이미 생성된 지휘관은 초기 로스터 변경이 소급되지 않으므로 새 게임에서
-확인해 주세요. 단, 정식 v1.3.4 ROM은 v1.3.0~v1.3.3 구 세이브의 키스·레스터가
+확인해 주세요. 단, 정식 v1.3.5 ROM은 v1.3.0~v1.3.3 구 세이브의 키스·레스터가
 파이터 레벨 10 이상에서 막힌 경우를 게임 안에서 자동 복구합니다. `다음 클래스`를
 바꾸면 해당 클래스만 교체되며 그 뒤에
 연결된 기존 전직 선택지는 유지됩니다.
@@ -180,11 +180,11 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 4. 복사본의 기본 파일명을 새 ROM과 똑같이 맞춥니다.
 5. 새 ROM을 실행하고 게임 안의 `불러오기`로 저장을 엽니다.
 
-예를 들어 새 ROM이 `Langrisser II (Korean Normal v1.3.4).md`이면 다음 저장
+예를 들어 새 ROM이 `Langrisser II (Korean Normal v1.3.5).md`이면 다음 저장
 파일이 생성됩니다.
 
 ```text
-Langrisser II (Korean Normal v1.3.4).srm
+Langrisser II (Korean Normal v1.3.5).srm
 ```
 
 에뮬레이터의 상태 저장 파일(`.state`, `.state*`, `.gst`)은 ROM 내부 코드와 실행 중 메모리를 포함하므로 다른 빌드와의 호환을 보장하지 않습니다. 업데이트 후 문제가 보이면 상태 저장 대신 게임 내 저장인 `.srm`으로 다시 시작해 주세요.
@@ -202,6 +202,7 @@ Langrisser II (Korean Normal v1.3.4).srm
 
 ## 문서
 
+- [v1.3.5 상세 검증 기록](docs/v1.3.5_validation.md)
 - [세이브를 유지하는 업데이트 안내](docs/save_preserving_rom_updates.md)
 - [게임 데이터 편집기 구조](docs/editor_data_model.md)
 - [개발·빌드·분석·검증 상세 문서](docs/development_guide.md)

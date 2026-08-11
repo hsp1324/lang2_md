@@ -71,6 +71,20 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                     probe_builder.FIRST_PLAYER_DEPLOYMENT_OFFSET + 3,
                 }
             )
+        if completion_layout:
+            wrapper = probe_builder.completion_hp_wrapper_code()
+            allowed.update(
+                range(
+                    probe_builder.START_MENU_ENTRY_OPERAND,
+                    probe_builder.START_MENU_ENTRY_OPERAND + 4,
+                )
+            )
+            allowed.update(
+                range(
+                    probe_builder.RUNTIME_WRAPPER,
+                    probe_builder.RUNTIME_WRAPPER + len(wrapper),
+                )
+            )
         return allowed
 
     def test_changes_only_declared_enemy_fields_and_checksum(self):
@@ -131,7 +145,13 @@ class Scenario18ClearProbeTests(unittest.TestCase):
         data = self.patched()
         layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
         expected = {
-            probe_builder.GREAT_DRAGON_RECORD_INDEX: (0x54, 0x5E, 1, 39, 34),
+            probe_builder.GREAT_DRAGON_RECORD_INDEX: (
+                probe_builder.GREAT_DRAGON_NAME_ID,
+                probe_builder.GREAT_DRAGON_CLASS_ID,
+                1,
+                39,
+                34,
+            ),
             probe_builder.LANA_RECORD_INDEX: (0x0C, 0x60, 3, 37, 34),
         }
         for index, (name_id, class_id, level, at, df) in expected.items():
@@ -185,6 +205,31 @@ class Scenario18ClearProbeTests(unittest.TestCase):
             )
         )
         self.assertEqual(data[start : start + len(expected)], expected)
+
+    def test_completion_wrapper_targets_only_the_source_great_dragon(self):
+        wrapper = probe_builder.completion_hp_wrapper_code()
+        record = (
+            probe_builder.RUNTIME_GROUP_BASE
+            + probe_builder.GREAT_DRAGON_RUNTIME_GROUP
+            * probe_builder.RUNTIME_GROUP_SIZE
+        )
+        self.assertIn(
+            bytes.fromhex("0C 39 00")
+            + probe_builder.GREAT_DRAGON_NAME_ID.to_bytes(1, "big")
+            + (record + probe_builder.RUNTIME_NAME_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertIn(
+            bytes.fromhex("0C 39 00")
+            + probe_builder.GREAT_DRAGON_CLASS_ID.to_bytes(1, "big")
+            + record.to_bytes(4, "big"),
+            wrapper,
+        )
+        self.assertIn(
+            bytes.fromhex("13 FC 00 01")
+            + (record + probe_builder.RUNTIME_HP_OFFSET).to_bytes(4, "big"),
+            wrapper,
+        )
 
     def test_dark_princess_layout_moves_only_elwin_below_source_lana(self):
         data = self.patched(dark_princess_layout=True)
@@ -614,7 +659,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
         completion = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xEC0B,
+            0x8E29,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -622,7 +667,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0xEC1E,
+            0x6331,
         )
         dark_princess = bytearray(self.production)
         protagonist_death = bytearray(self.production)
@@ -635,7 +680,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 dark_princess_layout=True,
             ),
-            0xEC1E,
+            0x8E3C,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -643,7 +688,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0xA973,
+            0x4B91,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -651,7 +696,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 resident_annihilation=True,
             ),
-            0x3713,
+            0xD931,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -659,7 +704,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 resident_combat_loss=True,
             ),
-            0x6507,
+            0x0725,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -667,7 +712,7 @@ class Scenario18ClearProbeTests(unittest.TestCase):
                 self.source,
                 resident_combat_loss_same_bank_fix=True,
             ),
-            0x6507,
+            0x0725,
         )
 
     def test_rejects_non_source_fixed_record(self):

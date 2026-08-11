@@ -71,8 +71,39 @@ class ClassChangeDataTests(unittest.TestCase):
         source = bytearray(self.source)
         pointer = class_change_chain_pointer(source, 1)
         source[pointer + 0x4C : pointer + 0x4E] = b"\x00\x00"
-        with self.assertRaisesRegex(ValueError, "no terminal sentinel"):
+        with self.assertRaisesRegex(
+            ValueError, "terminal sentinel|invalid class ID"
+        ):
             read_class_change_chain(source, 1)
+
+    def test_reads_and_patches_a_relocated_variable_length_chain(self):
+        source = bytearray(self.source)
+        source.extend(b"\xFF" * (0x100000 - len(source)))
+        pointer = 0x0F0000
+        pointer_offset = CLASS_CHANGE_POINTER_TABLE
+        source[pointer_offset:pointer_offset + 4] = pointer.to_bytes(4, "big")
+
+        transitions = list(read_class_change_chain(self.source, 1))
+        transitions.insert(-1, ClassTransition(0x2B, (0x0D, 0x0F, 0x12)))
+        cursor = pointer
+        for transition in transitions[:-1]:
+            values = (transition.current_class, *transition.candidates)
+            source[cursor:cursor + 8] = b"".join(
+                value.to_bytes(2, "big") for value in values
+            )
+            cursor += 8
+        terminal = transitions[-1]
+        source[cursor:cursor + 6] = (
+            terminal.current_class.to_bytes(2, "big")
+            + terminal.candidates[0].to_bytes(2, "big")
+            + b"\xFF\xFF"
+        )
+
+        self.assertEqual(read_class_change_chain(source, 1), tuple(transitions))
+        swapped = list(transitions)
+        swapped[0] = ClassTransition(0x01, (0x05, 0x04, 0x0A))
+        patch_class_change_chain(source, 1, swapped)
+        self.assertEqual(read_class_change_chain(source, 1), tuple(swapped))
 
     def test_patch_chain_round_trip_changes_only_selected_words(self):
         original = list(read_class_change_chain(self.source, 1))

@@ -60,13 +60,17 @@ COMPLETION_TARGET_RECORD_INDEX = 0
 COMPLETION_RECORD_COUNT = 1
 COMPLETION_ACTIVE_POSITION = (14, 60)
 COMPLETION_AT = 0xF4
-# Keep the one-enemy completion probe two points below the old 0xFC defense so
-# the bounded stock damage roll in both release profiles still reaches HP0.
-# Larger
-# negative-looking byte values wrap the stock unsigned battle arithmetic and
-# can instead turn the hit into zero damage.  This is diagnostic ROM data
-# only; production Scenario 31 remains untouched.
-COMPLETION_DF = 0xFA
+# Keep the one-enemy completion probe five points below the old 0xFC defense.
+# At 0xFA the current Normal profile consistently left Bernhardt at HP2 while
+# Hard reached HP0; 0xF8 still left Normal at HP1 in eight ordinary attacks.
+# The displayed DF floors at 5 even at 0xF7, so the completion Start wrapper
+# sets only this diagnostic enemy's runtime HP to 1 before an ordinary attack.
+# Larger negative-looking bytes wrap the stock unsigned battle arithmetic and
+# can instead turn the hit into zero damage. This is diagnostic ROM data only;
+# production Scenario 31 keeps the stock layout and now corrects only record
+# 8's duplicate Demon Lord name ID so its existing death event can run.
+COMPLETION_DF = 0xF7
+COMPLETION_HP = 1
 BRANCH_TARGET_INDICES = tuple(range(0, 9))
 ALL_FIXED_RECORD_INDICES = tuple(
     range(FIRST_COMBAT_RECORD_INDEX, LAST_COMBAT_RECORD_INDEX + 1)
@@ -161,6 +165,7 @@ def branch_death_wrapper_code(
     target_index: int,
     *,
     protect_protagonist: bool = False,
+    repair_legacy_name: bool = True,
 ) -> bytes:
     if target_index not in BRANCH_TARGET_INDICES:
         raise ValueError(
@@ -168,7 +173,11 @@ def branch_death_wrapper_code(
         )
     target_group = FIRST_FIXED_RUNTIME_GROUP + target_index
     trigger_name_id = BRANCH_EVENT_SPECS[target_index][0]
-    runtime_name_id = trigger_name_id if target_index == 8 else None
+    runtime_name_id = (
+        trigger_name_id
+        if target_index == 8 and repair_legacy_name
+        else None
+    )
     return runtime_death_wrapper_code(
         target_group,
         runtime_name_id=runtime_name_id,
@@ -182,6 +191,24 @@ def player_branch_death_wrapper_code(target_group: int) -> bytes:
             f"player branch target must be one of {PLAYER_BRANCH_TARGETS}"
         )
     return runtime_death_wrapper_code(target_group)
+
+
+def completion_hp_wrapper_code() -> bytes:
+    """Set only the one-enemy completion target to HP1, then run Start."""
+    target_group = FIRST_FIXED_RUNTIME_GROUP + COMPLETION_TARGET_RECORD_INDEX
+    target_hp = (
+        RUNTIME_GROUP_BASE
+        + target_group * RUNTIME_GROUP_SIZE
+        + RUNTIME_HP_OFFSET
+    )
+    code = bytearray(bytes.fromhex("13 FC 00"))
+    code.extend(COMPLETION_HP.to_bytes(1, "big"))
+    code.extend(target_hp.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
 
 
 def runtime_death_wrapper_code(
@@ -265,9 +292,35 @@ def validate_layout(probe: bytes, source: bytes) -> None:
     for index in range(source_layout.record_count):
         base = source_layout.records_offset + index * FIXED_RECORD_SIZE
         end = base + FIXED_RECORD_SIZE
-        if probe[base:end] != source[base:end]:
+        expected = bytearray(source[base:end])
+        # A reviewed Hard input is allowed to differ in the same combat fields
+        # this diagnostic itself owns.  Identity, class, level, coordinates,
+        # side, visibility, and every other byte remain source-locked.
+        expected[FIELD_OFFSETS["at"]] = probe[base + FIELD_OFFSETS["at"]]
+        expected[FIELD_OFFSETS["df"]] = probe[base + FIELD_OFFSETS["df"]]
+        # Standard Hard stores its runtime soldier-correction lookup tag in
+        # the source-unused byte immediately before the mercenary list.
+        expected[0x1D] = probe[base + 0x1D]
+        mercenaries = FIELD_OFFSETS["mercenaries"]
+        expected[mercenaries : mercenaries + 6] = probe[
+            base + mercenaries : base + mercenaries + 6
+        ]
+        # v1.3.5 corrects the source's duplicate ID 0x65 to the stock event's
+        # otherwise-unreachable ID 0x66.  Accept legacy production as well so
+        # historical probe tests remain reproducible, but reject every other
+        # fixed-record difference.
+        if (
+            index == 8
+            and probe[base + FIELD_OFFSETS["name_id"]]
+            == builder.SCENARIO31_DEMON_LORD_EVENT_NAME_ID
+        ):
+            expected[FIELD_OFFSETS["name_id"]] = (
+                builder.SCENARIO31_DEMON_LORD_EVENT_NAME_ID
+            )
+        if probe[base:end] != expected:
             raise ValueError(
-                f"input Scenario 31 fixed record {index} differs from Japanese source"
+                f"input Scenario 31 fixed record {index} differs from the "
+                "reviewed production layout"
             )
     for label, offset, expected_bytes in (
         (
@@ -384,12 +437,24 @@ def patch_probe(
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
     if branch_target is not None:
+        layout = scenario_layout(source, SCENARIO_NUMBER)
+        target_name = (
+            layout.records_offset
+            + branch_target * FIXED_RECORD_SIZE
+            + FIELD_OFFSETS["name_id"]
+        )
+        repair_legacy_name = not (
+            branch_target == 8
+            and probe[target_name]
+            == builder.SCENARIO31_DEMON_LORD_EVENT_NAME_ID
+        )
         install_start_wrapper(
             probe,
             source,
             branch_death_wrapper_code(
                 branch_target,
                 protect_protagonist=protect_protagonist,
+                repair_legacy_name=repair_legacy_name,
             ),
         )
         return builder.update_md_checksum(probe)
@@ -434,6 +499,11 @@ def patch_probe(
         probe[active + FIELD_OFFSETS["y"]] = COMPLETION_ACTIVE_POSITION[1]
         probe[layout.record_list_offset : layout.record_list_offset + 2] = (
             COMPLETION_RECORD_COUNT.to_bytes(2, "big")
+        )
+        install_start_wrapper(
+            probe,
+            source,
+            completion_hp_wrapper_code(),
         )
     return builder.update_md_checksum(probe)
 
@@ -528,12 +598,27 @@ def main() -> int:
             f"Scenario 31 runtime branch group {args.branch_target}: "
             "runtime defeat diagnostic"
         )
-        print("all deployments and fixed records remain source-identical")
+        print(
+            "all deployments and fixed records remain production-identical; "
+            "v1.3.5 record 8 keeps event ID 66"
+        )
         if args.branch_target == 8:
-            print(
-                "runtime group 18 name changes from duplicate source ID 65 "
-                "to the stock dormant branch ID 66"
+            layout = scenario_layout(source, SCENARIO_NUMBER)
+            name_offset = (
+                layout.records_offset
+                + 8 * FIXED_RECORD_SIZE
+                + FIELD_OFFSETS["name_id"]
             )
+            if probe[name_offset] == builder.SCENARIO31_DEMON_LORD_EVENT_NAME_ID:
+                print(
+                    "production fixed record already uses ID 66; the runtime "
+                    "wrapper does not write the name"
+                )
+            else:
+                print(
+                    "legacy runtime group 18 name changes from duplicate "
+                    "source ID 65 to branch ID 66"
+                )
         if args.protect_protagonist:
             print("runtime player group 0 receives diagnostic DF FF protection")
         else:
@@ -543,7 +628,10 @@ def main() -> int:
             f"Scenario 31 runtime player group {args.player_branch_target}: "
             "runtime defeat diagnostic"
         )
-        print("all deployments and fixed records remain source-identical")
+        print(
+            "all deployments and fixed records remain production-identical; "
+            "v1.3.5 record 8 keeps event ID 66"
+        )
         print("all non-target runtime groups remain completely unchanged")
     else:
         print("Scenario 31 combat records 0..9: AT 0, DF 0, no mercenaries")

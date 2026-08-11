@@ -50,9 +50,9 @@ from tools import build_scenario31_clear_probe_rom as scenario31
 
 
 DEFAULT_NORMAL_ROM = (
-    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.4).md"
+    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.5).md"
 )
-DEFAULT_HARD_ROM = ROOT / "roms/builds/Langrisser II (Korean Hard v1.3.4).md"
+DEFAULT_HARD_ROM = ROOT / "roms/builds/Langrisser II (Korean Hard v1.3.5).md"
 DEFAULT_OUTPUT_ROOT = ROOT / "tmp/current-source-result-probes"
 DEFAULT_SOURCE_ROM = ROOT / korean_builder.IN_ROM
 
@@ -102,13 +102,13 @@ PROBE_DEFINITIONS: dict[int, dict[str, object]] = {
     10: {"module": scenario10, "filename": "s10.md", "kwargs": {}},
     11: {
         "module": scenario11,
-        "filename": "s11-continuation.md",
-        "kwargs": {"safe_clear_layout": True, "safe_jessica": True},
+        "filename": "s11-completion.md",
+        "kwargs": {"completion_layout": True},
     },
     12: {
         "module": scenario12,
-        "filename": "s12.md",
-        "kwargs": {"compact_layout": True},
+        "filename": "s12-completion.md",
+        "kwargs": {"completion_layout": True},
     },
     13: {
         "module": scenario13,

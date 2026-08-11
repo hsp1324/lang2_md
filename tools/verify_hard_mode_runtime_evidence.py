@@ -289,7 +289,11 @@ def verify_planned_scenario(
         soldier = record["enemy_soldier_correction"]
         expected = {
             "class_id": int(str(record["class_id"]), 16),
-            "name_id": int(str(record["name_id"]), 16),
+            "name_id": runtime_name_id(
+                scenario_number,
+                fixed_record_index,
+                int(str(record["name_id"]), 16),
+            ),
             "commander_at": int(commander["at"]["planned"]),
             "commander_df": int(commander["df"]["planned"]),
             "soldier_at": int(soldier["at"]["planned"]),
@@ -331,6 +335,27 @@ def verify_planned_scenario(
             )
         actual_groups.append(actual)
     return tuple(actual_groups)
+
+
+def runtime_name_id(
+    scenario_number: int,
+    fixed_record_index: int,
+    planned_name_id: int,
+) -> int:
+    """Apply reviewed shared-gameplay identity fixes over balance metadata."""
+
+    # The approved Hard plan intentionally describes Japanese-source balance
+    # records.  v1.3.5 corrects Scenario 31 record 8's duplicate Demon Lord
+    # ID 0x65 to the stock death handler's ID 0x66 in every edition.  Keep the
+    # balance plan immutable and overlay that non-balance production fix only
+    # when checking loaded runtime groups.
+    if (
+        scenario_number == 31
+        and fixed_record_index == 8
+        and planned_name_id == 0x65
+    ):
+        return 0x66
+    return planned_name_id
 
 
 def verify_retained_planned_scenario(

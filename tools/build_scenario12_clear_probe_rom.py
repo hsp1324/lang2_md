@@ -59,6 +59,16 @@ COMPACT_VISIBLE_ENEMY_POSITIONS = {
     8: (17, 22),
     9: (14, 22),
 }
+COMPLETION_TARGET_RECORD_INDEX = 2
+COMPLETION_TARGET_NAME_ID = 0x49
+COMPLETION_TARGET_CLASS_ID = 0x59
+COMPLETION_TARGET_POSITION = (15, 19)
+COMPLETION_HIDDEN_RECORD_INDEXES = tuple(
+    index
+    for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1)
+    if index != COMPLETION_TARGET_RECORD_INDEX
+)
+COMPLETION_HP = 1
 SCENARIO_TRIGGERS = {
     0x198F06: bytes.fromhex("06 F1 00 00 05 04 19 0D 00 19 8F F6"),
     0x198F12: bytes.fromhex("07 01 00 00 04 06 04 06 00 19 90 74"),
@@ -98,6 +108,24 @@ def mark_runtime_group_defeated_code(group: int) -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def completion_hp_wrapper_code() -> bytes:
+    """Set only the identity-checked final Living Armor to HP1."""
+    target_group = PLAYER_DEPLOYMENT_COUNT + COMPLETION_TARGET_RECORD_INDEX
+    record = RUNTIME_GROUP_BASE + target_group * RUNTIME_GROUP_SIZE
+    code = bytearray(bytes.fromhex("0C 39 00"))
+    code.extend(COMPLETION_TARGET_NAME_ID.to_bytes(1, "big"))
+    code.extend((record + 1).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 08"))
+    code.extend(bytes.fromhex("13 FC 00"))
+    code.extend(COMPLETION_HP.to_bytes(1, "big"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -170,11 +198,12 @@ def patch_probe(
     source: bytes,
     *,
     compact_layout: bool = False,
+    completion_layout: bool = False,
     protagonist_death: bool = False,
 ) -> int:
     validate_layout(probe, source)
     layout = scenario_layout(source, SCENARIO_NUMBER)
-    if protagonist_death and compact_layout:
+    if sum((compact_layout, completion_layout, protagonist_death)) > 1:
         raise ValueError("protagonist-death conflicts with layout options")
     if protagonist_death:
         install_start_wrapper(
@@ -197,6 +226,25 @@ def patch_probe(
             base = layout.records_offset + index * FIXED_RECORD_SIZE
             probe[base + FIELD_OFFSETS["x"]] = x
             probe[base + FIELD_OFFSETS["y"]] = y
+    elif completion_layout:
+        positions = deployment_bytes(COMPACT_PLAYER_DEPLOYMENTS)
+        end = FIRST_PLAYER_DEPLOYMENT_OFFSET + len(positions)
+        probe[FIRST_PLAYER_DEPLOYMENT_OFFSET:end] = positions
+        for index in COMPLETION_HIDDEN_RECORD_INDEXES:
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            probe[base] |= 0x80
+        target = (
+            layout.records_offset
+            + COMPLETION_TARGET_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        probe[target] &= 0x7F
+        probe[target + FIELD_OFFSETS["x"]] = COMPLETION_TARGET_POSITION[0]
+        probe[target + FIELD_OFFSETS["y"]] = COMPLETION_TARGET_POSITION[1]
+        install_start_wrapper(
+            probe,
+            source,
+            completion_hp_wrapper_code(),
+        )
     return builder.update_md_checksum(probe)
 
 
@@ -221,6 +269,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--completion-layout",
+        action="store_true",
+        help=(
+            "hide non-target guardians, place the source final Living Armor "
+            "above Elwin, and identity-guard its runtime HP1 wrapper"
+        ),
+    )
+    parser.add_argument(
         "--protagonist-death",
         action="store_true",
         help=(
@@ -239,6 +295,7 @@ def main() -> int:
         probe,
         source,
         compact_layout=args.compact_layout,
+        completion_layout=args.completion_layout,
         protagonist_death=args.protagonist_death,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
@@ -256,6 +313,8 @@ def main() -> int:
         print("Scenario 12 enemy records 0..10: AT 0, DF 0, no mercenaries")
     if args.compact_layout:
         print("diagnostic player and visible-guardian layout moved to the center")
+    elif args.completion_layout:
+        print("identity-guarded final Living Armor completion layout installed")
     elif not args.protagonist_death:
         print("stock player and enemy coordinates preserved")
     if not args.protagonist_death:

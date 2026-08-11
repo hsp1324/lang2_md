@@ -13,9 +13,8 @@ class AiClassMapSpriteTests(unittest.TestCase):
         cls.expanded = bytearray(cls.original)
         builder.expand_rom(cls.expanded)
         cls.patched = bytearray(cls.expanded)
-        # The production build repurposes Keith/Lester's obsolete Fighter
-        # map records for the new Hawk Lord and Croco Lord classes before it
-        # attaches the reviewed commander-specific sprite set.
+        # The production build adds dedicated Hawk/Croco Lord records while
+        # preserving Keith/Lester's Fighter records for Runestone restarts.
         builder.patch_join_class_choice_class_data(
             cls.patched,
             cls.original,
@@ -79,14 +78,6 @@ class AiClassMapSpriteTests(unittest.TestCase):
                 builder.AI_CLASS_MAP_SPRITE_SPECS
             )
         }
-        repurposed = {
-            (7, 0x01): builder.JOIN_CLASS_CHOICE_HAWK_LORD,
-            (9, 0x01): builder.JOIN_CLASS_CHOICE_CROCO_LORD,
-        }
-        repurposed_design = {
-            (7, 0x01): 0x0F,
-            (9, 0x01): 0x10,
-        }
         for commander_id in range(1, 11):
             pointer = builder.be32(
                 self.original,
@@ -96,32 +87,18 @@ class AiClassMapSpriteTests(unittest.TestCase):
             while self.original[pointer] != 0xFF:
                 class_id = self.original[pointer]
                 before = builder.be16(self.original, pointer + 1)
-                after_class_id = self.patched[pointer]
-                after = builder.be16(self.patched, pointer + 1)
-                expected_class_id = repurposed.get(
-                    (commander_id, class_id),
-                    class_id,
+                patched_record = builder.commander_sprite_record_offset(
+                    self.patched, commander_id, class_id
                 )
+                after_class_id = self.patched[patched_record]
+                after = builder.be16(self.patched, patched_record + 1)
                 expected = target.get(
-                    (commander_id, expected_class_id),
+                    (commander_id, class_id),
                     before,
                 )
-                design_class_id = repurposed_design.get(
-                    (commander_id, class_id)
-                )
-                if design_class_id is not None:
-                    design_record = builder.commander_sprite_record_offset(
-                        self.class_data_patched,
-                        commander_id,
-                        design_class_id,
-                    )
-                    expected = builder.be16(
-                        self.class_data_patched,
-                        design_record + 1,
-                    )
                 self.assertEqual(
                     after_class_id,
-                    expected_class_id,
+                    class_id,
                     (commander_id, class_id),
                 )
                 self.assertEqual(
@@ -130,6 +107,25 @@ class AiClassMapSpriteTests(unittest.TestCase):
                     (commander_id, class_id),
                 )
                 pointer += 3
+
+        for commander_id, custom_class, design_class in (
+            (7, builder.JOIN_CLASS_CHOICE_HAWK_LORD, 0x0F),
+            (9, builder.JOIN_CLASS_CHOICE_CROCO_LORD, 0x10),
+        ):
+            with self.subTest(
+                commander_id=commander_id,
+                custom_class=custom_class,
+            ):
+                custom_record = builder.commander_sprite_record_offset(
+                    self.patched, commander_id, custom_class
+                )
+                design_record = builder.commander_sprite_record_offset(
+                    self.patched, commander_id, design_class
+                )
+                self.assertEqual(
+                    builder.be16(self.patched, custom_record + 1),
+                    builder.be16(self.patched, design_record + 1),
+                )
 
     def test_both_frames_match_the_quantized_accepted_asset(self) -> None:
         for commander_id, class_id, custom_sprite_id in (

@@ -12,6 +12,18 @@ from Xlib import X, error
 from Xlib.display import Display
 
 
+if not hasattr(Image, "Resampling"):
+    class _Resampling:
+        NEAREST = Image.NEAREST
+        BOX = Image.BOX
+        BILINEAR = Image.BILINEAR
+        HAMMING = Image.HAMMING
+        BICUBIC = Image.BICUBIC
+        LANCZOS = Image.LANCZOS
+
+    Image.Resampling = _Resampling  # type: ignore[attr-defined]
+
+
 def find_blastem_window_xlib() -> int:
     display = Display()
     stack = [display.screen().root]

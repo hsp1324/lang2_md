@@ -51,3 +51,28 @@ repairs the specific v1.3.0/v1.3.1 Fighter LV10 and v1.3.2/v1.3.3 Fighter
 LV11+ save states at runtime; the user's `.srm` does not need to be edited by
 an external migration tool.  A commander who already selected a non-Fighter
 class is never rewritten.
+
+## v1.3.5 Runestone class-chain repair
+
+The v1.3.2 join-only Hawk Lord and Croco Lord additions reused Keith's and
+Lester's stock Fighter transition records.  That was sufficient for a normal
+join from Hawk Knight/Crocoknight, but a Runestone always restarts its owner
+from Fighter.  Consequently v1.3.2 through v1.3.4 displayed the join-only
+promotion row after a Runestone: Keith saw Magic Knight / Dragon Knight /
+Bishop instead of Lord / Hawk Knight / Healer, and Lester had the analogous
+wrong branch.
+
+v1.3.5 keeps the stock Fighter rows intact and relocates each longer join-only
+class chain and commander sprite map into reserved expansion space.  The join
+behavior and v1.3.4 legacy-save recovery remain unchanged, while a Runestone
+restart now follows the original Fighter choices.  The three focused paths
+were exercised on isolated Xvfb/BlastEm displays:
+
+| Commander start | First choices after repair |
+| --- | --- |
+| Keith / Fighter | Lord / Hawk Knight / Healer |
+| Lester / Fighter | Knight / Crocoknight / Shaman |
+| Jessica / Warlock | Healer / Sorcerer / Lord |
+
+Keith's Hard-mode test also equipped and consumed a real Runestone before the
+class-choice screen was inspected; this was not only a menu-table check.

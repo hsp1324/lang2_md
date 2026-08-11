@@ -128,6 +128,40 @@ def expected_endpoint(
     return validate_expected_endpoint(row) if row is not None else None
 
 
+def expected_endpoint_context(
+    scenario_number: int,
+    *,
+    allow_unapproved_defeat: bool,
+    path: Path = EXPECTED_ENDPOINTS,
+) -> tuple[dict | None, dict | None]:
+    """Return hash-locked evidence plus an optional untrusted routing hint.
+
+    ``--allow-unapproved-defeat`` is used for fresh cross-profile diagnosis.
+    A clean checkout can legitimately lack ignored historical screenshots;
+    those files must still fail closed for an ordinary release verification.
+    In diagnostic mode only, retain the manifest endpoint as a UI-routing hint
+    so a detected GAME OVER can be dismissed to the title, while never
+    reporting the missing row as approved evidence.
+    """
+
+    try:
+        approved = expected_endpoint(scenario_number, path)
+    except FileNotFoundError:
+        if not allow_unapproved_defeat:
+            raise
+        data = load_json(path)
+        hint = next(
+            (
+                row
+                for row in data.get("scenarios", [])
+                if int(row["number"]) == scenario_number
+            ),
+            None,
+        )
+        return None, hint
+    return approved, approved
+
+
 def entry_evidence(
     scenario_number: int,
     *,
@@ -1259,7 +1293,10 @@ def verify_scenario(
                 ],
                 env=env,
             )
-        approved_endpoint = expected_endpoint(scenario_number)
+        approved_endpoint, endpoint_hint = expected_endpoint_context(
+            scenario_number,
+            allow_unapproved_defeat=allow_unapproved_defeat,
+        )
         detector_endpoint, phase_confirmations = run_detector(
             display=display,
             max_checks=phase_checks,
@@ -1273,8 +1310,8 @@ def verify_scenario(
         )
         if (
             detector_endpoint == "game_over"
-            and approved_endpoint is not None
-            and approved_endpoint.get("endpoint")
+            and endpoint_hint is not None
+            and endpoint_hint.get("endpoint")
             == "defeat_return_title_turn_1"
         ):
             title_checks = dismiss_game_over_and_wait_for_title(

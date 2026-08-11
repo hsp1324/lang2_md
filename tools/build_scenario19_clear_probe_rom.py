@@ -33,6 +33,7 @@ SOURCE_PLAYER_DEPLOYMENTS = (
 PLAYER_DEPLOYMENT_COUNT = len(SOURCE_PLAYER_DEPLOYMENTS)
 COMPLETION_ELWIN_POSITION = (37, 22)
 IMELDA_POSITION = (37, 23)
+COMPLETION_HP = 1
 FIRST_ENEMY_RECORD_INDEX = 0
 LAST_ENEMY_RECORD_INDEX = 9
 IMELDA_RECORD_INDEX = 2
@@ -163,6 +164,24 @@ def protagonist_death_wrapper_code() -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def completion_hp_wrapper_code() -> bytes:
+    """Set only the adjacent completion Imelda to HP1, then run Start."""
+    target_group = PLAYER_DEPLOYMENT_COUNT + IMELDA_RECORD_INDEX
+    target_hp = (
+        RUNTIME_GROUP_BASE
+        + target_group * RUNTIME_GROUP_SIZE
+        + RUNTIME_HP_OFFSET
+    )
+    code = bytearray(bytes.fromhex("13 FC 00"))
+    code.extend(COMPLETION_HP.to_bytes(1, "big"))
+    code.extend(target_hp.to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -348,6 +367,11 @@ def patch_probe(
             FIRST_PLAYER_DEPLOYMENT_OFFSET :
             FIRST_PLAYER_DEPLOYMENT_OFFSET + len(elwin)
         ] = elwin
+        install_start_wrapper(
+            probe,
+            source,
+            completion_hp_wrapper_code(),
+        )
     return builder.update_md_checksum(probe)
 
 

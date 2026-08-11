@@ -39,7 +39,7 @@ SAFE_PLAYER_DEPLOYMENTS = (
 JESSICA_RECORD_INDEX = 0
 SAFE_JESSICA_POSITION = (18, 18)
 LIVE_VERIFIED_SAFE_JESSICA_CHECKSUM = 0xD091
-EXPECTED_SAFE_JESSICA_CHECKSUM = 0x4F46
+EXPECTED_SAFE_JESSICA_CHECKSUM = 0xF164
 FIRST_ENEMY_RECORD_INDEX = 1
 LAST_ENEMY_RECORD_INDEX = 10
 PROBE_AT = 0
@@ -60,6 +60,18 @@ SAFE_CLEAR_VISIBLE_POSITIONS = {
     8: (17, 18),
     9: (19, 18),
 }
+COMPLETION_TARGET_RECORD_INDEX = 10
+COMPLETION_TARGET_NAME_ID = 0x32
+COMPLETION_TARGET_CLASS_ID = 0x35
+COMPLETION_TARGET_POSITION = (20, 20)
+COMPLETION_HIDDEN_ENEMY_INDEXES = tuple(
+    range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX)
+)
+COMPLETION_HP = 1
+COMPLETION_DEFEATED_RUNTIME_GROUPS = tuple(
+    PLAYER_DEPLOYMENT_COUNT + index
+    for index in COMPLETION_HIDDEN_ENEMY_INDEXES
+)
 START_MENU_ENTRY = 0x022C1E
 START_MENU_ENTRY_OPERAND = 0x00F2E0
 RUNTIME_WRAPPER = 0x3FEF00
@@ -87,6 +99,35 @@ def mark_runtime_group_defeated_code(group: int) -> bytes:
     code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("13 FC 00 FF"))
     code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("41 F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    code.extend(bytes.fromhex("4E F9"))
+    code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
+    return bytes(code)
+
+
+def completion_hp_wrapper_code() -> bytes:
+    """Retire prior enemies and set the identity-checked final group to HP1."""
+    code = bytearray()
+    for group in COMPLETION_DEFEATED_RUNTIME_GROUPS:
+        record = RUNTIME_GROUP_BASE + group * RUNTIME_GROUP_SIZE
+        code.extend(bytes.fromhex("00 39 00 80"))
+        code.extend(
+            (record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+        )
+        code.extend(bytes.fromhex("13 FC 00 00"))
+        code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+        code.extend(bytes.fromhex("13 FC 00 FF"))
+        code.extend((record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    target_group = PLAYER_DEPLOYMENT_COUNT + COMPLETION_TARGET_RECORD_INDEX
+    record = RUNTIME_GROUP_BASE + target_group * RUNTIME_GROUP_SIZE
+    code.extend(bytes.fromhex("0C 39 00"))
+    code.extend(COMPLETION_TARGET_NAME_ID.to_bytes(1, "big"))
+    code.extend((record + 1).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 08"))
+    code.extend(bytes.fromhex("13 FC 00"))
+    code.extend(COMPLETION_HP.to_bytes(1, "big"))
+    code.extend((record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -155,6 +196,7 @@ def patch_probe(
     safe_elwin: bool = False,
     safe_clear_layout: bool = False,
     safe_jessica: bool = False,
+    completion_layout: bool = False,
     protagonist_death: bool = False,
     jessica_death: bool = False,
 ) -> int:
@@ -165,6 +207,13 @@ def patch_probe(
         raise ValueError("protagonist-death and jessica-death modes conflict")
     if death_modes and (safe_elwin or safe_clear_layout or safe_jessica):
         raise ValueError("death modes conflict with safe-layout options")
+    if completion_layout and (
+        safe_elwin
+        or safe_clear_layout
+        or safe_jessica
+        or death_modes
+    ):
+        raise ValueError("completion-layout conflicts with other modes")
     if death_modes:
         for index in range(layout.record_count):
             start = layout.records_offset + index * FIXED_RECORD_SIZE
@@ -212,6 +261,29 @@ def patch_probe(
         x, y = SAFE_JESSICA_POSITION
         probe[base + FIELD_OFFSETS["x"]] = x
         probe[base + FIELD_OFFSETS["y"]] = y
+    if completion_layout:
+        for index, (x, y) in enumerate(SAFE_PLAYER_DEPLOYMENTS):
+            offset = FIRST_PLAYER_DEPLOYMENT_OFFSET + index * 4
+            probe[offset : offset + 2] = x.to_bytes(2, "big")
+            probe[offset + 2 : offset + 4] = y.to_bytes(2, "big")
+        for index in COMPLETION_HIDDEN_ENEMY_INDEXES:
+            base = layout.records_offset + index * FIXED_RECORD_SIZE
+            probe[base] |= 0x80
+        target = (
+            layout.records_offset
+            + COMPLETION_TARGET_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        probe[target] &= 0x7F
+        probe[target + FIELD_OFFSETS["x"]] = COMPLETION_TARGET_POSITION[0]
+        probe[target + FIELD_OFFSETS["y"]] = COMPLETION_TARGET_POSITION[1]
+        jessica = layout.records_offset + JESSICA_RECORD_INDEX * FIXED_RECORD_SIZE
+        probe[jessica + FIELD_OFFSETS["x"]] = SAFE_JESSICA_POSITION[0]
+        probe[jessica + FIELD_OFFSETS["y"]] = SAFE_JESSICA_POSITION[1]
+        install_start_wrapper(
+            probe,
+            source,
+            completion_hp_wrapper_code(),
+        )
     return builder.update_md_checksum(probe)
 
 
@@ -250,6 +322,14 @@ def parse_args() -> argparse.Namespace:
             "turn-eight fire area to the compact southern battle area"
         ),
     )
+    parser.add_argument(
+        "--completion-layout",
+        action="store_true",
+        help=(
+            "place the source final reinforcement beside Sherry, keep "
+            "Jessica safe, hide earlier enemies, and identity-guard HP1"
+        ),
+    )
     death_mode = parser.add_mutually_exclusive_group()
     death_mode.add_argument(
         "--protagonist-death",
@@ -280,6 +360,7 @@ def main() -> int:
         safe_elwin=args.safe_elwin,
         safe_clear_layout=args.safe_clear_layout,
         safe_jessica=args.safe_jessica,
+        completion_layout=args.completion_layout,
         protagonist_death=args.protagonist_death,
         jessica_death=args.jessica_death,
     )
@@ -314,6 +395,8 @@ def main() -> int:
         print("stock enemy levels and coordinates preserved")
     if args.safe_jessica and not (args.protagonist_death or args.jessica_death):
         print("diagnostic Jessica deployment moved to (18,18)")
+    if args.completion_layout:
+        print("identity-guarded final reinforcement completion layout installed")
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

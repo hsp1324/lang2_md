@@ -139,6 +139,39 @@ class ClassChangeProbeBuilderTests(unittest.TestCase):
                 probe_level=10,
             )
 
+    def test_level_up_only_probe_can_use_guarded_start_trigger(self):
+        probe = bytearray(self.production)
+        checksum = probe_builder.patch_level_up_only_probe(
+            probe,
+            self.source,
+            current_class=0x2B,
+            runtime_record_index=4,
+            probe_level=9,
+            start_menu_trigger=True,
+        )
+        code = probe_builder.wrapper_code(
+            runtime_record_index=4,
+            expected_class=0x2B,
+            probe_level=9,
+            probe_experience=8,
+        )
+        start = probe_builder.START_MENU_ENTRY_OPERAND
+        wrapper = probe_builder.PROBE_WRAPPER
+        self.assertEqual(
+            probe[start : start + 4],
+            wrapper.to_bytes(4, "big"),
+        )
+        self.assertEqual(probe[wrapper : wrapper + len(code)], code)
+        self.assertEqual(
+            probe[
+                probe_builder.END_TURN_LEVEL_UP_ENTRY_OPERAND :
+                probe_builder.END_TURN_LEVEL_UP_ENTRY_OPERAND + 4
+            ],
+            probe_builder.LEVEL_UP_HANDLER.to_bytes(4, "big"),
+        )
+        self.assertIn(bytes.fromhex("0C 39 00 2B FF FF 61 BC"), code)
+        self.assertEqual(probe[0x18E:0x190], checksum.to_bytes(2, "big"))
+
     def test_preferred_candidate_reorders_only_the_selected_source_row(self):
         probe = bytearray(self.production)
         transition = probe_builder.selected_transition(self.source, 5, 0x11)
