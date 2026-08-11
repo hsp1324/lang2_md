@@ -1,4 +1,4 @@
-name: Build v1.3.4 Linux and macOS patchers
+name: Build v1.3.5 Linux and macOS patchers
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ jobs:
         include:
           - runner: ubuntu-22.04
             arch: x86_64
-            executable: Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64
-            archive: Langrisser-II-Korean-Patcher-v1.3.4-linux-x86_64.tar.gz
+            executable: Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64
+            archive: Langrisser-II-Korean-Patcher-v1.3.5-linux-x86_64.tar.gz
             checksum: SHA256SUMS-linux-x86_64.txt
           - runner: ubuntu-22.04-arm
             arch: arm64
-            executable: Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64
-            archive: Langrisser-II-Korean-Patcher-v1.3.4-linux-arm64.tar.gz
+            executable: Langrisser-II-Korean-Patcher-v1.3.5-linux-arm64
+            archive: Langrisser-II-Korean-Patcher-v1.3.5-linux-arm64.tar.gz
             checksum: SHA256SUMS-linux-arm64.txt
     runs-on: ${{ matrix.runner }}
     steps:
@@ -42,7 +42,7 @@ jobs:
         run: >-
           python -c "from patcher.langrisser_ii_korean_patcher import
           load_release_manifest; m=load_release_manifest();
-          assert m['release']=='v1.3.4'; assert len(m['targets'])==3"
+          assert m['release']=='v1.3.5'; assert len(m['targets'])==3"
 
       - name: Build and smoke-test Linux patcher
         shell: bash
@@ -53,7 +53,14 @@ jobs:
           PATCHER_ARCH: ${{ matrix.arch }}
         run: |
           set -euo pipefail
-          pyinstaller             --noconfirm             --clean             --onefile             --console             --name "$PATCHER_EXECUTABLE"             --paths "."             --add-data "patches:patches"             "patcher/langrisser_ii_korean_patcher.py"
+          mkdir -p package-patches
+          cp \
+            patches/v1.3.5.json \
+            patches/original-v1.3.5.bps \
+            patches/normal-v1.3.5.bps \
+            patches/hard-v1.3.5.bps \
+            package-patches/
+          pyinstaller             --noconfirm             --clean             --onefile             --console             --name "$PATCHER_EXECUTABLE"             --paths "."             --add-data "package-patches:patches"             "patcher/langrisser_ii_korean_patcher.py"
 
           binary="dist/$PATCHER_EXECUTABLE"
           test -x "$binary"
@@ -82,7 +89,7 @@ jobs:
       - name: Upload Linux release assets
         uses: actions/upload-artifact@v4
         with:
-          name: Langrisser-II-Korean-Patcher-v1.3.4-linux-${{ matrix.arch }}
+          name: Langrisser-II-Korean-Patcher-v1.3.5-linux-${{ matrix.arch }}
           if-no-files-found: error
           path: |
             dist/${{ matrix.archive }}
@@ -96,11 +103,11 @@ jobs:
         include:
           - runner: macos-14
             arch: arm64
-            archive: Langrisser-II-Korean-Patcher-v1.3.4-macos-arm64.app.zip
+            archive: Langrisser-II-Korean-Patcher-v1.3.5-macos-arm64.app.zip
             checksum: SHA256SUMS-macos-arm64.txt
           - runner: macos-15-intel
             arch: x86_64
-            archive: Langrisser-II-Korean-Patcher-v1.3.4-macos-x86_64.app.zip
+            archive: Langrisser-II-Korean-Patcher-v1.3.5-macos-x86_64.app.zip
             checksum: SHA256SUMS-macos-x86_64.txt
     runs-on: ${{ matrix.runner }}
     steps:
@@ -121,7 +128,7 @@ jobs:
         run: >-
           python -c "from patcher.langrisser_ii_korean_patcher import
           load_release_manifest; m=load_release_manifest();
-          assert m['release']=='v1.3.4'; assert len(m['targets'])==3"
+          assert m['release']=='v1.3.5'; assert len(m['targets'])==3"
 
       - name: Build and smoke-test macOS app
         shell: bash
@@ -131,8 +138,15 @@ jobs:
           PATCHER_ARCH: ${{ matrix.arch }}
         run: |
           set -euo pipefail
-          app_name="Langrisser II Korean Patcher v1.3.4"
-          pyinstaller             --noconfirm             --clean             --onefile             --windowed             --name "$app_name"             --paths "."             --add-data "patches:patches"             "patcher/langrisser_ii_korean_patcher.py"
+          app_name="Langrisser II Korean Patcher v1.3.5"
+          mkdir -p package-patches
+          cp \
+            patches/v1.3.5.json \
+            patches/original-v1.3.5.bps \
+            patches/normal-v1.3.5.bps \
+            patches/hard-v1.3.5.bps \
+            package-patches/
+          pyinstaller             --noconfirm             --clean             --onefile             --windowed             --name "$app_name"             --paths "."             --add-data "package-patches:patches"             "patcher/langrisser_ii_korean_patcher.py"
 
           app="dist/$app_name.app"
           binary="$app/Contents/MacOS/$app_name"
@@ -157,7 +171,7 @@ jobs:
       - name: Upload macOS release assets
         uses: actions/upload-artifact@v4
         with:
-          name: Langrisser-II-Korean-Patcher-v1.3.4-macos-${{ matrix.arch }}
+          name: Langrisser-II-Korean-Patcher-v1.3.5-macos-${{ matrix.arch }}
           if-no-files-found: error
           path: |
             dist/${{ matrix.archive }}
