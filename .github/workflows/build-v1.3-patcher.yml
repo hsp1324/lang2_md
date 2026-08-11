@@ -1,4 +1,4 @@
-name: Build v1.3.5 Windows patcher
+name: Build v1.3.6 Windows patcher
 
 on:
   workflow_dispatch:
@@ -27,17 +27,17 @@ jobs:
         run: >-
           python -c "from patcher.langrisser_ii_korean_patcher import
           load_release_manifest; m=load_release_manifest();
-          assert m['release']=='v1.3.5'; assert len(m['targets'])==3"
+          assert m['release']=='v1.3.6'; assert len(m['targets'])==3"
 
       - name: Build single-file Windows patcher
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force "package-patches" | Out-Null
           $assets = @(
-            "patches/v1.3.5.json"
-            "patches/original-v1.3.5.bps"
-            "patches/normal-v1.3.5.bps"
-            "patches/hard-v1.3.5.bps"
+            "patches/v1.3.6.json"
+            "patches/original-v1.3.6.bps"
+            "patches/normal-v1.3.6.bps"
+            "patches/hard-v1.3.6.bps"
           )
           Copy-Item -Path $assets -Destination "package-patches"
           pyinstaller `
@@ -46,7 +46,7 @@ jobs:
             --onefile `
             --console `
             --hide-console hide-early `
-            --name "Langrisser-II-Korean-Patcher-v1.3.5" `
+            --name "Langrisser-II-Korean-Patcher-v1.3.6" `
             --paths "." `
             --add-data "package-patches;patches" `
             "patcher/langrisser_ii_korean_patcher.py"
@@ -54,7 +54,7 @@ jobs:
       - name: Verify executable and write checksum
         shell: pwsh
         run: |
-          $exe = "dist/Langrisser-II-Korean-Patcher-v1.3.5.exe"
+          $exe = "dist/Langrisser-II-Korean-Patcher-v1.3.6.exe"
           if (-not (Test-Path $exe)) { throw "Patcher executable is missing" }
           $bytes = [System.IO.File]::ReadAllBytes($exe)
           if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) {
@@ -64,7 +64,7 @@ jobs:
           from pathlib import Path
           import pefile
 
-          path = Path("dist/Langrisser-II-Korean-Patcher-v1.3.5.exe")
+          path = Path("dist/Langrisser-II-Korean-Patcher-v1.3.6.exe")
           pe = pefile.PE(str(path), fast_load=True)
           pe.parse_data_directories(
               directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_IMPORT"]]
@@ -82,7 +82,7 @@ jobs:
           print("PE import check passed: COMCTL32.dll ordinal 380 is absent")
           '@ | python -
           $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
-          $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.3.5.exe`n"
+          $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.3.6.exe`n"
           [System.IO.File]::WriteAllText(
             "dist/SHA256SUMS.txt",
             $checksum,
@@ -93,8 +93,8 @@ jobs:
       - name: Upload release assets
         uses: actions/upload-artifact@v4
         with:
-          name: Langrisser-II-Korean-Patcher-v1.3.5
+          name: Langrisser-II-Korean-Patcher-v1.3.6
           if-no-files-found: error
           path: |
-            dist/Langrisser-II-Korean-Patcher-v1.3.5.exe
+            dist/Langrisser-II-Korean-Patcher-v1.3.6.exe
             dist/SHA256SUMS.txt
