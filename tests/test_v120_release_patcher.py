@@ -1,4 +1,5 @@
 import hashlib
+import io
 from pathlib import Path
 import shutil
 from tempfile import TemporaryDirectory
@@ -226,6 +227,22 @@ class V137ReleasePatcherTests(unittest.TestCase):
         with mock.patch.object(patcher, "run_gui") as gui:
             self.assertEqual(patcher.main(["--self-test"]), 0)
         gui.assert_not_called()
+
+    def test_self_test_reconfigures_legacy_windows_console_to_utf8(self):
+        stdout_bytes = io.BytesIO()
+        stderr_bytes = io.BytesIO()
+        stdout = io.TextIOWrapper(stdout_bytes, encoding="cp1252")
+        stderr = io.TextIOWrapper(stderr_bytes, encoding="cp1252")
+        with (
+            mock.patch.object(patcher.sys, "stdout", stdout),
+            mock.patch.object(patcher.sys, "stderr", stderr),
+        ):
+            self.assertEqual(patcher.main(["--self-test"]), 0)
+            stdout.flush()
+            self.assertEqual(stdout.encoding.lower(), "utf-8")
+            self.assertIn("self-test 통과", stdout_bytes.getvalue().decode("utf-8"))
+        stdout.detach()
+        stderr.detach()
 
 
 if __name__ == "__main__":

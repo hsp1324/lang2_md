@@ -80,7 +80,8 @@ class V137ReleaseAssetContractTests(unittest.TestCase):
             "Langrisser II (Korean Hard v1.3.7).md",
             document,
         )
-        self.assertIn("공개 완료를 뜻하지 않는다", document)
+        self.assertIn("상태: **v1.3.7 공개 배포**", document)
+        self.assertIn("총 93개 연속 저장 진행을 통과했다", document)
 
     def test_readme_downloads_follow_the_same_filename_contract(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

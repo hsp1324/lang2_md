@@ -645,7 +645,30 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def configure_cli_streams() -> None:
+    """Use UTF-8 for redirected Windows/PyInstaller console output.
+
+    A frozen console executable can inherit a legacy ANSI encoding such as
+    cp1252 when stdout is redirected by PowerShell or GitHub Actions.  The
+    patcher intentionally prints Korean status and error messages, so leaving
+    that encoding in place can make a successful self-test crash while merely
+    reporting its result.  Reconfiguring is harmless for modern terminals and
+    the ``getattr`` guards preserve test doubles and GUI-only launches.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if not callable(reconfigure):
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="backslashreplace")
+        except (OSError, ValueError):
+            # Closed/replaced streams are outside the patcher's control.  The
+            # normal print path below will retain the host's behavior.
+            pass
+
+
 def main(argv: list[str] | None = None) -> int:
+    configure_cli_streams()
     args = build_parser().parse_args(argv)
     if args.self_test:
         try:
