@@ -48,11 +48,11 @@ _INVALIDATED_PRE_WARM_LOAD_CONTEXT_GATE_SHA256 = {
 # Japanese source with byte-identical outputs before this identity was frozen.
 RELEASE_ROM_SHA256 = {
     "pure": "604d022080ae701a8b2ff0dd9f6906143e1483a74be5ac4ba9f8a2cffa051bff",
-    "normal": "c10ef6a6487c7b6a49ce47cce1792e89521698818cc13ce7590c97794ced4580",
-    "hard": "7d0c528c10d86367460792d06b95402d92557904ab62aea093ddda9d52081a4a",
+    "normal": "05f8ced0854b78b23eaf2c48b153d000fa56969cc5549a1d01df3dd86a19b32a",
+    "hard": "1b5735c1b1b0620f8131c3291208f605d95a7e5293e63de36627b83f3a9001bd",
 }
 RELEASE_IDENTITY_FINALIZED = True
-RELEASE_IDENTITY_GENERATION = "scenario1-dialogue-followup-20260812"
+RELEASE_IDENTITY_GENERATION = "loren-lavender-followup-20260813"
 INVALIDATED_RELEASE_SHA256 = frozenset(
     (*_INVALIDATED_PRE_PENDING_MARKER_SHA256.values(),
      *_INVALIDATED_PRE_COLD_LOAD_SCENARIO_FALLBACK_SHA256.values(),
@@ -63,7 +63,9 @@ INVALIDATED_RELEASE_SHA256 = frozenset(
      "3ee7431b5a3d062ce739463e89cdffce9543d0383ba7ccacb29f514e38c32b55",
      "66b4bc9b04e06b7e18f7d7f341d59ad5cfab02e480b3ff0949d277ba04a6f5a9",
      "3f7de8fd1b4695c62e764fef5ed06bf4c96d1974f1296863c46f903ac21d69f5",
-     "6646c1ce86e960ea33228f6ef41e7b1b3cd1b39f9fa8779a3172d6c75c65a878")
+     "6646c1ce86e960ea33228f6ef41e7b1b3cd1b39f9fa8779a3172d6c75c65a878",
+     "c10ef6a6487c7b6a49ce47cce1792e89521698818cc13ce7590c97794ced4580",
+     "7d0c528c10d86367460792d06b95402d92557904ab62aea093ddda9d52081a4a")
 )
 
 # These generated/dated records must be refreshed from the same central values.

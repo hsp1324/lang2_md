@@ -149,7 +149,7 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
             with self.subTest(profile=profile_name):
                 self.assertEqual(
                     len(changed),
-                    {"pure": 11148, "normal": 11148, "hard": 11809}[
+                    {"pure": 11148, "normal": 11223, "hard": 11884}[
                         profile_name
                     ],
                 )
@@ -319,7 +319,7 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
         validation = (ROOT / "docs/v1.3.7_validation.md").read_text(
             encoding="utf-8"
         )
-        self.assertIn("reissued with the Scenario 1 dialogue follow-up", validation)
+        self.assertIn("reissued with the Loren lavender-palette follow-up", validation)
         for topic in (
             "LV10",
             "LV11",

@@ -338,11 +338,11 @@ class HardModeFirstTurnTests(unittest.TestCase):
             ),
             "normal_rom": (
                 "roms/builds/Langrisser II (Korean Normal v1.3.7).md",
-                "c10ef6a6487c7b6a49ce47cce1792e89521698818cc13ce7590c97794ced4580",
+                "05f8ced0854b78b23eaf2c48b153d000fa56969cc5549a1d01df3dd86a19b32a",
             ),
             "hard_rom": (
                 "roms/builds/Langrisser II (Korean Hard v1.3.7).md",
-                "7d0c528c10d86367460792d06b95402d92557904ab62aea093ddda9d52081a4a",
+                "1b5735c1b1b0620f8131c3291208f605d95a7e5293e63de36627b83f3a9001bd",
             ),
         }
         for profile in ("pure", "normal", "hard"):

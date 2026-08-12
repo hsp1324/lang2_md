@@ -25,10 +25,10 @@
       "id": "normal",
       "label_ko": "최신 디자인 일반판",
       "output_filename": "Langrisser II (Korean Normal v1.3.7).md",
-      "output_sha256": "c10ef6a6487c7b6a49ce47cce1792e89521698818cc13ce7590c97794ced4580",
+      "output_sha256": "05f8ced0854b78b23eaf2c48b153d000fa56969cc5549a1d01df3dd86a19b32a",
       "output_size": 4194304,
       "patch_filename": "normal-v1.3.7.bps",
-      "patch_sha256": "c17d2b86af34eccd019eea23a430982d08f04cde95ac0b714766ec48db90a658",
+      "patch_sha256": "4f605b8ff875307d173a11a1d6d0409645940c7fbb6cbff6e3b541fc0f404328",
       "patch_size": 2286586
     },
     {
@@ -36,10 +36,10 @@
       "id": "hard",
       "label_ko": "최신 디자인 하드판",
       "output_filename": "Langrisser II (Korean Hard v1.3.7).md",
-      "output_sha256": "7d0c528c10d86367460792d06b95402d92557904ab62aea093ddda9d52081a4a",
+      "output_sha256": "1b5735c1b1b0620f8131c3291208f605d95a7e5293e63de36627b83f3a9001bd",
       "output_size": 4194304,
       "patch_filename": "hard-v1.3.7.bps",
-      "patch_sha256": "2c13a6ea841ce99825c2b1ab281a02d442f2333fe78cf0f69ebd1fd8518eaed3",
+      "patch_sha256": "e8cb9de58de92bd5e5687d4f0edec1a6033a733bb1e22618c11a522120b33665",
       "patch_size": 2289214
     }
   ]

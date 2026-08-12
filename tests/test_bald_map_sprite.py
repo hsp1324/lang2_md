@@ -253,11 +253,11 @@ class LorenMapSpriteTests(unittest.TestCase):
     def test_loren_recolors_only_armor_and_preserves_blade(self) -> None:
         self.assertEqual(
             builder.LOREN_SPRITE_COLOR_INDEX_REMAP,
-            {0x1: 0x6, 0xE: 0x7},
+            {0x1: 0xE, 0xE: 0x2},
         )
         self.assertEqual(
             set(builder.LOREN_SPRITE_COLOR_INDEX_REMAP.values()),
-            {0x6, 0x7},
+            {0xE, 0x2},
         )
         changed_indexes = set()
         for frame_base, target, blade_coords in zip(
@@ -402,8 +402,16 @@ class PairedNpcMapSpriteTests(unittest.TestCase):
 
     def test_paired_palette_roles_match_the_editor_design(self) -> None:
         self.assertEqual(
+            builder.LOREN_SPRITE_COLOR_INDEX_REMAP,
+            {0x1: 0xE, 0xE: 0x2},
+        )
+        self.assertEqual(
             builder.PAIRED_NPC_MAP_SPRITES[0x99]["color_index_remap"],
             {0x1: 0x6, 0xE: 0x7},
+        )
+        self.assertNotEqual(
+            builder.LOREN_SPRITE_COLOR_INDEX_REMAP,
+            builder.PAIRED_NPC_MAP_SPRITES[0x99]["color_index_remap"],
         )
         self.assertEqual(
             builder.PAIRED_NPC_MAP_SPRITES[0x9A]["color_index_remap"],

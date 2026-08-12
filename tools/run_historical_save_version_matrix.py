@@ -207,7 +207,7 @@ HISTORICAL_TARGETS = (
 
 
 FINAL_MANIFEST_SHA256 = (
-    "6eddb0fb48579da8907136015b7ff08a73d9228e297b959617d4200857911999"
+    "b60dcdf4d971bb7f5494bb728d057ac545c1fccb97bd8bc1bcf860d7ebb55115"
 )
 FINAL_PATCH_IDENTITIES = {
     "pure": {
@@ -217,12 +217,12 @@ FINAL_PATCH_IDENTITIES = {
     },
     "normal": {
         "filename": "normal-v1.3.7.bps",
-        "sha256": "c17d2b86af34eccd019eea23a430982d08f04cde95ac0b714766ec48db90a658",
+        "sha256": "4f605b8ff875307d173a11a1d6d0409645940c7fbb6cbff6e3b541fc0f404328",
         "bytes": 2286586,
     },
     "hard": {
         "filename": "hard-v1.3.7.bps",
-        "sha256": "2c13a6ea841ce99825c2b1ab281a02d442f2333fe78cf0f69ebd1fd8518eaed3",
+        "sha256": "e8cb9de58de92bd5e5687d4f0edec1a6033a733bb1e22618c11a522120b33665",
         "bytes": 2289214,
     },
 }

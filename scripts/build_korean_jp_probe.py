@@ -167,12 +167,14 @@ LOREN_CUSTOM_FRAME_OFFSETS = tuple(
     base + LOREN_CUSTOM_SPRITE_ID * MAP_SPRITE_BYTES
     for base in MAP_SPRITE_FRAME_BASES
 )
-# Loren's approved map design is ivory, not the saturated violet introduced in
-# v1.3.1.  Use the same pale-gold/brown live-palette ramp as the paired Scenario
-# 1 militia while preserving the stock shield, trim, and blade pixels.
+# Loren's editor design uses a pale lavender ramp, distinct from the Scenario 1
+# militia's ivory armor.  The live map cannot add per-class CRAM colours, so use
+# the restrained muted-violet/charcoal pair rather than the saturated bright
+# violet used by the earlier v1.3.1 attempt.  Preserve the stock shield, trim,
+# and blade pixels.
 LOREN_SPRITE_COLOR_INDEX_REMAP = {
-    0x1: 0x6,  # gray armor face -> ivory
-    0xE: 0x7,  # dark gray armor shade -> warm brown
+    0x1: 0xE,  # gray armor face -> muted violet
+    0xE: 0x2,  # dark gray armor shade -> charcoal violet
 }
 LOREN_BLADE_COORDS_BY_FRAME = (
     frozenset(
