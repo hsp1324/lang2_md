@@ -81,15 +81,15 @@
       "reason": "무행동 첫 턴 전투가 원작 난수·프레임 타이밍 경계에 있어 엘윈 HP 0 패배와 HP 1 이상 2턴 진입이 모두 재현되며, 두 결과 모두 정상 경로로 승인됨",
       "pure_rom": {
         "path": "roms/builds/Langrisser II (Korean Original v1.3.7).md",
-        "sha256": "2d475a96f5f5ee26352bef6c3c392a77aafa283a2c0f260a6d1cb8603b3610ac"
+        "sha256": "66b4bc9b04e06b7e18f7d7f341d59ad5cfab02e480b3ff0949d277ba04a6f5a9"
       },
       "normal_rom": {
         "path": "roms/builds/Langrisser II (Korean Normal v1.3.7).md",
-        "sha256": "92e90c0e00df03c1c3264bc6ff7702c5356c2ba2b65d5f2281177066f329c7d8"
+        "sha256": "3f7de8fd1b4695c62e764fef5ed06bf4c96d1974f1296863c46f903ac21d69f5"
       },
       "hard_rom": {
-        "path": "roms/builds/Langrisser II (Korean Hard T1.3.7 B1.3.6).md",
-        "sha256": "ca7750c207382023636acb37901242437861a8b83f4b39477c1405c8dd1ee6eb"
+        "path": "roms/builds/Langrisser II (Korean Hard v1.3.7).md",
+        "sha256": "6646c1ce86e960ea33228f6ef41e7b1b3cd1b39f9fa8779a3172d6c75c65a878"
       },
       "normal_evidence": [
         {

@@ -331,6 +331,20 @@ class HardModeFirstTurnTests(unittest.TestCase):
         self.assertIsNone(first_turn.expected_endpoint(14))
 
     def test_scenario_12_rng_boundary_accepts_defeat_or_turn_two(self):
+        expected_release_roms = {
+            "pure_rom": (
+                "roms/builds/Langrisser II (Korean Original v1.3.7).md",
+                "66b4bc9b04e06b7e18f7d7f341d59ad5cfab02e480b3ff0949d277ba04a6f5a9",
+            ),
+            "normal_rom": (
+                "roms/builds/Langrisser II (Korean Normal v1.3.7).md",
+                "3f7de8fd1b4695c62e764fef5ed06bf4c96d1974f1296863c46f903ac21d69f5",
+            ),
+            "hard_rom": (
+                "roms/builds/Langrisser II (Korean Hard v1.3.7).md",
+                "6646c1ce86e960ea33228f6ef41e7b1b3cd1b39f9fa8779a3172d6c75c65a878",
+            ),
+        }
         for profile in ("pure", "normal", "hard"):
             expected = first_turn.expected_endpoint(12, profile=profile)
             self.assertTrue(expected["rng_sensitive"])
@@ -352,9 +366,12 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 "turn_2_command",
             )
 
-        comparisons = first_turn.expected_endpoint(12)[
-            "comparison_evidence"
-        ]
+        expected = first_turn.expected_endpoint(12)
+        for key, (path, digest) in expected_release_roms.items():
+            self.assertEqual(expected[key]["path"], path)
+            self.assertEqual(expected[key]["sha256"], digest)
+
+        comparisons = expected["comparison_evidence"]
         self.assertTrue(
             any(
                 row.get("observed_endpoint") == "turn_2_command"
