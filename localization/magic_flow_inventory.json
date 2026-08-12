@@ -10,7 +10,7 @@
     "live_natural_learned_magic_count": 11,
     "source_locked_range_count": 9
   },
-  "conclusion": "Twenty-one of 22 magic IDs have at least one source class-change ownership path. Teleport is the bounded source exception: only Agent 25 owns it, and that class is absent from all ten player trees and all fixed scenario records. Every ID still shares the source-locked production list, selection, parameter, and application path and has retained diagnostic application evidence. This is structural coverage, not a claim that every commander/class ownership combination was naturally played.",
+  "conclusion": "Twenty-one of 22 magic IDs have at least one source class-change ownership path. Teleport is the bounded source exception: only Agent 25 owns it, and that class is absent from all ten player trees and all fixed scenario records. Every ID still shares the source-locked production list, selection, parameter, and application path and has retained diagnostic application evidence. The v1.3.6 Hawk Lord and Croco Lord class records are bounded aliases of their declared Japanese mounted source records; every other class-record byte remains source-locked. This is structural coverage, not a claim that every commander/class ownership combination was naturally played.",
   "source_locked_ranges": [
     {
       "name": "class_records",
@@ -18,7 +18,22 @@
       "end": "0x05FF08",
       "size": 4396,
       "source_sha256": "07efffd287c2a6787dc1cefee3b3ef3efae1481767117e3d899f2c65eeaaeebd",
-      "production_source_equivalent": true
+      "production_source_equivalent": false,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": [
+        {
+          "class_id": 43,
+          "source_class_id": 6,
+          "offset": "0x05F290",
+          "size": 28
+        },
+        {
+          "class_id": 44,
+          "source_class_id": 7,
+          "offset": "0x05F2AC",
+          "size": 28
+        }
+      ]
     },
     {
       "name": "level_up_learning",
@@ -26,7 +41,9 @@
       "end": "0x01498E",
       "size": 72,
       "source_sha256": "2e0177dfd678207bcb3701b954b9c2d893ef7a98eb3dcd0ee2e35ec9ac250f4d",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     },
     {
       "name": "magic_command_gate",
@@ -34,7 +51,9 @@
       "end": "0x020DC0",
       "size": 18,
       "source_sha256": "a176129752052073e838579d646b42a1b34fdfef74e9f99b70c76e74348f1254",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     },
     {
       "name": "magic_list_builder",
@@ -42,7 +61,9 @@
       "end": "0x02125A",
       "size": 184,
       "source_sha256": "33139cb0ec237628bfcfdf90b85a029b5db8c922b138b326452a10139503a9b2",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     },
     {
       "name": "magic_selection",
@@ -50,7 +71,9 @@
       "end": "0x021578",
       "size": 424,
       "source_sha256": "3370433847d778fa3bd021a80fd791520373e4d67d937cd91c367975a54c5d87",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     },
     {
       "name": "magic_application",
@@ -58,7 +81,9 @@
       "end": "0x00EDB0",
       "size": 1560,
       "source_sha256": "a53bfcac3fac803fa38ab73c531167fb45d70acf1bf73b38340d43e9f5199824",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     },
     {
       "name": "magic_parameters",
@@ -66,7 +91,9 @@
       "end": "0x0820EC",
       "size": 176,
       "source_sha256": "6b7eeb2782426146925e4541fada3c5e46d277ede13478188b56491e2782865c",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     },
     {
       "name": "ability_requirements",
@@ -74,7 +101,9 @@
       "end": "0x0829FA",
       "size": 46,
       "source_sha256": "5aa6300a3780d58a3375fff8379b54b4f665885547f414fe047b10aca412b1d9",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     },
     {
       "name": "ability_masks",
@@ -82,7 +111,9 @@
       "end": "0x082A56",
       "size": 92,
       "source_sha256": "5f2d087f77e236be888480b27918f533962b4ba3c787aa3755fa216aa0361599",
-      "production_source_equivalent": true
+      "production_source_equivalent": true,
+      "production_matches_declared_policy": true,
+      "declared_class_record_aliases": []
     }
   ],
   "control_flow": {

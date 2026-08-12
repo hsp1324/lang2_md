@@ -247,7 +247,7 @@ def build_variant(
         )
 
     output_root = (
-        ROOT / "docs/assets/ai-class-source/latest" / str(spec["output_dir"])
+        ROOT / "assets/class-sprites/source/latest" / str(spec["output_dir"])
     )
     logical_dir = output_root / "logical16"
     preview_dir = output_root / "previews"

@@ -119,6 +119,18 @@ def wrapper_code(
     return bytes(code)
 
 
+def join_marker_clear_instruction(commander_id: int) -> bytes:
+    """Return the diagnostic CLR.B used before the stock level-up handler."""
+    try:
+        row = builder.JOIN_CLASS_CHOICE_RECORDS[commander_id]
+    except KeyError as exc:
+        raise ValueError(
+            f"commander {commander_id} has no join class-choice marker"
+        ) from exc
+    marker_address = int(row["active_marker_address"])
+    return bytes.fromhex("42 39") + marker_address.to_bytes(4, "big")
+
+
 def start_menu_wrapper_code(
     commander_id: int = 1,
     candidates: tuple[int, ...] = (4, 5, 10),
@@ -222,6 +234,8 @@ def patch_probe(
     restore_commander_id: int = 1,
     preferred_candidate: int | None = None,
     runestone_restart: bool = False,
+    preserve_production_resume: bool = False,
+    clear_join_marker: bool = False,
 ) -> int:
     if force_runtime_context and enable_start_menu_probe:
         raise ValueError(
@@ -229,6 +243,14 @@ def patch_probe(
         )
     if runestone_restart and current_class is None:
         raise ValueError("Runestone restart requires a current class")
+    if preserve_production_resume and not force_runtime_context:
+        raise ValueError(
+            "preserving the production resume requires a forced runtime context"
+        )
+    if clear_join_marker and not (force_runtime_context and runestone_restart):
+        raise ValueError(
+            "clearing the join marker requires a forced Rune Stone context"
+        )
     transition = prefer_transition_candidate(
         probe,
         source,
@@ -260,6 +282,8 @@ def patch_probe(
         ),
         equipped_item=RUNESTONE_ITEM_ID if runestone_restart else None,
     )
+    if clear_join_marker:
+        code = join_marker_clear_instruction(commander_id) + code
     wrapper_end = PROBE_WRAPPER + len(code)
     if probe[PROBE_WRAPPER:wrapper_end] != b"\xFF" * len(code):
         raise ValueError("input probe wrapper region is not empty")
@@ -279,17 +303,18 @@ def patch_probe(
         production_resume = probe[resume_offset : resume_offset + 4]
         if production_resume not in (resume_expected, declared_join_wrapper):
             raise ValueError("input class-change resume operand changed")
-        post_code = post_apply_wrapper_code(
-            runtime_record_index,
-            restore_commander_id,
-        )
-        post_end = POST_APPLY_WRAPPER + len(post_code)
-        if probe[POST_APPLY_WRAPPER:post_end] != b"\xFF" * len(post_code):
-            raise ValueError("input post-apply wrapper region is not empty")
-        probe[resume_offset : resume_offset + 4] = POST_APPLY_WRAPPER.to_bytes(
-            4, "big"
-        )
-        probe[POST_APPLY_WRAPPER:post_end] = post_code
+        if not preserve_production_resume:
+            post_code = post_apply_wrapper_code(
+                runtime_record_index,
+                restore_commander_id,
+            )
+            post_end = POST_APPLY_WRAPPER + len(post_code)
+            if probe[POST_APPLY_WRAPPER:post_end] != b"\xFF" * len(post_code):
+                raise ValueError("input post-apply wrapper region is not empty")
+            probe[resume_offset : resume_offset + 4] = POST_APPLY_WRAPPER.to_bytes(
+                4, "big"
+            )
+            probe[POST_APPLY_WRAPPER:post_end] = post_code
     elif enable_start_menu_probe:
         start_expected = START_MENU_ENTRY.to_bytes(4, "big")
         start_offset = START_MENU_ENTRY_OPERAND
@@ -443,6 +468,22 @@ def parse_args() -> argparse.Namespace:
             "verify that the stock LV10 handler restarts at the first row"
         ),
     )
+    parser.add_argument(
+        "--preserve-production-resume",
+        action="store_true",
+        help=(
+            "diagnostic contract: leave the production class-change resume "
+            "operand and EXP wrapper byte-identical"
+        ),
+    )
+    parser.add_argument(
+        "--clear-join-marker",
+        action="store_true",
+        help=(
+            "diagnostic contract: clear this commander's release join marker "
+            "immediately before entering the stock level-up handler"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -503,6 +544,8 @@ def main() -> int:
         restore_commander_id=args.restore_commander_id,
         preferred_candidate=args.preferred_candidate,
         runestone_restart=args.runestone_restart,
+        preserve_production_resume=args.preserve_production_resume,
+        clear_join_marker=args.clear_join_marker,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -517,6 +560,8 @@ def main() -> int:
     )
     if args.runestone_restart:
         print("real Rune Stone item 0x1A equipped for stock restart handling")
+    if args.clear_join_marker:
+        print("release join marker cleared immediately before stock level-up")
     candidates = "/".join(f"0x{value:02X}" for value in transition.candidates)
     if args.preferred_candidate is not None:
         print(

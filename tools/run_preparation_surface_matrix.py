@@ -59,7 +59,47 @@ PREPARATION_LAUNCH_ATTEMPTS = 3
 RUNTIME_GROUP_BASE = 0x603C
 RUNTIME_GROUP_SIZE = 0x60
 RUNTIME_MEMBER_SIZE = 0x0C
+RUNTIME_SIDE_OFFSET = 0x20
+RUNTIME_LEVEL_OFFSET = 0x2E
+# Opening/event code imports saved progression into only these fixed records.
+# Keep this list identity-locked by scenario, record, and name so an arbitrary
+# allied/NPC class or level mismatch cannot be waved through as progression.
+RUNTIME_FIXED_PROGRESS_OVERRIDES = {
+    (1, 1): {"name_id": 0x02, "fields": ("level",)},       # Liana
+    (2, 3): {"name_id": 0x02, "fields": ("level",)},       # Liana
+    (3, 0): {"name_id": 0x02, "fields": ("level",)},       # Liana
+    (4, 0): {"name_id": 0x02, "fields": ("level",)},       # Liana
+    (6, 0): {"name_id": 0x08, "fields": ("class_id",)},    # Aaron
+    (7, 3): {"name_id": 0x07, "fields": ("level",)},       # Keith
+    (10, 1): {"name_id": 0x09, "fields": ("level",)},      # Lester
+    (11, 0): {"name_id": 0x0A, "fields": ("class_id", "level")},
+    (15, 0): {"name_id": 0x06, "fields": ("class_id", "level")},
+    (22, 0): {"name_id": 0x02, "fields": ("class_id", "level")},
+    (25, 0): {"name_id": 0x0A, "fields": ("class_id", "level")},
+}
+# Some legacy-save recovery probes deliberately inject an otherwise impossible
+# Fighter LV10/11/12 into the natural join record.  Those probes must opt in
+# with the exact class and level they injected; ordinary preparation/result
+# runs never receive this exception.  Keep both the target identities and the
+# permitted diagnostic values closed here so a caller cannot suppress an
+# unrelated fixed-record regression.
+RUNTIME_FIXED_DIAGNOSTIC_OVERRIDE_TARGETS = {
+    (7, 3): {
+        "name_id": 0x07,  # Keith
+        "class_ids": (0x01,),
+        "levels": (10, 11, 12),
+    },
+    (10, 1): {
+        "name_id": 0x09,  # Lester
+        "class_ids": (0x01,),
+        "levels": (10, 11, 12),
+    },
+}
 PROFILE_ROMS = {
+    "pure": (
+        ROOT
+        / "tmp/Langrisser II (Korean Original prep-pattern-pool-yal probe).md"
+    ),
     "normal": (
         ROOT / "tmp/Langrisser II (Korean prep-pattern-pool-yal probe).md"
     ),
@@ -110,10 +150,280 @@ def runtime_fixed_record_signature(gst: bytes, group_index: int) -> tuple:
     )
 
 
+def runtime_fixed_record_layout(
+    gst: bytes,
+    group_index: int,
+) -> dict[str, object]:
+    """Read the fixed-record fields that must survive the runtime loader.
+
+    The old scenario-identity score intentionally used only class, name, and
+    mercenary IDs.  That was sufficient to distinguish scenarios, but it was
+    not a layout-integrity check: a wrong side, level, or placement could pass
+    the 75% identity threshold.  Keep the compact signature for scenario
+    selection and expose the complete loader-owned subset for the stricter
+    check below.
+    """
+    start = (
+        GST_WORK_RAM_FILE_OFFSET
+        + RUNTIME_GROUP_BASE
+        + group_index * RUNTIME_GROUP_SIZE
+    )
+    end = start + RUNTIME_GROUP_SIZE
+    if len(gst) < end:
+        raise ValueError(
+            f"GST is too short to contain runtime group {group_index}"
+        )
+    record = gst[start:end]
+    return {
+        "class_id": record[0],
+        "name_id": record[1],
+        "side_id": record[RUNTIME_SIDE_OFFSET],
+        "level": record[RUNTIME_LEVEL_OFFSET],
+        "x": record[0x06],
+        "y": record[0x07],
+        "mercenaries": [
+            record[index * RUNTIME_MEMBER_SIZE]
+            for index in range(1, 7)
+        ],
+    }
+
+
+def verify_runtime_fixed_record_layout(
+    gst: bytes,
+    rom: bytes,
+    reference: bytes,
+    scenario_number: int,
+    diagnostic_exact_overrides: (
+        dict[tuple[int, int], dict[str, int]] | None
+    ) = None,
+) -> dict[str, object]:
+    """Require every loaded fixed record to retain its structural identity.
+
+    A small identity-locked set of opening/event records legitimately imports
+    a commander's saved class and/or level. Those declared fields are reported
+    rather than source-locked. Names, sides, coordinates, and mercenary
+    composition remain mandatory for every record; every undeclared class and
+    level remains mandatory as well.
+    """
+    model = read_scenario(rom, reference, scenario_number)
+    player_groups = player_commander_count(rom, scenario_number)
+    requested_diagnostics = diagnostic_exact_overrides or {}
+    normalized_diagnostics: dict[tuple[int, int], dict[str, int]] = {}
+    for key, requested in requested_diagnostics.items():
+        if not (
+            isinstance(key, tuple)
+            and len(key) == 2
+            and all(isinstance(value, int) for value in key)
+        ):
+            raise ValueError(
+                "runtime diagnostic override keys must be "
+                "(scenario, fixed_record) integer tuples"
+            )
+        if key[0] != scenario_number:
+            raise ValueError(
+                "runtime diagnostic override scenario does not match the "
+                f"requested Scenario {scenario_number}: {key}"
+            )
+        policy = RUNTIME_FIXED_DIAGNOSTIC_OVERRIDE_TARGETS.get(key)
+        if policy is None:
+            raise ValueError(
+                "runtime diagnostic override target is not permitted: "
+                f"Scenario {key[0]} record {key[1]}"
+            )
+        if set(requested) != {"name_id", "class_id", "level"}:
+            raise ValueError(
+                "runtime diagnostic override must specify exactly name_id, "
+                "class_id, and level"
+            )
+        normalized = {
+            field: int(requested[field])
+            for field in ("name_id", "class_id", "level")
+        }
+        if normalized["name_id"] != int(policy["name_id"]):
+            raise ValueError(
+                "runtime diagnostic override name identity is not permitted: "
+                f"0x{normalized['name_id']:02X}"
+            )
+        if normalized["class_id"] not in policy["class_ids"]:
+            raise ValueError(
+                "runtime diagnostic override class is not permitted: "
+                f"0x{normalized['class_id']:02X}"
+            )
+        if normalized["level"] not in policy["levels"]:
+            raise ValueError(
+                "runtime diagnostic override level is not permitted: "
+                f"{normalized['level']}"
+            )
+        normalized_diagnostics[key] = normalized
+
+    manual_slot = b"".join(
+        gst[
+            GST_WORK_RAM_FILE_OFFSET + address:
+            GST_WORK_RAM_FILE_OFFSET + address + size
+        ]
+        for address, size in MANUAL_SLOT_WORK_RAM_SEGMENTS
+    )
+    if len(manual_slot) != sum(
+        size for _, size in MANUAL_SLOT_WORK_RAM_SEGMENTS
+    ):
+        raise ValueError("GST is too short to contain the manual-slot record")
+    rows = []
+    mismatches = []
+    used_diagnostics = []
+    for row in model["records"]:
+        index = int(row["index"])
+        expected = {
+            "class_id": int(row["class_id"]),
+            "name_id": int(row["name"]["id"]),
+            "side_id": int(row["side_id"]),
+            "level": int(row["level"]),
+            "x": int(row["x"]),
+            "y": int(row["y"]),
+            "mercenaries": [int(value) for value in row["mercenaries"]],
+        }
+        actual = runtime_fixed_record_layout(gst, player_groups + index)
+        diagnostic = normalized_diagnostics.get((scenario_number, index))
+        override = RUNTIME_FIXED_PROGRESS_OVERRIDES.get(
+            (scenario_number, index)
+        )
+        progression_fields = []
+        saved_progression_expected = {}
+        if diagnostic is not None:
+            if expected["name_id"] != diagnostic["name_id"]:
+                raise RuntimeError(
+                    "declared runtime diagnostic identity changed: "
+                    f"Scenario {scenario_number} record {index} name "
+                    f"0x{expected['name_id']:02X}"
+                )
+            progression_fields = ["class_id", "level"]
+            used_diagnostics.append({
+                "scenario": scenario_number,
+                "fixed_record_index": index,
+                **diagnostic,
+            })
+        elif override is not None:
+            if expected["name_id"] != int(override["name_id"]):
+                raise RuntimeError(
+                    "declared runtime progression identity changed: "
+                    f"Scenario {scenario_number} record {index} name "
+                    f"0x{expected['name_id']:02X}"
+                )
+            progression_fields = list(override["fields"])
+            commander_id = int(override["name_id"])
+            commander = (
+                MANUAL_SLOT_COMMANDER_ROSTER_OFFSET
+                + (commander_id - 1) * MANUAL_SLOT_COMMANDER_RECORD_SIZE
+            )
+            saved_progression_expected = {
+                "class_id": manual_slot[
+                    commander + MANUAL_SLOT_COMMANDER_CLASS_OFFSET
+                ],
+                "level": manual_slot[
+                    commander + MANUAL_SLOT_COMMANDER_LEVEL_OFFSET
+                ],
+            }
+        protected_fields = [
+            field for field in expected if field not in progression_fields
+        ]
+        changed = {
+            field: {"expected": expected[field], "actual": actual[field]}
+            for field in protected_fields
+            if actual[field] != expected[field]
+        }
+        for field in progression_fields:
+            progression_expected = (
+                diagnostic[field]
+                if diagnostic is not None
+                else saved_progression_expected[field]
+            )
+            if actual[field] != progression_expected:
+                changed[field] = {
+                    "expected": progression_expected,
+                    "actual": actual[field],
+                    "source": (
+                        "caller_exact_diagnostic"
+                        if diagnostic is not None
+                        else "serialized_commander_save"
+                    ),
+                }
+        progression_overrides = {
+            field: {
+                "source": expected[field],
+                "runtime": actual[field],
+                "required_runtime": (
+                    diagnostic[field]
+                    if diagnostic is not None
+                    else saved_progression_expected[field]
+                ),
+            }
+            for field in progression_fields
+            if actual[field] != expected[field]
+        }
+        result_row = {
+            "fixed_record_index": index,
+            "runtime_group": player_groups + index,
+            "expected": expected,
+            "actual": actual,
+            "allowed_progression_fields": progression_fields,
+            "saved_progression_expected": saved_progression_expected,
+            "diagnostic_exact_override": diagnostic,
+            "progression_overrides": progression_overrides,
+            "protected_mismatches": changed,
+        }
+        rows.append(result_row)
+        if changed:
+            mismatches.append(result_row)
+
+    result = {
+        "status": "pass" if not mismatches else "fail",
+        "scenario": scenario_number,
+        "player_runtime_group_count": player_groups,
+        "fixed_record_count": len(rows),
+        "checked_fields": [
+            "class_id",
+            "name_id",
+            "side_id",
+            "level",
+            "x",
+            "y",
+            "mercenaries",
+        ],
+        "allied_progression_policy": (
+            "only the scenario/record/name entries in "
+            "RUNTIME_FIXED_PROGRESS_OVERRIDES may import the exact serialized "
+            "commander class_id and/or level; Keith/Lester legacy diagnostics "
+            "must additionally opt in to an exact closed override"
+        ),
+        "diagnostic_exact_overrides_requested": [
+            {
+                "scenario": scenario,
+                "fixed_record_index": record,
+                **values,
+            }
+            for (scenario, record), values in normalized_diagnostics.items()
+        ],
+        "diagnostic_exact_overrides_used": used_diagnostics,
+        "mismatch_count": len(mismatches),
+        "mismatches": mismatches,
+        "records": rows,
+    }
+    if mismatches:
+        first = mismatches[0]
+        raise RuntimeError(
+            "runtime fixed-record layout mismatch: Scenario "
+            f"{scenario_number} record {first['fixed_record_index']} "
+            f"{first['protected_mismatches']}"
+        )
+    return result
+
+
 def verify_runtime_scenario_identity(
     gst_path: Path,
     rom_path: Path,
     scenario_number: int,
+    diagnostic_exact_overrides: (
+        dict[tuple[int, int], dict[str, int]] | None
+    ) = None,
 ) -> dict[str, object]:
     """Identify the selected scenario from its loaded fixed-record groups.
 
@@ -183,6 +493,13 @@ def verify_runtime_scenario_identity(
             f"{scenario_number}, identified {best['scenario']} "
             f"({best['matched_records']}/{best['total_records']} records)"
         )
+    result["fixed_record_layout"] = verify_runtime_fixed_record_layout(
+        gst,
+        rom,
+        reference,
+        scenario_number,
+        diagnostic_exact_overrides=diagnostic_exact_overrides,
+    )
     return result
 
 
@@ -230,6 +547,17 @@ def manual_slot_record_from_gst(gst_path: Path) -> bytes:
             )
         parts.append(gst[start:end])
     return b"".join(parts)
+
+
+def manual_slot_scenario_from_gst(gst_path: Path) -> int:
+    record = manual_slot_record_from_gst(gst_path)
+    scenario = int.from_bytes(record[:2], "big")
+    if not SCENARIO_MIN <= scenario <= SCENARIO_MAX:
+        raise ValueError(
+            f"manual-slot runtime record has invalid scenario {scenario}: "
+            f"{gst_path}"
+        )
+    return scenario
 
 
 def hire_rows(mask: int) -> list[dict[str, object]]:
@@ -1242,6 +1570,9 @@ def launch_to_preparation(
     runtime_name: str,
     output: Path,
     manual_slot_args: list[str] | None = None,
+    diagnostic_exact_overrides: (
+        dict[tuple[int, int], dict[str, int]] | None
+    ) = None,
 ) -> dict[str, object]:
     last_error: Exception | None = None
     for attempt in range(1, PREPARATION_LAUNCH_ATTEMPTS + 1):
@@ -1296,6 +1627,7 @@ def launch_to_preparation(
                 identity_gst,
                 rom,
                 scenario_number,
+                diagnostic_exact_overrides=diagnostic_exact_overrides,
             )
             identity["attempt"] = attempt
             return identity

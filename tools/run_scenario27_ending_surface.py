@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -17,12 +18,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools import build_scenario27_ending_probe_rom as probe_builder
-from tools.capture_magic_application import portrait_dialogue_visible
-from tools import run_blastem_sequence as sequence
-from tools import run_gray_acted_surface_matrix as gray
-from tools import run_preparation_surface_matrix as matrix
-from tools import run_scenario21_result_surface as shared
+from tools import build_scenario27_ending_probe_rom as probe_builder  # noqa: E402
+from tools.capture_magic_application import portrait_dialogue_visible  # noqa: E402
+from tools import run_blastem_sequence as sequence  # noqa: E402
+from tools import run_gray_acted_surface_matrix as gray  # noqa: E402
+from tools import run_preparation_surface_matrix as matrix  # noqa: E402
+from tools import run_scenario21_result_surface as shared  # noqa: E402
+from tools import verify_hard_mode_first_turn as first_turn  # noqa: E402
 
 
 DEFAULT_OUTPUT_ROOT = ROOT / "captures/run/current_s27_ending"
@@ -42,6 +44,7 @@ RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
 BERNHARDT_RUNTIME_GROUP = 18
+BERNHARDT_INITIAL_HP = 10
 
 
 def fin_visible(path: Path) -> bool:
@@ -78,7 +81,7 @@ def should_confirm_ending_surface(
     )
 
 
-def bernhardt_runtime_state(path: Path) -> dict[str, int | bool]:
+def bernhardt_runtime_record(path: Path) -> bytes:
     payload = path.read_bytes()
     ram = payload[GST_WORK_RAM_OFFSET:GST_WORK_RAM_OFFSET + WORK_RAM_BYTES]
     if len(ram) != WORK_RAM_BYTES:
@@ -87,15 +90,126 @@ def bernhardt_runtime_state(path: Path) -> dict[str, int | bool]:
         (RUNTIME_GROUP_BASE & 0xFFFF)
         + BERNHARDT_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
     )
-    flag = ram[record + RUNTIME_DEFEATED_FLAG_OFFSET]
+    return ram[record:record + RUNTIME_GROUP_SIZE]
+
+
+def bernhardt_runtime_state(path: Path) -> dict[str, int | bool]:
+    record = bernhardt_runtime_record(path)
+    flag = record[RUNTIME_DEFEATED_FLAG_OFFSET]
     return {
-        "class_id": ram[record],
-        "name_id": ram[record + 1],
+        "class_id": record[0],
+        "name_id": record[1],
         "defeated_flag": flag,
         "defeated": bool(flag & 0x80),
-        "hp": ram[record + RUNTIME_HP_OFFSET],
-        "x": ram[record + RUNTIME_X_OFFSET],
-        "y": ram[record + RUNTIME_X_OFFSET + 1],
+        "hp": record[RUNTIME_HP_OFFSET],
+        "x": record[RUNTIME_X_OFFSET],
+        "y": record[RUNTIME_X_OFFSET + 1],
+    }
+
+
+def require_staged_bernhardt(path: Path) -> dict[str, int | bool]:
+    """Require the diagnostic Start wrapper's exact one-HP battle state."""
+    state = bernhardt_runtime_state(path)
+    expected = {
+        "class_id": 0x4E,
+        "name_id": 0x0E,
+        "defeated": False,
+        "hp": probe_builder.PROBE_BERNHARDT_HP,
+        "x": probe_builder.PROBE_BERNHARDT_X,
+        "y": probe_builder.PROBE_BERNHARDT_Y,
+    }
+    mismatches = {
+        key: {"expected": value, "actual": state.get(key)}
+        for key, value in expected.items()
+        if state.get(key) != value
+    }
+    if mismatches:
+        raise RuntimeError(
+            "Scenario 27 diagnostic Start wrapper did not stage the exact "
+            f"Bernhardt root: {mismatches}"
+        )
+    return state
+
+
+def trigger_and_verify_start_wrapper(
+    recorder: matrix.RuntimeRecorder,
+) -> dict[str, object]:
+    """Open the real Start menu and prove its diagnostic HP-only effect.
+
+    ``gray.enter_battle_command`` stops in Elwin's unit command panel.  The
+    wrapper operand at ROM ``0x00F2E0`` is only consumed when the global Start
+    menu is opened, so merely reaching the unit panel cannot stage Bernhardt.
+    Keep the exact close/open/close/reopen input round trip explicit here.
+    """
+    before_gst = recorder.save_gst("states/before_start_wrapper.gst")
+    before_state = bernhardt_runtime_state(before_gst)
+    expected_before = {
+        "class_id": 0x4E,
+        "name_id": 0x0E,
+        "defeated": False,
+        "hp": BERNHARDT_INITIAL_HP,
+        "x": probe_builder.PROBE_BERNHARDT_X,
+        "y": probe_builder.PROBE_BERNHARDT_Y,
+    }
+    before_mismatches = {
+        key: {"expected": value, "actual": before_state.get(key)}
+        for key, value in expected_before.items()
+        if before_state.get(key) != value
+    }
+    if before_mismatches:
+        raise RuntimeError(
+            "Scenario 27 pre-wrapper Bernhardt root is unexpected: "
+            f"{before_mismatches}"
+        )
+
+    recorder.send(["b"], delay=0.8)
+    recorder.send(["start"], delay=1.0)
+    start_menu = recorder.capture("battle/start_wrapper_menu.png")
+    if first_turn.start_menu_cursor_row(start_menu) is None:
+        raise RuntimeError("Scenario 27 diagnostic did not open the Start menu")
+    staged_gst = recorder.save_gst("states/start_wrapper_staged.gst")
+    staged_state = require_staged_bernhardt(staged_gst)
+
+    before_record = bernhardt_runtime_record(before_gst)
+    staged_record = bernhardt_runtime_record(staged_gst)
+    changed_offsets = [
+        offset
+        for offset, (before, after) in enumerate(
+            zip(before_record, staged_record, strict=True)
+        )
+        if before != after
+    ]
+    if changed_offsets != [RUNTIME_HP_OFFSET]:
+        raise RuntimeError(
+            "Scenario 27 Start wrapper changed unexpected Bernhardt runtime "
+            f"bytes: {changed_offsets}"
+        )
+
+    recorder.send(["b"], delay=0.8)
+    recorder.send(["c"], delay=0.8)
+    command = recorder.capture("battle/turn1_command_staged.png")
+    if not sequence.battle_command_menu_visible(command):
+        raise RuntimeError(
+            "Scenario 27 diagnostic did not reopen Elwin's unit command menu"
+        )
+    pre_attack_gst = recorder.save_gst("states/pre_bernhardt_attack.gst")
+    pre_attack_state = require_staged_bernhardt(pre_attack_gst)
+    if bernhardt_runtime_record(pre_attack_gst) != staged_record:
+        raise RuntimeError(
+            "Scenario 27 Bernhardt runtime record changed while returning "
+            "from Start to Elwin's unit command menu"
+        )
+    return {
+        "before_gst": before_gst,
+        "before_state": before_state,
+        "start_menu": start_menu,
+        "staged_gst": staged_gst,
+        "staged_state": staged_state,
+        "changed_record_offsets": changed_offsets,
+        "command": command,
+        "pre_attack_gst": pre_attack_gst,
+        "pre_attack_state": pre_attack_state,
+        "action_sequence": ["b", "start", "b", "c"],
     }
 
 
@@ -215,6 +329,10 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
     if output.exists():
         raise FileExistsError(f"ending output already exists: {output}")
     output.mkdir(parents=True)
+    seed = {
+        "path": shared.relative(args.seed_gst),
+        "sha256": shared.sha256(args.seed_gst),
+    }
     runtime_name = f"s27-ending-{args.profile}-{args.run_id}"
     recorder = matrix.RuntimeRecorder(
         output,
@@ -234,7 +352,11 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
         preparation = recorder.capture("preparation.png")
         gray.enter_battle_command(recorder, args.rom, output)
         command = recorder.capture("battle/turn1_command.png")
-        pre_attack_gst = recorder.save_gst("states/pre_bernhardt_attack.gst")
+        wrapper_stage = trigger_and_verify_start_wrapper(recorder)
+        pre_attack_gst = wrapper_stage["pre_attack_gst"]
+        if not isinstance(pre_attack_gst, Path):
+            raise TypeError("Scenario 27 wrapper stage returned an invalid GST")
+        staged_bernhardt = wrapper_stage["pre_attack_state"]
 
         target = None
         post_battle_gst = None
@@ -255,9 +377,10 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
             target = recorder.capture(
                 f"battle/attempt_{attempt:02d}_bernhardt_target.png"
             )
-            # AT/DF zero does not eliminate the stock combat variance.  The
-            # retained command-menu state is replayed after a miss and this
-            # extra idle interval advances the untouched battle RNG.
+            # The diagnostic Start wrapper has already staged HP1. Retain the
+            # command-menu state only as bounded recovery if stock input or
+            # the battle transition does not complete on the first attempt;
+            # the ordinary combat/death handlers themselves stay untouched.
             time.sleep(args.retry_rng_delay * (attempt - 1))
             recorder.send(["c"], delay=0.25)
 
@@ -310,6 +433,9 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
             confirmation_delay=args.confirmation_delay,
         )
         fin_gst = recorder.save_gst("states/fin.gst")
+        seed_unchanged = shared.sha256(args.seed_gst) == seed["sha256"]
+        if not seed_unchanged:
+            raise RuntimeError("input seed GST changed during ending capture")
         report = {
             "schema_version": 1,
             "status": "pass",
@@ -321,12 +447,57 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
                 "sha256": shared.sha256(args.rom),
                 "md_checksum": matrix.md_checksum(args.rom),
             },
+            "seed": seed,
+            "seed_unchanged": seed_unchanged,
             "scenario_identity": identity,
             "preparation": shared.image_report(preparation),
             "turn1_command": shared.image_report(command),
+            "turn1_command_staged": shared.image_report(
+                wrapper_stage["command"]
+            ),
             "bernhardt_target": shared.image_report(target),
             "pre_attack_gst": shared.relative(pre_attack_gst),
             "pre_attack_gst_sha256": shared.sha256(pre_attack_gst),
+            "diagnostic_runtime_stage": {
+                "harness_only": True,
+                "natural_full_battle_clear": False,
+                "product_release_rom_changed": False,
+                "start_callback_operand_address": (
+                    f"0x{probe_builder.START_MENU_ENTRY_OPERAND:06X}"
+                ),
+                "start_wrapper_address": (
+                    f"0x{probe_builder.RUNTIME_WRAPPER:06X}"
+                ),
+                "stock_start_entry_address": (
+                    f"0x{probe_builder.START_MENU_ENTRY:06X}"
+                ),
+                "wrapper_sha256": hashlib.sha256(
+                    probe_builder.completion_hp_wrapper_code()
+                ).hexdigest(),
+                "trigger_action_sequence": wrapper_stage["action_sequence"],
+                "before_start_menu_gst": shared.relative(
+                    wrapper_stage["before_gst"]
+                ),
+                "before_start_menu_gst_sha256": shared.sha256(
+                    wrapper_stage["before_gst"]
+                ),
+                "start_menu": shared.image_report(
+                    wrapper_stage["start_menu"]
+                ),
+                "staged_gst": shared.relative(wrapper_stage["staged_gst"]),
+                "staged_gst_sha256": shared.sha256(
+                    wrapper_stage["staged_gst"]
+                ),
+                "target_runtime_record_changed_offsets": (
+                    wrapper_stage["changed_record_offsets"]
+                ),
+                "before_bernhardt": wrapper_stage["before_state"],
+                "runtime_hp_address": (
+                    f"0x{probe_builder.BERNHARDT_RUNTIME_HP_ADDRESS:08X}"
+                ),
+                "bernhardt": staged_bernhardt,
+                "ordinary_stock_attack_death_and_ending_handlers": True,
+            },
             "attack_attempts": attack_attempts,
             "battle_frames": battle_frames,
             "post_battle_gst": shared.relative(post_battle_gst),
@@ -364,6 +535,8 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
                 "sha256": shared.sha256(args.rom),
                 "md_checksum": matrix.md_checksum(args.rom),
             },
+            "seed": seed,
+            "seed_unchanged": shared.sha256(args.seed_gst) == seed["sha256"],
             "error_type": type(exc).__name__,
             "error": str(exc),
             "failure_gst": failure_gst,
@@ -383,7 +556,9 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("normal", "hard"), required=True)
+    parser.add_argument(
+        "--profile", choices=("pure", "normal", "hard"), required=True
+    )
     parser.add_argument("--rom", type=Path, required=True)
     parser.add_argument("--seed-gst", type=Path, default=matrix.DEFAULT_SEED_GST)
     parser.add_argument("--display", default=matrix.DEFAULT_DISPLAY)

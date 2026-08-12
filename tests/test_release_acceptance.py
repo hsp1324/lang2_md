@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -6,7 +7,7 @@ from tools import release_acceptance
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+ROM = ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.6).md"
 
 
 class ReleaseAcceptanceTests(unittest.TestCase):
@@ -28,13 +29,25 @@ class ReleaseAcceptanceTests(unittest.TestCase):
         ]
         self.assertEqual(failures, [])
 
+    def test_checked_reports_match_public_release(self):
+        self.assertEqual(
+            json.loads(
+                release_acceptance.JSON_OUTPUT.read_text(encoding="utf-8")
+            ),
+            json.loads(json.dumps(self.inventory, ensure_ascii=False)),
+        )
+        self.assertEqual(
+            release_acceptance.MARKDOWN_OUTPUT.read_text(encoding="utf-8"),
+            release_acceptance.render_markdown(self.inventory),
+        )
+
     def test_release_identity_is_locked(self):
         release = self.inventory["release"]
         self.assertEqual(release["size"], 0x400000)
-        self.assertEqual(release["header_checksum"], "99FD")
+        self.assertEqual(release["header_checksum"], "1F84")
         self.assertEqual(
             release["sha256"],
-            "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
+            "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
         )
 
     def test_verification_lineage_is_not_relabelled(self):
@@ -42,10 +55,10 @@ class ReleaseAcceptanceTests(unittest.TestCase):
         self.assertEqual(lineage["runtime_matrix_checksum"], "1AB2")
         self.assertEqual(
             lineage["last_full_game_baseline_checksum"],
-            "5ED9",
+            "54C2",
         )
-        self.assertEqual(lineage["candidate_checksum"], "99FD")
-        self.assertEqual(lineage["candidate_delta_changed_bytes"], 2244)
+        self.assertEqual(lineage["candidate_checksum"], "1F84")
+        self.assertEqual(lineage["candidate_delta_changed_bytes"], 725)
         self.assertEqual(
             lineage["candidate_delta_unclassified_bytes"],
             0,

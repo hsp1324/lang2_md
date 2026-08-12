@@ -15,6 +15,20 @@ class HardModeScenarioSmokeTests(unittest.TestCase):
         cls.manifest = json.loads(
             scenario_runtime.DEFAULT_RESULTS.read_text(encoding="utf-8")
         )
+        current_build = json.loads(
+            (ROOT / "localization/hard_mode_build.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        if (
+            cls.manifest["hard_rom"]["sha256"]
+            != current_build["hard"]["sha256"]
+        ):
+            raise unittest.SkipTest(
+                "retained legacy scenario-smoke evidence does not match the "
+                "current candidate; current v1.3.7 scenario acceptance is "
+                "performed by the v1.3.7 final gate"
+            )
         cls.plan = hard_mode_plan.build_plan()
 
     def test_runtime_evidence_reaches_current_candidate_through_owned_deltas(

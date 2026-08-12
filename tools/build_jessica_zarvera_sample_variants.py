@@ -34,7 +34,7 @@ from tools.build_class_sprite_assets import (
 
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sample-class-variants-v1/"
+    / "assets/class-sprites/source/latest/sample-class-variants-v1/"
     "jessica-zarvera"
 )
 TRANSPARENT = (0, 0, 0, 0)

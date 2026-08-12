@@ -4,7 +4,6 @@ import unittest
 from scripts import build_korean_jp_probe as builder
 from tools.analyze_preparation_vram_ownership import (
     load_gst,
-    referenced_tiles,
     reserved_table_tiles,
     sprite_referenced_tiles,
 )
@@ -129,21 +128,18 @@ class BattleDynamicGlyphVramOwnershipTests(unittest.TestCase):
         relocated = set(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS)
         self.assertTrue(relocated <= set(builder.BYTE_UI_DYNAMIC_MAP_TILE_IDS))
 
-        used = set()
         reserved = set()
         for path in sorted((ROOT / "captures/analysis").glob("*.gst")):
             state = load_gst(path)
-            used.update(referenced_tiles(state))
             reserved.update(reserved_table_tiles(state))
-        # Slots 4/6 deliberately reuse two blank cells whose only retained
-        # Plane references belong to non-battle class-change/dialogue layouts.
-        # Every other battle slot remains fully absent from the old retained
-        # owner set, and all battle slots stay clear of linked SAT sprites.
-        battle_only_blank = set(builder.BATTLE_DYNAMIC_STALE_WINDOW_TILES)
-        self.assertTrue((relocated - battle_only_blank).isdisjoint(used))
+        # Current battle states legitimately reference these patterns from the
+        # name/class fields after the dynamic renderer uploads Hangul.  A
+        # blanket Plane/Window reference scan therefore treats successful text
+        # rendering as an ownership collision.  The actual collision contracts
+        # are that no linked SAT sprite and no live VDP table owns a destination.
         for path in sorted((ROOT / "captures/analysis").glob("*.gst")):
             self.assertTrue(
-                battle_only_blank.isdisjoint(
+                relocated.isdisjoint(
                     sprite_referenced_tiles(load_gst(path))
                 )
             )
@@ -152,10 +148,24 @@ class BattleDynamicGlyphVramOwnershipTests(unittest.TestCase):
     def test_map_slots_avoid_all_live_vdp_tables_in_current_battle_states(self) -> None:
         states = sorted(
             (ROOT / "captures/run/gray_acted_surface_matrix").glob(
-                "*/*/gray-cache-full01/attempts/*/states/active_command.gst"
+                "*/*/*/attempts/*/states/active_command.gst"
             )
         )
-        self.assertEqual(len(states), 27)
+        # Retained evidence covers at least the 16-scenario normal/hard
+        # acted-sprite matrix.  Check every retained state instead of pinning a
+        # retired run-id or rejecting later supplemental captures.
+        self.assertGreaterEqual(len(states), 32)
+        covered = {
+            (path.parts[-7], path.parts[-6])
+            for path in states
+        }
+        self.assertTrue(
+            {
+                (profile, f"s{scenario:02d}")
+                for profile in ("normal", "hard")
+                for scenario in range(1, 17)
+            }.issubset(covered)
+        )
         for path in states:
             with self.subTest(path=path):
                 reserved = reserved_table_tiles(load_gst(path))

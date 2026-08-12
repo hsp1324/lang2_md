@@ -831,7 +831,10 @@ WORD_STREAM_CONTROLS = {
 SCENARIO_LEVEL_PREFIX = 0x09B2E7
 SCENARIO_LEVEL_PREFIX_HOOK = 0x025CDC
 SCENARIO_LEVEL_PREFIX_HOOK_BYTES = bytes.fromhex("41 F9 00 09 B2 E7")
-SCENARIO_LEVEL_PREFIX_EVIDENCE = "captures/run/1391_s19_canonical_brief_06.png"
+SCENARIO_LEVEL_PREFIX_EVIDENCE = (
+    "captures/run/preparation_surface_matrix/pure/s19/"
+    "v137-frozen-current-prefix-20260812/briefing/attempt_1/detect_06.png"
+)
 
 HALFWIDTH_ALLOWED = {0x20, *range(0xA1, 0xE0)}
 ASCII_ALLOWED = {

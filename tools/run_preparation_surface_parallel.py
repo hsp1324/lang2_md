@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import queue
+import shutil
 import socket
 import subprocess
 import sys
@@ -28,6 +29,7 @@ DEFAULT_XVFB_LIBRARY_PATH = Path(
     "/tmp/lang2-xvfb-root/usr/lib/x86_64-linux-gnu"
 )
 DEFAULT_DISPLAY_BASE = 120
+MIN_ISOLATED_DISPLAY_NUMBER = 100
 DEFAULT_WORKERS = 6
 MAX_WORKERS = 12
 
@@ -57,7 +59,14 @@ def parse_scenarios(value: str) -> list[int]:
 def display_number(display: str) -> int:
     if not display.startswith(":") or not display[1:].isdigit():
         raise ValueError(f"parallel worker needs a simple X display: {display}")
-    return int(display[1:])
+    number = int(display[1:])
+    if number < MIN_ISOLATED_DISPLAY_NUMBER:
+        raise ValueError(
+            "refusing a low-numbered/possibly physical X display; isolated "
+            f"Xvfb displays must be :{MIN_ISOLATED_DISPLAY_NUMBER} or higher: "
+            f"{display}"
+        )
+    return number
 
 
 def wait_for_xvfb(display: str, process: subprocess.Popen[bytes]) -> None:
@@ -85,6 +94,9 @@ def start_xvfb(
     library_path: Path,
     display: str,
 ) -> subprocess.Popen[bytes]:
+    # Validate before spawning anything.  A post-launch check could already
+    # have attempted to claim the user's physical X server number.
+    display_number(display)
     environment = os.environ.copy()
     environment["LD_LIBRARY_PATH"] = str(library_path)
     process = subprocess.Popen(
@@ -120,6 +132,14 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: source.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def relative(path: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        return str(resolved)
 
 
 def run_one(
@@ -190,6 +210,10 @@ def run_one(
 
 
 def run_parallel(args: argparse.Namespace) -> dict[str, object]:
+    seed = {
+        "path": relative(args.seed_gst),
+        "sha256": sha256(args.seed_gst),
+    }
     workers = min(args.workers, len(args.scenarios))
     displays = [f":{args.display_base + index}" for index in range(workers)]
     xvfb_processes: list[subprocess.Popen[bytes]] = []
@@ -206,17 +230,41 @@ def run_parallel(args: argparse.Namespace) -> dict[str, object]:
         def assigned(scenario: int) -> dict[str, object]:
             display = available.get()
             try:
-                return run_one(
-                    profile=args.profile,
-                    scenario=scenario,
-                    rom=args.rom,
-                    reference_rom=args.reference_rom,
-                    seed_gst=args.seed_gst,
-                    display=display,
-                    output_root=args.output_root,
-                    runtime_root=args.runtime_root,
-                    run_id=args.run_id,
-                )
+                attempts = []
+                for attempt in range(1, args.attempts + 1):
+                    output = (
+                        args.output_root
+                        / args.profile
+                        / f"s{scenario:02d}"
+                        / args.run_id
+                    )
+                    if attempt > 1 and output.exists():
+                        shutil.rmtree(output)
+                    row = run_one(
+                        profile=args.profile,
+                        scenario=scenario,
+                        rom=args.rom,
+                        reference_rom=args.reference_rom,
+                        seed_gst=args.seed_gst,
+                        display=display,
+                        output_root=args.output_root,
+                        runtime_root=args.runtime_root,
+                        run_id=args.run_id,
+                    )
+                    row["attempt"] = attempt
+                    attempts.append({
+                        "attempt": attempt,
+                        "returncode": row.get("returncode"),
+                        "status": row.get("status"),
+                        "elapsed_seconds": row.get("elapsed_seconds"),
+                    })
+                    if (
+                        row.get("returncode") == 0
+                        and row.get("status") == "captured_exact_unreviewed"
+                    ):
+                        break
+                row["attempt_history"] = attempts
+                return row
             finally:
                 available.put(display)
 
@@ -252,17 +300,25 @@ def run_parallel(args: argparse.Namespace) -> dict[str, object]:
         if row.get("returncode") == 0
         and row.get("status") == "captured_exact_unreviewed"
     ]
+    seed_unchanged = sha256(args.seed_gst) == seed["sha256"]
     return {
         "schema_version": 1,
-        "status": "pass" if len(passed) == len(rows) else "fail",
+        "status": (
+            "pass"
+            if len(passed) == len(rows) and seed_unchanged
+            else "fail"
+        ),
         "profile": args.profile,
         "rom": {
-            "path": str(args.rom.relative_to(ROOT)),
+            "path": relative(args.rom),
             "sha256": sha256(args.rom),
             "md_checksum": matrix.md_checksum(args.rom),
         },
+        "seed": seed,
+        "seed_unchanged": seed_unchanged,
         "run_id": args.run_id,
         "workers": workers,
+        "attempts_per_scenario": args.attempts,
         "display_base": args.display_base,
         "scenarios": args.scenarios,
         "elapsed_seconds": round(time.monotonic() - started, 3),
@@ -281,6 +337,12 @@ def main() -> int:
     parser.add_argument("--seed-gst", type=Path, default=matrix.DEFAULT_SEED_GST)
     parser.add_argument("--scenarios", type=parse_scenarios, default=parse_scenarios("1-31"))
     parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
+    parser.add_argument(
+        "--attempts",
+        type=int,
+        default=2,
+        help="isolated retry attempts for transient emulator startup failures",
+    )
     parser.add_argument("--display-base", type=int, default=DEFAULT_DISPLAY_BASE)
     parser.add_argument("--xvfb", type=Path, default=DEFAULT_XVFB)
     parser.add_argument(
@@ -304,8 +366,12 @@ def main() -> int:
 
     if not 1 <= args.workers <= MAX_WORKERS:
         parser.error(f"--workers must be 1..{MAX_WORKERS}")
-    if not 1 <= args.display_base <= 999 - args.workers:
-        parser.error("--display-base does not leave room for every worker")
+    if not 1 <= args.attempts <= 4:
+        parser.error("--attempts must be 1..4")
+    if not MIN_ISOLATED_DISPLAY_NUMBER <= args.display_base <= 999 - args.workers:
+        parser.error(
+            "--display-base must be at least 100 and leave room for every worker"
+        )
     for label, path in (
         ("ROM", args.rom),
         ("reference ROM", args.reference_rom),
@@ -327,6 +393,7 @@ def main() -> int:
             "profile": args.profile,
             "rom": str(args.rom),
             "workers": min(args.workers, len(args.scenarios)),
+            "attempts": args.attempts,
             "displays": [
                 f":{args.display_base + index}"
                 for index in range(min(args.workers, len(args.scenarios)))

@@ -19,7 +19,9 @@ if str(ROOT) not in sys.path:
 
 from scripts import build_korean_jp_probe as korean_builder
 from tools import hard_mode_approval
+from tools import hard_mode_npc_survival
 from tools import rom_update
+from tools import scenario_data
 from tools.rom_version import get_profile
 
 
@@ -28,8 +30,13 @@ DEFAULT_BUILD_MANIFEST = ROOT / "localization/hard_mode_build.json"
 DEFAULT_APPLIED_PLAN = ROOT / "localization/hard_mode_plan.json"
 
 FIXED_RECORD_SIZE = 0x24
+SIDE_ID_OFFSET = 0x08
+LEVEL_OFFSET = 0x0E
 COMMANDER_AT_OFFSET = 0x12
 COMMANDER_DF_OFFSET = 0x13
+X_OFFSET = 0x18
+Y_OFFSET = 0x19
+NAME_ID_OFFSET = 0x1A
 CLASS_ID_OFFSET = 0x1B
 HARD_CORRECTION_INDEX_OFFSET = 0x1D
 MERCENARY_OFFSET = 0x1E
@@ -41,6 +48,12 @@ SOLDIER_CORRECTION_HOOK_SOURCE = bytes.fromhex(
 )
 SOLDIER_CORRECTION_ROUTINE = 0x300000
 SOLDIER_CORRECTION_TABLE = 0x300080
+DYNAMIC_NPC_CORRECTION_HOOK = 0x010CFE
+DYNAMIC_NPC_CORRECTION_HOOK_SOURCE = bytes.fromhex(
+    "4C DF 18 0E 4E 75"
+)
+DYNAMIC_NPC_CORRECTION_ROUTINE = 0x300120
+DYNAMIC_NPC_CORRECTION_TABLE = 0x300160
 SOLDIER_CORRECTION_AREA_END = 0x300200
 
 
@@ -91,12 +104,58 @@ def correction_hook() -> bytes:
     )
 
 
+def dynamic_npc_correction_routine(
+    table_address: int = DYNAMIC_NPC_CORRECTION_TABLE,
+) -> bytes:
+    """Add Hard-only defense deltas after the stock roster rewrite.
+
+    The stock loader takes fixed records whose name ID is playable (1..11)
+    through a separate path.  That path preserves the fixed-record tag at
+    ``-7(a0)`` but recalculates class, level and combat values from the saved
+    roster.  At its epilogue ``a1`` already points one 0x60-byte group beyond
+    the rewritten NPC, so only DF/D+ are adjusted relative to that live data.
+    """
+    return (
+        bytes.fromhex(
+            "74 00"              # moveq #0,d2
+            "14 28 FF F9"        # move.b -7(a0),d2 (record tag)
+            "0C 02 00 FF"        # cmpi.b #$ff,d2
+            "67 18"              # beq.b restore
+            "D4 42"              # add.w d2,d2
+            "47 F9"
+        )
+        + table_address.to_bytes(4, "big")
+        + bytes.fromhex(
+            "12 33 20 00"        # move.b (a3,d2.w),d1 (DF delta)
+            "D3 29 FF DB"        # add.b d1,-$25(a1) (group+$3B)
+            "12 33 20 01"        # move.b 1(a3,d2.w),d1 (D+ delta)
+            "D3 29 FF E7"        # add.b d1,-$19(a1) (group+$47)
+            "4C DF 18 0E"        # stock epilogue: restore d1-d3/a3-a4
+            "4E 75"              # rts
+        )
+    )
+
+
+def dynamic_npc_correction_hook() -> bytes:
+    return bytes.fromhex("4E F9") + DYNAMIC_NPC_CORRECTION_ROUTINE.to_bytes(
+        4, "big"
+    )
+
+
 def _planned_records(plan: dict[str, Any]) -> list[tuple[int, dict[str, Any]]]:
     return [
         (int(scenario["number"]), record)
         for scenario in plan["scenarios"]
         for record in scenario["records"]
     ]
+
+
+def _npc_protection_records(
+    plan: dict[str, Any],
+) -> list[tuple[int, dict[str, Any]]]:
+    section = plan.get("npc_survival_protection", {})
+    hard_mode_npc_survival.validate_section(section)
+    return list(hard_mode_npc_survival.protection_records(section))
 
 
 def _correction_pairs(plan: dict[str, Any]) -> list[tuple[int, int]]:
@@ -107,10 +166,57 @@ def _correction_pairs(plan: dict[str, Any]) -> list[tuple[int, int]]:
         )
         for _, record in _planned_records(plan)
     }
+    pairs.update({
+        (
+            int(record["soldier_correction"]["at"]),
+            int(record["soldier_correction"]["df"]["planned"]),
+        )
+        for _, record in _npc_protection_records(plan)
+    })
     result = sorted(pairs)
     if len(result) >= 0xFF:
         raise ValueError("hard correction table needs more than 254 indexes")
     return result
+
+
+def _dynamic_npc_delta_table(
+    plan: dict[str, Any],
+    pairs: list[tuple[int, int]] | None = None,
+) -> bytes:
+    """Return a tag-indexed table used only by the playable-NPC path."""
+    pairs = pairs or _correction_pairs(plan)
+    pair_index = {pair: index for index, pair in enumerate(pairs)}
+    deltas: dict[int, tuple[int, int]] = {}
+    for scenario in plan["npc_survival_protection"]["scenarios"]:
+        commander_delta = int(
+            scenario["enemy_attack_offset"]["commander_at_delta"]
+        )
+        soldier_delta = int(
+            scenario["enemy_attack_offset"][
+                "soldier_at_correction_delta"
+            ]
+        )
+        for record in scenario["records"]:
+            if int(str(record["name_id"]), 16) > 0x0B:
+                continue
+            correction = (
+                int(record["soldier_correction"]["at"]),
+                int(record["soldier_correction"]["df"]["planned"]),
+            )
+            index = pair_index[correction]
+            delta = (commander_delta, soldier_delta)
+            previous = deltas.setdefault(index, delta)
+            if previous != delta:
+                raise ValueError(
+                    "playable NPC correction tag has conflicting deltas: "
+                    f"{index}: {previous!r} != {delta!r}"
+                )
+    table = bytearray(len(pairs) * 2)
+    for index, (commander_delta, soldier_delta) in deltas.items():
+        table[index * 2:index * 2 + 2] = bytes(
+            (_encoded_byte(commander_delta), _encoded_byte(soldier_delta))
+        )
+    return bytes(table)
 
 
 def validate_plan_approval(
@@ -141,6 +247,9 @@ def load_applied_plan(path: Path = DEFAULT_APPLIED_PLAN) -> dict[str, Any]:
     scenarios = plan.get("scenarios", [])
     if [int(row["number"]) for row in scenarios] != list(range(1, 32)):
         raise ValueError("hard-mode plan must contain scenarios 1..31")
+    hard_mode_npc_survival.validate_section(
+        plan.get("npc_survival_protection", {})
+    )
     return plan
 
 
@@ -170,6 +279,24 @@ def verify_applied_hard_mode(
         SOLDIER_CORRECTION_TABLE + len(table)
     ] != table:
         raise ValueError("Standard Hard soldier-correction table differs")
+    if payload[
+        DYNAMIC_NPC_CORRECTION_HOOK:
+        DYNAMIC_NPC_CORRECTION_HOOK
+        + len(dynamic_npc_correction_hook())
+    ] != dynamic_npc_correction_hook():
+        raise ValueError("Hard playable-NPC correction hook is absent")
+    dynamic_routine = dynamic_npc_correction_routine()
+    if payload[
+        DYNAMIC_NPC_CORRECTION_ROUTINE:
+        DYNAMIC_NPC_CORRECTION_ROUTINE + len(dynamic_routine)
+    ] != dynamic_routine:
+        raise ValueError("Hard playable-NPC correction routine is absent")
+    dynamic_table = _dynamic_npc_delta_table(plan, pairs)
+    if payload[
+        DYNAMIC_NPC_CORRECTION_TABLE:
+        DYNAMIC_NPC_CORRECTION_TABLE + len(dynamic_table)
+    ] != dynamic_table:
+        raise ValueError("Hard playable-NPC correction table differs")
     pair_index = {pair: index for index, pair in enumerate(pairs)}
     for scenario_number, record in _planned_records(plan):
         offset = int(str(record["offset"]), 16)
@@ -197,6 +324,53 @@ def verify_applied_hard_mode(
                 f"Scenario {scenario_number} hard record differs at "
                 f"0x{offset:06X}: {actual!r} != {expected!r}"
             )
+    for scenario_number, record in _npc_protection_records(plan):
+        offset = int(str(record["offset"]), 16)
+        layout = scenario_data.scenario_layout(payload, scenario_number)
+        indexed_offset = (
+            layout.records_offset
+            + int(record["index"]) * FIXED_RECORD_SIZE
+        )
+        if indexed_offset != offset:
+            raise ValueError(
+                f"Scenario {scenario_number} protected NPC index differs: "
+                f"0x{indexed_offset:06X} != 0x{offset:06X}"
+            )
+        soldier = record["soldier_correction"]
+        expected = {
+            "side": 0x03,
+            "level": int(record["level"]),
+            "at": _encoded_byte(int(record["commander_at"])),
+            "df": _encoded_byte(int(record["commander_df"]["planned"])),
+            "x": int(record["x"]),
+            "y": int(record["y"]),
+            "name": int(str(record["name_id"]), 16),
+            "class": int(str(record["class_id"]), 16),
+            "tag": pair_index[(
+                int(soldier["at"]),
+                int(soldier["df"]["planned"]),
+            )],
+            "mercenaries": bytes(record["mercenaries"]),
+        }
+        actual = {
+            "side": payload[offset + SIDE_ID_OFFSET],
+            "level": payload[offset + LEVEL_OFFSET],
+            "at": payload[offset + COMMANDER_AT_OFFSET],
+            "df": payload[offset + COMMANDER_DF_OFFSET],
+            "x": payload[offset + X_OFFSET],
+            "y": payload[offset + Y_OFFSET],
+            "name": payload[offset + NAME_ID_OFFSET],
+            "class": payload[offset + CLASS_ID_OFFSET],
+            "tag": payload[offset + HARD_CORRECTION_INDEX_OFFSET],
+            "mercenaries": payload[
+                offset + MERCENARY_OFFSET:offset + FIXED_RECORD_SIZE
+            ],
+        }
+        if actual != expected:
+            raise ValueError(
+                f"Scenario {scenario_number} protected NPC differs at "
+                f"0x{offset:06X}: {actual!r} != {expected!r}"
+            )
 
 
 def apply_hard_mode(
@@ -217,6 +391,15 @@ def apply_hard_mode(
         != SOLDIER_CORRECTION_HOOK_SOURCE
     ):
         raise ValueError("fixed-unit soldier correction hook source changed")
+    if (
+        data[
+            DYNAMIC_NPC_CORRECTION_HOOK:
+            DYNAMIC_NPC_CORRECTION_HOOK
+            + len(DYNAMIC_NPC_CORRECTION_HOOK_SOURCE)
+        ]
+        != DYNAMIC_NPC_CORRECTION_HOOK_SOURCE
+    ):
+        raise ValueError("playable-NPC loader epilogue source changed")
     if any(
         value != 0xFF
         for value in data[
@@ -232,6 +415,7 @@ def apply_hard_mode(
     soldier_changes = 0
     mercenary_changes = 0
     summon_changes = 0
+    npc_protection_changes = 0
     for scenario_number, record in _planned_records(plan):
         offset = int(str(record["offset"]), 16)
         if offset in target_offsets:
@@ -336,12 +520,74 @@ def apply_hard_mode(
         mercenary_changes += len(conventional_rows)
         summon_changes += len(summon_rows)
 
+    for scenario_number, record in _npc_protection_records(plan):
+        offset = int(str(record["offset"]), 16)
+        layout = scenario_data.scenario_layout(data, scenario_number)
+        indexed_offset = (
+            layout.records_offset
+            + int(record["index"]) * FIXED_RECORD_SIZE
+        )
+        if indexed_offset != offset:
+            raise ValueError(
+                f"Scenario {scenario_number} protected NPC index differs: "
+                f"0x{indexed_offset:06X} != 0x{offset:06X}"
+            )
+        if offset in target_offsets:
+            raise ValueError(
+                f"duplicate protected NPC hard-mode record: 0x{offset:06X}"
+            )
+        target_offsets.add(offset)
+        expected = {
+            "side": 0x03,
+            "level": int(record["level"]),
+            "at": _encoded_byte(int(record["commander_at"])),
+            "df": _encoded_byte(int(record["commander_df"]["original"])),
+            "x": int(record["x"]),
+            "y": int(record["y"]),
+            "name": int(str(record["name_id"]), 16),
+            "class": int(str(record["class_id"]), 16),
+            "tag": 0xFF,
+            "mercenaries": bytes(record["mercenaries"]),
+        }
+        actual = {
+            "side": data[offset + SIDE_ID_OFFSET],
+            "level": data[offset + LEVEL_OFFSET],
+            "at": data[offset + COMMANDER_AT_OFFSET],
+            "df": data[offset + COMMANDER_DF_OFFSET],
+            "x": data[offset + X_OFFSET],
+            "y": data[offset + Y_OFFSET],
+            "name": data[offset + NAME_ID_OFFSET],
+            "class": data[offset + CLASS_ID_OFFSET],
+            "tag": data[offset + HARD_CORRECTION_INDEX_OFFSET],
+            "mercenaries": bytes(data[
+                offset + MERCENARY_OFFSET:offset + FIXED_RECORD_SIZE
+            ]),
+        }
+        if actual != expected:
+            raise ValueError(
+                f"Scenario {scenario_number} protected NPC source differs "
+                f"at 0x{offset:06X}: {actual!r} != {expected!r}"
+            )
+        soldier = record["soldier_correction"]
+        correction = (
+            int(soldier["at"]),
+            int(soldier["df"]["planned"]),
+        )
+        data[offset + COMMANDER_DF_OFFSET] = _encoded_byte(
+            int(record["commander_df"]["planned"])
+        )
+        data[offset + HARD_CORRECTION_INDEX_OFFSET] = pair_index[correction]
+        npc_protection_changes += 1
+
     routine = correction_routine()
     hook = correction_hook()
     table = b"".join(
         bytes((_encoded_byte(at), _encoded_byte(df)))
         for at, df in pairs
     )
+    dynamic_routine = dynamic_npc_correction_routine()
+    dynamic_hook = dynamic_npc_correction_hook()
+    dynamic_table = _dynamic_npc_delta_table(plan, pairs)
     data[
         SOLDIER_CORRECTION_HOOK:
         SOLDIER_CORRECTION_HOOK + len(hook)
@@ -354,6 +600,18 @@ def apply_hard_mode(
         SOLDIER_CORRECTION_TABLE:
         SOLDIER_CORRECTION_TABLE + len(table)
     ] = table
+    data[
+        DYNAMIC_NPC_CORRECTION_HOOK:
+        DYNAMIC_NPC_CORRECTION_HOOK + len(dynamic_hook)
+    ] = dynamic_hook
+    data[
+        DYNAMIC_NPC_CORRECTION_ROUTINE:
+        DYNAMIC_NPC_CORRECTION_ROUTINE + len(dynamic_routine)
+    ] = dynamic_routine
+    data[
+        DYNAMIC_NPC_CORRECTION_TABLE:
+        DYNAMIC_NPC_CORRECTION_TABLE + len(dynamic_table)
+    ] = dynamic_table
 
     checksum = korean_builder.update_md_checksum(data)
     payload = bytes(data)
@@ -383,7 +641,11 @@ def apply_hard_mode(
             ).hex().upper(),
         },
         "implementation": {
-            "target_record_count": len(target_offsets),
+            "target_record_count": len(_planned_records(plan)),
+            "npc_survival_protection_record_count": (
+                npc_protection_changes
+            ),
+            "total_fixed_record_count": len(target_offsets),
             "commander_change_record_count": commander_changes,
             "soldier_correction_record_count": soldier_changes,
             "mercenary_replacement_slot_count": mercenary_changes,
@@ -396,7 +658,23 @@ def apply_hard_mode(
             "loader_hook": f"0x{SOLDIER_CORRECTION_HOOK:06X}",
             "loader_routine": f"0x{SOLDIER_CORRECTION_ROUTINE:06X}",
             "correction_table": f"0x{SOLDIER_CORRECTION_TABLE:06X}",
+            "dynamic_npc_loader_hook": (
+                f"0x{DYNAMIC_NPC_CORRECTION_HOOK:06X}"
+            ),
+            "dynamic_npc_loader_routine": (
+                f"0x{DYNAMIC_NPC_CORRECTION_ROUTINE:06X}"
+            ),
+            "dynamic_npc_delta_table": (
+                f"0x{DYNAMIC_NPC_CORRECTION_TABLE:06X}"
+            ),
+            "dynamic_npc_delta_record_count": sum(
+                1
+                for index in range(0, len(dynamic_table), 2)
+                if dynamic_table[index:index + 2] != b"\x00\x00"
+            ),
             "shared_class_records_modified": False,
+            "original_profile_modified": False,
+            "normal_profile_modified": False,
             "custom_class_map_sprites": {
                 "count": len(
                     korean_builder.AI_CLASS_MAP_SPRITE_SPECS

@@ -28395,7 +28395,7 @@
             "0x19902C"
           ],
           "modified": true,
-          "modified_word_count": 41,
+          "modified_word_count": 39,
           "physical_page_count": 1,
           "physical_pages": [
             {
@@ -28404,7 +28404,7 @@
               "terminator": "0xFFFF",
               "tokens": "FFF7 0014 00AA 00AA 006C FFFE 0081 0073 0064 0073 00BF 00E0 0000 002A 0019 0032 004A 003B 0063 0089 0079 FFFE 00E8 009C 0077 00E8 0130 0131 0073 0080 0063 0096 01B5 0096 007D FFFE 00C2 0146 00AA 00AA 006C FFFF",
               "modified": true,
-              "modified_word_count": 41
+              "modified_word_count": 39
             }
           ]
         },

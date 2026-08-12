@@ -124,6 +124,34 @@ def wait_for_result(
     )
 
 
+def wait_for_save_menu(
+    recorder: matrix.RuntimeRecorder,
+    *,
+    max_frames: int,
+    settle_delay: float,
+    button_delay: float,
+) -> tuple[Path, int, list[dict[str, object]]]:
+    observations: list[dict[str, object]] = []
+    for frame in range(1, max_frames + 1):
+        time.sleep(settle_delay)
+        capture = recorder.capture(f"save/advance_{frame:03d}.png")
+        surface = classify_surface(capture)
+        observations.append(
+            {
+                "frame": frame,
+                "surface": surface,
+                "capture": relative(capture),
+                "sha256": sha256(capture),
+            }
+        )
+        if surface == "save_menu":
+            return capture, frame, observations
+        recorder.send(["c"], delay=button_delay)
+    raise RuntimeError(
+        f"save menu not reached within {max_frames} stable surfaces"
+    )
+
+
 def run_capture(args: argparse.Namespace) -> dict[str, object]:
     direction = SCENARIO_MOVE_DIRECTIONS[args.scenario]
     output = (
@@ -169,6 +197,16 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
         result = output / "battle/battle_result.png"
         shutil.copy2(result_source, result)
         result_gst = recorder.save_gst("states/battle_result.gst")
+        recorder.send(["c"], delay=args.button_delay)
+        save_source, save_frame, save_observations = wait_for_save_menu(
+            recorder,
+            max_frames=args.max_save_frames,
+            settle_delay=args.settle_delay,
+            button_delay=args.button_delay,
+        )
+        save_menu = output / "save/save_menu.png"
+        shutil.copy2(save_source, save_menu)
+        save_gst = recorder.save_gst("states/save_menu.gst")
         report = {
             "schema_version": 1,
             "status": "pass",
@@ -192,6 +230,14 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
                 "bytes": result_gst.stat().st_size,
             },
             "observations": observations,
+            "save_menu_frame": save_frame,
+            "save_menu": image_report(save_menu),
+            "save_menu_gst": {
+                "path": relative(save_gst),
+                "sha256": sha256(save_gst),
+                "bytes": save_gst.stat().st_size,
+            },
+            "save_observations": save_observations,
             "elapsed_seconds": round(time.monotonic() - started, 3),
             "captures": recorder.captures,
             "actions": recorder.actions,
@@ -239,7 +285,9 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("normal", "hard"), required=True)
+    parser.add_argument(
+        "--profile", choices=("pure", "normal", "hard"), required=True
+    )
     parser.add_argument(
         "--scenario",
         type=int,
@@ -253,6 +301,7 @@ def main() -> int:
     parser.add_argument("--runtime-root", type=Path, default=matrix.DEFAULT_RUNTIME_ROOT)
     parser.add_argument("--run-id", type=matrix.validate_run_id, required=True)
     parser.add_argument("--max-frames", type=int, default=160)
+    parser.add_argument("--max-save-frames", type=int, default=100)
     parser.add_argument("--settle-delay", type=float, default=0.8)
     parser.add_argument("--button-delay", type=float, default=0.35)
     args = parser.parse_args()
@@ -260,8 +309,8 @@ def main() -> int:
     args.seed_gst = args.seed_gst.resolve()
     args.output_root = args.output_root.resolve()
     args.runtime_root = args.runtime_root.resolve()
-    if args.max_frames < 1:
-        parser.error("--max-frames must be positive")
+    if args.max_frames < 1 or args.max_save_frames < 1:
+        parser.error("frame limits must be positive")
     if args.settle_delay < 0 or args.button_delay < 0:
         parser.error("delays must not be negative")
     for label, path in (("ROM", args.rom), ("seed GST", args.seed_gst)):

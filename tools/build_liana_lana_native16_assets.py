@@ -29,7 +29,7 @@ from tools.build_test_class_sprite_assets import class_tiers
 
 OUTPUT_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/liana-lana-paired"
+    / "assets/class-sprites/source/latest/liana-lana-paired"
 )
 MASK_PATH = ROOT / "editor/ai_identity_masks.json"
 TRANSPARENT = (0, 0, 0, 0)

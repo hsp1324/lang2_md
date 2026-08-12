@@ -1,14 +1,28 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
 import unittest
 
-from PIL import Image
+from tools.build_ai_class_sprite_assets import (
+    ASSET_VERSION,
+    SHARED_CLASS_TEMPLATE_SOURCES,
+)
+from tools.pillow_compat import flattened_image_data
+
+from tests.ai_class_asset_contract import (
+    LIVE_ROOT,
+    compose_untranslated_shared_source,
+    design_overrides,
+    manifest,
+    manifest_row,
+    pixels,
+    rgba,
+)
 
 
-ROOT = Path(__file__).resolve().parents[1]
-LIVE = ROOT / "editor/static/ai-class-sprites"
+TARGETS = {
+    (7, 0x0B): "shared-high-lord-hein-v1/logical16/07-0B.png",
+    (7, 0x1A): "shared-swordmaster-hein-v1/logical16/07-1A.png",
+}
 
 
 class KeithBlueMartialPaletteTests(unittest.TestCase):
@@ -18,50 +32,40 @@ class KeithBlueMartialPaletteTests(unittest.TestCase):
             (73, 109, 255, 255),
             (109, 219, 255, 255),
         }
-        high_lord = Image.open(LIVE / "7/0B.png").convert("RGBA")
-        swordmaster = Image.open(LIVE / "7/1A.png").convert("RGBA")
-        high_lord_colors = {
-            color for color in high_lord.get_flattened_data() if color[3]
-        }
-        swordmaster_colors = {
-            color for color in swordmaster.get_flattened_data() if color[3]
-        }
-        self.assertTrue(expected.issubset(high_lord_colors))
-        self.assertTrue(expected.issubset(swordmaster_colors))
-        self.assertNotIn((219, 146, 36, 255), high_lord_colors)
-        self.assertNotIn((146, 36, 0, 255), high_lord_colors)
-        self.assertNotIn((219, 146, 36, 255), swordmaster_colors)
-        self.assertNotIn((109, 73, 0, 255), swordmaster_colors)
-        self.assertIn((255, 255, 255, 255), high_lord_colors)
-        self.assertIn((255, 255, 255, 255), swordmaster_colors)
+        for key in TARGETS:
+            with self.subTest(class_id=f"{key[1]:02X}"):
+                live = rgba(LIVE_ROOT / f"7/{key[1]:02X}.png")
+                colors = {
+                    color
+                    for color in flattened_image_data(live)
+                    if color[3]
+                }
+                self.assertTrue(expected.issubset(colors))
+                self.assertNotIn((219, 146, 36, 255), colors)
+                self.assertIn((255, 255, 255, 255), colors)
 
-    def test_sources_validate_and_manifest_cache_version_is_current(self) -> None:
-        for source_name, class_id in (
-            ("shared-high-lord-hein-v1", "0B"),
-            ("shared-swordmaster-hein-v1", "1A"),
-        ):
-            report = json.loads(
-                (
-                    ROOT
-                    / "docs/assets/ai-class-source/latest"
-                    / source_name
-                    / "validation-report.json"
-                ).read_text(encoding="utf-8")
-            )
-            row = next(
-                item
-                for item in report["classes"]
-                if item["commander_id"] == 7
-                and item["class_id"] == class_id
-            )
-            self.assertTrue(row["accepted"])
-        manifest = json.loads(
-            (LIVE / "manifest.json").read_text(encoding="utf-8")
-        )
-        self.assertEqual(
-            manifest["asset_version"],
-            "liana-lana-healer-shared-v106",
-        )
+    def test_retained_source_override_identity_and_closure_are_live(self) -> None:
+        document = manifest()
+        overrides = design_overrides()
+        self.assertEqual(document["asset_version"], ASSET_VERSION)
+        for key, expected_suffix in TARGETS.items():
+            with self.subTest(class_id=f"{key[1]:02X}"):
+                source_path, _ = SHARED_CLASS_TEMPLATE_SOURCES[key]
+                self.assertTrue(source_path.is_file())
+                self.assertTrue(source_path.as_posix().endswith(expected_suffix))
+                row = manifest_row(document, *key)
+                self.assertTrue(row["design_override"])
+                self.assertEqual(
+                    row["design_revision"], overrides[key]["revision"]
+                )
+                self.assertTrue(
+                    row["ai_source_position"].endswith(expected_suffix)
+                )
+                expected = compose_untranslated_shared_source(
+                    key, document=document
+                )
+                live = rgba(LIVE_ROOT / f"7/{key[1]:02X}.png")
+                self.assertEqual(pixels(expected), pixels(live))
 
 
 if __name__ == "__main__":

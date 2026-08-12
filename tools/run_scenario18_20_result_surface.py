@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """Replay current Scenario 18-20 final battles and retain result surfaces."""
 
 from __future__ import annotations
@@ -80,6 +81,16 @@ SCENARIOS: dict[int, dict[str, object]] = {
     },
 }
 
+UNSUPPORTED_STATE_RESTORE_REASON = (
+    "deprecated Scenario 18-20 continuation runner: bundled BlastEm 0.6.2 "
+    "does not bind the historical 'load' key alias, so copying an external "
+    "GST over quicksave.gst cannot prove that the state was restored"
+)
+
+
+class UnsupportedStateRestoreError(RuntimeError):
+    """Raised before the deprecated external-GST replay can start."""
+
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -129,35 +140,9 @@ def launch_continuation(
     initial_delay: float,
     load_delay: float,
 ) -> tuple[Path, Path]:
-    recorder.run_command(
-        [
-            sys.executable,
-            str(ROOT / "tools/run_blastem_sequence.py"),
-            "launch-only",
-            "--rom",
-            str(rom),
-            "--runtime-name",
-            runtime_name,
-            "--initial-delay",
-            str(initial_delay),
-            "--virtual-display",
-            recorder.display,
-            "--replace-existing",
-            "--send-event",
-        ]
-    )
-    recorder.send(["save:0.8"])
-    quicksaves = sorted(
-        recorder.runtime_home.rglob("quicksave.gst"),
-        key=lambda path: path.stat().st_mtime_ns,
-    )
-    if not quicksaves:
-        raise RuntimeError("BlastEm did not create a continuation quicksave")
-    shutil.copy2(seed_gst, quicksaves[-1])
-    recorder.send([f"load:{load_delay}"])
-    loaded = recorder.capture("continuation/loaded_target.png")
-    loaded_gst = recorder.save_gst("states/loaded_continuation.gst")
-    return loaded, loaded_gst
+    """Reject the historical replay before launching or mutating a runtime."""
+    del recorder, rom, seed_gst, runtime_name, initial_delay, load_delay
+    raise UnsupportedStateRestoreError(UNSUPPORTED_STATE_RESTORE_REASON)
 
 
 def begin_final_battle(

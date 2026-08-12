@@ -1,34 +1,78 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
 import unittest
 
-from PIL import Image
+from tools.build_ai_class_sprite_assets import (
+    ASSET_VERSION,
+    SHARED_CLASS_TEMPLATE_SOURCES,
+)
+from tools.pillow_compat import flattened_image_data
+
+from tests.ai_class_asset_contract import (
+    LIVE_ROOT,
+    compose_untranslated_shared_source,
+    manifest,
+    manifest_row,
+    pixels,
+    rgba,
+)
 
 
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE_ROOT = ROOT / "docs/assets/ai-class-source/latest/sherry-ranger-v4"
+KEY = (4, 0x21)
 
 
 class SherryRangerHighMasterTemplateTests(unittest.TestCase):
-    def test_ranger_keeps_high_master_shape_and_uses_a_distinct_palette(self) -> None:
-        report = json.loads(
-            (SOURCE_ROOT / "validation.json").read_text(encoding="utf-8")
+    def test_retained_ranger_source_identity_and_closure_are_live(self) -> None:
+        source_path, _ = SHARED_CLASS_TEMPLATE_SOURCES[KEY]
+        self.assertTrue(source_path.is_file())
+        self.assertTrue(
+            source_path.as_posix().endswith(
+                "sherry-ranger-v4/logical16/04-21.png"
+            )
         )
-        self.assertTrue(report["accepted"])
+        document = manifest()
+        self.assertEqual(document["asset_version"], ASSET_VERSION)
+        row = manifest_row(document, *KEY)
         self.assertEqual(
-            report["template_shape_match"], report["template_shape_total"]
+            row["ai_source_position"],
+            "latest/sherry-ranger-v4/logical16/04-21.png",
         )
-        self.assertGreaterEqual(report["equipment_color_differences"], 24)
-        self.assertLessEqual(report["visible_color_count"], 15)
-        with Image.open(SOURCE_ROOT / "logical16/04-21.png") as opened:
-            source = opened.convert("RGBA")
-        with Image.open(
-            ROOT / "editor/static/ai-class-sprites/4/21.png"
-        ) as opened:
-            live = opened.convert("RGBA")
-        self.assertEqual(list(source.get_flattened_data()), list(live.get_flattened_data()))
+        self.assertFalse(row["design_override"])
+        self.assertTrue(row["design_override_superseded"])
+        expected = compose_untranslated_shared_source(KEY, document=document)
+        live = rgba(LIVE_ROOT / "4/21.png")
+        self.assertEqual(pixels(expected), pixels(live))
+
+    def test_ranger_keeps_high_master_shape_with_distinct_colors(self) -> None:
+        ranger = rgba(LIVE_ROOT / "4/21.png")
+        high_master = rgba(LIVE_ROOT / "4/23.png")
+        ranger_alpha = tuple(
+            color[3] for color in flattened_image_data(ranger)
+        )
+        high_master_alpha = tuple(
+            color[3] for color in flattened_image_data(high_master)
+        )
+        self.assertEqual(ranger_alpha, high_master_alpha)
+        self.assertGreaterEqual(
+            sum(
+                left != right
+                for left, right in zip(
+                    flattened_image_data(ranger),
+                    flattened_image_data(high_master),
+                )
+            ),
+            24,
+        )
+        self.assertLessEqual(
+            len(
+                {
+                    color
+                    for color in flattened_image_data(ranger)
+                    if color[3]
+                }
+            ),
+            15,
+        )
 
 
 if __name__ == "__main__":

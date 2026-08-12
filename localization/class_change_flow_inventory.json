@@ -86,8 +86,11 @@
     "class_record_table": "0x05EDDC",
     "commander_chain_pointer_table": "0x08253A",
     "selected_class_write": "0x014C36",
+    "stock_ownership_filter": "0x014B2C",
+    "lester_result_ownership_guard": "0x31E380",
+    "lester_result_guard_contract": "commander 9, active Scenario 10, outer result callback 0xCEC4",
     "runtime_to_roster_call": "0x00CEC4",
-    "semantic_anchor_count": 11
+    "semantic_anchor_count": 12
   },
   "manual_save_descriptor": {
     "descriptor": "0x01E046",

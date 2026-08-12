@@ -7,13 +7,14 @@ import unittest
 from PIL import Image
 
 from tools.build_shared_keith_wizard_new_classes import SCHEMES
+from tools.pillow_compat import flattened_image_data
 
 
 ROOT = Path(__file__).resolve().parents[1]
 LIVE_ROOT = ROOT / "editor/static/ai-class-sprites"
 SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-keith-wizard-new-classes-v1"
+    / "assets/class-sprites/source/latest/shared-keith-wizard-new-classes-v1"
 )
 
 
@@ -34,7 +35,7 @@ class LesterZarveraLineagePaletteTests(unittest.TestCase):
         self.assertEqual(
             row["design_revision"], overrides["9:26"]["revision"]
         )
-        colors = set(live.get_flattened_data())
+        colors = set(flattened_image_data(live))
         lineage = {
             (146, 0, 36, 255),
             (36, 73, 219, 255),
@@ -42,7 +43,7 @@ class LesterZarveraLineagePaletteTests(unittest.TestCase):
         }
         self.assertTrue(lineage.issubset(colors))
         self.assertTrue(
-            lineage.issubset(set(archmage.get_flattened_data()))
+            lineage.issubset(set(flattened_image_data(archmage)))
         )
         self.assertNotIn((36, 73, 0, 255), colors)
         self.assertNotIn((73, 146, 36, 255), colors)
@@ -60,7 +61,6 @@ class LesterZarveraLineagePaletteTests(unittest.TestCase):
                 (255, 182, 36, 255),
             ),
         )
-        live = Image.open(LIVE_ROOT / "9/26.png").convert("RGBA")
         overrides = json.loads(
             (ROOT / "editor/ai_class_design_overrides.json").read_text(
                 encoding="utf-8"

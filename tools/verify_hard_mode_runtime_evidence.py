@@ -42,6 +42,12 @@ RUNTIME_COMMANDER_AT_OFFSET = 0x3A
 RUNTIME_COMMANDER_DF_OFFSET = 0x3B
 RUNTIME_SOLDIER_AT_OFFSET = 0x46
 RUNTIME_SOLDIER_DF_OFFSET = 0x47
+PLAYABLE_ROSTER_BASE = 0xA4CC
+PLAYABLE_ROSTER_RECORD_SIZE = 0x18
+CLASS_RECORD_TABLE = 0x05EDDC
+CLASS_RECORD_SIZE = 0x1C
+NAME_CORRECTION_TABLE = 0x082A56
+NAME_CORRECTION_RECORD_SIZE = 0x06
 
 SCENARIO_ONE_PLAYER_GROUPS = 2
 SCENARIO_ONE_EXPECTED_GST_SHA256 = (
@@ -196,6 +202,122 @@ def expected_runtime_group(expected: ExpectedRuntimeGroup) -> RuntimeGroup:
         soldier_df=expected.soldier_df,
         mercenaries=expected.mercenaries,
     )
+
+
+def _playable_roster_record(gst: bytes, name_id: int) -> bytes:
+    if not 1 <= name_id <= 0x0B:
+        raise ValueError(f"not a playable roster name ID: {name_id}")
+    start = (
+        GST_WORK_RAM_FILE_OFFSET
+        + PLAYABLE_ROSTER_BASE
+        + (name_id - 1) * PLAYABLE_ROSTER_RECORD_SIZE
+    )
+    end = start + PLAYABLE_ROSTER_RECORD_SIZE
+    if len(gst) < end:
+        raise ValueError("GST is too short to contain the playable roster")
+    return gst[start:end]
+
+
+def expected_protected_npc_runtime_group(
+    gst: bytes,
+    rom: bytes,
+    scenario: dict,
+    record: dict,
+) -> RuntimeGroup:
+    """Project one protected NPC after all stock and Hard loader passes."""
+
+    name_id = int(str(record["name_id"]), 16)
+    if name_id > 0x0B:
+        return RuntimeGroup(
+            class_id=int(str(record["class_id"]), 16),
+            name_id=name_id,
+            level=int(record["level"]),
+            commander_at=int(record["commander_at"]),
+            commander_df=int(record["commander_df"]["planned"]),
+            soldier_at=int(record["soldier_correction"]["at"]),
+            soldier_df=int(
+                record["soldier_correction"]["df"]["planned"]
+            ),
+            mercenaries=tuple(record["mercenaries"]),
+        )
+
+    roster = _playable_roster_record(gst, name_id)
+    class_id = roster[0]
+    class_start = CLASS_RECORD_TABLE + class_id * CLASS_RECORD_SIZE
+    name_start = (
+        NAME_CORRECTION_TABLE
+        + (name_id - 1) * NAME_CORRECTION_RECORD_SIZE
+    )
+    if len(rom) < class_start + CLASS_RECORD_SIZE:
+        raise ValueError("ROM is too short to contain the class table")
+    if len(rom) < name_start + NAME_CORRECTION_RECORD_SIZE:
+        raise ValueError("ROM is too short to contain name corrections")
+    commander_delta = int(
+        scenario["enemy_attack_offset"]["commander_at_delta"]
+    )
+    soldier_delta = int(
+        scenario["enemy_attack_offset"][
+            "soldier_at_correction_delta"
+        ]
+    )
+    return RuntimeGroup(
+        class_id=class_id,
+        name_id=name_id,
+        level=roster[2],
+        commander_at=roster[4],
+        commander_df=(roster[5] + commander_delta) & 0xFF,
+        soldier_at=(
+            rom[class_start + 0x0F]
+            + roster[0x16]
+            + rom[name_start + 0x03]
+        ) & 0xFF,
+        soldier_df=(
+            rom[class_start + 0x10]
+            + rom[name_start + 0x04]
+            + soldier_delta
+        ) & 0xFF,
+        mercenaries=tuple(record["mercenaries"]),
+    )
+
+
+def verify_protected_npc_scenario(
+    gst: bytes,
+    rom: bytes,
+    scenario_number: int,
+    player_group_count: int,
+) -> tuple[RuntimeGroup, ...]:
+    """Verify every loss-condition NPC, including roster-derived values."""
+
+    plan = load_applied_plan()
+    section = plan["npc_survival_protection"]
+    scenario = next(
+        (
+            row
+            for row in section["scenarios"]
+            if int(row["number"]) == scenario_number
+        ),
+        None,
+    )
+    if scenario is None:
+        return ()
+    actual_groups = []
+    for record in scenario["records"]:
+        runtime_group = player_group_count + int(record["index"])
+        actual = read_runtime_group(gst, runtime_group)
+        expected = expected_protected_npc_runtime_group(
+            gst,
+            rom,
+            scenario,
+            record,
+        )
+        if actual != expected:
+            raise ValueError(
+                f"Scenario {scenario_number} protected NPC "
+                f"{record['name_korean']} runtime group {runtime_group} "
+                f"differs: expected {expected!r}, found {actual!r}"
+            )
+        actual_groups.append(actual)
+    return tuple(actual_groups)
 
 
 def load_runtime_exceptions(

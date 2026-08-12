@@ -17,7 +17,7 @@ MASK_FILE = ROOT / "editor/ai_mount_masks.json"
 AI_DIR = ROOT / "editor/static/ai-class-sprites"
 ROM_DIR = ROOT / "editor/static/class-sprites/commanders"
 OUTPUT_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/rom-mount-color-variants-v1"
+    ROOT / "assets/class-sprites/source/latest/rom-mount-color-variants-v1"
 )
 MASK_GROUPS = {
     # Elwin's infantry-sized head uses its separately edited Highlander mount

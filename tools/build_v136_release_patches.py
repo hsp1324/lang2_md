@@ -13,7 +13,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.build_hard_mode_rom import verify_applied_hard_mode
 from tools.rom_update import bps_apply, bps_create, sha256_bytes
 
 
@@ -94,8 +93,9 @@ def build(*, check: bool = False) -> dict[str, object]:
             str(target_spec["sha256"]),
             str(target_spec["label_ko"]),
         )
-        if target_spec["id"] == "hard":
-            verify_applied_hard_mode(target)
+        # v1.3.6 is hash-locked historical output. Do not validate it with the
+        # evolving current Hard loader contract: v1.3.7 adds a second loader
+        # hook and 19 protected NPC records that did not exist in v1.3.6.
         metadata = json.dumps(
             {
                 "game": "Langrisser II",

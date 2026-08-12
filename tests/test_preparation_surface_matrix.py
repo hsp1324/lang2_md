@@ -18,6 +18,11 @@ SEED_GST = (
 )
 
 
+class PreparationSurfaceProfileTests(unittest.TestCase):
+    def test_profiles_include_original_release(self):
+        self.assertEqual(sorted(matrix.PROFILE_ROMS), ["hard", "normal", "pure"])
+
+
 class PreparationSurfaceMatrixTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:

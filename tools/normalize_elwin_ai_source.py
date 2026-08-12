@@ -24,7 +24,7 @@ from tools.build_ai_class_sprite_assets import (
 
 
 GUIDE_DIR = (
-    ROOT / "docs/assets/ai-class-source/elwin-head-ratio-guides-v2"
+    ROOT / "assets/class-sprites/source/elwin-head-ratio-guides-v2"
 )
 MASK_PATH = ROOT / "editor/ai_identity_masks.json"
 MAGENTA = (255, 0, 255, 255)

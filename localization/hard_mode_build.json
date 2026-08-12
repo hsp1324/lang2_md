@@ -5,28 +5,36 @@
   "approval_confirmation": "표준 하드로 해줘",
   "base": {
     "size": 4194304,
-    "sha256": "9e6b45b109a1596d44a8c0c863a515cd590d82416b906daa958f71d33d1a48c8",
+    "sha256": "cf9683990c8f8eabcc75e6dfe8be049fe6f446c061517a3e0bc825aacae347be",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "hard": {
     "size": 4194304,
-    "header_checksum": "3E8F",
-    "sha256": "a9e607aa0d117742f8bbb2f3a3d756205b14ff33a72d18f3dc4bdccc15525aa1",
+    "header_checksum": "2586",
+    "sha256": "6646c1ce86e960ea33228f6ef41e7b1b3cd1b39f9fa8779a3172d6c75c65a878",
     "sram_descriptor": "5241F8200040000100403FFF"
   },
   "implementation": {
     "target_record_count": 300,
+    "npc_survival_protection_record_count": 19,
+    "total_fixed_record_count": 319,
     "commander_change_record_count": 300,
     "soldier_correction_record_count": 300,
     "mercenary_replacement_slot_count": 302,
     "summon_replacement_slot_count": 2,
     "total_mercenary_slot_change_count": 304,
-    "correction_pair_count": 67,
+    "correction_pair_count": 72,
     "record_tag_offset": "0x1D",
     "loader_hook": "0x010E90",
     "loader_routine": "0x300000",
     "correction_table": "0x300080",
+    "dynamic_npc_loader_hook": "0x010CFE",
+    "dynamic_npc_loader_routine": "0x300120",
+    "dynamic_npc_delta_table": "0x300160",
+    "dynamic_npc_delta_record_count": 2,
     "shared_class_records_modified": false,
+    "original_profile_modified": false,
+    "normal_profile_modified": false,
     "custom_class_map_sprites": {
       "count": 131,
       "class_ids": [
@@ -86,11 +94,11 @@
     "save_states_supported": false
   },
   "release": {
-    "release_id": "ko-hard-1.3.6",
-    "translation_version": "1.3.6",
-    "balance_version": "1.3.6",
-    "rom_filename": "Langrisser II (Korean Hard v1.3.6).md",
-    "header_title": "LANGRISSER II KOREAN T1.3.6 B1.3.6 BY HSP1324",
-    "output": "roms/builds/Langrisser II (Korean Hard v1.3.6).md"
+    "release_id": "ko-hard-1.3.7",
+    "translation_version": "1.3.7",
+    "balance_version": "1.3.7",
+    "rom_filename": "Langrisser II (Korean Hard v1.3.7).md",
+    "header_title": "LANGRISSER II KOREAN T1.3.7 B1.3.7 BY HSP1324",
+    "output": "roms/builds/Langrisser II (Korean Hard v1.3.7).md"
   }
 }

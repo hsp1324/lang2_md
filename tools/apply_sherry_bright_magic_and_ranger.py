@@ -6,11 +6,18 @@ from __future__ import annotations
 from collections import Counter
 import json
 from pathlib import Path
+import sys
 
 from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 AI_ROOT = ROOT / "editor/static/ai-class-sprites"
 MANIFEST_PATH = AI_ROOT / "manifest.json"
 ROM_ROOT = ROOT / "editor/static/class-sprites/commanders/4"
@@ -18,21 +25,21 @@ ASSET_VERSION = "liana-lana-healer-shared-v106"
 TARGETS = {
     0x13: (
         ROOT
-        / "docs/assets/ai-class-source/latest/shared-elwin-magic-v1/"
+        / "assets/class-sprites/source/latest/shared-elwin-magic-v1/"
         "logical16/04-13.png",
         "엘윈 사용자 리터칭 메이지",
         "latest/shared-elwin-magic-v1/logical16/04-13.png",
     ),
     0x14: (
         ROOT
-        / "docs/assets/ai-class-source/latest/shared-elwin-magic-v1/"
+        / "assets/class-sprites/source/latest/shared-elwin-magic-v1/"
         "logical16/04-14.png",
         "엘윈 사용자 리터칭 아크메이지",
         "latest/shared-elwin-magic-v1/logical16/04-14.png",
     ),
     0x21: (
         ROOT
-        / "docs/assets/ai-class-source/latest/sherry-ranger-v4/"
+        / "assets/class-sprites/source/latest/sherry-ranger-v4/"
         "logical16/04-21.png",
         "쉐리 하이마스터 동일 디자인 기반 레인저 색상 변형",
         "latest/sherry-ranger-v4/logical16/04-21.png",
@@ -41,7 +48,7 @@ TARGETS = {
 
 
 def dominant_colors(image: Image.Image, limit: int = 6) -> list[str]:
-    counts = Counter(color for color in image.get_flattened_data() if color[3])
+    counts = Counter(color for color in flattened_image_data(image) if color[3])
     return [
         "#{:02x}{:02x}{:02x}".format(*color[:3])
         for color, _ in counts.most_common(limit)
@@ -57,7 +64,7 @@ def main() -> int:
         if image.size != (16, 16):
             raise ValueError(f"native source must be 16x16: {source_path}")
         visible_color_count = len(
-            {color for color in image.get_flattened_data() if color[3]}
+            {color for color in flattened_image_data(image) if color[3]}
         )
         if visible_color_count > 15:
             raise ValueError(f"visible palette exceeds 15: {class_id:02X}")

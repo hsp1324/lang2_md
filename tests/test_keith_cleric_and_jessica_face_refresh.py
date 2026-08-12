@@ -4,57 +4,46 @@ import json
 from pathlib import Path
 import unittest
 
-from PIL import Image
-
 from tools.build_ai_class_sprite_assets import (
+    ASSET_VERSION,
     IDENTITY_PIXEL_TRANSLATIONS,
-    close_internal_transparency,
+    SHARED_CLASS_TEMPLATE_SOURCES,
+)
+from tools.pillow_compat import flattened_image_data
+
+from tests.ai_class_asset_contract import (
+    LIVE_ROOT,
+    compose_untranslated_shared_source,
+    design_overrides,
+    manifest,
+    manifest_row,
+    override_image,
+    pixels,
+    rgba,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LIVE = ROOT / "editor/static/ai-class-sprites"
-JESSICA_REFRESH = (
-    ROOT
-    / "docs/assets/ai-class-source/latest/jessica-face-mask-refresh-v1"
-)
 
 
 class KeithClericSkyPaletteTests(unittest.TestCase):
     def test_healer_and_priest_use_keith_sky_blue_family(self) -> None:
-        sources = {
-            0x08: ROOT
-            / "docs/assets/ai-class-source/latest/"
-            "shared-new-classes-v2-refined/logical16/07-08.png",
-            0x11: ROOT
-            / "docs/assets/ai-class-source/latest/"
-            "shared-hein-classes-v1/logical16/07-11.png",
-        }
-        for class_id, source_path in sources.items():
-            with self.subTest(class_id=f"{class_id:02X}"):
-                source = Image.open(source_path).convert("RGBA")
-                close_internal_transparency(source)
-                live = Image.open(
-                    LIVE / f"7/{class_id:02X}.png"
-                ).convert("RGBA")
-                self.assertEqual(
-                    list(source.get_flattened_data()),
-                    list(live.get_flattened_data()),
+        document = manifest()
+        for key in ((7, 0x08), (7, 0x11)):
+            with self.subTest(class_id=f"{key[1]:02X}"):
+                source_path, _ = SHARED_CLASS_TEMPLATE_SOURCES[key]
+                self.assertTrue(source_path.is_file())
+                expected = compose_untranslated_shared_source(
+                    key, document=document
                 )
-                colors = set(live.get_flattened_data())
+                live = rgba(LIVE_ROOT / f"7/{key[1]:02X}.png")
+                self.assertEqual(pixels(expected), pixels(live))
+                colors = set(flattened_image_data(live))
                 self.assertIn((73, 109, 255, 255), colors)
                 self.assertIn((109, 219, 255, 255), colors)
 
-        healer = set(
-            Image.open(LIVE / "7/08.png")
-            .convert("RGBA")
-            .get_flattened_data()
-        )
-        priest = set(
-            Image.open(LIVE / "7/11.png")
-            .convert("RGBA")
-            .get_flattened_data()
-        )
+        healer = set(flattened_image_data(rgba(LIVE_ROOT / "7/08.png")))
+        priest = set(flattened_image_data(rgba(LIVE_ROOT / "7/11.png")))
         self.assertNotIn((0, 146, 109, 255), healer)
         self.assertNotIn((36, 219, 146, 255), healer)
         self.assertNotIn((36, 146, 36, 255), priest)
@@ -62,108 +51,64 @@ class KeithClericSkyPaletteTests(unittest.TestCase):
 
 
 class JessicaFaceMaskRefreshTests(unittest.TestCase):
-    def test_latest_masks_are_exactly_restored(self) -> None:
+    def test_global_masks_and_saved_overrides_are_current(self) -> None:
         masks = json.loads(
             (ROOT / "editor/ai_identity_masks.json").read_text(
                 encoding="utf-8"
             )
         )["masks"]
-        report = json.loads(
-            (JESSICA_REFRESH / "validation-report.json").read_text(
-                encoding="utf-8"
-            )
-        )
-        self.assertTrue(report["all_accepted"])
-        overrides = json.loads(
-            (ROOT / "editor/ai_class_design_overrides.json").read_text(
-                encoding="utf-8"
-            )
-        )["designs"]
-        manifest = json.loads(
-            (LIVE / "manifest.json").read_text(encoding="utf-8")
-        )
-        for row in report["classes"]:
-            class_id = int(row["class_id"], 16)
-            live = Image.open(
-                LIVE / f"10/{class_id:02X}.png"
-            ).convert("RGBA")
-            source = Image.open(
-                JESSICA_REFRESH / row["file"]
-            ).convert("RGBA")
-            close_internal_transparency(source)
-            original = Image.open(
-                ROOT
-                / "editor/static/class-sprites/commanders/10"
-                / f"{class_id:02X}-p1.png"
-            ).convert("RGBA")
-            override_key = f"10:{class_id:02X}"
-            if override_key in overrides:
-                manifest_row = manifest["commanders"]["10"]["classes"][
-                    str(class_id)
-                ]
-                self.assertTrue(manifest_row["design_override"])
+        overrides = design_overrides()
+        document = manifest()
+        self.assertEqual(document["asset_version"], ASSET_VERSION)
+
+        for key in ((10, 0x08), (10, 0x11), (10, 0x26)):
+            with self.subTest(class_id=f"{key[1]:02X}"):
+                mask_key = f"{key[0]}:{key[1]:02X}"
+                self.assertIn(mask_key, masks)
+                self.assertIn(key, overrides)
+                row = manifest_row(document, *key)
+                self.assertTrue(row["design_override"])
                 self.assertEqual(
-                    manifest_row["design_revision"],
-                    overrides[override_key]["revision"],
+                    row["design_revision"], overrides[key]["revision"]
                 )
-            else:
                 self.assertEqual(
-                    list(source.get_flattened_data()),
-                    list(live.get_flattened_data()),
+                    row["identity_lock_pixel_count"], len(masks[mask_key])
                 )
-            points = {
-                tuple(point) for point in masks[f"10:{class_id:02X}"]
-            }
-            if override_key not in overrides:
-                for point in points:
-                    if original.getpixel(point)[3]:
-                        self.assertEqual(
-                            live.getpixel(point),
-                            original.getpixel(point),
-                            (class_id, point),
-                        )
-            visible = {
-                color for color in live.get_flattened_data() if color[3]
-            }
-            self.assertLessEqual(len(visible), 15)
+                live = rgba(LIVE_ROOT / f"10/{key[1]:02X}.png")
+                self.assertLessEqual(
+                    len(
+                        {
+                            color
+                            for color in flattened_image_data(live)
+                            if color[3]
+                        }
+                    ),
+                    15,
+                )
+
+    def test_saved_overrides_feed_the_current_live_assets(self) -> None:
+        document = manifest()
+        for key in ((10, 0x08), (10, 0x11)):
+            with self.subTest(class_id=f"{key[1]:02X}"):
+                expected = compose_untranslated_shared_source(
+                    key, document=document
+                )
+                live = rgba(LIVE_ROOT / f"10/{key[1]:02X}.png")
+                self.assertEqual(pixels(expected), pixels(live))
+
+        # Jessica's saved Zarvera edit is the current authoritative full
+        # sprite. Its deliberate internal negative space is not regenerated.
+        zarvera = rgba(LIVE_ROOT / "10/26.png")
+        self.assertEqual(pixels(zarvera), pixels(override_image((10, 0x26))))
 
     def test_wizard_palette_and_zarvera_placement_are_current(self) -> None:
-        wizard = Image.open(LIVE / "10/15.png").convert("RGBA")
+        wizard = rgba(LIVE_ROOT / "10/15.png")
         self.assertEqual(wizard.getpixel((6, 6)), (146, 146, 146, 255))
         self.assertNotIn(
-            (36, 73, 255, 255), set(wizard.get_flattened_data())
+            (36, 73, 255, 255), set(flattened_image_data(wizard))
         )
         self.assertNotIn((10, 0x26), IDENTITY_PIXEL_TRANSLATIONS)
         self.assertNotIn((10, 0x1A), IDENTITY_PIXEL_TRANSLATIONS)
-
-    def test_manifest_and_saved_overrides_match_live(self) -> None:
-        manifest = json.loads(
-            (LIVE / "manifest.json").read_text(encoding="utf-8")
-        )
-        self.assertEqual(
-            manifest["asset_version"],
-            "identity-mask-and-silhouette-closure-v107",
-        )
-        overrides = json.loads(
-            (ROOT / "editor/ai_class_design_overrides.json").read_text(
-                encoding="utf-8"
-            )
-        )["designs"]
-        for class_id in (0x08, 0x11, 0x26):
-            live = Image.open(
-                LIVE / f"10/{class_id:02X}.png"
-            ).convert("RGBA")
-            row = manifest["commanders"]["10"]["classes"][str(class_id)]
-            self.assertTrue(row["design_override"])
-            self.assertEqual(
-                row["design_revision"],
-                overrides[f"10:{class_id:02X}"]["revision"],
-            )
-            self.assertEqual(live.size, (16, 16))
-            self.assertLessEqual(
-                len({color for color in live.get_flattened_data() if color[3]}),
-                15,
-            )
 
 
 if __name__ == "__main__":

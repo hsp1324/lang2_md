@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import tempfile
 import unittest
 
 from scripts import build_korean_jp_probe as builder
@@ -30,9 +31,21 @@ class PreparationVramOwnershipTests(unittest.TestCase):
 
     def test_builder_uses_only_the_audited_pattern_pool(self) -> None:
         replacement = self.report["replacement_pool"]
+        source = replacement["retained_source_manifest"]
         self.assertEqual(
             replacement["tiles"],
             [f"0x{tile:04X}" for tile in builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS],
+        )
+        self.assertEqual(source["scope"], ownership.RETAINED_GST_SCOPE)
+        self.assertEqual(source["state_count"], 212)
+        self.assertEqual(source["preparation_state_count"], 8)
+        self.assertTrue(source["unrelated_gst_files_are_out_of_scope"])
+        self.assertTrue(replacement["current_preparation_renderer_is_exercised"])
+        self.assertTrue(replacement["pool_has_no_current_sat_reference"])
+        self.assertTrue(
+            replacement[
+                "strictly_preparation_only_tiles_are_absent_outside_preparation"
+            ]
         )
         self.assertTrue(
             all(
@@ -72,6 +85,20 @@ class PreparationVramOwnershipTests(unittest.TestCase):
                     )
                 )
         self.assertTrue(runtime["hard"]["pool_payloads_identical_before_after"])
+
+    def test_retained_source_manifest_hash_drift_fails_closed(self) -> None:
+        manifest = json.loads(
+            ownership.DEFAULT_RETAINED_GST_MANIFEST.read_text(encoding="utf-8")
+        )
+        manifest["families"][0]["path_hash_aggregate_sha256"] = "0" * 64
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sources.json"
+            path.write_text(
+                json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "hash changed"):
+                ownership.retained_source_states(path)
 
 
 if __name__ == "__main__":

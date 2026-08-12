@@ -19,6 +19,12 @@ HARD_BUILD = (
 class HardCandidateDeltaTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+        if not HARD_BUILD.is_file():
+            raise unittest.SkipTest(
+                "ignored legacy T1.0.0 hard ROM is absent; this suite audits "
+                "the historical candidate delta, not the current v1.3.7 "
+                "candidate"
+            )
         cls.model = json.loads(MODEL.read_text(encoding="utf-8"))
         cls.hard = HARD_BUILD.read_bytes()
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 from __future__ import annotations
 
 import argparse
@@ -31,36 +32,36 @@ from tools.pixellab_elwin_inpaint import head_lock_box
 from tools.scenario_data import KOREAN_NAME_BY_ID, class_names
 
 
-DEFAULT_SHEET = ROOT / "docs/assets/allied_class_redesign_concept.png"
+DEFAULT_SHEET = ROOT / "assets/class-sprites/reference/allied_class_redesign_concept.png"
 DEFAULT_BOARD_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/character-ai-v3"
+    / "assets/class-sprites/source/character-ai-v3"
 )
 ELWIN_NATIVE_SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/elwin-native16-v16"
+    ROOT / "assets/class-sprites/source/elwin-native16-v16"
 )
 ELWIN_LORD_SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/elwin-lord-v2"
+    ROOT / "assets/class-sprites/source/latest/elwin-lord-v2"
 )
 ELWIN_HERO_SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/elwin-hero-ai-v7-anatomy"
+    ROOT / "assets/class-sprites/source/latest/elwin-hero-ai-v7-anatomy"
 )
 ELWIN_HERO_SELECTED_SAMPLE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "sample-class-variants-v4-free-five/01-elwin-22-hero"
 )
 ELWIN_MOUNTED_SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/elwin-mounted-v2"
+    ROOT / "assets/class-sprites/source/latest/elwin-mounted-v2"
 )
 SHERRY_NATIVE_SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/sherry-v2"
+    ROOT / "assets/class-sprites/source/latest/sherry-v2"
 )
 HEIN_LATEST_SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/hein/raw"
+    ROOT / "assets/class-sprites/source/latest/hein/raw"
 )
 HEIN_SORCERER_V2_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/hein-sorcerer-v2"
+    ROOT / "assets/class-sprites/source/latest/hein-sorcerer-v2"
 )
 HEIN_SORCERER_V2_CLEAN_SOURCE = (
     HEIN_SORCERER_V2_DIR / "clean/hein-09-sorcerer-ai.png"
@@ -70,119 +71,119 @@ HEIN_SORCERER_V2_LOGICAL_SOURCE = (
 )
 LIANA_LANA_PAIRED_SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/liana-lana-strict16-v1"
+    / "assets/class-sprites/source/latest/liana-lana-strict16-v1"
 )
 SHARED_ARCHMAGE_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-archmage-lester-v1"
+    / "assets/class-sprites/source/latest/shared-archmage-lester-v1"
     / "logical16"
 )
 SHARED_ELWIN_MAGIC_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-elwin-magic-v1"
+    / "assets/class-sprites/source/latest/shared-elwin-magic-v1"
     / "logical16"
 )
 SHARED_HEIN_WIZARD_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-wizard-hein-v1"
+    / "assets/class-sprites/source/latest/shared-wizard-hein-v1"
     / "logical16"
 )
 LIANA_TO_LANA_WIZARD_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/lana-wizard-liana-template-v1"
+    / "assets/class-sprites/source/latest/lana-wizard-liana-template-v1"
     / "logical16"
 )
 SHARED_KEITH_WIZARD_NEW_CLASS_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-keith-wizard-new-classes-v1"
+    / "assets/class-sprites/source/latest/shared-keith-wizard-new-classes-v1"
     / "logical16"
 )
 SHARED_LIANA_SUMMONER_AGENT_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-liana-summoner-agent-v1"
+    / "assets/class-sprites/source/latest/shared-liana-summoner-agent-v1"
     / "logical16"
 )
 SHARED_LIANA_LANA_HEALER_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-liana-lana-healer-v1"
+    / "assets/class-sprites/source/latest/shared-liana-lana-healer-v1"
     / "logical16"
 )
 LIANA_SAGE_SHERRY_WIZARD_PALETTE_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "liana-sage-sherry-wizard-palette-v1/logical16"
 )
 SHARED_ELWIN_SWORDMASTER_HIGH_MASTER_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-high-master-elwin-swordmaster-v1"
     / "logical16"
 )
 SHARED_AARON_SAINT_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-saint-aaron-v1"
+    / "assets/class-sprites/source/latest/shared-saint-aaron-v1"
     / "logical16"
 )
 SHARED_AARON_HIGH_PRIEST_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-high-priest-aaron-v1"
+    / "assets/class-sprites/source/latest/shared-high-priest-aaron-v1"
     / "logical16"
 )
 SHERRY_RANGER_V4_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sherry-ranger-v4"
+    / "assets/class-sprites/source/latest/sherry-ranger-v4"
     / "logical16"
 )
 HEIN_WARLOCK_SORCERER_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/hein-warlock-sorcerer-v1"
+    / "assets/class-sprites/source/latest/hein-warlock-sorcerer-v1"
     / "logical16"
 )
 HEIN_MAGIC_KNIGHT_PALADIN_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/hein-magic-knight-paladin-v1"
+    / "assets/class-sprites/source/latest/hein-magic-knight-paladin-v1"
     / "logical16"
 )
 SHARED_HEIN_CLASS_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-hein-classes-v1"
+    / "assets/class-sprites/source/latest/shared-hein-classes-v1"
     / "logical16"
 )
 SHARED_HIGH_LORD_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-high-lord-hein-v1"
+    / "assets/class-sprites/source/latest/shared-high-lord-hein-v1"
     / "logical16"
 )
 SHARED_SWORDMASTER_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-swordmaster-hein-v1"
+    / "assets/class-sprites/source/latest/shared-swordmaster-hein-v1"
     / "logical16"
 )
 SHARED_ELWIN_LORD_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-lord-elwin-high-lord-v1"
     / "logical16"
 )
 SCOTT_KEITH_ELWIN_LORD_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-scott-keith-lord-elwin-lord-v1/logical16"
 )
 SHERRY_SCOTT_KEITH_AARON_LORD_SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-sherry-scott-keith-lord-aaron-lord-v1/logical16"
 )
 SHARED_NEW_CLASS_SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined"
+    / "assets/class-sprites/source/latest/shared-new-classes-v2-refined"
 )
 SHARED_NEW_CLASS_SOURCE_DIR = SHARED_NEW_CLASS_SOURCE_ROOT / "logical16"
 SHARED_NEW_CLASS_MASKS = SHARED_NEW_CLASS_SOURCE_ROOT / "identity-masks.json"
 JESSICA_FRESH_MAGIC_SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     / "jessica-zarvera-summoner-ai-v1-fresh"
 )
 JESSICA_FRESH_MAGIC_SOURCE_DIR = (
@@ -190,7 +191,7 @@ JESSICA_FRESH_MAGIC_SOURCE_DIR = (
 )
 KEITH_LESTER_TIER_MOUNT_SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/keith-lester-tier1-mounted-v1"
+    / "assets/class-sprites/source/latest/keith-lester-tier1-mounted-v1"
 )
 KEITH_LESTER_TIER_MOUNT_SOURCE_DIR = (
     KEITH_LESTER_TIER_MOUNT_SOURCE_ROOT / "logical16"
@@ -202,11 +203,11 @@ KEITH_LESTER_TIER_MOUNT_MASKS = (
     KEITH_LESTER_TIER_MOUNT_SOURCE_ROOT / "mount-masks.json"
 )
 ELWIN_DIRECT_STAGE_SOURCE = (
-    ROOT / "docs/assets/direct_16x16_01_elwin.png"
+    ROOT / "assets/class-sprites/reference/direct_16x16_01_elwin.png"
 )
 ELWIN_MAGIC_SOURCE = (
     ROOT
-    / "docs/assets/ai-class-source/character-ai-v3/elwin/"
+    / "assets/class-sprites/source/character-ai-v3/elwin/"
     "elwin-mage-archmage-source-v3.png"
 )
 IDENTITY_MASK_OVERRIDES = ROOT / "editor/ai_identity_masks.json"
@@ -1082,6 +1083,33 @@ FINAL_PIXEL_OVERRIDES = {
         (5, 3): (219, 182, 255, 255),
         (4, 3): (146, 36, 219, 255),
         (6, 9): (36, 36, 36, 255),
+    },
+}
+
+# The editor persists accepted 16x16 designs as final live pixels, after the
+# generic identity/closure stages.  These two Jessica designs intentionally
+# keep details that those generic stages would otherwise replace on a later
+# rebuild.  Reapply only the accepted deltas at the very end so a clean asset
+# rebuild is pixel-identical to the live sprites that are encoded into ROM.
+USER_APPROVED_FINAL_PIXEL_OVERRIDES = {
+    (10, 0x26): {
+        (10, 5): TRANSPARENT,
+        (11, 5): TRANSPARENT,
+        (12, 5): TRANSPARENT,
+        (10, 6): TRANSPARENT,
+        (11, 6): TRANSPARENT,
+        (12, 6): TRANSPARENT,
+        (10, 7): TRANSPARENT,
+    },
+    (10, 0x28): {
+        (2, 0): TRANSPARENT,
+        (2, 1): (255, 255, 255, 255),
+        (12, 3): (146, 73, 36, 255),
+        (10, 4): ROM_INK,
+        (11, 4): ROM_INK,
+        (4, 6): ROM_INK,
+        (5, 7): ROM_INK,
+        (6, 8): (73, 0, 73, 255),
     },
 }
 
@@ -3258,7 +3286,10 @@ def _build_assets_unlocked(
                         f"사용자 얼굴 마스크 {len(identity_lock_points)}"
                         "픽셀과 원본 눈 완전 복원·실제 ROM 미적용"
                     )
-                elif key in JESSICA_FRESH_MAGIC_SOURCE_KEYS:
+                elif (
+                    key in JESSICA_FRESH_MAGIC_SOURCE_KEYS
+                    and key not in shared_template_labels
+                ):
                     class_label = {
                         0x26: "자베라",
                         0x28: "서머너",
@@ -3422,7 +3453,8 @@ def _build_assets_unlocked(
                         )
                         source_position = (
                             "latest/sample-class-variants-v4-free-five/"
-                            "01-elwin-22-hero/logical16/04.png"
+                            "01-elwin-22-hero/ai/04.png + "
+                            "editor/ai_class_design_overrides.json · 1:22"
                         )
                         feature = (
                             "사용자가 샘플 클래스 4번에서 승인한 엘윈 킹 "
@@ -3897,6 +3929,22 @@ def _build_assets_unlocked(
             closed_transparent_points: set[tuple[int, int]] = set()
             if redesigned:
                 closed_transparent_points = close_internal_transparency(image)
+            approved_final_pixels = USER_APPROVED_FINAL_PIXEL_OVERRIDES.get(
+                key,
+                {},
+            )
+            for point, color in approved_final_pixels.items():
+                image.putpixel(point, color)
+            closed_transparent_points.difference_update(
+                point
+                for point, color in approved_final_pixels.items()
+                if not color[3]
+            )
+            if approved_final_pixels:
+                feature += (
+                    "·사용자 승인 최종 픽셀 "
+                    f"{len(approved_final_pixels)}개 유지"
+                )
             if closed_transparent_points:
                 feature += (
                     "·외곽 배경과 분리된 머리·목·팔·몸통 내부 투명 "

@@ -70,6 +70,22 @@ class BlastemCommandDetectorTests(unittest.TestCase):
             frame.save(path)
             self.assertTrue(battle_command_menu_visible(path))
 
+    def test_accepts_scenario12_lester_status_bar_fingerprint(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "scenario12-lester-command.png"
+            frame = Image.new("RGB", (320, 240), (0, 128, 0))
+            frame.paste((0, 0, 119), (15, 25, 65, 105))
+            frame.paste((255, 255, 255), (20, 35, 30, 65))
+            frame.paste((119, 87, 87), (65, 25, 95, 105))
+            frame.paste((180, 130, 20), (95, 42, 101, 145))
+            # Reproduce the exact 44.875% status-blue ratio measured in the
+            # retained Scenario 12 Lester frame.  The runtime PNG fingerprint
+            # is 14a2a5abd1184c6b0abd5f47bb8259300d5918fa23fcb8da15ad62eabac61d28.
+            frame.paste((0, 0, 119), (0, 195, 143, 235))
+            frame.paste((0, 0, 119), (143, 195, 144, 219))
+            frame.save(path)
+            self.assertTrue(battle_command_menu_visible(path))
+
     def test_rejects_wide_result_panel_after_relaxed_text_threshold(self):
         with TemporaryDirectory() as directory:
             path = Path(directory) / "result-960.png"

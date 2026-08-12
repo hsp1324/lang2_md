@@ -192,7 +192,7 @@ class Scenario12ClearProbeTests(unittest.TestCase):
                     expected,
                 )
                 if kwargs.get("protagonist_death"):
-                    self.assertEqual(expected, 0x4B91)
+                    self.assertEqual(expected, 0x1653)
 
     def test_base_probe_changes_only_enemy_combat_fields_and_checksum(self):
         data = self.patched()

@@ -25,7 +25,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIR = ROOT / "editor/static/class-sprites/commanders/1"
 DEFAULT_OUTPUT = (
-    ROOT / "docs/assets/ai-class-source/pixellab-elwin-trial"
+    ROOT / "assets/class-sprites/source/pixellab-elwin-trial"
 )
 DEFAULT_TOKEN_FILE = Path.home() / ".config/pixellab/token"
 API_URL = "https://api.pixellab.ai/v2/inpaint"

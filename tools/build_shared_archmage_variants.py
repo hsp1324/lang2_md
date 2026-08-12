@@ -22,7 +22,7 @@ from tools.build_ai_class_sprite_assets import (
 
 SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-archmage-lester-v1"
+    / "assets/class-sprites/source/latest/shared-archmage-lester-v1"
 )
 MASTER_PATH = SOURCE_DIR / "master/lester-14-user-edited.png"
 MANIFEST_PATH = ROOT / "editor/static/ai-class-sprites/manifest.json"

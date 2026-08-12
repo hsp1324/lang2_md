@@ -34,7 +34,7 @@ MANIFEST_PATH = ASSET_DIR / "manifest.json"
 DESIGN_PATH = ROOT / "editor/ai_class_design_overrides.json"
 ARCHIVE_PATH = (
     ROOT
-    / "docs/assets/ai-class-source/archive/"
+    / "assets/class-sprites/source/archive/"
     "jessica-swordmaster-before-polish-v1/"
     "10-1A-editor-v62.png"
 )

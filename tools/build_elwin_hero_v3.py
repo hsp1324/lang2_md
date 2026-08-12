@@ -13,9 +13,9 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = (
     ROOT
-    / "docs/assets/ai-class-source/latest/elwin-hero-v2/logical16/22-hero.png"
+    / "assets/class-sprites/source/latest/elwin-hero-v2/logical16/22-hero.png"
 )
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/elwin-hero-v3"
+OUTPUT = ROOT / "assets/class-sprites/source/latest/elwin-hero-v3"
 MASK_FILE = ROOT / "editor/ai_identity_masks.json"
 ROM_SPRITE = ROOT / "editor/static/class-sprites/commanders/1/22-p1.png"
 

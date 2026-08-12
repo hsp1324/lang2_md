@@ -324,10 +324,56 @@ class HardModeFirstTurnTests(unittest.TestCase):
         )
         self.assertIsNone(first_turn.expected_endpoint(5))
         self.assertIsNone(first_turn.expected_endpoint(7))
-        self.assertIsNone(first_turn.expected_endpoint(12))
+        self.assertEqual(
+            first_turn.expected_endpoint(12)["endpoint"],
+            "defeat_return_title_turn_1",
+        )
         self.assertIsNone(first_turn.expected_endpoint(14))
 
-    def test_unapproved_mode_uses_missing_legacy_evidence_only_as_hint(self):
+    def test_scenario_12_rng_boundary_accepts_defeat_or_turn_two(self):
+        for profile in ("pure", "normal", "hard"):
+            expected = first_turn.expected_endpoint(12, profile=profile)
+            self.assertTrue(expected["rng_sensitive"])
+            self.assertTrue(expected["turn_2_also_valid"])
+            self.assertEqual(
+                first_turn.classify_endpoint(
+                    "title_screen",
+                    1,
+                    expected=expected,
+                ),
+                "defeat_return_title_turn_1",
+            )
+            self.assertEqual(
+                first_turn.classify_endpoint(
+                    "turn_command",
+                    2,
+                    expected=expected,
+                ),
+                "turn_2_command",
+            )
+
+        comparisons = first_turn.expected_endpoint(12)[
+            "comparison_evidence"
+        ]
+        self.assertTrue(
+            any(
+                row.get("observed_endpoint") == "turn_2_command"
+                for row in comparisons
+            )
+        )
+
+    def test_scenario_11_defeat_policy_is_profile_specific(self):
+        self.assertEqual(
+            first_turn.expected_endpoint(11, profile="pure")["endpoint"],
+            "defeat_return_title_turn_1",
+        )
+        self.assertEqual(
+            first_turn.expected_endpoint(11, profile="normal")["endpoint"],
+            "defeat_return_title_turn_1",
+        )
+        self.assertIsNone(first_turn.expected_endpoint(11, profile="hard"))
+
+    def test_missing_ignored_legacy_evidence_does_not_block_fresh_replay(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "endpoints.json"
             path.write_text(
@@ -336,6 +382,7 @@ class HardModeFirstTurnTests(unittest.TestCase):
                         "scenarios": [
                             {
                                 "number": 31,
+                                "profiles": ["normal"],
                                 "endpoint": "defeat_return_title_turn_1",
                                 "normal_evidence": [
                                     {
@@ -349,14 +396,22 @@ class HardModeFirstTurnTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            with self.assertRaises(FileNotFoundError):
-                first_turn.expected_endpoint_context(
-                    31,
-                    allow_unapproved_defeat=False,
-                    path=path,
-                )
             approved, hint = first_turn.expected_endpoint_context(
                 31,
+                profile="normal",
+                allow_unapproved_defeat=False,
+                path=path,
+            )
+            self.assertEqual(
+                approved["endpoint"], "defeat_return_title_turn_1"
+            )
+            self.assertIs(hint, approved)
+            self.assertFalse(approved["archival_evidence_complete"])
+            self.assertFalse(approved["archival_evidence"][0]["available"])
+
+            approved, hint = first_turn.expected_endpoint_context(
+                31,
+                profile="hard",
                 allow_unapproved_defeat=True,
                 path=path,
             )

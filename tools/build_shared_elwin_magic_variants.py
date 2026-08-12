@@ -19,13 +19,13 @@ from tools.build_ai_class_sprite_assets import identity_locked_character_sprite
 
 
 SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/shared-elwin-magic-v1"
+    ROOT / "assets/class-sprites/source/latest/shared-elwin-magic-v1"
 )
 SORCERER_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/hein-warlock-sorcerer-v1"
+    ROOT / "assets/class-sprites/source/latest/hein-warlock-sorcerer-v1"
 )
 PALADIN_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/hein-magic-knight-paladin-v1"
+    ROOT / "assets/class-sprites/source/latest/hein-magic-knight-paladin-v1"
 )
 MANIFEST_PATH = ROOT / "editor/static/ai-class-sprites/manifest.json"
 ROM_SPRITE_DIR = ROOT / "editor/static/class-sprites/commanders"

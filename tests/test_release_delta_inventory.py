@@ -4,6 +4,12 @@ import unittest
 
 from tools.release_delta_inventory import (
     CANDIDATE_SHA256,
+    DEFAULT_CANDIDATE,
+    PUBLIC_CANDIDATE,
+    PUBLIC_CANDIDATE_CHECKSUM,
+    PUBLIC_CANDIDATE_SHA256,
+    PUBLIC_MANIFEST,
+    PUBLIC_RELEASE,
     analyze_delta,
     markdown_report,
     sha256,
@@ -12,7 +18,6 @@ from tools.capture_class_change_application import runtime_progress
 
 
 ROOT = Path(__file__).resolve().parents[1]
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
 INVENTORY_JSON = ROOT / "localization/release_delta_5ed9_to_99fd.json"
 INVENTORY_MARKDOWN = ROOT / "docs/release_delta_5ed9_to_99fd.md"
 
@@ -84,12 +89,26 @@ class ReleaseDeltaInventoryTests(unittest.TestCase):
             },
         )
 
-    def test_candidate_rom_matches_the_audited_build(self) -> None:
-        self.assertEqual(sha256(KO_ROM.read_bytes()), CANDIDATE_SHA256)
+    def test_historical_candidate_and_public_release_are_not_conflated(self) -> None:
+        self.assertNotEqual(DEFAULT_CANDIDATE, PUBLIC_CANDIDATE)
+        self.assertIn("ko-99fd", DEFAULT_CANDIDATE.name)
         self.assertEqual(
             self.result["candidate"]["sha256"],
             CANDIDATE_SHA256,
         )
+        public = PUBLIC_CANDIDATE.read_bytes()
+        self.assertEqual(PUBLIC_RELEASE, "v1.3.6")
+        self.assertEqual(sha256(public), PUBLIC_CANDIDATE_SHA256)
+        self.assertEqual(
+            public[0x18E:0x190].hex().upper(),
+            PUBLIC_CANDIDATE_CHECKSUM,
+        )
+        manifest = json.loads(PUBLIC_MANIFEST.read_text(encoding="utf-8"))
+        normal = next(
+            row for row in manifest["targets"] if row["id"] == "normal"
+        )
+        self.assertEqual(manifest["release"], PUBLIC_RELEASE)
+        self.assertEqual(normal["output_sha256"], PUBLIC_CANDIDATE_SHA256)
 
     def test_live_evidence_is_retained_and_hash_locked(self) -> None:
         self.assertEqual(len(self.result["live_evidence"]), 10)

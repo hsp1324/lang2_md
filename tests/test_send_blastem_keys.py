@@ -6,6 +6,7 @@ from Xlib import X
 from tools.send_blastem_keys import (
     DIRECT_EVENT_NEUTRAL_KEYS,
     DIRECT_EVENT_RELEASE_SETTLE,
+    KEYSYMS,
     activate_window,
     choose_monitor,
     press,
@@ -13,6 +14,14 @@ from tools.send_blastem_keys import (
 
 
 class SendBlastemKeysTests(unittest.TestCase):
+    def test_unbound_blastem_load_alias_is_rejected(self):
+        self.assertNotIn("load", KEYSYMS)
+        display = MagicMock()
+        window = MagicMock()
+        with self.assertRaisesRegex(ValueError, "unknown key: load"):
+            press(display, window, "load", hold=0.02, send_event=True)
+        window.send_event.assert_not_called()
+
     def test_widest_monitor_is_selected_for_emulator_window(self):
         monitors = [
             ("TV", 0, 0, 1920, 1080),

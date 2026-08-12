@@ -34,9 +34,23 @@ class EditorModelTests(unittest.TestCase):
         model = class_change_editor_model(self.korean, self.japanese)
         self.assertEqual(len(model["commanders"]), 10)
         self.assertEqual(model["commanders"][0]["name"], "엘윈")
-        self.assertTrue(
-            all(len(commander["transitions"]) == 10
-                for commander in model["commanders"])
+        self.assertEqual(
+            {
+                commander["commander_id"]: len(commander["transitions"])
+                for commander in model["commanders"]
+            },
+            {
+                1: 10,
+                2: 10,
+                3: 10,
+                4: 10,
+                5: 10,
+                6: 10,
+                7: 11,
+                8: 10,
+                9: 11,
+                10: 10,
+            },
         )
         self.assertEqual(
             model["commanders"][0]["transitions"][0],

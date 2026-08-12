@@ -9,7 +9,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_ROOT = ROOT / "editor/static/ai-class-sprites"
-SOURCE_ROOT = ROOT / "docs/assets/ai-class-source"
+SOURCE_ROOT = ROOT / "assets/class-sprites/source"
 
 
 class CurrentClassSpriteAssetTests(unittest.TestCase):

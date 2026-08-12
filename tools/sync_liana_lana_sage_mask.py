@@ -20,7 +20,7 @@ from tools.build_ai_class_sprite_assets import protected_eye_points
 
 MASK_PATH = ROOT / "editor/ai_identity_masks.json"
 SOURCE_ROOT = (
-    ROOT / "docs/assets/ai-class-source/latest/liana-lana-strict16-v1"
+    ROOT / "assets/class-sprites/source/latest/liana-lana-strict16-v1"
 )
 ROM_ROOT = ROOT / "editor/static/class-sprites/commanders"
 CLASS_ID = 0x18

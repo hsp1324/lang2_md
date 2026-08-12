@@ -3,6 +3,11 @@
   "scenarios": [
     {
       "number": 6,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 시 헤인이 전사하고 게임이 재부팅된 뒤 타이틀로 돌아가는 원작 패배 경로",
       "normal_rom": {
@@ -40,6 +45,10 @@
     },
     {
       "number": 11,
+      "profiles": [
+        "pure",
+        "normal"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 시 일반판과 원작 디자인판에서 보호 대상이 전사해 타이틀로 돌아가는 원작 밸런스 경로이며, 표준 하드판은 같은 입력에서 2턴으로 진행됨",
       "normal_rom": {
@@ -60,7 +69,124 @@
       ]
     },
     {
+      "number": 12,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
+      "endpoint": "defeat_return_title_turn_1",
+      "rng_sensitive": true,
+      "turn_2_also_valid": true,
+      "reason": "무행동 첫 턴 전투가 원작 난수·프레임 타이밍 경계에 있어 엘윈 HP 0 패배와 HP 1 이상 2턴 진입이 모두 재현되며, 두 결과 모두 정상 경로로 승인됨",
+      "pure_rom": {
+        "path": "roms/builds/Langrisser II (Korean Original v1.3.7).md",
+        "sha256": "2d475a96f5f5ee26352bef6c3c392a77aafa283a2c0f260a6d1cb8603b3610ac"
+      },
+      "normal_rom": {
+        "path": "roms/builds/Langrisser II (Korean Normal v1.3.7).md",
+        "sha256": "92e90c0e00df03c1c3264bc6ff7702c5356c2ba2b65d5f2281177066f329c7d8"
+      },
+      "hard_rom": {
+        "path": "roms/builds/Langrisser II (Korean Hard T1.3.7 B1.3.6).md",
+        "sha256": "ca7750c207382023636acb37901242437861a8b83f4b39477c1405c8dd1ee6eb"
+      },
+      "normal_evidence": [
+        {
+          "path": "captures/analysis/s12-defeat-audit-current-normal-a-12-loader_s12_entry_turn1_entry.gst",
+          "sha256": "2f884a810c7a75fc1090f63a74d17db56cab4104cba42361f43456d6ec017974",
+          "entry_rng_seed": "0x45CE0000"
+        },
+        {
+          "path": "captures/run/s12-defeat-audit-current-normal-a-12-first-turn_s12_endpoint.png",
+          "sha256": "60ba5fdb8f9cfd27635ebacb0cfe6aad59317c4728979a52691c44fb61c3dbfe",
+          "observed_endpoint": "defeat_return_title_turn_1"
+        },
+        {
+          "path": "captures/analysis/s12-defeat-audit-current-normal-a-12-first-turn_s12_endpoint.gst",
+          "sha256": "d33952451e0e5add2a37d699448c0e1eb9061c87945a3125e15085f4669b9ac9",
+          "turn_counter": 1,
+          "elwin_hp": 0,
+          "elwin_defeated_flag": "0x80"
+        }
+      ],
+      "hard_evidence": [
+        {
+          "path": "captures/analysis/s12-defeat-audit-current-hard-a-12-loader_s12_entry_turn1_entry.gst",
+          "sha256": "816b00a16dd5a0608e73c7d3971d0e853508ddf32a2406ff2d04d6e6b288bb5e",
+          "entry_rng_seed": "0x45880000"
+        },
+        {
+          "path": "captures/run/s12-defeat-audit-current-hard-a-12-first-turn_s12_endpoint.png",
+          "sha256": "338a08f511582df11a47ce53428c74976b65d351417e45f1d6dac72d4d342b66",
+          "observed_endpoint": "defeat_return_title_turn_1"
+        },
+        {
+          "path": "captures/analysis/s12-defeat-audit-current-hard-a-12-first-turn_s12_endpoint.gst",
+          "sha256": "f77664a926af2a47c6154d9f6bc3de5adeed06e696d8ce9058a9dfab08de79c3",
+          "turn_counter": 1,
+          "elwin_hp": 0,
+          "elwin_defeated_flag": "0x80"
+        }
+      ],
+      "pure_evidence": [
+        {
+          "path": "captures/analysis/v135-pure-rerun-12-loader_s12_entry_turn1_entry.gst",
+          "sha256": "56ef0230ad7676e24b0f3bea7d6b0524171720fc526844166f2f54a425196f5f",
+          "release": "v1.3.5 historical replay",
+          "entry_rng_seed": "0x45600000"
+        },
+        {
+          "path": "captures/analysis/v135-pure-rerun-12-first-turn_s12_endpoint.gst",
+          "sha256": "d68a6ef751ed88ca2cf6e1d68f0db54d4aaae7e1dc3cc5848f547be223cf44ab",
+          "release": "v1.3.5 historical replay",
+          "turn_counter": 1,
+          "elwin_hp": 0,
+          "elwin_defeated_flag": "0x80"
+        }
+      ],
+      "comparison_evidence": [
+        {
+          "path": "captures/analysis/v135-normal-rerun-12-loader_s12_entry_turn1_entry.gst",
+          "sha256": "6ec118cd01e64938d8d74e7460cd18d0787262a870ed6133eb8165360c0d1313",
+          "release": "v1.3.5 historical replay",
+          "profile": "normal",
+          "entry_rng_seed": "0x45600000"
+        },
+        {
+          "path": "captures/analysis/v135-normal-rerun-12-first-turn_s12_endpoint.gst",
+          "sha256": "33514eff31654f0d6c90d8a43e9b6f3d5a8e23dca87342a99a6a86e4d50895ee",
+          "release": "v1.3.5 historical replay",
+          "profile": "normal",
+          "observed_endpoint": "turn_2_command",
+          "turn_counter": 2,
+          "elwin_hp": 1
+        },
+        {
+          "path": "captures/analysis/v137-final-frozen-20260811-01-pure-first-turn-12-loader_s12_entry_turn1_entry.gst",
+          "sha256": "e538e58e93877908d7f0cdfcef3982dfc2be3d912ef01b445e6ac65e0057792a",
+          "release": "v1.3.7 frozen final replay",
+          "profile": "pure",
+          "entry_rng_seed": "0x45A10000"
+        },
+        {
+          "path": "captures/analysis/v137-final-frozen-20260811-01-pure-first-turn-12-first-turn_s12_endpoint.gst",
+          "sha256": "c02f33b5b9bd6204fedf3045f37b0b8bbd91cb9e617c537318daf6a60680b56d",
+          "release": "v1.3.7 frozen final replay",
+          "profile": "pure",
+          "observed_endpoint": "turn_2_command",
+          "turn_counter": 2,
+          "elwin_hp": 1
+        }
+      ]
+    },
+    {
       "number": 13,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 시 엘윈이 적 공격으로 전사하고 게임이 재부팅된 뒤 타이틀로 돌아가는 원작 패배 경로",
       "normal_rom": {
@@ -98,6 +224,11 @@
     },
     {
       "number": 25,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
       "normal_rom": {
@@ -125,6 +256,11 @@
     },
     {
       "number": 26,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
       "normal_rom": {
@@ -152,6 +288,11 @@
     },
     {
       "number": 27,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
       "normal_rom": {
@@ -179,6 +320,11 @@
     },
     {
       "number": 30,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
       "normal_rom": {
@@ -206,6 +352,11 @@
     },
     {
       "number": 31,
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
       "endpoint": "defeat_return_title_turn_1",
       "reason": "무행동 첫 턴의 원작 패배 경로가 v1.3.4 세 판본에서 동일하게 재현됨",
       "normal_rom": {

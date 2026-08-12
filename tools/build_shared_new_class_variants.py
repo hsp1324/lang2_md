@@ -36,7 +36,7 @@ from tools.pixellab_elwin_inpaint import head_lock_box
 from tools.scenario_data import KOREAN_NAME_BY_ID
 
 
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/shared-new-classes-v1"
+OUTPUT = ROOT / "assets/class-sprites/source/latest/shared-new-classes-v1"
 TRANSPARENT = (0, 0, 0, 0)
 RESAMPLING = getattr(Image, "Resampling", Image)
 

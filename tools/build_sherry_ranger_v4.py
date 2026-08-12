@@ -19,14 +19,15 @@ from tools.build_ai_class_sprite_assets import (  # noqa: E402
     load_identity_mask_overrides,
     protected_eye_points,
 )
+from tools.pillow_compat import flattened_image_data  # noqa: E402
 
 
 SOURCE = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-high-master-elwin-swordmaster-v1/logical16/04-23.png"
 )
-SOURCE_DIR = ROOT / "docs/assets/ai-class-source/latest/sherry-ranger-v4"
+SOURCE_DIR = ROOT / "assets/class-sprites/source/latest/sherry-ranger-v4"
 LOGICAL_DIR = SOURCE_DIR / "logical16"
 PREVIEW_DIR = SOURCE_DIR / "previews"
 ORIGINAL = ROOT / "editor/static/class-sprites/commanders/4/21-p1.png"
@@ -48,7 +49,7 @@ RANGER_RECOLOR = {
 
 
 def visible_palette(image: Image.Image) -> Counter[tuple[int, int, int, int]]:
-    return Counter(color for color in image.get_flattened_data() if color[3])
+    return Counter(color for color in flattened_image_data(image) if color[3])
 
 
 def build() -> dict[str, object]:

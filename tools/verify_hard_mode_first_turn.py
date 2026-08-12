@@ -21,8 +21,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools import run_blastem_sequence as sequence_runner
-from tools import verify_hard_mode_scenario_runtime as loader_verifier
+from tools import run_blastem_sequence as sequence_runner  # noqa: E402
+from tools import verify_hard_mode_scenario_runtime as loader_verifier  # noqa: E402
 
 
 DEFAULT_ROM = (
@@ -72,7 +72,11 @@ def sha256(path: Path) -> str:
 
 
 def relative(path: Path) -> str:
-    return str(path.resolve().relative_to(ROOT))
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        return str(resolved)
 
 
 def load_json(path: Path) -> dict:
@@ -80,14 +84,24 @@ def load_json(path: Path) -> dict:
 
 
 def validate_expected_endpoint(row: dict) -> dict:
+    """Validate a reviewed endpoint row without requiring ignored archives.
+
+    The endpoint policy itself is tracked release data.  Historical screenshots
+    are useful provenance, but most of the old ``captures/analysis`` tree is
+    intentionally ignored and is absent in a clean checkout.  Hash-check every
+    retained file that is present and record availability for the result; the
+    fresh run still has to reproduce the exact endpoint and retains its own
+    capture/GST hashes.
+    """
+    validated = dict(row)
+    archival_evidence: list[dict[str, object]] = []
     for rom_key in ("normal_rom", "hard_rom", "pure_rom"):
         edition_rom = row.get(rom_key)
         if edition_rom is None:
             continue
         edition_path = ROOT / edition_rom["path"]
         # Old comparison ROMs are private/ignored and may be absent in a clean
-        # checkout. Retained screenshots remain mandatory and hash-locked; if
-        # an edition ROM is locally available, lock it too.
+        # checkout. If an edition ROM is locally available, lock it too.
         if (
             edition_path.is_file()
             and sha256(edition_path) != edition_rom["sha256"]
@@ -99,21 +113,33 @@ def validate_expected_endpoint(row: dict) -> dict:
         "normal_evidence",
         "hard_evidence",
         "pure_evidence",
+        "comparison_evidence",
     ):
         for evidence in row.get(evidence_group, []):
             evidence_path = ROOT / evidence["path"]
-            if not evidence_path.is_file():
-                raise FileNotFoundError(evidence_path)
-            if sha256(evidence_path) != evidence["sha256"]:
+            available = evidence_path.is_file()
+            if available and sha256(evidence_path) != evidence["sha256"]:
                 raise ValueError(
                     f"expected-endpoint evidence hash changed for "
                     f"{evidence_path}"
                 )
-    return row
+            archival_evidence.append({
+                "group": evidence_group,
+                "path": evidence["path"],
+                "sha256": evidence["sha256"],
+                "available": available,
+            })
+    validated["archival_evidence"] = archival_evidence
+    validated["archival_evidence_complete"] = all(
+        item["available"] for item in archival_evidence
+    )
+    return validated
 
 
 def expected_endpoint(
     scenario_number: int,
+    *,
+    profile: str | None = None,
     path: Path = EXPECTED_ENDPOINTS,
 ) -> dict | None:
     data = load_json(path)
@@ -125,41 +151,46 @@ def expected_endpoint(
         ),
         None,
     )
+    if row is not None and profile is not None:
+        profiles = row.get("profiles", ["pure", "normal", "hard"])
+        if profile not in profiles:
+            return None
     return validate_expected_endpoint(row) if row is not None else None
 
 
 def expected_endpoint_context(
     scenario_number: int,
     *,
+    profile: str | None = None,
     allow_unapproved_defeat: bool,
     path: Path = EXPECTED_ENDPOINTS,
 ) -> tuple[dict | None, dict | None]:
-    """Return hash-locked evidence plus an optional untrusted routing hint.
+    """Return reviewed policy plus an optional untrusted routing hint.
 
     ``--allow-unapproved-defeat`` is used for fresh cross-profile diagnosis.
-    A clean checkout can legitimately lack ignored historical screenshots;
-    those files must still fail closed for an ordinary release verification.
-    In diagnostic mode only, retain the manifest endpoint as a UI-routing hint
-    so a detected GAME OVER can be dismissed to the title, while never
-    reporting the missing row as approved evidence.
+    A row that does not approve the selected profile may still be used in that
+    diagnostic mode as a UI-routing hint so a detected GAME OVER can be
+    dismissed to the title, while never reporting it as approved evidence.
     """
-
-    try:
-        approved = expected_endpoint(scenario_number, path)
-    except FileNotFoundError:
-        if not allow_unapproved_defeat:
-            raise
-        data = load_json(path)
-        hint = next(
-            (
-                row
-                for row in data.get("scenarios", [])
-                if int(row["number"]) == scenario_number
-            ),
-            None,
-        )
-        return None, hint
-    return approved, approved
+    approved = expected_endpoint(
+        scenario_number,
+        profile=profile,
+        path=path,
+    )
+    if approved is not None:
+        return approved, approved
+    if not allow_unapproved_defeat:
+        return None, None
+    data = load_json(path)
+    hint = next(
+        (
+            row
+            for row in data.get("scenarios", [])
+            if int(row["number"]) == scenario_number
+        ),
+        None,
+    )
+    return None, hint
 
 
 def entry_evidence(
@@ -167,6 +198,7 @@ def entry_evidence(
     *,
     loader_results_path: Path = LOADER_SMOKE_RESULTS,
     deep_results_path: Path = DEEP_RESULTS,
+    require_loader_entry: bool = False,
 ) -> dict:
     loader = load_json(loader_results_path)
     for row in loader.get("scenarios", []):
@@ -182,6 +214,11 @@ def entry_evidence(
                     "hard_rom", {}
                 ).get("sha256"),
             }
+    if require_loader_entry:
+        raise ValueError(
+            f"Scenario {scenario_number} has no entry in required loader "
+            f"manifest {loader_results_path.resolve()}"
+        )
     deep = load_json(deep_results_path)
     for row in deep.get("scenarios", []):
         if (
@@ -649,10 +686,11 @@ def select_turn_end(
         ],
         env=env,
     )
-    map_predicate = lambda path: (
-        sequence_runner.battle_map_surface_visible(path)
-        and not sequence_runner.battle_command_menu_visible(path)
-    )
+    def map_predicate(path: Path) -> bool:
+        return (
+            sequence_runner.battle_map_surface_visible(path)
+            and not sequence_runner.battle_command_menu_visible(path)
+        )
     pre_turn_event_confirmations = 0
     try:
         map_checks = wait_for_surface(
@@ -1064,9 +1102,9 @@ def render_document(
         "map after closing the unit panel, confirm the Start menu after "
         "opening it, choose the stock `턴 종료` command, and wait through "
         "event, AI, movement, and battle animation frames.",
-        "- Accept only a real Turn 2 command menu or the scenario's normal "
-        "defeat path. A title return is accepted only when the immutable "
-        "normal ROM reproduces the same route and the scenario is listed in "
+        "- Accept only a real Turn 2 command menu or a reviewed natural "
+        "defeat path. A title return is accepted only for the profiles and "
+        "scenarios listed with hash-locked comparison evidence in "
         "`localization/hard_mode_first_turn_expected_endpoints.json`. The "
         "Turn 2 endpoint is also checked against work-RAM counter "
         "`$FFFFA5F1`.",
@@ -1110,7 +1148,8 @@ def render_document(
             "faction phases returned to a playable command state. "
             "`game_over_turn_1` is accepted only where the no-action route "
             "naturally defeats the party. `defeat_return_title_turn_1` "
-            "requires a matching immutable-normal-ROM defeat trace. Neither "
+            "requires a reviewed, profile-specific defeat trace. Reviewed "
+            "RNG-sensitive rows may also validly reach `turn_2_command`. Neither "
             "defeat endpoint claims a successful scenario clear.",
             "",
         ]
@@ -1136,6 +1175,7 @@ def save_document(
 def verify_scenario(
     scenario_number: int,
     *,
+    profile: str = "hard",
     rom: Path,
     loader_results_path: Path,
     deep_results_path: Path,
@@ -1155,6 +1195,7 @@ def verify_scenario(
     evidence_prefix: str = "hard_first_turn",
     verify_hard_runtime: bool = True,
     allow_unapproved_defeat: bool = False,
+    require_loader_entry: bool = False,
 ) -> dict:
     rom_digest = sha256(rom)
     evidence = (
@@ -1164,6 +1205,7 @@ def verify_scenario(
             scenario_number,
             loader_results_path=loader_results_path,
             deep_results_path=deep_results_path,
+            require_loader_entry=require_loader_entry,
         )
     )
     validate_entry_rom_lineage(
@@ -1295,6 +1337,7 @@ def verify_scenario(
             )
         approved_endpoint, endpoint_hint = expected_endpoint_context(
             scenario_number,
+            profile=profile,
             allow_unapproved_defeat=allow_unapproved_defeat,
         )
         detector_endpoint, phase_confirmations = run_detector(
@@ -1400,6 +1443,15 @@ def verify_scenario(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", type=int, required=True)
+    parser.add_argument(
+        "--profile",
+        choices=("pure", "normal", "hard"),
+        help=(
+            "release profile used for profile-specific no-action endpoint "
+            "approval; defaults to hard unless --skip-hard-runtime-check is "
+            "used, in which case it defaults to normal"
+        ),
+    )
     parser.add_argument("--rom", type=Path, default=DEFAULT_ROM)
     parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
     parser.add_argument(
@@ -1421,6 +1473,14 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEEP_RESULTS,
         help="fallback deep-runtime manifest for missing loader rows",
+    )
+    parser.add_argument(
+        "--require-loader-entry",
+        action="store_true",
+        help=(
+            "require the selected scenario in --loader-results and forbid "
+            "fallback to the historical deep-runtime manifest"
+        ),
     )
     parser.add_argument(
         "--require-entry-rom-match",
@@ -1529,6 +1589,11 @@ def main() -> int:
     results = load_results(results_path, rom)
     result = verify_scenario(
         args.scenario,
+        profile=(
+            args.profile
+            if args.profile is not None
+            else ("normal" if args.skip_hard_runtime_check else "hard")
+        ),
         rom=rom,
         loader_results_path=args.loader_results.resolve(),
         deep_results_path=args.deep_results.resolve(),
@@ -1552,6 +1617,7 @@ def main() -> int:
         evidence_prefix=evidence_prefix,
         verify_hard_runtime=not args.skip_hard_runtime_check,
         allow_unapproved_defeat=args.allow_unapproved_defeat,
+        require_loader_entry=args.require_loader_entry,
     )
     save_result(results_path, results, result)
     if args.documentation is not None:

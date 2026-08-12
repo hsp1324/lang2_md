@@ -728,7 +728,7 @@ user-facing Japanese byte string.
   drawing each unit's numeric level in the scrolling scenario briefing.
   It is an intentional compact level abbreviation, not untranslated
   Japanese. The current ROM preserves both record and hook, and
-  `captures/run/1391_s19_canonical_brief_06.png` visibly shows `L-5`, `L-4`, and other
+  `captures/run/preparation_surface_matrix/pure/s19/v137-frozen-current-prefix-20260812/briefing/attempt_1/detect_06.png` visibly shows `L-5`, `L-4`, and other
   unit levels.
 - Category totals: `retained_compact_english_ui` 1, `structured_layout_false_positive` 21, `word_stream_byte_false_positive` 116.
 - Exact aligned 32-bit references: 1; the sole reference is the retained `L-` load.

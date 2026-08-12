@@ -374,9 +374,9 @@ class Scenario9ClearProbeRomTests(unittest.TestCase):
 
     def test_diagnostic_checksums_are_valid(self):
         for mode, checksum in (
-            ("npc", 0xFB81),
-            ("protagonist", 0x4B91),
-            ("turn", 0x729B),
+            ("npc", 0xC643),
+            ("protagonist", 0x1653),
+            ("turn", 0x3D5D),
         ):
             with self.subTest(mode=mode):
                 data = self.diagnostic_patched(mode)

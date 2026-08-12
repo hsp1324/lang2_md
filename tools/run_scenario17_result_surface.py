@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture the current Scenario 17 normal-result path in an isolated probe."""
+"""Capture the current Scenario 17 result path in an isolated probe."""
 
 from __future__ import annotations
 
@@ -487,7 +487,9 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("normal", "hard"), required=True)
+    parser.add_argument(
+        "--profile", choices=("pure", "normal", "hard"), required=True
+    )
     parser.add_argument("--rom", type=Path, required=True)
     parser.add_argument("--seed-gst", type=Path, default=matrix.DEFAULT_SEED_GST)
     parser.add_argument("--display", default=matrix.DEFAULT_DISPLAY)

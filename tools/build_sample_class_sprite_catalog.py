@@ -13,7 +13,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = (
-    ROOT / "docs/assets/ai-class-source/latest/sample-class-variants-v1"
+    ROOT / "assets/class-sprites/source/latest/sample-class-variants-v1"
 )
 STATIC_ROOT = ROOT / "editor/static/sample-class-sprites"
 AI_ROOT = ROOT / "editor/static/ai-class-sprites"

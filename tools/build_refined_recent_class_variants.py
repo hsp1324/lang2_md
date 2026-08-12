@@ -34,8 +34,8 @@ from tools.build_shared_new_class_variants import (
 from tools.scenario_data import KOREAN_NAME_BY_ID
 
 
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined"
-V1 = ROOT / "docs/assets/ai-class-source/latest/shared-new-classes-v1"
+OUTPUT = ROOT / "assets/class-sprites/source/latest/shared-new-classes-v2-refined"
+V1 = ROOT / "assets/class-sprites/source/latest/shared-new-classes-v1"
 TRANSPARENT = (0, 0, 0, 0)
 INK = (36, 36, 36, 255)
 GRAY = (73, 73, 109, 255)
@@ -64,12 +64,12 @@ def stable_donor(commander_id: int, class_id: int) -> tuple[Path | None, str]:
     if class_id == 0x15:
         if commander_id == 5:
             return (
-                ROOT / "docs/assets/ai-class-source/latest/hein/logical16/15-wizard.png",
+                ROOT / "assets/class-sprites/source/latest/hein/logical16/15-wizard.png",
                 "사용자 승인 헤인 위저드",
             )
         return (
             ROOT
-            / "docs/assets/ai-class-source/latest/shared-wizard-hein-v1/logical16"
+            / "assets/class-sprites/source/latest/shared-wizard-hein-v1/logical16"
             / f"{commander_id:02d}-15.png",
             "사용자 승인 헤인 위저드 캐릭터별 변형",
         )
@@ -78,7 +78,7 @@ def stable_donor(commander_id: int, class_id: int) -> tuple[Path | None, str]:
             return None, "아론 고유 원본 하이프리스트 유지"
         return (
             ROOT
-            / "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16"
+            / "assets/class-sprites/source/latest/shared-hein-classes-v1/logical16"
             / f"{commander_id:02d}-16.png",
             "사용자 승인 헤인 하이프리스트 캐릭터별 변형",
         )
@@ -86,7 +86,7 @@ def stable_donor(commander_id: int, class_id: int) -> tuple[Path | None, str]:
         color = "red" if commander_id == 2 else "blue"
         return (
             ROOT
-            / "docs/assets/ai-class-source/latest/liana-lana-strict16-v1"
+            / "assets/class-sprites/source/latest/liana-lana-strict16-v1"
             / f"native16-{color}/18.png",
             "리아나·라나 승인 세이지 논리16",
         )
@@ -94,7 +94,7 @@ def stable_donor(commander_id: int, class_id: int) -> tuple[Path | None, str]:
         color = "red" if commander_id == 2 else "blue"
         return (
             ROOT
-            / "docs/assets/ai-class-source/latest/liana-lana-strict16-v1"
+            / "assets/class-sprites/source/latest/liana-lana-strict16-v1"
             / f"native16-{color}/28.png",
             "리아나·라나 승인 서머너 논리16",
         )

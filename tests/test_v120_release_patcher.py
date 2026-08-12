@@ -1,11 +1,13 @@
 import hashlib
 from pathlib import Path
+import shutil
 from tempfile import TemporaryDirectory
 import unittest
+from unittest import mock
 import zipfile
 
 from patcher import langrisser_ii_korean_patcher as patcher
-from tools.build_v136_release_patches import (
+from tools.build_v137_release_patches import (
     SOURCE_PATH,
     TARGETS,
     build,
@@ -15,7 +17,7 @@ from tools.build_v136_release_patches import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-class V136ReleasePatcherTests(unittest.TestCase):
+class V137ReleasePatcherTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if not SOURCE_PATH.is_file():
@@ -23,11 +25,44 @@ class V136ReleasePatcherTests(unittest.TestCase):
 
     def test_committed_bps_assets_are_reproducible(self):
         manifest = build(check=True)
-        self.assertEqual(manifest["release"], "v1.3.6")
+        self.assertEqual(manifest["release"], "v1.3.7")
         self.assertEqual(
             {record["id"] for record in manifest["targets"]},
             {"pure", "normal", "hard"},
         )
+
+    def test_embedded_self_test_hashes_and_applies_every_bps(self):
+        structural = patcher.verify_embedded_assets()
+        self.assertTrue(structural["embedded_manifest_verified"])
+        self.assertTrue(structural["all_patches_hashed"])
+        self.assertFalse(structural["all_patches_applied"])
+        applied = patcher.verify_embedded_assets(SOURCE_PATH.read_bytes())
+        self.assertTrue(applied["all_patches_applied"])
+        self.assertEqual(len(applied["targets"]), 3)
+        self.assertTrue(
+            all(row["application_verified"] for row in applied["targets"])
+        )
+
+    def test_embedded_self_test_rejects_a_corrupted_packaged_patch(self):
+        with TemporaryDirectory() as temporary:
+            asset_dir = Path(temporary)
+            manifest = patcher.load_release_manifest()
+            shutil.copy2(
+                ROOT / "patches" / patcher.MANIFEST_FILENAME,
+                asset_dir / patcher.MANIFEST_FILENAME,
+            )
+            for row in manifest["targets"]:
+                name = str(row["patch_filename"])
+                shutil.copy2(ROOT / "patches" / name, asset_dir / name)
+            corrupt = asset_dir / str(manifest["targets"][0]["patch_filename"])
+            payload = bytearray(corrupt.read_bytes())
+            payload[len(payload) // 2] ^= 0x01
+            corrupt.write_bytes(payload)
+            with (
+                mock.patch.object(patcher, "_asset_dir", return_value=asset_dir),
+                self.assertRaisesRegex(patcher.UpdateError, "내장 패치 해시"),
+            ):
+                patcher.verify_embedded_assets()
 
     def test_patcher_builds_all_three_verified_roms_without_source_overwrite(self):
         source_before = hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest()
@@ -44,9 +79,9 @@ class V136ReleasePatcherTests(unittest.TestCase):
             self.assertEqual(
                 {result.output_path.name for result in results},
                 {
-                    "Langrisser II (Korean Original v1.3.6).md",
-                    "Langrisser II (Korean Normal v1.3.6).md",
-                    "Langrisser II (Korean Hard v1.3.6).md",
+                    "Langrisser II (Korean Original v1.3.7).md",
+                    "Langrisser II (Korean Normal v1.3.7).md",
+                    "Langrisser II (Korean Hard v1.3.7).md",
                 },
             )
             for spec in TARGETS:
@@ -110,6 +145,87 @@ class V136ReleasePatcherTests(unittest.TestCase):
             self.assertEqual(
                 (directory / output_name).read_bytes(), b"keep this file"
             )
+
+    def test_source_output_collision_is_rejected_before_any_write(self):
+        with TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            source = directory / str(TARGETS[0]["output_filename"])
+            source.write_bytes(SOURCE_PATH.read_bytes())
+            source_hash = hashlib.sha256(source.read_bytes()).hexdigest()
+            with self.assertRaisesRegex(patcher.UpdateError, "원본 ROM과 결과 ROM"):
+                patcher.apply_release(source, output_dir=directory)
+            self.assertEqual(
+                hashlib.sha256(source.read_bytes()).hexdigest(), source_hash
+            )
+            for target in TARGETS[1:]:
+                self.assertFalse(
+                    (directory / str(target["output_filename"])).exists()
+                )
+
+    def test_three_output_commit_rolls_back_create_and_replace_together(self):
+        with TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            pure = directory / str(TARGETS[0]["output_filename"])
+            normal = directory / str(TARGETS[1]["output_filename"])
+            hard = directory / str(TARGETS[2]["output_filename"])
+            original = b"preexisting normal output"
+            normal.write_bytes(original)
+            real_replace = patcher.os.replace
+            injected = False
+
+            def flaky_replace(source, destination):
+                nonlocal injected
+                source_path = Path(source)
+                destination_path = Path(destination)
+                if (
+                    not injected
+                    and source_path.suffix == ".tmp"
+                    and destination_path == normal
+                ):
+                    injected = True
+                    raise OSError("injected second-output commit failure")
+                return real_replace(source, destination)
+
+            with (
+                mock.patch.object(
+                    patcher.os,
+                    "replace",
+                    side_effect=flaky_replace,
+                ),
+                self.assertRaisesRegex(patcher.UpdateError, "모두 되돌렸습니다"),
+            ):
+                patcher.apply_release(
+                    SOURCE_PATH,
+                    output_dir=directory,
+                    confirm_overwrite=lambda _path: True,
+                )
+
+            self.assertTrue(injected)
+            self.assertFalse(pure.exists())
+            self.assertEqual(normal.read_bytes(), original)
+            self.assertFalse(hard.exists())
+            self.assertEqual(list(directory.glob("*.bak")), [])
+            self.assertEqual(list(directory.glob(".*.tmp")), [])
+
+    def test_frozen_macos_defaults_next_to_app_bundle(self):
+        executable = Path(
+            "/Users/player/Downloads/Langrisser II Korean Patcher v1.3.7.app/"
+            "Contents/MacOS/Langrisser II Korean Patcher v1.3.7"
+        )
+        with (
+            mock.patch.object(patcher.sys, "frozen", True, create=True),
+            mock.patch.object(patcher.sys, "executable", str(executable)),
+            mock.patch.object(patcher.sys, "platform", "darwin"),
+        ):
+            self.assertEqual(
+                patcher._application_dir(),
+                Path("/Users/player/Downloads"),
+            )
+
+    def test_self_test_cli_does_not_launch_gui(self):
+        with mock.patch.object(patcher, "run_gui") as gui:
+            self.assertEqual(patcher.main(["--self-test"]), 0)
+        gui.assert_not_called()
 
 
 if __name__ == "__main__":

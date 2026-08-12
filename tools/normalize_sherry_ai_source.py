@@ -16,7 +16,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 GUIDE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sherry-v2/guides"
+    / "assets/class-sprites/source/latest/sherry-v2/guides"
 )
 RESAMPLING = getattr(Image, "Resampling", Image)
 SHERRY_NATIVE_SOURCE_FILES = {

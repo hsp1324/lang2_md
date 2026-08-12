@@ -10,6 +10,7 @@ from typing import Any
 
 from tools import hard_mode_approval
 from tools import hard_mode_baseline
+from tools import hard_mode_npc_survival
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -428,6 +429,7 @@ def build_plan(
         },
         "implementation_policy": {
             "normal_release_immutable": True,
+            "original_release_immutable": True,
             "commander_stats": "fixed scenario records",
             "enemy_soldier_corrections": (
                 "expanded-ROM per-record table and loader hook"
@@ -452,6 +454,11 @@ def build_plan(
                 "direct attack, and first-turn event verification"
             ),
             "fixed_summon_natural_magic_required": False,
+            "npc_survival_protection": (
+                "Hard only: loss-condition NPC commander DF offsets the "
+                "scenario enemy commander AT delta, and NPC soldier D+ "
+                "offsets the enemy soldier A+ delta"
+            ),
             "runtime_exception_manifest": str(
                 DEFAULT_RUNTIME_EXCEPTIONS.relative_to(ROOT)
             ),
@@ -473,7 +480,13 @@ def build_plan(
             "soldier_correction_record_count": soldier_correction_count,
             "mercenary_replacement_slot_count": mercenary_replacement_count,
             "summon_replacement_slot_count": summon_replacement_count,
+            "npc_survival_protection_record_count": (
+                hard_mode_npc_survival.EXPECTED_RECORD_COUNT
+            ),
         },
+        "npc_survival_protection": (
+            hard_mode_npc_survival.build_section(baseline, steps)
+        ),
         "automatic_exclusions": [
             {
                 "scenario": 1,
@@ -517,6 +530,7 @@ def _fmt_mercenaries(values: list[int]) -> str:
 def render_markdown(plan: dict[str, Any]) -> str:
     normal = plan["normal_release"]
     summary = plan["summary"]
+    npc_protection = plan["npc_survival_protection"]
     build = (
         json.loads(DEFAULT_BUILD_MANIFEST.read_text(encoding="utf-8"))
         if DEFAULT_BUILD_MANIFEST.exists()
@@ -563,6 +577,7 @@ def render_markdown(plan: dict[str, Any]) -> str:
         f"- 상태: `{plan['status']}`",
         f"- 승인 상태: `{plan['approval']['status']}`",
         f"- 필요한 승인 문구: `{plan['approval']['required_confirmation']}`",
+        "- 원작 디자인판 수정: 없음",
         "- 일반판 수정: 없음",
     ]
     if build is not None:
@@ -582,6 +597,10 @@ def render_markdown(plan: dict[str, Any]) -> str:
         f"- 대상 적 레코드: {summary['target_record_count']}개",
         f"- 지휘관 AT/DF 변경: {summary['commander_change_record_count']}개",
         f"- 적 전용 병사 A+/D+ 변경: {summary['soldier_correction_record_count']}개",
+        (
+            "- 패배 조건 NPC 생존 보정: "
+            f"{summary['npc_survival_protection_record_count']}명"
+        ),
         f"- 보수적 용병 승급: {summary['mercenary_replacement_slot_count']}칸",
         (
             "- 소환물 교체: "
@@ -600,6 +619,40 @@ def render_markdown(plan: dict[str, Any]) -> str:
         "  마법 권한이 붙지 않으므로 마법 사용을 전제로 편성하지 않는다.",
         "- 이벤트 진영 전환, 아군 지원, 연출용 강적은 자동 강화에서 뺀다.",
         "- 모든 변경은 주소와 전후 값을 아래 표 및 JSON 원장에 남긴다.",
+        "",
+        "## 패배 조건 NPC 생존 보정",
+        "",
+        (
+            "- 사용자 제보: [하드판 NPC 생존 난도 문제]("
+            f"{npc_protection['source_report']['url']})"
+        ),
+        (
+            "- 적용 범위: 패배 조건에 사망·전멸이 직접 연결된 "
+            f"9개 장의 고정 NPC {npc_protection['record_count']}명만 대상이다."
+        ),
+        "- 원작 디자인판과 최신 디자인 일반판은 0바이트 변경이며, 하드판에만 적용한다.",
+        "- NPC 지휘관 DF에는 같은 장의 적 지휘관 AT 강화분을, NPC 병사",
+        "  D+에는 같은 장의 적 병사 A+ 강화분을 더해 하드 강화의 비대칭만 상쇄한다.",
+        "- NPC AT, 병사 A+, 이름, 클래스, 레벨, AI, 초기 배치, 용병은 바꾸지 않는다.",
+        "- 리아나·제시카처럼 원작이 저장된 동료 성장값으로 다시 계산하는 NPC는",
+        "  재계산 뒤의 실제 DF/D+에 같은 보정분만 더해 현재 클래스와 레벨을 보존한다.",
+        "",
+        "| 장 | 패배 조건 | 주소 | NPC/클래스 | 지휘관 DF | 병사 A+/D+ |",
+        "|---:|:---|:---:|:---|:---:|:---:|",
+    ])
+    for scenario in npc_protection["scenarios"]:
+        for record in scenario["records"]:
+            commander_df = record["commander_df"]
+            soldier = record["soldier_correction"]
+            lines.append(
+                f"| {scenario['number']} | {scenario['loss_condition']} | "
+                f"`{record['offset']}` | {record['name_korean']}/"
+                f"{record['class_korean']} | {commander_df['original']} → "
+                f"{commander_df['planned']} | {soldier['at']}/"
+                f"{soldier['df']['original']} → {soldier['at']}/"
+                f"{soldier['df']['planned']} |"
+            )
+    lines.extend([
         "",
         "## 룬스톤 성장 전제",
         "",

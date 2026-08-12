@@ -1798,6 +1798,16 @@ class RuntimeVerificationInventoryTests(unittest.TestCase):
         actual = inventory.OUTPUT.read_text(encoding="utf-8")
         self.assertEqual(actual, expected)
 
+    def test_supplemental_notes_are_declared_data(self):
+        supplements = inventory.load_supplements()
+        self.assertEqual(set(supplements), {6, 21, 22, 23, 24, 25, 26})
+        self.assertIn("v1.3.6", supplements[6])
+        for scenario in range(21, 27):
+            self.assertIn(
+                f"scenario{scenario}_current_result_surface",
+                supplements[scenario],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,13 +12,13 @@ from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/elwin-hero-ai-v7-anatomy"
+OUTPUT = ROOT / "assets/class-sprites/source/latest/elwin-hero-ai-v7-anatomy"
 ROM_SPRITE = ROOT / "editor/static/class-sprites/commanders/1/22-p1.png"
 MASK_FILE = ROOT / "editor/ai_identity_masks.json"
 REFERENCE_BACKDROP = (238, 238, 238, 255)
 SELECTED_CANDIDATE = OUTPUT / "selected-sources/22-hero-ai.png"
 PREVIOUS_HERO = (
-    ROOT / "docs/assets/ai-class-source/latest/elwin-hero-ai-v6-fresh/22-hero.png"
+    ROOT / "assets/class-sprites/source/latest/elwin-hero-ai-v6-fresh/22-hero.png"
 )
 
 TRANSPARENT = (0, 0, 0, 0)

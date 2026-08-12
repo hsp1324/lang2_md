@@ -17,7 +17,7 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
     def test_resource_counts(self):
         groups = self.result["groups"]
         expected = {
-            "conditions": (32, 31),
+            "conditions": (32, 32),
             "scenario_descriptions": (31, 31),
             "item_names": (38, 38),
             "item_descriptions": (37, 37),
@@ -48,7 +48,8 @@ class JapaneseResourceInventoryTests(unittest.TestCase):
     def test_report_describes_all_condition_records(self):
         report = markdown_report(self.result)
         self.assertIn("builder patches Scenario 1-31", report)
-        self.assertIn("preserves the final preparation-UI record", report)
+        self.assertIn("Scenario 10 TURN 3 alternative condition", report)
+        self.assertNotIn("final preparation-UI record", report)
         self.assertNotIn("patches only Scenario 1", report)
 
 

@@ -22,19 +22,19 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten"
+    / "assets/class-sprites/source/latest/sample-class-variants-v2-ten"
 )
 SPRITE_ROOT = ROOT / "editor/static/class-sprites/commanders"
 CURRENT_AI_ROOT = ROOT / "editor/static/ai-class-sprites"
 MANIFEST = ROOT / "editor/static/ai-class-sprites/manifest.json"
 JESSICA_FRESH_MASKS = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     / "jessica-zarvera-summoner-ai-v1-fresh/identity-masks.json"
 )
 PRESERVED_ZARVERA_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sample-class-variants-v1/"
+    / "assets/class-sprites/source/latest/sample-class-variants-v1/"
     / "jessica-zarvera"
 )
 PRESERVED_ZARVERA_LOGICAL = (

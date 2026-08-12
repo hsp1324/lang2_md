@@ -5,6 +5,7 @@ import unittest
 from PIL import Image
 
 from scripts import build_korean_jp_probe as builder
+from tools.pillow_compat import flattened_image_data
 
 
 class AiClassPaletteRoleTests(unittest.TestCase):
@@ -18,7 +19,7 @@ class AiClassPaletteRoleTests(unittest.TestCase):
             image = Image.open(path).convert("RGBA")
             colors = {
                 color
-                for color in image.get_flattened_data()
+                for color in flattened_image_data(image)
                 if color[3] >= 128
             }
             yield commander_id, class_id, image, colors

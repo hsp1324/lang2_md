@@ -25,6 +25,7 @@ from tools.build_ai_class_sprite_assets import (  # noqa: E402
     protected_eye_points,
 )
 from tools.build_shared_new_class_variants import validate  # noqa: E402
+from tools.pillow_compat import flattened_image_data  # noqa: E402
 
 
 SOURCE = OUTPUT / "logical16/10-15.png"
@@ -40,7 +41,7 @@ ASSET_VERSION = "liana-lana-healer-shared-v106"
 
 def dominant_colors(image: Image.Image, limit: int = 6) -> list[str]:
     counts: dict[tuple[int, int, int, int], int] = {}
-    for color in image.get_flattened_data():
+    for color in flattened_image_data(image):
         if color[3]:
             counts[color] = counts.get(color, 0) + 1
     ranked = sorted(counts.items(), key=lambda item: -item[1])[:limit]
@@ -103,7 +104,7 @@ def main() -> int:
         if original.getpixel(point)[3]:
             composed.putpixel(point, original.getpixel(point))
     final_colors = {
-        color for color in composed.get_flattened_data() if color[3]
+        color for color in flattened_image_data(composed) if color[3]
     }
     if len(final_colors) > 15:
         raise ValueError(

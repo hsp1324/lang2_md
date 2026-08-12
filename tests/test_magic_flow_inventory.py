@@ -104,8 +104,23 @@ class MagicFlowInventoryTests(unittest.TestCase):
     def test_production_flow_is_source_equivalent(self):
         self.assertTrue(
             all(
-                row["production_source_equivalent"]
+                row["production_matches_declared_policy"]
                 for row in self.result["source_locked_ranges"]
+            )
+        )
+        class_records = self.result["source_locked_ranges"][0]
+        self.assertFalse(class_records["production_source_equivalent"])
+        self.assertEqual(
+            [
+                (row["class_id"], row["source_class_id"])
+                for row in class_records["declared_class_record_aliases"]
+            ],
+            [(0x2B, 0x06), (0x2C, 0x07)],
+        )
+        self.assertTrue(
+            all(
+                row["production_source_equivalent"]
+                for row in self.result["source_locked_ranges"][1:]
             )
         )
         self.assertEqual(
@@ -125,6 +140,15 @@ class MagicFlowInventoryTests(unittest.TestCase):
         with self.assertRaisesRegex(
             ValueError,
             "production logic/data differs from source",
+        ):
+            inventory(self.jp, bytes(mutated), self.runtime)
+
+    def test_declared_class_alias_lock_rejects_mutation(self):
+        mutated = bytearray(self.ko)
+        mutated[0x05F290] ^= 1
+        with self.assertRaisesRegex(
+            ValueError,
+            "class_records production logic/data differs from source",
         ):
             inventory(self.jp, bytes(mutated), self.runtime)
 

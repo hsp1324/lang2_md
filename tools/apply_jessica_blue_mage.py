@@ -44,13 +44,13 @@ MASK_PATH = ROOT / "editor/ai_identity_masks.json"
 DESIGN_PATH = ROOT / "editor/ai_class_design_overrides.json"
 MASTER_PATH = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-hein-classes-v1/master/"
     "hein-13-mage-user-approved.png"
 )
 LOGICAL_PATH = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-hein-classes-v1/logical16/10-13.png"
 )
 ORIGINAL_SPRITE_PATH = (

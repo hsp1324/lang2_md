@@ -8,18 +8,25 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 LIVE = ROOT / "editor/static/ai-class-sprites"
 MANIFEST = LIVE / "manifest.json"
 OVERRIDES = ROOT / "editor/ai_class_design_overrides.json"
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-liana-summoner-agent-v1"
 )
 SUMMONER_MASTER = OUTPUT / "master/02-28-liana-user-edited.png"
@@ -149,11 +156,11 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.get_flattened_data()]
+    return [list(color) for color in flattened_image_data(image)]
 
 
 def palette(image: Image.Image, limit: int | None = None) -> list[str]:
-    colors = Counter(color for color in image.get_flattened_data() if color[3])
+    colors = Counter(color for color in flattened_image_data(image) if color[3])
     return [
         "#%02x%02x%02x" % color[:3]
         for color, _ in colors.most_common(limit)
@@ -280,8 +287,8 @@ def build(*, recapture_master: bool = False) -> dict[str, object]:
             and len(colors) <= 15
             and not empty_rows
             and not empty_columns
-            and (0, 0, 0, 255) not in result.get_flattened_data()
-            and (255, 0, 255, 255) not in result.get_flattened_data()
+            and (0, 0, 0, 255) not in flattened_image_data(result)
+            and (255, 0, 255, 255) not in flattened_image_data(result)
         )
         reports.append(
             {

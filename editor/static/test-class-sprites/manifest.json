@@ -1,6 +1,6 @@
 {
   "generated_from": "roms/original/Langrisser II (Japan).md",
-  "concept_sheet": "docs/assets/allied_class_redesign_concept.png",
+  "concept_sheet": "assets/class-sprites/reference/allied_class_redesign_concept.png",
   "commander_count": 10,
   "redesigned_count": 111,
   "policy": "preserve the lowest class in each duplicate sprite group; dramatically redesign only later classes for editor comparison",

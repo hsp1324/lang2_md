@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """Replay Scenario 12's final stock battle and retain result/save surfaces."""
 
 from __future__ import annotations
@@ -34,6 +35,16 @@ FINAL_LIVING_ARMOR_RUNTIME_GROUP = 9
 EXPECTED_SHERRY_POSITION = (22, 8)
 EXPECTED_TARGET_POSITION = (23, 8)
 
+UNSUPPORTED_STATE_RESTORE_REASON = (
+    "deprecated Scenario 12 continuation runner: bundled BlastEm 0.6.2 "
+    "does not bind the historical 'load' key alias, so copying an external "
+    "GST over quicksave.gst cannot prove that the state was restored"
+)
+
+
+class UnsupportedStateRestoreError(RuntimeError):
+    """Raised before the deprecated external-GST replay can start."""
+
 
 def runtime_group(path: Path, group: int) -> dict[str, int]:
     payload = path.read_bytes()
@@ -62,40 +73,9 @@ def launch_continuation(
     initial_delay: float,
     load_delay: float,
 ) -> tuple[Path, Path]:
-    """Launch an isolated emulator, then load the untouched continuation GST."""
-    recorder.run_command(
-        [
-            sys.executable,
-            str(ROOT / "tools/run_blastem_sequence.py"),
-            "launch-only",
-            "--rom",
-            str(rom),
-            "--runtime-name",
-            runtime_name,
-            "--initial-delay",
-            str(initial_delay),
-            "--virtual-display",
-            recorder.display,
-            "--replace-existing",
-            "--send-event",
-        ]
-    )
-    # Create the ROM-specific quicksave directory without deriving or editing
-    # any game state. Replace that disposable state with the historical GST,
-    # then ask BlastEm to load it normally.
-    recorder.send(["save:0.8"])
-    quicksaves = sorted(
-        recorder.runtime_home.rglob("quicksave.gst"),
-        key=lambda path: path.stat().st_mtime_ns,
-    )
-    if not quicksaves:
-        raise RuntimeError("BlastEm did not create a continuation quicksave")
-    runtime_quicksave = quicksaves[-1]
-    shutil.copy2(continuation_gst, runtime_quicksave)
-    recorder.send([f"load:{load_delay}"])
-    loaded = recorder.capture("continuation/loaded.png")
-    retained = recorder.save_gst("states/loaded_continuation.gst")
-    return loaded, retained
+    """Reject the historical replay before launching or mutating a runtime."""
+    del recorder, rom, continuation_gst, runtime_name, initial_delay, load_delay
+    raise UnsupportedStateRestoreError(UNSUPPORTED_STATE_RESTORE_REASON)
 
 
 def select_sherry_attack(

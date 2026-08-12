@@ -9,6 +9,8 @@ import subprocess
 import sys
 import time
 
+from PIL import Image
+
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -28,6 +30,9 @@ RUN_SEQUENCE = ROOT / "tools/run_blastem_sequence.py"
 SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
 CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"
 XLIB_ONLY_CAPTURE = False
+CLASS_CHANGE_MENU_BLUE = (0, 0, 119)
+CLASS_CHANGE_MENU_PANEL = (153, 33, 302, 214)
+CLASS_CHANGE_MENU_MIN_BLUE_RATIO = 0.45
 
 
 def artifact_stem(
@@ -62,6 +67,76 @@ def runtime_progress(gst: bytes, runtime_record_index: int) -> tuple[int, int, i
     )
 
 
+def runtime_equipped_item(gst: bytes, runtime_record_index: int) -> int:
+    record = probe_builder.runtime_record_address(runtime_record_index) & 0xFFFF
+    offset = (
+        GST_WORK_RAM_FILE_OFFSET
+        + record
+        + probe_builder.EQUIPPED_ITEM_OFFSET
+    )
+    if len(gst) <= offset:
+        raise ValueError("GST is too short to contain the equipped item")
+    return gst[offset]
+
+
+def candidate_navigation(
+    candidate_count: int,
+    selected_index: int,
+    *,
+    capture_all: bool,
+) -> tuple[tuple[int, ...], int]:
+    """Return candidate rows to capture and the upward moves before apply."""
+    if not 1 <= selected_index <= candidate_count:
+        raise ValueError("selected candidate is outside the visible rows")
+    last_capture = candidate_count if capture_all else selected_index
+    return tuple(range(1, last_capture + 1)), last_capture - selected_index
+
+
+def class_change_candidate_surface_visible(path: Path) -> bool:
+    """Return whether a capture is the full three-row class-choice surface.
+
+    A tier-four Rune Stone restart can show an MP/stat page and then the
+    ``class change available`` notice before the candidate surface.  Counting
+    the stock dark-blue pixels in the right-hand information panels separates
+    that full-screen layout from both compact notices without depending on
+    localized text or a particular commander's portrait.
+    """
+    with Image.open(path) as opened:
+        image = opened.convert("RGB")
+    if image.size != (320, 240):
+        return False
+    panel = image.crop(CLASS_CHANGE_MENU_PANEL)
+    blue_pixels = sum(
+        pixel == CLASS_CHANGE_MENU_BLUE for pixel in panel.getdata()
+    )
+    return blue_pixels / (panel.width * panel.height) >= (
+        CLASS_CHANGE_MENU_MIN_BLUE_RATIO
+    )
+
+
+def advance_to_candidate_surface(
+    prefix: Path,
+    *,
+    max_advances: int,
+    delay: float = 1.5,
+) -> Path:
+    """Advance bounded notification pages and retain the first real menu."""
+    if max_advances < 1:
+        raise ValueError("max candidate advances must be positive")
+    for advance in range(1, max_advances + 1):
+        send_keys(f"c:{delay}")
+        probe = Path(f"{prefix}_candidate_advance_{advance:02d}.png")
+        capture(probe)
+        if class_change_candidate_surface_visible(probe):
+            candidate = Path(f"{prefix}_candidate1.png")
+            shutil.copy2(probe, candidate)
+            return candidate
+    raise RuntimeError(
+        "class-change candidate surface did not appear after "
+        f"{max_advances} confirmation pages"
+    )
+
+
 def build_probe(
     input_rom: Path,
     source_rom: Path,
@@ -73,6 +148,8 @@ def build_probe(
     preferred_candidate: int | None = None,
     bypass_join_visibility: bool = False,
     runestone_restart: bool = False,
+    preserve_production_resume: bool = False,
+    clear_join_marker: bool = False,
 ) -> tuple[int, int]:
     source = source_rom.read_bytes()
     probe = bytearray(input_rom.read_bytes())
@@ -92,6 +169,8 @@ def build_probe(
         restore_commander_id=restore_commander_id,
         preferred_candidate=preferred_candidate,
         runestone_restart=runestone_restart,
+        preserve_production_resume=preserve_production_resume,
+        clear_join_marker=clear_join_marker,
     )
     if bypass_join_visibility:
         hook = builder.JOIN_CLASS_CHOICE_VISIBILITY_HOOK
@@ -177,12 +256,36 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--preserve-production-resume",
+        action="store_true",
+        help=(
+            "leave the production class-change resume/EXP wrapper installed "
+            "and do not use the diagnostic post-apply identity-restoration wrapper"
+        ),
+    )
+    parser.add_argument(
+        "--clear-join-marker",
+        action="store_true",
+        help=(
+            "clear the selected commander's join marker immediately before "
+            "the stock level-up handler; diagnostic Rune Stone precondition"
+        ),
+    )
+    parser.add_argument(
         "--candidate-index",
         type=int,
         default=1,
         help=(
             "one-based visible candidate row to select; navigation uses the "
             "real class-change UI and does not reorder ROM data"
+        ),
+    )
+    parser.add_argument(
+        "--capture-all-candidates",
+        action="store_true",
+        help=(
+            "visit and capture every visible candidate row, then return to "
+            "--candidate-index before applying it"
         ),
     )
     parser.add_argument(
@@ -198,6 +301,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--initial-delay", type=float, default=12.0)
     parser.add_argument("--confirmation-delay", type=float, default=0.9)
     parser.add_argument("--max-confirmations", type=int, default=40)
+    parser.add_argument(
+        "--max-candidate-advances",
+        type=int,
+        default=8,
+        help=(
+            "maximum bounded confirmations used to pass stat/availability "
+            "notices before the real class-choice surface"
+        ),
+    )
     parser.add_argument("--stability-delay", type=float, default=15.0)
     blastem_display.add_display_arguments(parser)
     return parser.parse_args()
@@ -232,6 +344,8 @@ def main() -> int:
         args.preferred_candidate,
         args.bypass_join_visibility,
         args.runestone_restart,
+        args.preserve_production_resume,
+        args.clear_join_marker,
     )
     source = args.source_rom.read_bytes()
     transition = (
@@ -297,11 +411,20 @@ def main() -> int:
         )
         run(sequence_command)
         capture(Path(f"{prefix}_trigger.png"))
-        send_keys("c:1.5")
-        capture(Path(f"{prefix}_candidate1.png"))
-        for candidate_index in range(2, args.candidate_index + 1):
+        advance_to_candidate_surface(
+            prefix,
+            max_advances=args.max_candidate_advances,
+        )
+        capture_rows, upward_moves = candidate_navigation(
+            len(candidates),
+            args.candidate_index,
+            capture_all=args.capture_all_candidates,
+        )
+        for candidate_index in capture_rows[1:]:
             send_keys("down:0.8")
             capture(Path(f"{prefix}_candidate{candidate_index}.png"))
+        for _ in range(upward_moves):
+            send_keys("up:0.8")
         send_keys("c:5.0")
         capture(Path(f"{prefix}_applied_map.png"))
         time.sleep(args.stability_delay)
@@ -313,12 +436,24 @@ def main() -> int:
             raise RuntimeError(
                 f"expected one quicksave.gst for {runtime_name}, found {len(states)}"
             )
-        progress = runtime_progress(states[0].read_bytes(), args.runtime_record_index)
-        expected = (expected_class, args.restore_commander_id, 1)
+        gst = states[0].read_bytes()
+        progress = runtime_progress(gst, args.runtime_record_index)
+        expected_commander_id = (
+            args.commander_id
+            if args.preserve_production_resume
+            else args.restore_commander_id
+        )
+        expected = (expected_class, expected_commander_id, 1)
         if progress[:3] != expected:
             raise RuntimeError(
                 "applied runtime mismatch: expected class/commander/LV "
                 f"{expected}, found {progress[:3]} (EXP {progress[3]})"
+            )
+        equipped_item = runtime_equipped_item(gst, args.runtime_record_index)
+        if args.runestone_restart and equipped_item != 0:
+            raise RuntimeError(
+                "Rune Stone was not consumed: equipped item is "
+                f"0x{equipped_item:02X}"
             )
         gst_output.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(states[0], gst_output)

@@ -8,7 +8,7 @@ the remaining unreviewed entries and all live playback checks stay separate.
 
 | Resource | Entries | Modified | Reviewed | Live verified |
 | --- | ---: | ---: | ---: | ---: |
-| conditions | 32 | 31 | 0 | 0 |
+| conditions | 32 | 32 | 0 | 0 |
 | scenario_descriptions | 31 | 31 | 31 | 0 |
 | item_names | 38 | 38 | 0 | 0 |
 | item_descriptions | 37 | 37 | 0 | 0 |
@@ -20,7 +20,7 @@ the remaining unreviewed entries and all live playback checks stay separate.
 
 ## Notes
 
-- Conditions use 32 records: the builder patches Scenario 1-31 and preserves the final preparation-UI record.
+- Conditions use 32 records: the builder patches Scenario 1-31 plus the Scenario 10 TURN 3 alternative condition.
 - Summoned creatures are class-table IDs and are tracked in `localization/global_strings.json`.
 - `mercenary_battle_names` is a separate direct-word path from the shared byte class table.
 - Detailed pointers, original tokens, targets, and explicit review flags are in

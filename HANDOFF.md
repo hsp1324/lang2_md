@@ -8703,20 +8703,20 @@ contains 57 safe syllables as documented below and in
   entries still bypass the AI result entirely. The browser inspector displays
   source and 16x16 dominant color swatches at equal 88-pixel preview sizes to
   expose future palette or apparent-size drift.
-- Generated sources are retained under `docs/assets/ai-class-source`, while
+- Generated sources are retained under `assets/class-sprites/source`, while
   the accepted final preview input is
-  `docs/assets/allied_class_redesign_concept.png`. It is a `972x1619` 10x5
+  `assets/class-sprites/reference/allied_class_redesign_concept.png`. It is a `972x1619` 10x5
   high-resolution pseudo-pixel sheet rather than a native 16x16 sheet, and now
   supplies all ten commanders, including Elwin. The rejected
   `allied_class_ai_evolution_v2.png` and direct Elwin/Liana experiments remain
-  under `docs/assets/ai-class-source` as source history but are not wired into
+  under `assets/class-sprites/source` as source history but are not wired into
   the preview. Its dark gray background is removed with a color-seeded
   foreground mask before phase-selected nearest reduction. Character design work is
   intentionally paused here so localization remains the primary task.
 - A separate final generation experiment used each commander's enlarged ROM
   16x16 reference strip as direct image input. The ten raw five-stage outputs
-  are `docs/assets/direct_16x16_01_elwin.png` through
-  `docs/assets/direct_16x16_10_jessica.png`. They are comparison-only source
+  are `assets/class-sprites/reference/direct_16x16_01_elwin.png` through
+  `assets/class-sprites/reference/direct_16x16_10_jessica.png`. They are comparison-only source
   files: the AI tab, Test Change tab, editor build API, and ROM builder do not
   read them.
 - Headless Chromium at 1600x1000 and 390x844 verified 17 Elwin nodes, 28
@@ -8728,7 +8728,7 @@ contains 57 safe syllables as documented below and in
 
 - This section supersedes the 2026-07-24 AI-input notes above. The current
   Elwin upper-class source is
-  `docs/assets/ai-class-source/elwin-native16-v14`. Swordmaster now has paired
+  `assets/class-sprites/source/elwin-native16-v14`. Swordmaster now has paired
   2-3-pixel gold/yellow pauldrons inspired by High Lord, as explicitly
   requested, while keeping one sword per hand. Its accepted raw output matches
   64/69 identity pixels (92.8%), has 72 connected body/equipment pixels, and
@@ -8751,7 +8751,7 @@ contains 57 safe syllables as documented below and in
   other rank-zero/base class stay byte-exact to the ROM.
 - Commanders 2-10 no longer use `identity-locked-class-boards` as the final
   source or identity reference. Their new per-commander sheets live below
-  `docs/assets/ai-class-source/character-ai-v3`. Every sheet was regenerated
+  `assets/class-sprites/source/character-ai-v3`. Every sheet was regenerated
   with `references/XX-original.png` as the authoritative face/hair input.
   Sherry and Hein now use newer per-class sources described below; the other
   commanders continue to use these sheets. Sherry has the original short bob;
@@ -8790,7 +8790,7 @@ contains 57 safe syllables as documented below and in
   source, converted 16x16, and ROM original side by side. These ten files live
   in the corresponding `character-ai-v3/<character>` directories.
 - Sherry's current source is
-  `docs/assets/ai-class-source/sherry-native16-v1`. It uses only each class's
+  `assets/class-sprites/source/sherry-native16-v1`. It uses only each class's
   ROM full-ratio image and user mask as image-generation inputs; the previous
   Sherry AI sheet was excluded. All eleven upper duplicate classes retain the
   large head, eye/white-eye pixels, and jaw-length short silver bob. Raw
@@ -8799,9 +8799,9 @@ contains 57 safe syllables as documented below and in
   logical16 designs, and `sherry-v1-ai-final-rom.png` compares AI source,
   converted sprite, and ROM original.
 - Hein's current source is
-  `docs/assets/ai-class-source/latest/hein`. All eleven upper duplicate
+  `assets/class-sprites/source/latest/hein`. All eleven upper duplicate
   classes were generated anew from only their ROM originals and user masks;
-  prior AI art is archived under `docs/assets/ai-class-source/archive/hein`.
+  prior AI art is archived under `assets/class-sprites/source/archive/hein`.
   Final sprites preserve the locked identity pixels and use every row and
   column of the logical 16×16 canvas.
 - The active preview asset version is `hein-full-square-v31`.

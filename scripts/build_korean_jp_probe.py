@@ -14,12 +14,6 @@ import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
-# Pillow 11 added ``get_flattened_data`` as the replacement for ``getdata``.
-# Distribution Python environments used by the Linux patch/build workflow can
-# still ship Pillow 9 or 10, so expose the equivalent iterator there as well.
-if not hasattr(Image.Image, "get_flattened_data"):
-    Image.Image.get_flattened_data = Image.Image.getdata  # type: ignore[attr-defined]
-
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from tools.class_change_data import (
     CLASS_CHANGE_POINTER_TABLE,
@@ -34,6 +28,7 @@ from tools.rom_version import (
     get_profile as get_rom_version_profile,
 )
 from tools.scenario_data import KOREAN_NAME_BY_ID
+from tools.pillow_compat import flattened_image_data
 
 
 IN_ROM = Path("roms/original/Langrisser II (Japan).md")
@@ -521,7 +516,7 @@ def ai_class_map_palette_index_overrides(
 
     visible_colors = Counter(
         color
-        for color in image.convert("RGBA").get_flattened_data()
+        for color in flattened_image_data(image.convert("RGBA"))
         if color[3] >= 128
     )
     colors_by_family: dict[
@@ -1947,17 +1942,20 @@ CLASS_CHANGE_EXPECTED_GLYPHS = (
 # the tier-1 LV10 class-change boundary.
 # When each commander first becomes runtime-active, the stock progression
 # handler sees LV10, opens that commander's ordinary tier-2 candidate screen,
-# and resets the chosen class to LV1.  A continuation wrapper then feeds EXP
-# back through the stock level-up state machine until the selected tier-2
-# class reaches the commander's original joining level plus three.  This keeps
-# every ordinary level-up/stat-growth message and does not synthesize stats.
+# and resets the chosen class to LV1.  A continuation wrapper then grants one
+# fixed raw EXP amount, independent of the selected branch, and lets the stock
+# state machine consume it.  Every profile reconstructs only the cumulative
+# EXP needed to have just reached the commander's original tier-2 level; the
+# Japanese row's partially filled EXP bar is deliberately excluded.  The
+# selected class's own gauge therefore determines the resulting level without
+# synthetic stat, profile bonus, or branch-specific adjustment.
 INITIAL_COMMANDER_ROSTER_TABLE = 0x05E64A
 INITIAL_COMMANDER_RECORD_SIZE = 0x0E
 JOIN_CLASS_CHOICE_LEVEL_CONTINUATION = 0x014ABA
 JOIN_CLASS_CHOICE_APPLY_CONTINUATION = 0x014D0C
 JOIN_CLASS_CHOICE_CONTINUATION_ORIGINAL = bytes.fromhex("00 01 48 0C")
 JOIN_CLASS_CHOICE_LEVEL_WRAPPER = 0x31E000
-JOIN_CLASS_CHOICE_LEVEL_WRAPPER_LIMIT = 0x31E400
+JOIN_CLASS_CHOICE_LEVEL_WRAPPER_LIMIT = 0x31E200
 # Preparation and class-change Korean glyphs deliberately reuse the stock
 # battle cursor cells because the two surfaces are never visible at the same
 # instant.  Their VRAM contents do survive the transition, however: after a
@@ -1983,16 +1981,45 @@ BATTLE_OVERLAY_RESTORE_ROUTINE_LIMIT = 0x2F8400
 # the three LV10 tier-one records enter class choice at scenario start, before
 # the characters actually appear.  Preserve the stock compare for every other
 # commander and defer only these three until their first player scenario and
-# a genuine on-map coordinate.  $FFFFA612 is the live scenario number copied
-# by the stock scenario loader (1..31).
+# a genuine on-map coordinate.  The stock route/result UI uses $FFFFA612 as a
+# transient selector/next-scenario word, but the manual-save descriptor stores
+# only the active scenario at $FFFFA49C.  A cold title-screen LOAD therefore
+# leaves A612 zero, while a warm LOAD can retain an unrelated nonzero selector
+# value.  The visibility guard always starts from the persisted active scenario
+# and uses A612 only when the scheduler stack proves the stock result callback
+# owns the scan and has already selected the next scenario.
 JOIN_CLASS_CHOICE_VISIBILITY_HOOK = 0x014848
 JOIN_CLASS_CHOICE_VISIBILITY_HOOK_ORIGINAL = bytes.fromhex(
     "0C 28 00 0A 00 2E"
 )
+JOIN_CLASS_CHOICE_SCAN_ENTRY = 0x01480C
 JOIN_CLASS_CHOICE_VISIBILITY_GUARD = 0x31E200
-JOIN_CLASS_CHOICE_VISIBILITY_GUARD_LIMIT = 0x31E400
-JOIN_CLASS_CHOICE_CURRENT_SCENARIO = 0xA612
-JOIN_CLASS_CHOICE_ACTIVE_MARKER = 0x5A
+JOIN_CLASS_CHOICE_VISIBILITY_GUARD_LIMIT = 0x31E380
+JOIN_CLASS_CHOICE_SELECTOR_SCENARIO = 0xA612
+# The stock class-choice path applies a second ownership filter after the
+# LV10/visibility gate.  Scenario 10 keeps Lester's event-owned side byte at
+# 4 even after he joins, so its bit 0 is clear and the stock filter silently
+# skips him.  Keith and Jessica use side byte 3 and do not hit this defect.
+# Wrap only that filter and admit Lester only inside Scenario 10's result scan;
+# ordinary turns, pre-join NPC scans, later Runestone changes, and every other
+# commander retain the exact stock bit-test result.
+JOIN_CLASS_CHOICE_OWNERSHIP_HOOK = 0x014B2C
+JOIN_CLASS_CHOICE_OWNERSHIP_HOOK_ORIGINAL = bytes.fromhex(
+    "08 02 00 00 67 00 01 EA 53 41"
+)
+JOIN_CLASS_CHOICE_OWNERSHIP_GUARD = 0x31E380
+JOIN_CLASS_CHOICE_OWNERSHIP_GUARD_LIMIT = 0x31E400
+JOIN_CLASS_CHOICE_ACTIVE_SCENARIO = 0xA49C
+JOIN_CLASS_CHOICE_CALLBACK_STACK_POINTER = 0xFFFF8000
+JOIN_CLASS_CHOICE_RESULT_SCAN_CONTINUATION = 0x0000CEC4
+JOIN_CLASS_CHOICE_OWNERSHIP_REJECT = 0x014D1C
+# v1.3.6 left 0x5A in SRAM after a join-time EXP grant.  It identified a
+# commander that had received the old wrapper at some point, not a currently
+# pending join.  Reusing it made every later Runestone restart look like a
+# fresh join and re-applied the bonus.  A new one-shot value is armed only by
+# the live tier-1 join gate; the wrapper treats the old value as stale data.
+JOIN_CLASS_CHOICE_LEGACY_ACTIVE_MARKER = 0x5A
+JOIN_CLASS_CHOICE_PENDING_MARKER = 0xA5
 JOIN_CLASS_CHOICE_HAWK_LORD = 0x2B
 JOIN_CLASS_CHOICE_CROCO_LORD = 0x2C
 JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES = {
@@ -2043,10 +2070,8 @@ JOIN_CLASS_CHOICE_RECORDS = {
         "tier2_candidates": (0x04, JOIN_CLASS_CHOICE_HAWK_LORD, 0x08),
         "original_tier2_class": 0x06,
         "original_tier2_level": 1,
-        "join_level_bonus": 3,
-        "target_tier2_level": 4,
-        "residual_experience": 5,
-        "experience_policy": "target_level",
+        "original_tier2_experience": 5,
+        "base_join_raw_experience": 0x00,
         "first_appearance_scenario": 7,
         "first_player_scenario": 8,
         "active_marker_address": 0x00403FE7,
@@ -2064,21 +2089,8 @@ JOIN_CLASS_CHOICE_RECORDS = {
         "tier2_candidates": (0x05, JOIN_CLASS_CHOICE_CROCO_LORD, 0x0A),
         "original_tier2_class": 0x07,
         "original_tier2_level": 7,
-        "join_level_bonus": 3,
-        "target_tier2_level": 10,
-        "residual_experience": 15,
-        # Lester receives one finite post-choice EXP grant per branch.  These
-        # byte-sized grants produce the requested natural branch difference:
-        # Knight/Croco Lord reach LV8 and Shaman reaches LV9, without refilling
-        # EXP until a forced target level is reached.
-        "experience_policy": "fixed_grant",
-        "fixed_experience_by_class": {
-            0x05: 0xE0,
-            # Crocoknight/Croco Lord uses a 24-EXP gauge; seven complete
-            # gauges reach the same LV8 branch target as Knight's 7 * 32.
-            JOIN_CLASS_CHOICE_CROCO_LORD: 0xA8,
-            0x0A: 0xC0,
-        },
+        "original_tier2_experience": 15,
+        "base_join_raw_experience": 0x90,
         "first_appearance_scenario": 10,
         "first_player_scenario": 11,
         "active_marker_address": 0x00403FE9,
@@ -2095,15 +2107,29 @@ JOIN_CLASS_CHOICE_RECORDS = {
         "tier2_candidates": (0x08, 0x09, 0x04),
         "original_tier2_class": 0x09,
         "original_tier2_level": 5,
-        "join_level_bonus": 3,
-        "target_tier2_level": 8,
-        "residual_experience": 0,
-        "experience_policy": "target_level",
+        "original_tier2_experience": 0,
+        "base_join_raw_experience": 0x60,
         "first_appearance_scenario": 11,
         "first_player_scenario": 12,
         "active_marker_address": 0x00403FEB,
     },
 }
+
+
+def join_raw_experience(commander_id: int) -> int:
+    """Return one branch- and profile-independent join EXP grant."""
+    if commander_id not in JOIN_CLASS_CHOICE_RECORDS:
+        raise ValueError(f"unknown join-choice commander: {commander_id}")
+    value = int(
+        JOIN_CLASS_CHOICE_RECORDS[commander_id]["base_join_raw_experience"]
+    )
+    if not 0 <= value <= 0xFF:
+        raise ValueError(
+            f"join EXP for commander {commander_id} does not fit one byte: {value}"
+        )
+    return value
+
+
 # Scenario 1 event pages use both FFFF (page end) and FFFD (event end).
 # Older suffix-only patches left the beginning of these pages in Japanese.
 # Keep the original terminator at its fixed address and replace the whole body.
@@ -6905,6 +6931,7 @@ def patch_profile_user_customizations(
     patch_join_class_choice_progression(data, source)
     patch_join_class_choice_class_data(data, source)
     patch_join_class_choice_visibility_guard(data, source)
+    patch_join_class_choice_ownership_guard(data, source)
     patch_join_class_choice_target_levels(data, source)
     patch_scenario6_runestone_accessibility(data, source)
     patch_scenario31_demon_lord_identity(data, source)
@@ -6939,20 +6966,55 @@ def build_join_class_choice_visibility_guard() -> bytes:
     clear.  A later stock progression pass can then open class choice after the
     reinforcement has appeared and the player selects it.
 
-    v1.3.0 saves can contain Keith or Lester as Fighter LV10.  v1.3.2 removed
-    Fighter from their class-change chains and tried to migrate only records
-    that were still exactly LV10.  Once the broken chain let either commander
-    reach LV11, every later scan skipped that migration at the initial LV10
-    compare and the invalid Fighter continued to level forever.  Dispatch the
-    two legacy records before the level compare, and restore every joining
-    progression field to its clean LV10 boundary once the commander is really
-    on the player's map.  This repairs LV10 and already-damaged LV11+ saves
-    while leaving pre-join NPCs and ordinary Runestone progression untouched.
+    The non-public v1.3.0 development build and released v1.3.1 can contain
+    Keith or Lester as Fighter LV10.  v1.3.2 removed Fighter from their
+    class-change chains and tried to migrate only records that were still
+    exactly LV10.  Once the broken chain let either commander reach LV11,
+    every later scan skipped that migration at the initial LV10 compare and
+    the invalid Fighter continued to level forever.  Dispatch the two legacy
+    records before the level compare, and restore every joining progression
+    field to its clean LV10 boundary once the commander is really on the
+    player's map.  This repairs public v1.3.1 LV10 and v1.3.2/v1.3.3 LV11+
+    saves while leaving pre-join NPCs and ordinary Runestone progression
+    untouched.
+
+    The same live-boundary check arms a one-shot SRAM marker only while the
+    target is really in its tier-1 class at LV10.  The post-class-change EXP
+    wrapper requires that marker, so a later Runestone restart cannot receive
+    the join bonus again merely because it selected one of the same tier-2
+    classes.
     """
     code = _M68KCode()
+
+    # A49C is the persisted active scenario and is authoritative for ordinary
+    # turns plus both cold and warm manual LOAD.  Natural result processing has
+    # already placed the next scenario in A612, but that scratch word may be a
+    # stale nonzero value after a warm LOAD.  Use it only when the scheduler's
+    # outer continuation is the exact stock result callback.  Every 0x1480C
+    # entry is scheduler-owned, and A2 is overwritten at 0x14AE4 or 0x14B3A
+    # before either progression branch first reads it, so it is safe scratch.
+    # D2 is likewise overwritten by the stock class-gauge read after this hook.
+    code.emit(
+        bytes.fromhex("34 38")
+        + JOIN_CLASS_CHOICE_ACTIVE_SCENARIO.to_bytes(2, "big")
+    )  # move.w $A49C.w,d2
+    code.emit(
+        bytes.fromhex("24 79")
+        + JOIN_CLASS_CHOICE_CALLBACK_STACK_POINTER.to_bytes(4, "big")
+    )  # movea.l $FFFF8000.l,a2
+    code.emit(
+        bytes.fromhex("0C 92")
+        + JOIN_CLASS_CHOICE_RESULT_SCAN_CONTINUATION.to_bytes(4, "big")
+    )  # cmpi.l #$0000CEC4,(a2)
+    code.emit("66 04")  # bne.b scenario_ready
+    code.emit(
+        bytes.fromhex("34 38")
+        + JOIN_CLASS_CHOICE_SELECTOR_SCENARIO.to_bytes(2, "big")
+    )  # result scan only: move.w $A612.w,d2
+
     for commander_id in JOIN_CLASS_CHOICE_RECORDS:
         code.emit(bytes.fromhex("0C 28 00") + bytes((commander_id, 0x00, 0x01)))
-        code.branch_word(0x6700, f"target_{commander_id}")
+        code.branch_byte(0x6700, f"target_{commander_id}")
 
     # Every non-target commander keeps the stock comparison result.
     code.emit("0C 28 00 0A 00 2E")
@@ -6962,12 +7024,13 @@ def build_join_class_choice_visibility_guard() -> bytes:
         code.label(f"target_{commander_id}")
         first_scenario = int(row["first_player_scenario"])
         code.emit(
-            bytes.fromhex("0C 78")
+            bytes.fromhex("0C 42")
             + first_scenario.to_bytes(2, "big")
-            + JOIN_CLASS_CHOICE_CURRENT_SCENARIO.to_bytes(2, "big")
-        )  # cmpi.w #first_player_scenario,$A612.w
-        code.branch_word(0x6500, "hidden")  # bcs.w hidden
-        code.branch_word(0x6000, "coordinates")
+        )  # cmpi.w #first_player_scenario,d2
+        # Keep the 384-byte reservation by taking the nearby eligible branch
+        # with a byte displacement and retaining the far hidden word branch.
+        code.branch_byte(0x6400, "coordinates")  # bcc.b coordinates
+        code.branch_word(0x6000, "hidden")
 
     code.label("coordinates")
     code.emit("0C 28 00 FF 00 06")  # cmpi.b #$FF,6(a0) -- map X
@@ -6979,38 +7042,49 @@ def build_join_class_choice_visibility_guard() -> bytes:
     code.emit("4A 28 00 07")        # X=0: reject only when Y is also zero
     code.branch_word(0x6700, "hidden")
     code.label("visible")
-    for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
-        if row.get("legacy_tier1_class") is None:
-            continue
+    for commander_id in JOIN_CLASS_CHOICE_RECORDS:
         code.emit(bytes.fromhex("0C 28 00") + bytes((commander_id, 0x00, 0x01)))
-        code.branch_word(0x6700, f"legacy_{commander_id}")
+        code.branch_word(0x6700, f"visible_target_{commander_id}")
     code.branch_word(0x6000, "compare_level")
 
     for commander_id, row in JOIN_CLASS_CHOICE_RECORDS.items():
         legacy_class = row.get("legacy_tier1_class")
-        if legacy_class is None:
-            continue
-        target = bytes(row["target"])
-        code.label(f"legacy_{commander_id}")
+        code.label(f"visible_target_{commander_id}")
+        if legacy_class is not None:
+            target = bytes(row["target"])
+            code.emit(
+                bytes.fromhex("0C 28 00")
+                + bytes((int(legacy_class), 0x00, 0x00))
+            )  # cmpi.b #legacy_class,0(a0)
+            code.branch_word(0x6600, f"arm_join_{commander_id}")
+            code.emit("0C 28 00 0A 00 2E")  # cmpi.b #10,$2E(a0)
+            code.branch_word(0x6500, f"arm_join_{commander_id}")  # below LV10
+            for value, runtime_offset in (
+                (int(row["tier1_class"]), 0x00),
+                (target[1], 0x39),
+                (10, 0x2E),
+                (target[3], 0x2F),
+                (target[4], 0x3A),
+                (target[5], 0x3B),
+            ):
+                code.emit(
+                    bytes.fromhex("11 7C 00")
+                    + bytes((value, 0x00, runtime_offset))
+                )  # move.b #value,runtime_offset(a0)
+
+        code.label(f"arm_join_{commander_id}")
+        code.emit("0C 28 00 0A 00 2E")  # only the LV10 join boundary arms
+        code.branch_word(0x6600, "compare_level")
         code.emit(
             bytes.fromhex("0C 28 00")
-            + bytes((int(legacy_class), 0x00, 0x00))
-        )  # cmpi.b #legacy_class,0(a0)
+            + bytes((int(row["tier1_class"]), 0x00, 0x00))
+        )  # cmpi.b #tier1_class,0(a0)
         code.branch_word(0x6600, "compare_level")
-        code.emit("0C 28 00 0A 00 2E")  # cmpi.b #10,$2E(a0)
-        code.branch_word(0x6500, "compare_level")  # bcs: below LV10
-        for value, runtime_offset in (
-            (int(row["tier1_class"]), 0x00),
-            (target[1], 0x39),
-            (10, 0x2E),
-            (target[3], 0x2F),
-            (target[4], 0x3A),
-            (target[5], 0x3B),
-        ):
-            code.emit(
-                bytes.fromhex("11 7C 00")
-                + bytes((value, 0x00, runtime_offset))
-            )  # move.b #value,runtime_offset(a0)
+        code.emit(
+            bytes.fromhex("13 FC 00")
+            + bytes((JOIN_CLASS_CHOICE_PENDING_MARKER,))
+            + int(row["active_marker_address"]).to_bytes(4, "big")
+        )  # move.b #pending_marker,marker.l
         code.branch_word(0x6000, "compare_level")
 
     code.label("compare_level")
@@ -7055,7 +7129,100 @@ def patch_join_class_choice_visibility_guard(
     )
 
 
+def build_join_class_choice_ownership_guard() -> bytes:
+    """Preserve the stock side-bit gate with one result-only Lester repair."""
+    code = _M68KCode()
+    code.emit("08 02 00 00")  # btst #0,d2 -- displaced stock gate
+    code.branch_word(0x6600, "eligible")
+
+    # A clear stock side bit remains ineligible except for Lester while the
+    # Scenario 10 battle-result scanner owns the callback stack.  $FFFF8004 is
+    # 0x1480C during the scan; 0x85EE pushed the outer 0xCEC4 continuation onto
+    # the stack addressed by $FFFF8000, so the stack must be dereferenced.
+    code.emit("0C 28 00 09 00 01")  # cmpi.b #9,1(a0)
+    code.branch_word(0x6600, "ineligible")
+    code.emit(
+        bytes.fromhex("0C 78 00 0A")
+        + JOIN_CLASS_CHOICE_ACTIVE_SCENARIO.to_bytes(2, "big")
+    )  # cmpi.w #10,$A49C.w
+    code.branch_word(0x6600, "ineligible")
+    code.emit("2F 0A")  # move.l a2,-(sp)
+    code.emit(
+        bytes.fromhex("24 79")
+        + JOIN_CLASS_CHOICE_CALLBACK_STACK_POINTER.to_bytes(4, "big")
+    )  # movea.l $FFFF8000.l,a2
+    code.emit(
+        bytes.fromhex("0C 92")
+        + JOIN_CLASS_CHOICE_RESULT_SCAN_CONTINUATION.to_bytes(4, "big")
+    )  # cmpi.l #$0000CEC4,(a2)
+    code.emit("24 5F")  # movea.l (sp)+,a2; MOVEA preserves CMPI flags
+    code.branch_word(0x6600, "ineligible")
+
+    code.label("eligible")
+    # The ten-byte hook also displaced the stock SUBQ.  Reproduce it only on
+    # the eligible fallthrough, then force Z clear for the caller's BEQ.
+    code.emit("53 41")  # subq.w #1,d1
+    code.emit("4A 28 00 01")  # tst.b 1(a0); valid commander IDs are nonzero
+    code.emit("4E 75")
+
+    code.label("ineligible")
+    # D2 is unchanged and bit 0 was already known clear.  Repeating BTST sets
+    # Z exactly as the original instruction did for the caller's BEQ.
+    code.emit("08 02 00 00")
+    code.emit("4E 75")
+    result = code.finish()
+    if (
+        JOIN_CLASS_CHOICE_OWNERSHIP_GUARD + len(result)
+        > JOIN_CLASS_CHOICE_OWNERSHIP_GUARD_LIMIT
+    ):
+        raise ValueError("join class-choice ownership guard exceeds reserved area")
+    return result
+
+
+def join_class_choice_ownership_hook_bytes() -> bytes:
+    branch_opcode = JOIN_CLASS_CHOICE_OWNERSHIP_HOOK + 6
+    displacement = JOIN_CLASS_CHOICE_OWNERSHIP_REJECT - (branch_opcode + 2)
+    return (
+        bytes.fromhex("4E B9")
+        + JOIN_CLASS_CHOICE_OWNERSHIP_GUARD.to_bytes(4, "big")
+        + bytes.fromhex("67 00")
+        + displacement.to_bytes(2, "big", signed=True)
+    )
+
+
+def patch_join_class_choice_ownership_guard(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    hook = JOIN_CLASS_CHOICE_OWNERSHIP_HOOK
+    end = hook + len(JOIN_CLASS_CHOICE_OWNERSHIP_HOOK_ORIGINAL)
+    if source[hook:end] != JOIN_CLASS_CHOICE_OWNERSHIP_HOOK_ORIGINAL:
+        raise ValueError("Japanese join class-choice ownership hook changed")
+    if data[hook:end] != JOIN_CLASS_CHOICE_OWNERSHIP_HOOK_ORIGINAL:
+        raise ValueError("input join class-choice ownership hook changed")
+
+    routine = build_join_class_choice_ownership_guard()
+    routine_end = JOIN_CLASS_CHOICE_OWNERSHIP_GUARD + len(routine)
+    if (
+        data[JOIN_CLASS_CHOICE_OWNERSHIP_GUARD:routine_end]
+        != b"\xFF" * len(routine)
+    ):
+        raise ValueError("join class-choice ownership guard area is not blank")
+    data[JOIN_CLASS_CHOICE_OWNERSHIP_GUARD:routine_end] = routine
+    data[hook:end] = join_class_choice_ownership_hook_bytes()
+
+
 def build_join_class_choice_level_wrapper() -> bytes:
+    """Resume the stock handler and apply only an armed join-time EXP grant.
+
+    The visibility gate writes ``JOIN_CLASS_CHOICE_PENDING_MARKER`` immediately
+    before a real tier-1 join choice.  A Runestone restart reaches this wrapper
+    through the same stock continuation, but has no pending marker and must
+    therefore retain the stock LV1/EXP0 result.  v1.3.6's old 0x5A value is
+    explicitly cleared without granting EXP so existing SRAM cannot retrigger
+    the join bonus.  Every valid tier-2 branch receives the same
+    character-specific raw EXP byte exactly once in every profile.
+    """
     code = _M68KCode()
     code.emit(
         bytes.fromhex("4E B9")
@@ -7078,84 +7245,53 @@ def build_join_class_choice_level_wrapper() -> bytes:
         candidates = tuple(int(value) for value in row["tier2_candidates"])
         marker_address = int(row["active_marker_address"])
         code.label(f"commander_{commander_id}")
+
+        # v1.3.6 persisted 0x5A after the original join.  Treat it as stale
+        # save data, clear it, and never turn it into a fresh grant.
+        code.emit(
+            bytes.fromhex("0C 39 00")
+            + bytes((JOIN_CLASS_CHOICE_LEGACY_ACTIVE_MARKER,))
+            + marker_address.to_bytes(4, "big")
+        )
+        code.branch_word(0x6600, f"pending_{commander_id}")
+        code.emit(bytes.fromhex("42 39") + marker_address.to_bytes(4, "big"))
+        code.branch_word(0x6000, "next")
+
+        # Only the one-shot marker armed at a genuine live tier-1 boundary may
+        # drive the branch-independent finite EXP grant.
+        code.label(f"pending_{commander_id}")
+        code.emit(
+            bytes.fromhex("0C 39 00")
+            + bytes((JOIN_CLASS_CHOICE_PENDING_MARKER,))
+            + marker_address.to_bytes(4, "big")
+        )
+        code.branch_word(0x6600, "next")
         code.emit("74 00")           # moveq #0,d2
         code.emit("14 28 00 00")     # move.b 0(a0),d2
         for candidate in candidates:
             code.emit(bytes.fromhex("0C 02 00") + bytes((candidate,)))
-            code.branch_word(0x6700, f"class_{commander_id}_{candidate}")
+            code.branch_word(0x6700, f"class_ok_{commander_id}")
+        # A pending marker paired with anything except the immediate tier-2
+        # result is stale/corrupt.  Drop it instead of leaking into a later
+        # Runestone choice.
         code.emit(bytes.fromhex("42 39") + marker_address.to_bytes(4, "big"))
         code.branch_word(0x6000, "next")
 
-        policy = str(row["experience_policy"])
-        if policy == "fixed_grant":
-            grants = {
-                int(class_id): int(experience)
-                for class_id, experience in dict(
-                    row["fixed_experience_by_class"]
-                ).items()
-            }
-            if set(grants) != set(candidates):
-                raise ValueError(
-                    f"fixed EXP classes for commander {commander_id} do not "
-                    "match its class choices"
-                )
-            for candidate in candidates:
-                code.label(f"class_{commander_id}_{candidate}")
-                code.emit(
-                    bytes.fromhex("0C 39 00")
-                    + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
-                    + marker_address.to_bytes(4, "big")
-                )
-                code.branch_word(0x6700, "next")
-                code.emit(
-                    bytes.fromhex("13 FC 00")
-                    + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
-                    + marker_address.to_bytes(4, "big")
-                )
-                code.emit(
-                    bytes.fromhex("11 7C 00")
-                    + bytes((grants[candidate],))
-                    + bytes.fromhex("00 2F")
-                )
-                code.branch_word(0x6000, "next")
-            continue
-        if policy != "target_level":
-            raise ValueError(
-                f"unknown join EXP policy for commander {commander_id}: {policy}"
-            )
-
-        target_level = int(row["target_tier2_level"])
-        residual_exp = int(row["residual_experience"])
-        for candidate in candidates:
-            code.label(f"class_{commander_id}_{candidate}")
-            code.branch_word(0x6000, f"class_ok_{commander_id}")
         code.label(f"class_ok_{commander_id}")
-        code.emit(
-            bytes.fromhex("0C 28 00")
-            + bytes((target_level,))
-            + bytes.fromhex("00 2E")
-        )
-        code.branch_word(0x6400, f"target_reached_{commander_id}")
-        code.emit(
-            bytes.fromhex("13 FC 00")
-            + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
-            + marker_address.to_bytes(4, "big")
-        )
-        code.emit("11 7C 00 FF 00 2F")  # move.b #$FF,$2F(a0)
-        code.branch_word(0x6000, "next")
-
-        code.label(f"target_reached_{commander_id}")
-        code.emit(
-            bytes.fromhex("0C 39 00")
-            + bytes((JOIN_CLASS_CHOICE_ACTIVE_MARKER,))
-            + marker_address.to_bytes(4, "big")
-        )
-        code.branch_word(0x6600, "next")
-        code.emit(
-            bytes.fromhex("11 7C 00")
-            + bytes((residual_exp,))
-            + bytes.fromhex("00 2F")
-        )
+        grant = join_raw_experience(commander_id)
+        if grant == 0:
+            # A zero grant is still an owned join event.  Clear the inherited
+            # tier-1 EXP byte explicitly before consuming the marker so Keith
+            # cannot retain his Japanese row's partially filled bar.
+            code.emit("42 28 00 2F")  # clr.b $2F(a0)
+        else:
+            code.emit(
+                bytes.fromhex("11 7C 00")
+                + bytes((grant,))
+                + bytes.fromhex("00 2F")
+            )
+        # The stock state machine consumes the finite EXP over later scans;
+        # clearing now prevents refills and makes Runestone restarts inert.
         code.emit(bytes.fromhex("42 39") + marker_address.to_bytes(4, "big"))
         code.branch_word(0x6000, "next")
 
@@ -8454,6 +8590,7 @@ class _M68KCode:
         self.code = bytearray()
         self.labels: dict[str, int] = {}
         self.fixups: list[tuple[int, str]] = []
+        self.byte_fixups: list[tuple[int, str]] = []
 
     def emit(self, payload: str | bytes) -> None:
         self.code.extend(bytes.fromhex(payload) if isinstance(payload, str) else payload)
@@ -8468,6 +8605,13 @@ class _M68KCode:
         self.fixups.append((len(self.code), label))
         self.code.extend(b"\x00\x00")
 
+    def branch_byte(self, opcode: int, label: str) -> None:
+        if opcode & 0xFF:
+            raise ValueError("M68K byte-branch opcode must end in 0x00")
+        self.code.append(opcode >> 8)
+        self.byte_fixups.append((len(self.code), label))
+        self.code.append(0)
+
     def finish(self) -> bytes:
         for displacement_offset, label in self.fixups:
             if label not in self.labels:
@@ -8481,6 +8625,16 @@ class _M68KCode:
             self.code[displacement_offset : displacement_offset + 2] = (
                 displacement & 0xFFFF
             ).to_bytes(2, "big")
+        for displacement_offset, label in self.byte_fixups:
+            if label not in self.labels:
+                raise ValueError(f"undefined M68K label {label}")
+            # Byte branches are relative to the address immediately after the
+            # opcode/displacement pair.  A zero byte instead selects a word
+            # extension on 68000, so it is not a valid byte displacement.
+            displacement = self.labels[label] - (displacement_offset + 1)
+            if not -0x80 <= displacement <= 0x7F or displacement == 0:
+                raise ValueError(f"M68K byte branch to {label} is out of range")
+            self.code[displacement_offset] = displacement & 0xFF
         return bytes(self.code)
 
 

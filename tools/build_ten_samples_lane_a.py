@@ -24,7 +24,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten"
+OUTPUT = ROOT / "assets/class-sprites/source/latest/sample-class-variants-v2-ten"
 MANIFEST = ROOT / "editor/static/ai-class-sprites/manifest.json"
 ROM_ROOT = ROOT / "editor/static/class-sprites/commanders"
 CURRENT_ROOT = ROOT / "editor/static/ai-class-sprites"

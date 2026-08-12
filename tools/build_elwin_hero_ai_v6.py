@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/elwin-hero-ai-v6-fresh"
+OUTPUT = ROOT / "assets/class-sprites/source/latest/elwin-hero-ai-v6-fresh"
 CANDIDATE = OUTPUT / "candidates/hero-fresh-three-quarter-simple-v2.png"
 ROM_SPRITE = ROOT / "editor/static/class-sprites/commanders/1/22-p1.png"
 MASK_FILE = ROOT / "editor/ai_identity_masks.json"
@@ -223,7 +223,7 @@ def build() -> dict[str, object]:
     for index, (label, sprite) in enumerate((
         ("ROM identity", original),
         ("previous Hero", Image.open(
-            ROOT / "docs/assets/ai-class-source/latest/elwin-hero-ai-v5-fresh/22-hero.png"
+            ROOT / "assets/class-sprites/source/latest/elwin-hero-ai-v5-fresh/22-hero.png"
         ).convert("RGBA")),
         ("fresh AI repixel v6", image),
     )):

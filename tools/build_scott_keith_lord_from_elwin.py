@@ -7,18 +7,25 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 
 from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 AI_ROOT = ROOT / "editor/static/ai-class-sprites"
 ROM_ROOT = ROOT / "editor/static/class-sprites/commanders"
 MASK_FILE = ROOT / "editor/ai_identity_masks.json"
 MANIFEST_FILE = AI_ROOT / "manifest.json"
 SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-scott-keith-lord-elwin-lord-v1"
 )
 MASTER_PATH = SOURCE_ROOT / "master/01-04-current-elwin-lord.png"
@@ -69,7 +76,7 @@ SHIELD_COLOR_MAPS = {
 
 
 def palette(image: Image.Image, limit: int | None = None) -> list[str]:
-    counts = Counter(color for color in image.get_flattened_data() if color[3])
+    counts = Counter(color for color in flattened_image_data(image) if color[3])
     rows = counts.most_common(limit)
     return ["#{:02x}{:02x}{:02x}".format(*color[:3]) for color, _ in rows]
 

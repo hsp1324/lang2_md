@@ -289,11 +289,11 @@
     }
   ],
   "review_sheets": {
-    "all": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/all-ai-and-logical16.png",
-    "commander_1": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/01-elwin.png",
-    "commander_2": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/02-liana.png",
-    "commander_3": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/03-lana.png",
-    "commander_5": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/05-hein.png",
-    "commander_10": "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/10-jessica.png"
+    "all": "assets/class-sprites/source/latest/sample-class-variants-v4-free-five/all-ai-and-logical16.png",
+    "commander_1": "assets/class-sprites/source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/01-elwin.png",
+    "commander_2": "assets/class-sprites/source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/02-liana.png",
+    "commander_3": "assets/class-sprites/source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/03-lana.png",
+    "commander_5": "assets/class-sprites/source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/05-hein.png",
+    "commander_10": "assets/class-sprites/source/latest/sample-class-variants-v4-free-five/contact-sheets/commanders/10-jessica.png"
   }
 }

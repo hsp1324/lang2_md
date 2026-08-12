@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import subprocess
+import sys
 import unittest
 
 from tools import run_current_result_revalidation_parallel as runner
@@ -13,12 +15,24 @@ ROOT = Path(__file__).resolve().parents[1]
 class CurrentResultRevalidationParallelTests(unittest.TestCase):
     def test_runner_matrix_covers_all_scenarios(self):
         self.assertEqual(tuple(runner.RUNNERS), tuple(range(1, 32)))
+        self.assertEqual(runner.PROFILES, ("pure", "normal", "hard"))
+
+    def test_profile_parser_accepts_pure_without_changing_existing_profiles(self):
+        self.assertEqual(
+            runner.parse_profiles("pure,normal,hard"),
+            ["pure", "normal", "hard"],
+        )
+        self.assertEqual(
+            runner.parse_profiles("normal,hard"),
+            ["normal", "hard"],
+        )
 
     def args(self) -> argparse.Namespace:
         return argparse.Namespace(
             profiles=["normal", "hard"],
             scenarios=[12, 14, 17, 27],
             workers=4,
+            attempts=3,
             probe_root=ROOT / "tmp/current-source-result-probes-20260802-01",
             seed_gst=ROOT / "captures/analysis/scenario27_preparation_current.gst",
             output_root=ROOT / "captures/run/test-current-result-revalidation",
@@ -30,6 +44,7 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
         report = runner.build_plan(self.args())
         self.assertEqual(report["status"], "pass")
         self.assertEqual(report["workers"], 4)
+        self.assertEqual(report["attempts"], 3)
         self.assertEqual(len(report["tasks"]), 8)
         self.assertEqual(
             {(row["profile"], row["scenario"]) for row in report["tasks"]},
@@ -147,6 +162,40 @@ class CurrentResultRevalidationParallelTests(unittest.TestCase):
             command,
         )
         self.assertEqual(command[-2:], ["--scenario", "30"])
+
+    def test_pure_plan_and_commands_use_the_pure_probe_tree(self):
+        args = self.args()
+        args.profiles = ["pure"]
+        args.scenarios = [1, 27]
+        report = runner.build_plan(args)
+        self.assertEqual(
+            {(row["profile"], row["scenario"]) for row in report["tasks"]},
+            {("pure", 1), ("pure", 27)},
+        )
+        early = runner.task_command(args, "pure", 1, ":611")
+        self.assertIn(
+            str(args.probe_root / "pure/s01-runtime-clear.md"),
+            early,
+        )
+        self.assertIn("pure", early)
+        ending = runner.task_command(args, "pure", 27, ":612")
+        self.assertIn(str(args.probe_root / "pure/s27-ending.md"), ending)
+        self.assertTrue(ending[1].endswith("run_scenario27_ending_surface.py"))
+
+    def test_every_orchestrated_result_runner_cli_accepts_the_pure_profile(self):
+        filenames = sorted(set(runner.RUNNERS.values()))
+        for filename in filenames:
+            with self.subTest(filename=filename):
+                completed = subprocess.run(
+                    [sys.executable, str(ROOT / "tools" / filename), "--help"],
+                    cwd=ROOT,
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    check=False,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stdout)
+                self.assertIn("{pure,normal,hard}", completed.stdout)
 
 
 if __name__ == "__main__":

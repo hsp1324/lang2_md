@@ -1,7 +1,37 @@
 {
-  "schema": 2,
-  "status": "verified_accessibility_patch",
+  "schema": 3,
+  "status": "v1.3.6_reproducible_probe_ready",
+  "release": "v1.3.6",
   "scenario": 6,
+  "source": {
+    "path": "roms/original/Langrisser II (Japan).md",
+    "md_checksum": "D79F",
+    "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b"
+  },
+  "release_manifest": "patches/v1.3.6.json",
+  "release_profiles": [
+    {
+      "id": "pure",
+      "patch": "patches/original-v1.3.6.bps",
+      "patch_sha256": "4cbf054c97ad6b358998279357c42e0e048a920e88cbbd2f09307f96da3bfaa9",
+      "md_checksum": "D4E7",
+      "output_sha256": "05e6c77e138040f2c3b2cf7fe8cd6c1b1f05247a2afca1f1b36b4c838d406a03"
+    },
+    {
+      "id": "normal",
+      "patch": "patches/normal-v1.3.6.bps",
+      "patch_sha256": "34fe8f8489383e639c2c98671220165f58beb26819971de0a8219aa5b85714ff",
+      "md_checksum": "1F84",
+      "output_sha256": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
+    },
+    {
+      "id": "hard",
+      "patch": "patches/hard-v1.3.6.bps",
+      "patch_sha256": "09ccc8d6d88b0a6956983222aec70946b3544722685c98604faa5556c89e19cb",
+      "md_checksum": "3E8F",
+      "output_sha256": "a9e607aa0d117742f8bbb2f3a3d756205b14ff33a72d18f3dc4bdccc15525aa1"
+    }
+  ],
   "secret_item": {
     "item": "룬스톤",
     "guide_coordinate_one_based": [
@@ -10,34 +40,21 @@
     ],
     "event_trigger_range": "0x18D768..0x18D778",
     "event_trigger_source_bytes": "D8AC08F00000050405040018D8D8FFFF",
-    "event_trigger_patched_bytes": "D8AC08F00000050407040018D8D8FFFF",
-    "event_trigger_sha256": "3df45e685c1ac62a7696e3565bb0f79c00edcee654bdb3559eb01f8845b255ae",
+    "event_trigger_source_sha256": "3df45e685c1ac62a7696e3565bb0f79c00edcee654bdb3559eb01f8845b255ae",
+    "event_trigger_release_bytes": "D8AC08F00000050407040018D8D8FFFF",
+    "event_trigger_release_sha256": "dcfbf29a7085c9262b1116f665d95496a021371b6ec8ef136476e2c6da0d8986",
+    "intentional_trigger_delta": {
+      "relative_offset": 8,
+      "field": "x_end",
+      "source": 5,
+      "release": 7
+    },
     "handler_range": "0x18D8D8..0x18D8F0",
     "handler_bytes": "0A020018D8EE13FF0200FF000018E1C8031A0B0002FFFFFF",
     "handler_sha256": "1c4b5970fe77008fb07f954c15d315da400349ee60352ca00d49ad5ca135aff1",
     "dialogue_address": "0x18E1C8",
     "dialogue": "룬스톤을 찾았다!"
   },
-  "roms": [
-    {
-      "role": "japanese_reference",
-      "path": "roms/original/Langrisser II (Japan).md",
-      "md_checksum": "D79F",
-      "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b"
-    },
-    {
-      "role": "v1.3.2_normal_candidate",
-      "path": "roms/builds/Langrisser II (Korean).md",
-      "md_checksum": "B50F",
-      "sha256": "ad66810801cf0e08dbc4be7aae0e96d71509327724ef2bdedd7245395652c88c"
-    },
-    {
-      "role": "v1.3.2_accessibility_probe",
-      "path": "roms/builds/Langrisser II (Scenario 6 Rune Stone Probe).md",
-      "md_checksum": "B4FB",
-      "sha256": "a108121d218327527ad5c0a1913b23b3f4ae6d422219f61bbd48145c55a69867"
-    }
-  ],
   "source_locked_npc_records": [
     {
       "fixed_record": 0,
@@ -72,42 +89,18 @@
       ]
     }
   ],
-  "all_factions_cheat": {
-    "input": [
-      "UP",
-      "LEFT",
-      "UP",
-      "RIGHT",
-      "A",
-      "LEFT",
-      "DOWN",
-      "B",
-      "DOWN",
-      "RIGHT",
-      "A",
-      "B",
-      "DOWN",
-      "RIGHT",
-      "A"
-    ],
-    "input_hold_seconds": 0.05,
-    "input_gap_seconds": 0.05,
-    "hard_candidate_result": "pass",
-    "visual_result": "적 지휘관에서 이동/공격 명령 메뉴가 열림",
-    "capture": "captures/run/hard_fbe2_s06_all_factions_enemy_command.png",
-    "capture_sha256": "65a546640539d6c02b7bafc5475f81d8c9bc43b52de893442baaf1d0340b1a90",
-    "gst": "captures/analysis/hard_fbe2_s06_all_factions_enemy_command.gst",
-    "gst_sha256": "e64d86cc857129a908a9a899764ae17d1096807ab3b1d32bc780f56c4f554abe"
-  },
-  "v1.3.2_accessibility": {
-    "production_trigger_rectangle": [
-      5,
-      4,
-      7,
-      4
-    ],
+  "probe": {
+    "role": "v1.3.6_normal_accessibility_probe",
+    "builder": "tools/build_scenario6_runestone_probe_rom.py",
+    "input_profile": "normal",
+    "fallback_patch": "patches/normal-v1.3.6.bps",
+    "generated_artifact_tracked": false,
+    "default_output": "tmp/scenario6-runestone-v1.3.6-probe.md",
+    "md_checksum": "1F70",
+    "sha256": "daa4b170ab26d84ed46fee9486774c972d1b05410bd89058e733c9bdc8281fc4",
     "probe_only_deployment_change": {
       "commander": "엘윈",
+      "rom_offset": "0x1809D2",
       "from": [
         4,
         26
@@ -127,15 +120,35 @@
         4
       ]
     },
-    "visual_result": "룬스톤을 찾았다!",
-    "capture": "captures/run/v132_s06_runestone_reachable.png",
-    "capture_sha256": "cae6a4abd5cbb3fd3d3c836532b551259ac317f8af703652cc3e156778a654f4",
-    "gst": "captures/runtime/v132-s06-runestone-pass/.local/share/blastem/Langrisser II (Scenario 6 Rune Stone Probe)/quicksave.gst",
-    "gst_sha256": "856e538ab3933c1edf369089fb21ca6e5cde32d1d7015cd622ba98efc77586f2"
+    "expected_visual_result": "룬스톤을 찾았다!",
+    "runtime_environment": "isolated Xvfb display with BlastEm"
+  },
+  "all_factions_cheat": {
+    "status": "historical_observation_not_part_of_the_v1.3.6_reproducible_probe",
+    "input": [
+      "UP",
+      "LEFT",
+      "UP",
+      "RIGHT",
+      "A",
+      "LEFT",
+      "DOWN",
+      "B",
+      "DOWN",
+      "RIGHT",
+      "A",
+      "B",
+      "DOWN",
+      "RIGHT",
+      "A"
+    ],
+    "input_hold_seconds": 0.05,
+    "input_gap_seconds": 0.05,
+    "note": "삭제된 과거 캡처와 GST는 현행 자동 검증 입력으로 사용하지 않는다."
   },
   "verdict": [
     "일본 원판의 룬스톤 트리거는 우물 (5,4) 한 칸뿐이며 주민 AI가 접근을 막을 수 있다.",
-    "v1.3.2는 NPC와 아이템 처리기를 그대로 두고 트리거의 X 끝점만 5에서 7로 넓힌다.",
-    "BlastEm에서 엘윈이 (6,4)에서 이동 가능한 (7,4)로 정상 이동한 뒤 `룬스톤을 찾았다!`가 표시됐다."
+    "v1.3.6 세 프로필은 NPC와 아이템 처리기를 원판과 동일하게 유지하고 트리거의 X 끝점만 5에서 7로 넓힌다.",
+    "Normal v1.3.6 BPS에서 probe를 매번 재생성할 수 있으며 배포 ROM과 별도로 큰 probe ROM, 캡처, GST를 저장소에 보관하지 않는다."
   ]
 }

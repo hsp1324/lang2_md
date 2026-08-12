@@ -1,3 +1,4 @@
+import hashlib
 from pathlib import Path
 import unittest
 
@@ -6,7 +7,7 @@ from tools import build_magic_application_probe_rom as probe_builder
 
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+KO_ROM = ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.6).md"
 
 
 class MagicApplicationProbeBuilderTests(unittest.TestCase):
@@ -14,6 +15,9 @@ class MagicApplicationProbeBuilderTests(unittest.TestCase):
     def setUpClass(cls):
         cls.source = JP_ROM.read_bytes()
         cls.production = KO_ROM.read_bytes()
+        assert hashlib.sha256(cls.production).hexdigest() == (
+            "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
+        )
 
     def test_source_and_production_keep_stock_branches(self):
         for data in (self.source, self.production):
@@ -100,7 +104,7 @@ class MagicApplicationProbeBuilderTests(unittest.TestCase):
             place_target=True,
             enable_all_magic=False,
         )
-        self.assertEqual(checksum, 0xF163)
+        self.assertEqual(checksum, 0xBC25)
         self.assertEqual(
             probe[
                 probe_builder.ALL_MAGIC_BRANCH_OFFSET :

@@ -6,6 +6,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "localization/hard_mode_current_candidate_runtime.json"
 CANDIDATE_DELTA = ROOT / "localization/hard_mode_candidate_delta.json"
+CURRENT_BUILD = ROOT / "localization/hard_mode_build.json"
 
 
 class HardCurrentCandidateRuntimeTests(unittest.TestCase):
@@ -13,6 +14,16 @@ class HardCurrentCandidateRuntimeTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.model = json.loads(MANIFEST.read_text(encoding="utf-8"))
         cls.delta = json.loads(CANDIDATE_DELTA.read_text(encoding="utf-8"))
+        current_build = json.loads(CURRENT_BUILD.read_text(encoding="utf-8"))
+        if (
+            cls.model["hard_rom"]["sha256"]
+            != current_build["hard"]["sha256"]
+        ):
+            raise unittest.SkipTest(
+                "retained T1.0.0 scenario GST hashes do not describe the "
+                "current candidate; current v1.3.7 scenario acceptance is "
+                "performed by the v1.3.7 final gate"
+            )
         cls.rows_by_number = {
             row["number"]: row for row in cls.model["scenarios"]
         }

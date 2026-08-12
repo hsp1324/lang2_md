@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 GUIDE_DIR = (
-    ROOT / "docs/assets/ai-class-source/hein-head-ratio-guides-v1"
+    ROOT / "assets/class-sprites/source/hein-head-ratio-guides-v1"
 )
 RESAMPLING = getattr(Image, "Resampling", Image)
 HEIN_NATIVE_SOURCE_FILES = {

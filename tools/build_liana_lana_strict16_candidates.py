@@ -33,7 +33,7 @@ from tools.build_liana_lana_native16_assets import (
 
 OUTPUT_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/liana-lana-strict16-v1"
+    / "assets/class-sprites/source/latest/liana-lana-strict16-v1"
 )
 MASK_PATH = ROOT / "editor/ai_identity_masks.json"
 TRANSPARENT = (0, 0, 0, 0)

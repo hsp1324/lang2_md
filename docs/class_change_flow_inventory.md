@@ -25,7 +25,7 @@ All 100 source transitions share the source-locked production application, runti
 | manual_slot_pointer_table | `0x01E004..0x01E018` | 20 | source-equivalent |
 | manual_slot_descriptor | `0x01E046..0x01E05C` | 22 | source-equivalent |
 
-The production comparison normalizes only the declared `+0x200000` SRAM absolute-address relocation. Every other byte in these ranges must match the Japanese source.
+The production comparison normalizes the declared `+0x200000` SRAM relocation, join visibility/fixed-raw-EXP hooks, and the Scenario 10 result-only Lester ownership hook. Every other byte in these ranges must match the Japanese source.
 
 The stock handler reads commander ID and current class from the 20-record runtime array, follows the commander chain table at `0x08253A`, writes the selected class at `0x014C36`, resets LV to 1, and applies class stats and mercenary unlocks. Routine `0x011C78` then copies eligible runtime records into the ten persistent `0x18`-byte roster records through one generic loop.
 

@@ -1,3 +1,4 @@
+import hashlib
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
@@ -8,6 +9,12 @@ from PIL import Image
 from tools import build_magic_application_probe_rom as probe_builder
 from tools import capture_magic_application as capture_tool
 from tools.run_blastem_sequence import GST_WORK_RAM_FILE_OFFSET
+
+
+ROOT = Path(__file__).resolve().parents[1]
+NORMAL_V136_ROM = (
+    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.6).md"
+)
 
 
 class CaptureMagicApplicationTests(unittest.TestCase):
@@ -177,10 +184,15 @@ class CaptureMagicApplicationTests(unittest.TestCase):
         with TemporaryDirectory() as directory:
             output = Path(directory) / "magic.md"
             source = probe_builder.DEFAULT_SOURCE_ROM.read_bytes()
-            probe = bytearray(probe_builder.DEFAULT_INPUT_ROM.read_bytes())
+            production = NORMAL_V136_ROM.read_bytes()
+            self.assertEqual(
+                hashlib.sha256(production).hexdigest(),
+                "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
+            )
+            probe = bytearray(production)
             checksum = probe_builder.patch_probe(probe, source, place_target=True)
             output.write_bytes(probe)
-            self.assertEqual(checksum, 0x213D)
+            self.assertEqual(checksum, 0xEBFF)
             self.assertEqual(len(output.read_bytes()), 0x400000)
 
     def test_effect_delay_defaults_past_the_stock_animation(self):

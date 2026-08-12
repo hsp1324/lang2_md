@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "release": {
-    "path": "roms/builds/Langrisser II (Korean).md",
+    "path": "roms/builds/Langrisser II (Korean Normal v1.3.6).md",
     "size": 4194304,
-    "header_checksum": "99FD",
-    "sha256": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+    "header_checksum": "1F84",
+    "sha256": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
   },
   "verification_lineage": {
     "runtime_matrix_checksum": "1AB2",
-    "last_full_game_baseline_checksum": "5ED9",
-    "candidate_checksum": "99FD",
-    "candidate_delta_changed_bytes": 2244,
+    "last_full_game_baseline_checksum": "54C2",
+    "candidate_checksum": "1F84",
+    "candidate_delta_changed_bytes": 725,
     "candidate_delta_unclassified_bytes": 0
   },
   "requirements": [
@@ -187,8 +187,8 @@
         {
           "label": "release delta is complete",
           "passed": true,
-          "actual": true,
-          "expected": true
+          "actual": "pass",
+          "expected": "pass"
         },
         {
           "label": "release delta has no unclassified bytes",
@@ -199,8 +199,8 @@
         {
           "label": "all current release evidence hashes match",
           "passed": true,
-          "actual": true,
-          "expected": true
+          "actual": "pass",
+          "expected": "pass"
         },
         {
           "label": "all compressed resources have owners",
@@ -210,8 +210,8 @@
         }
       ],
       "evidence": [
-        "localization/release_delta_5ed9_to_99fd.json",
-        "docs/release_delta_5ed9_to_99fd.md",
+        "localization/v136_release_validation.json",
+        "docs/v1.3.6_validation.md",
         "localization/compressed_resources.json"
       ]
     },
@@ -285,8 +285,8 @@
         {
           "label": "no-op editor build is byte-identical",
           "passed": true,
-          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
-          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+          "actual": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
+          "expected": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
         }
       ],
       "evidence": [
@@ -310,8 +310,8 @@
         {
           "label": "release delta records both build identities",
           "passed": true,
-          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
-          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+          "actual": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
+          "expected": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
         }
       ],
       "evidence": [
@@ -335,26 +335,26 @@
         {
           "label": "header checksum",
           "passed": true,
-          "actual": "99FD",
-          "expected": "99FD"
+          "actual": "1F84",
+          "expected": "1F84"
         },
         {
           "label": "SHA-256",
           "passed": true,
-          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
-          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+          "actual": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
+          "expected": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
         },
         {
-          "label": "ending inventory uses canonical ROM",
+          "label": "public manifest uses canonical ROM",
           "passed": true,
-          "actual": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3",
-          "expected": "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+          "actual": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
+          "expected": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
         }
       ],
       "evidence": [
-        "roms/builds/Langrisser II (Korean).md",
-        "localization/ending_credits_inventory.json",
-        "localization/release_delta_5ed9_to_99fd.json"
+        "roms/builds/Langrisser II (Korean Normal v1.3.6).md",
+        "patches/v1.3.6.json",
+        "localization/v136_release_validation.json"
       ]
     }
   ],

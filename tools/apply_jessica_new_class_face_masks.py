@@ -7,36 +7,43 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 LIVE_ROOT = ROOT / "editor/static/ai-class-sprites"
 MANIFEST = LIVE_ROOT / "manifest.json"
 MASKS = ROOT / "editor/ai_identity_masks.json"
 OVERRIDES = ROOT / "editor/ai_class_design_overrides.json"
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/jessica-face-mask-refresh-v1"
+    / "assets/class-sprites/source/latest/jessica-face-mask-refresh-v1"
 )
 ASSET_VERSION = "liana-lana-healer-shared-v106"
 
 TARGETS = (0x08, 0x11, 0x15, 0x18, 0x1A, 0x26)
 SOURCE_PATHS = {
     0x08: ROOT
-    / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined/logical16/10-08.png",
+    / "assets/class-sprites/source/latest/shared-new-classes-v2-refined/logical16/10-08.png",
     0x11: ROOT
-    / "docs/assets/ai-class-source/latest/shared-hein-classes-v1/logical16/10-11.png",
+    / "assets/class-sprites/source/latest/shared-hein-classes-v1/logical16/10-11.png",
     0x15: ROOT
-    / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined/logical16/10-15.png",
+    / "assets/class-sprites/source/latest/shared-new-classes-v2-refined/logical16/10-15.png",
     0x18: ROOT
-    / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined/logical16/10-18.png",
+    / "assets/class-sprites/source/latest/shared-new-classes-v2-refined/logical16/10-18.png",
     0x1A: ROOT
-    / "docs/assets/ai-class-source/latest/shared-swordmaster-hein-v1/logical16/10-1A.png",
+    / "assets/class-sprites/source/latest/shared-swordmaster-hein-v1/logical16/10-1A.png",
     0x26: ROOT
-    / "docs/assets/ai-class-source/latest/shared-keith-wizard-new-classes-v1/logical16/10-26.png",
+    / "assets/class-sprites/source/latest/shared-keith-wizard-new-classes-v1/logical16/10-26.png",
 }
 PREVIEW_PATHS = {
     0x08: SOURCE_PATHS[0x08].parents[1] / "previews/10-08.png",
@@ -60,12 +67,12 @@ MAIN_WIZARD_BLUE = (73, 109, 255, 255)
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.get_flattened_data()]
+    return [list(color) for color in flattened_image_data(image)]
 
 
 def palette(image: Image.Image) -> list[str]:
     counts = Counter(
-        color for color in image.get_flattened_data() if color[3]
+        color for color in flattened_image_data(image) if color[3]
     )
     return [
         "#{:02x}{:02x}{:02x}".format(*color[:3])

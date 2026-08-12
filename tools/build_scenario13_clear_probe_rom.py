@@ -47,11 +47,17 @@ COMPLETION_HP_WRAPPER = 0x3FEF00
 RUNTIME_GROUP_BASE = 0xFFFF603C
 RUNTIME_GROUP_SIZE = 0x60
 PROTAGONIST_RUNTIME_GROUP = 0
+ZORUM_RUNTIME_GROUP = 15
+ZORUM_RUNTIME_RECORD = (
+    RUNTIME_GROUP_BASE + ZORUM_RUNTIME_GROUP * RUNTIME_GROUP_SIZE
+)
 VARGAS_RUNTIME_RECORD = 0xFFFF669C
 RUNTIME_NAME_ID_OFFSET = 0x01
 RUNTIME_DEFEATED_FLAG_OFFSET = 0x02
 RUNTIME_HP_OFFSET = 0x03
 RUNTIME_X_OFFSET = 0x06
+ZORUM_NAME_ID = 0x13
+VARGAS_NAME_ID = 0x0F
 SOURCE_ZORUM_POSITION = (19, 27)
 PROBE_ZORUM_POSITION = (16, 4)
 COMPLETION_PLAYER_POSITIONS = (
@@ -90,12 +96,35 @@ def deployment_bytes(positions: tuple[tuple[int, int], ...]) -> bytes:
     )
 
 
-def completion_hp_wrapper_code() -> bytes:
-    code = bytearray(bytes.fromhex("0C 39 00 0F"))
-    code.extend((VARGAS_RUNTIME_RECORD + RUNTIME_NAME_ID_OFFSET).to_bytes(4, "big"))
-    code.extend(bytes.fromhex("66 08"))
+def identity_guarded_hp_one_code(runtime_record: int, name_id: int) -> bytes:
+    """Lower one exact live, visible actor without touching another group."""
+    code = bytearray(bytes.fromhex("0C 39"))
+    code.extend(name_id.to_bytes(2, "big"))
+    code.extend((runtime_record + RUNTIME_NAME_ID_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("66 24"))
+    code.extend(bytes.fromhex("08 39 00 07"))
+    code.extend(
+        (runtime_record + RUNTIME_DEFEATED_FLAG_OFFSET).to_bytes(4, "big")
+    )
+    code.extend(bytes.fromhex("66 1A"))
+    code.extend(bytes.fromhex("4A 39"))
+    code.extend((runtime_record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("67 12"))
+    code.extend(bytes.fromhex("0C 39 00 FF"))
+    code.extend((runtime_record + RUNTIME_X_OFFSET).to_bytes(4, "big"))
+    code.extend(bytes.fromhex("67 08"))
     code.extend(bytes.fromhex("13 FC 00 01"))
-    code.extend((VARGAS_RUNTIME_RECORD + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code.extend((runtime_record + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    return bytes(code)
+
+
+def completion_hp_wrapper_code() -> bytes:
+    code = bytearray(
+        identity_guarded_hp_one_code(ZORUM_RUNTIME_RECORD, ZORUM_NAME_ID)
+    )
+    code.extend(
+        identity_guarded_hp_one_code(VARGAS_RUNTIME_RECORD, VARGAS_NAME_ID)
+    )
     code.extend(bytes.fromhex("41 F9"))
     code.extend(START_MENU_ENTRY.to_bytes(4, "big"))
     code.extend(bytes.fromhex("4E F9"))
@@ -109,8 +138,9 @@ def completion_continuation_wrapper_code(source: bytes) -> bytes:
     A battle savestate can retain the stock Start-menu callback address in
     work RAM.  Redirecting only the callback initializer therefore does not
     affect that continuation.  This diagnostic trampoline hooks the retained
-    stock entry itself, conditionally lowers only a live Vargas, replays the
-    displaced stock instruction, and resumes at the next stock instruction.
+    stock entry itself, conditionally lowers only the exact live Zorum and
+    Vargas records, replays the displaced stock instruction, and resumes at
+    the next stock instruction.
     """
     displaced = source[
         START_MENU_ENTRY : START_MENU_ENTRY + START_MENU_ENTRY_PATCH_SIZE
@@ -118,11 +148,12 @@ def completion_continuation_wrapper_code(source: bytes) -> bytes:
     expected = bytes.fromhex("31 FC 00 00 BE AC")
     if displaced != expected:
         raise ValueError("Japanese Start-menu entry prologue changed")
-    code = bytearray(bytes.fromhex("0C 39 00 0F"))
-    code.extend((VARGAS_RUNTIME_RECORD + RUNTIME_NAME_ID_OFFSET).to_bytes(4, "big"))
-    code.extend(bytes.fromhex("66 08"))
-    code.extend(bytes.fromhex("13 FC 00 01"))
-    code.extend((VARGAS_RUNTIME_RECORD + RUNTIME_HP_OFFSET).to_bytes(4, "big"))
+    code = bytearray(
+        identity_guarded_hp_one_code(ZORUM_RUNTIME_RECORD, ZORUM_NAME_ID)
+    )
+    code.extend(
+        identity_guarded_hp_one_code(VARGAS_RUNTIME_RECORD, VARGAS_NAME_ID)
+    )
     code.extend(displaced)
     code.extend(bytes.fromhex("4E F9"))
     code.extend((START_MENU_ENTRY + START_MENU_ENTRY_PATCH_SIZE).to_bytes(4, "big"))
@@ -310,7 +341,7 @@ def parse_args() -> argparse.Namespace:
         help=(
             "with --completion-layout, hook the stock Start-menu entry so "
             "an already-running battle continuation that cached the stock "
-            "callback still reaches the Vargas HP diagnostic"
+            "callback still reaches the Zorum/Vargas HP diagnostic"
         ),
     )
     parser.add_argument(
@@ -355,10 +386,13 @@ def main() -> int:
         if args.completion_continuation:
             print(
                 "continuation Start trampoline conditionally lowers live "
-                "Vargas HP to 1 before resuming the stock menu"
+                "Zorum/Vargas HP to 1 before resuming the stock menu"
             )
         else:
-            print("Start conditionally lowers live Vargas HP to 1 before stock menu")
+            print(
+                "Start conditionally lowers exact live Zorum/Vargas HP to 1 "
+                "before stock menu"
+            )
         print("identities, levels, reinforcement flags, and events preserved")
     else:
         print("Zorum moved from (19,27) to (16,4), beside stock Elwin at (16,3)")

@@ -9,6 +9,20 @@ from tools import hard_mode_playtest as playtest
 class HardModePlaytestTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        build = playtest.load_json(playtest.DEFAULT_BUILD)
+        build_sha256 = build["hard"]["sha256"]
+        runtime_sha256 = playtest.load_json(
+            playtest.DEFAULT_RUNTIME
+        )["hard_rom"]["sha256"]
+        first_turn_sha256 = playtest.load_json(
+            playtest.DEFAULT_FIRST_TURN
+        )["hard_rom"]["sha256"]
+        if {runtime_sha256, first_turn_sha256} != {build_sha256}:
+            raise unittest.SkipTest(
+                "retained legacy hard-mode playtest manifests do not match "
+                "the current candidate; current v1.3.7 runtime acceptance "
+                "is performed by the v1.3.7 final gate"
+            )
         cls.identity = playtest.current_identity()
 
     def test_initial_manifest_requires_all_31_scenarios(self):

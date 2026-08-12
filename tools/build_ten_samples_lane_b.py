@@ -39,13 +39,13 @@ from tools.build_liana_lana_native16_assets import limit_visible_palette
 
 OUTPUT_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sample-class-variants-v2-ten"
+    / "assets/class-sprites/source/latest/sample-class-variants-v2-ten"
 )
 EDITOR_SPRITES = ROOT / "editor/static/class-sprites/commanders"
 CURRENT_SPRITES = ROOT / "editor/static/ai-class-sprites"
 RESOLVED_MASKS = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined/identity-masks.json"
+    / "assets/class-sprites/source/latest/shared-new-classes-v2-refined/identity-masks.json"
 )
 TRANSPARENT = (0, 0, 0, 0)
 REFERENCE_BACKDROP = (232, 232, 232, 255)

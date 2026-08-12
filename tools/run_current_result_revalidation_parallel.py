@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """Run current-source result-surface probes in isolated parallel emulators."""
 
 from __future__ import annotations
@@ -8,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 from pathlib import Path
 import queue
+import shutil
 import subprocess
 import sys
 import time
@@ -60,6 +62,10 @@ RUNNERS: dict[int, str] = {
     31: "run_scenario28_31_result_surface.py",
 }
 SCENARIOS = tuple(RUNNERS)
+PROFILES = ("pure", "normal", "hard")
+FRESH_PROCESS_SINGLE_ATTEMPT_SCENARIOS = (
+    11, 12, 13, 18, 19, 20, 28, 29, 30, 31,
+)
 SCENARIO_SEED_OVERRIDES = {
 }
 SCENARIO_PROFILE_SEED_OVERRIDES = {}
@@ -124,6 +130,11 @@ def task_command(
         "--run-id",
         args.run_id,
     ]
+    if scenario in FRESH_PROCESS_SINGLE_ATTEMPT_SCENARIOS:
+        command.extend((
+            "--fresh-process-attempt",
+            str(getattr(args, "fresh_process_attempt", 1)),
+        ))
     if scenario in (
         *range(1, 10), 11, 12, 13, 14, 15, 16, 18, 19, 20, 28, 29, 30, 31,
     ):
@@ -169,6 +180,12 @@ def run_one(
         "command": [relative(Path(command[1])), *command[2:]],
         "returncode": completed.returncode,
         "status": payload.get("status") if payload else "missing_evidence",
+        "retry_policy": payload.get("retry_policy") if payload else None,
+        "fresh_process_attempt": (
+            payload.get("fresh_process_attempt") if payload else None
+        ),
+        "runtime_session": payload.get("runtime_session") if payload else None,
+        "input_seed_gst": payload.get("input_seed_gst") if payload else None,
         "elapsed_seconds": round(time.monotonic() - started, 3),
         "output": relative(output),
         "evidence": relative(evidence) if evidence.is_file() else None,
@@ -199,7 +216,44 @@ def run_parallel(args: argparse.Namespace) -> dict[str, object]:
         def assigned(profile: str, scenario: int) -> dict[str, object]:
             display = available.get()
             try:
-                return run_one(args, profile, scenario, display)
+                attempts = []
+                for attempt in range(1, args.attempts + 1):
+                    output = task_output(
+                        args.output_root,
+                        profile,
+                        scenario,
+                        args.run_id,
+                    )
+                    if attempt > 1 and output.exists():
+                        shutil.rmtree(output)
+                    attempt_args = argparse.Namespace(**vars(args))
+                    attempt_args.fresh_process_attempt = attempt
+                    row = run_one(
+                        attempt_args,
+                        profile,
+                        scenario,
+                        display,
+                    )
+                    row["attempt"] = attempt
+                    attempts.append({
+                        "attempt": attempt,
+                        "returncode": row.get("returncode"),
+                        "status": row.get("status"),
+                        "elapsed_seconds": row.get("elapsed_seconds"),
+                        "fresh_process_attempt": row.get(
+                            "fresh_process_attempt"
+                        ),
+                        "runtime_session": row.get("runtime_session"),
+                        "input_seed_gst": row.get("input_seed_gst"),
+                    })
+                    if (
+                        row.get("returncode") == 0
+                        and row.get("status") == "pass"
+                    ):
+                        break
+                    matrix.terminate_blastem_processes(display=display)
+                row["attempt_history"] = attempts
+                return row
             finally:
                 available.put(display)
 
@@ -239,6 +293,7 @@ def run_parallel(args: argparse.Namespace) -> dict[str, object]:
         "profiles": args.profiles,
         "scenarios": args.scenarios,
         "workers": workers,
+        "attempts_per_task": args.attempts,
         "maximum_simultaneous_emulators": workers,
         "displays": displays,
         "passed_tasks": len(passed),
@@ -252,8 +307,10 @@ def run_parallel(args: argparse.Namespace) -> dict[str, object]:
 
 def parse_profiles(value: str) -> list[str]:
     profiles = [part.strip() for part in value.split(",") if part.strip()]
-    if not profiles or any(profile not in {"normal", "hard"} for profile in profiles):
-        raise argparse.ArgumentTypeError("profiles must be normal and/or hard")
+    if not profiles or any(profile not in PROFILES for profile in profiles):
+        raise argparse.ArgumentTypeError(
+            "profiles must be pure, normal, and/or hard"
+        )
     if len(set(profiles)) != len(profiles):
         raise argparse.ArgumentTypeError("profiles must not repeat")
     return profiles
@@ -294,6 +351,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, object]:
         "command": "plan",
         "run_id": args.run_id,
         "workers": min(args.workers, len(tasks)),
+        "attempts": getattr(args, "attempts", 2),
         "tasks": tasks,
     }
 
@@ -306,6 +364,12 @@ def main() -> int:
     parser.add_argument("--probe-root", type=Path, default=DEFAULT_PROBE_ROOT)
     parser.add_argument("--seed-gst", type=Path, default=matrix.DEFAULT_SEED_GST)
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument(
+        "--attempts",
+        type=int,
+        default=2,
+        help="isolated retry attempts for transient emulator startup failures",
+    )
     parser.add_argument("--display-base", type=int, default=500)
     parser.add_argument("--xvfb", type=Path, default=parallel.DEFAULT_XVFB)
     parser.add_argument(
@@ -334,6 +398,8 @@ def main() -> int:
     ]
     if not 1 <= args.workers <= parallel.MAX_WORKERS:
         parser.error(f"--workers must be 1..{parallel.MAX_WORKERS}")
+    if not 1 <= args.attempts <= 4:
+        parser.error("--attempts must be 1..4")
     if not 1 <= args.display_base <= 999 - min(args.workers, len(tasks)):
         parser.error("--display-base does not leave room for every worker")
     for profile, scenario in tasks:

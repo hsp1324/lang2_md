@@ -1,44 +1,55 @@
 from __future__ import annotations
 
 from collections import Counter
-import json
-from pathlib import Path
 import unittest
 
-from PIL import Image
+from tools.build_ai_class_sprite_assets import (
+    ASSET_VERSION,
+    SHARED_CLASS_TEMPLATE_SOURCES,
+)
+from tools.pillow_compat import flattened_image_data
 
-
-ROOT = Path(__file__).resolve().parents[1]
-AI_ROOT = ROOT / "editor/static/ai-class-sprites"
-SOURCE_ROOT = (
-    ROOT / "docs/assets/ai-class-source/latest/shared-elwin-magic-v1/logical16"
+from tests.ai_class_asset_contract import (
+    LIVE_ROOT,
+    compose_untranslated_shared_source,
+    manifest,
+    manifest_row,
+    pixels,
+    rgba,
 )
 
 
-class SherryBrightMagicCloakTests(unittest.TestCase):
-    def test_mage_and_archmage_use_bright_princess_cyan(self) -> None:
-        for class_id in (0x13, 0x14):
-            with Image.open(SOURCE_ROOT / f"04-{class_id:02X}.png") as opened:
-                source = opened.convert("RGBA")
-            with Image.open(AI_ROOT / f"4/{class_id:02X}.png") as opened:
-                live = opened.convert("RGBA")
-            self.assertEqual(
-                list(source.get_flattened_data()),
-                list(live.get_flattened_data()),
-            )
-            colors = Counter(live.get_flattened_data())
-            self.assertGreaterEqual(colors[(109, 219, 255, 255)], 12)
-            self.assertGreaterEqual(colors[(0, 109, 146, 255)], 12)
-            self.assertEqual(colors[(0, 36, 73, 255)], 0)
-            self.assertGreater(colors[(36, 36, 36, 255)], 0)
+TARGETS = ((4, 0x13), (4, 0x14))
 
-    def test_manifest_explains_the_bright_cloak(self) -> None:
-        manifest = json.loads(
-            (AI_ROOT / "manifest.json").read_text(encoding="utf-8")
-        )
-        for class_id in (0x13, 0x14):
-            row = manifest["commanders"]["4"]["classes"][str(class_id)]
-            self.assertIn("밝은 청록", row["feature"])
+
+class SherryBrightMagicCloakTests(unittest.TestCase):
+    def test_retained_magic_sources_identity_and_closure_are_live(self) -> None:
+        document = manifest()
+        self.assertEqual(document["asset_version"], ASSET_VERSION)
+        for key in TARGETS:
+            with self.subTest(class_id=f"{key[1]:02X}"):
+                source_path, _ = SHARED_CLASS_TEMPLATE_SOURCES[key]
+                self.assertTrue(source_path.is_file())
+                self.assertIn("shared-elwin-magic-v1", str(source_path))
+                row = manifest_row(document, *key)
+                self.assertIn(
+                    "shared-elwin-magic-v1", row["ai_source_position"]
+                )
+                expected = compose_untranslated_shared_source(
+                    key, document=document
+                )
+                live = rgba(LIVE_ROOT / f"4/{key[1]:02X}.png")
+                self.assertEqual(pixels(expected), pixels(live))
+
+    def test_mage_and_archmage_use_bright_princess_cyan(self) -> None:
+        for _, class_id in TARGETS:
+            with self.subTest(class_id=f"{class_id:02X}"):
+                live = rgba(LIVE_ROOT / f"4/{class_id:02X}.png")
+                colors = Counter(flattened_image_data(live))
+                self.assertGreaterEqual(colors[(109, 219, 255, 255)], 12)
+                self.assertGreaterEqual(colors[(0, 109, 146, 255)], 12)
+                self.assertEqual(colors[(0, 36, 73, 255)], 0)
+                self.assertGreater(colors[(36, 36, 36, 255)], 0)
 
 
 if __name__ == "__main__":

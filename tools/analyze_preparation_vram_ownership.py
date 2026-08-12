@@ -57,6 +57,16 @@ DEFAULT_NORMAL_POST_CAPTURES = (
     ROOT / "captures/run/normal_3203_s09_post_shop_arrangement.png",
     ROOT / "captures/run/normal_3203_s09_post_shop_enemy_detail.png",
 )
+DEFAULT_RETAINED_GST_MANIFEST = (
+    ROOT / "localization/preparation_vram_ownership_sources.json"
+)
+RETAINED_GST_SCOPE = "current_v137_preparation_vram_ownership_source_lock"
+RETAINED_GST_FAMILY_IDS = (
+    "current_candidate_first_turn_matrix",
+    "fresh_s1_preparation",
+    "pure_s19_preparation_roundtrip",
+    "exact_release_s13_s16_battle_cache",
+)
 
 
 @dataclass(frozen=True)
@@ -197,28 +207,202 @@ def reserved_table_tiles(state: GstVdpState) -> set[int]:
     return reserved
 
 
-def retained_ownership_scan(pool: tuple[int, ...]) -> dict[str, object]:
-    paths = sorted(
-        path
-        for path in (ROOT / "captures/analysis").glob("*.gst")
-        if not path.name.startswith(("hard_7b41_", "normal_3203_"))
+def _source_path(value: object) -> Path:
+    if not isinstance(value, str) or not value.endswith(".gst"):
+        raise ValueError("retained source path must be a .gst string")
+    path = (ROOT / value).resolve()
+    path.relative_to(ROOT)
+    return path
+
+
+def _expand_retained_family(family: dict[str, object]) -> list[Path]:
+    family_id = family.get("id")
+    if family.get("classification") != "exact_current_release":
+        raise ValueError(f"retained family {family_id!r} is not exact-current")
+
+    if family_id == "current_candidate_first_turn_matrix":
+        template = (
+            "captures/analysis/v137-final-frozen-20260811-02-{profile}-"
+            "first-turn-{scenario:02d}-{phase}.gst"
+        )
+        if family.get("path_template") != template:
+            raise ValueError("current first-turn source template changed")
+        if family.get("profiles") != ["pure", "normal", "hard"]:
+            raise ValueError("current first-turn profiles changed")
+        if family.get("scenarios") != "1-31":
+            raise ValueError("current first-turn scenario coverage changed")
+        phases = [
+            "loader_s{scenario:02d}_entry_turn1_entry",
+            "first-turn_s{scenario:02d}_endpoint",
+        ]
+        if family.get("phases") != phases:
+            raise ValueError("current first-turn phases changed")
+        return [
+            _source_path(
+                template.format(
+                    profile=profile,
+                    scenario=scenario,
+                    phase=phase.format(scenario=scenario),
+                )
+            )
+            for profile in ("pure", "normal", "hard")
+            for scenario in range(1, 32)
+            for phase in phases
+        ]
+
+    if family_id == "fresh_s1_preparation":
+        template = (
+            "captures/run/v137-s13-cache-formal/fresh-seeds/{profile}/"
+            "v137-s13-cache-current-20260812/fresh_s1_preparation.gst"
+        )
+        if family.get("path_template") != template:
+            raise ValueError("fresh S1 preparation source template changed")
+        if family.get("profiles") != ["pure", "normal", "hard"]:
+            raise ValueError("fresh S1 preparation profiles changed")
+        return [
+            _source_path(template.format(profile=profile))
+            for profile in ("pure", "normal", "hard")
+        ]
+
+    if family_id == "pure_s19_preparation_roundtrip":
+        values = family.get("paths")
+        if not isinstance(values, list) or not values:
+            raise ValueError("pure S19 preparation paths are missing")
+        return [_source_path(value) for value in values]
+
+    if family_id == "exact_release_s13_s16_battle_cache":
+        template = (
+            "captures/run/v137-s13-cache-formal/hover/{case}/states/{phase}.gst"
+        )
+        cases = [
+            "stock-pure-s13-74-current-20260812-01",
+            "stock-normal-s13-74-current-20260812-01",
+            "stock-hard-s13-74-current-20260812-01",
+            "stock-hard-s13-63-current-20260812-01",
+            "stock-pure-s16-73-current-20260812-01",
+            "stock-normal-s16-73-current-20260812-01",
+        ]
+        phases = ["before_hover", "command_open", "target_hover"]
+        if family.get("path_template") != template:
+            raise ValueError("S13/S16 battle-cache source template changed")
+        if family.get("cases") != cases or family.get("phases") != phases:
+            raise ValueError("S13/S16 battle-cache coverage changed")
+        return [
+            _source_path(template.format(case=case, phase=phase))
+            for case in cases
+            for phase in phases
+        ]
+
+    raise ValueError(f"unknown retained source family: {family_id!r}")
+
+
+def _path_hash_aggregate(paths: list[Path]) -> str:
+    digest = hashlib.sha256()
+    for path in paths:
+        relative = path.resolve().relative_to(ROOT).as_posix()
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(sha256(path).encode("ascii"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
+def retained_source_states(
+    manifest_path: Path = DEFAULT_RETAINED_GST_MANIFEST,
+) -> tuple[list[GstVdpState], list[GstVdpState], dict[str, object]]:
+    from tools import v137_release_identity as release_identity
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != 1:
+        raise ValueError("retained source manifest schema changed")
+    if manifest.get("scope") != RETAINED_GST_SCOPE:
+        raise ValueError("retained source manifest scope changed")
+    if manifest.get("release_generation") != release_identity.RELEASE_IDENTITY_GENERATION:
+        raise ValueError("retained source release generation changed")
+    if manifest.get("release_rom_sha256") != release_identity.RELEASE_ROM_SHA256:
+        raise ValueError("retained source release hashes changed")
+    families = manifest.get("families")
+    if not isinstance(families, list):
+        raise ValueError("retained source families are missing")
+    if tuple(family.get("id") for family in families) != RETAINED_GST_FAMILY_IDS:
+        raise ValueError("retained source family order or membership changed")
+
+    paths: list[Path] = []
+    preparation_paths: list[Path] = []
+    family_reports = []
+    for family in families:
+        family_paths = _expand_retained_family(family)
+        if len(family_paths) != family.get("expected_state_count"):
+            raise ValueError(f"retained family {family.get('id')} count changed")
+        aggregate = _path_hash_aggregate(family_paths)
+        if aggregate != family.get("path_hash_aggregate_sha256"):
+            raise ValueError(f"retained family {family.get('id')} hash changed")
+        paths.extend(family_paths)
+        if family.get("preparation_surface") is True:
+            preparation_paths.extend(family_paths)
+        elif family.get("preparation_surface") is not False:
+            raise ValueError(
+                f"retained family {family.get('id')} surface ownership is missing"
+            )
+        family_reports.append(
+            {
+                "id": family["id"],
+                "state_count": len(family_paths),
+                "path_hash_aggregate_sha256": aggregate,
+                "preparation_surface": family["preparation_surface"],
+            }
+        )
+
+    if len(paths) != len(set(paths)):
+        raise ValueError("retained source manifest contains duplicate GST paths")
+    if len(paths) != manifest.get("expected_state_count"):
+        raise ValueError("retained source manifest total count changed")
+    aggregate = _path_hash_aggregate(paths)
+    if aggregate != manifest.get("path_hash_aggregate_sha256"):
+        raise ValueError("retained source manifest aggregate hash changed")
+    states_by_path = {path: load_gst(path) for path in paths}
+    report = {
+        "path": str(manifest_path.resolve().relative_to(ROOT)),
+        "sha256": sha256(manifest_path),
+        "scope": manifest["scope"],
+        "release_generation": manifest["release_generation"],
+        "state_count": len(paths),
+        "preparation_state_count": len(preparation_paths),
+        "path_hash_aggregate_sha256": aggregate,
+        "families": family_reports,
+        "unrelated_gst_files_are_out_of_scope": True,
+    }
+    return (
+        [states_by_path[path] for path in paths],
+        [states_by_path[path] for path in preparation_paths],
+        report,
     )
-    states = [load_gst(path) for path in paths]
+
+
+def retained_ownership_scan(
+    pool: tuple[int, ...],
+    manifest_path: Path = DEFAULT_RETAINED_GST_MANIFEST,
+) -> dict[str, object]:
+    from scripts import build_korean_jp_probe as builder
+
+    states, prep_states, source_report = retained_source_states(manifest_path)
     reserved: set[int] = set()
+    sprite_used: set[int] = set()
     for state in states:
         reserved.update(reserved_table_tiles(state))
-
-    prep_states = [
-        state
-        for state in states
-        if any(
-            marker in state.path.name.lower()
-            for marker in ("prep", "arrang", "roster", "hire", "class_change")
-        )
-    ]
+        sprite_used.update(sprite_referenced_tiles(state))
     preparation_used: set[int] = set()
     for state in prep_states:
         preparation_used.update(referenced_tiles(state))
+    preparation_paths = {state.path for state in prep_states}
+    non_preparation_used: set[int] = set()
+    for state in states:
+        if state.path not in preparation_paths:
+            non_preparation_used.update(referenced_tiles(state))
+    strictly_preparation_only = (
+        set(builder.BYTE_UI_PREP_EXTRA_TILE_IDS)
+        - set(builder.BYTE_UI_DYNAMIC_TILE_IDS)
+    )
     variants = {
         tile: {
             state.vram[tile * TILE_BYTES : (tile + 1) * TILE_BYTES]
@@ -227,10 +411,21 @@ def retained_ownership_scan(pool: tuple[int, ...]) -> dict[str, object]:
         for tile in pool
     }
     return {
+        "retained_source_manifest": source_report,
         "retained_gst_count": len(states),
         "preparation_like_gst_count": len(prep_states),
-        "pool_has_no_retained_preparation_plane_window_sat_reference": all(
-            tile not in preparation_used for tile in pool
+        "current_preparation_referenced_pool_tiles": [
+            f"0x{tile:04X}" for tile in sorted(set(pool) & preparation_used)
+        ],
+        "current_preparation_renderer_is_exercised": bool(
+            set(pool) & preparation_used
+        ),
+        "pool_has_no_current_sat_reference": set(pool).isdisjoint(sprite_used),
+        "strictly_preparation_only_tiles": [
+            f"0x{tile:04X}" for tile in sorted(strictly_preparation_only)
+        ],
+        "strictly_preparation_only_tiles_are_absent_outside_preparation": (
+            strictly_preparation_only.isdisjoint(non_preparation_used)
         ),
         "pool_is_outside_all_retained_vdp_tables": all(
             tile not in reserved for tile in pool
@@ -245,6 +440,7 @@ def build_report(
     historical_gst: Path,
     pre_gst: Path,
     post_gst: Path,
+    retained_manifest: Path = DEFAULT_RETAINED_GST_MANIFEST,
 ) -> dict[str, object]:
     from scripts import build_korean_jp_probe as builder
 
@@ -296,7 +492,7 @@ def build_report(
     )
 
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "historical_collision": {
             "gst": str(historical_gst.relative_to(ROOT)),
             "gst_sha256": sha256(historical_gst),
@@ -339,7 +535,7 @@ def build_report(
                 builder.BYTE_UI_FULL_SCROLL_HSCROLL_FILL_ORIGINAL
                 == bytes.fromhex("32 3C 00 B7")
             ),
-            **retained_ownership_scan(pool),
+            **retained_ownership_scan(pool, retained_manifest),
         },
         "scenario_9_shop_roundtrip": {
             "hard": {
@@ -390,8 +586,14 @@ def validate_report(report: dict[str, object]) -> None:
         "replacement avoids live H-scroll addresses": replacement[
             "all_pattern_addresses_avoid_live_hscroll"
         ],
-        "replacement has no retained preparation references": replacement[
-            "pool_has_no_retained_preparation_plane_window_sat_reference"
+        "current preparation renderer exercises the replacement pool": replacement[
+            "current_preparation_renderer_is_exercised"
+        ],
+        "replacement has no current SAT owner": replacement[
+            "pool_has_no_current_sat_reference"
+        ],
+        "preparation-only cells stay absent from non-preparation surfaces": replacement[
+            "strictly_preparation_only_tiles_are_absent_outside_preparation"
         ],
         "replacement is outside retained VDP tables": replacement[
             "pool_is_outside_all_retained_vdp_tables"
@@ -433,6 +635,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--historical-gst", type=Path, default=DEFAULT_HISTORICAL_GST)
     parser.add_argument("--pre-gst", type=Path, default=DEFAULT_PRE_GST)
     parser.add_argument("--post-gst", type=Path, default=DEFAULT_POST_GST)
+    parser.add_argument(
+        "--retained-manifest",
+        type=Path,
+        default=DEFAULT_RETAINED_GST_MANIFEST,
+    )
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--output", type=Path)
     return parser.parse_args()
@@ -440,7 +647,12 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    report = build_report(args.historical_gst, args.pre_gst, args.post_gst)
+    report = build_report(
+        args.historical_gst,
+        args.pre_gst,
+        args.post_gst,
+        args.retained_manifest,
+    )
     if args.check:
         validate_report(report)
     rendered = json.dumps(report, ensure_ascii=False, indent=2) + "\n"

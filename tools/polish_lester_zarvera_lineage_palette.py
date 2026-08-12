@@ -7,15 +7,22 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-keith-wizard-new-classes-v1"
+    / "assets/class-sprites/source/latest/shared-keith-wizard-new-classes-v1"
 )
 SOURCE = SOURCE_ROOT / "logical16/09-26.png"
 PREVIEW = SOURCE_ROOT / "previews/09-26.png"
@@ -35,12 +42,12 @@ COLOR_MAP = {
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.get_flattened_data()]
+    return [list(color) for color in flattened_image_data(image)]
 
 
 def palette(image: Image.Image) -> list[str]:
     counts = Counter(
-        color for color in image.get_flattened_data() if color[3]
+        color for color in flattened_image_data(image) if color[3]
     )
     return [
         "#{:02x}{:02x}{:02x}".format(*color[:3])
@@ -122,7 +129,7 @@ def main() -> int:
         (255, 182, 36, 255),
     }
     if changed == 0 and not expected.issubset(
-        set(result.get_flattened_data())
+        set(flattened_image_data(result))
     ):
         raise ValueError("Lester Zarvera lineage colors were not found")
     if len(colors) > 15:

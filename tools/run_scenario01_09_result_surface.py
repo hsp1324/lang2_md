@@ -313,7 +313,9 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("normal", "hard"), required=True)
+    parser.add_argument(
+        "--profile", choices=("pure", "normal", "hard"), required=True
+    )
     parser.add_argument("--scenario", type=int, choices=tuple(SCENARIOS), required=True)
     parser.add_argument("--rom", type=Path, required=True)
     parser.add_argument("--seed-gst", type=Path, default=matrix.DEFAULT_SEED_GST)

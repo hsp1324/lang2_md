@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """Share Hein's High Lord and Swordmaster designs with selected commanders."""
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ from tools.build_ai_class_sprite_assets import (
     SHARED_DARK_BOUNDARY_REFERENCE_POINTS,
     identity_locked_character_sprite,
 )
+from tools.pillow_compat import flattened_image_data
 
 
 MANIFEST_PATH = ROOT / "editor/static/ai-class-sprites/manifest.json"
@@ -37,7 +39,7 @@ CLASS_SPECS = {
         "name": "HIGH LORD",
         "source_dir": (
             ROOT
-            / "docs/assets/ai-class-source/latest/"
+            / "assets/class-sprites/source/latest/"
             "shared-high-lord-hein-v1"
         ),
         "master": "master/hein-0B-high-lord-user-approved.png",
@@ -48,7 +50,7 @@ CLASS_SPECS = {
         "name": "SWORDMASTER",
         "source_dir": (
             ROOT
-            / "docs/assets/ai-class-source/latest/"
+            / "assets/class-sprites/source/latest/"
             "shared-swordmaster-hein-v1"
         ),
         "master": "master/hein-1A-swordmaster-user-approved.png",
@@ -195,7 +197,7 @@ def visible_palette(image: Image.Image) -> list[str]:
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.get_flattened_data()]
+    return [list(color) for color in flattened_image_data(image)]
 
 
 def role_mapping(

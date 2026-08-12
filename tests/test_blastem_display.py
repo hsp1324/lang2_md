@@ -40,14 +40,16 @@ class BlastEmDisplayTests(unittest.TestCase):
             self.assertEqual(os.environ["SDL_VIDEODRIVER"], "x11")
 
     def test_physical_display_requires_explicit_opt_in(self):
-        args = argparse.Namespace(
-            desktop_display=False,
-            virtual_display=":0",
-        )
-        with self.assertRaisesRegex(ValueError, "refusing virtual-display :0"):
-            blastem_display.configure_display(args)
+        for display in (":0", ":1", ":99", ":0.0"):
+            args = argparse.Namespace(
+                desktop_display=False,
+                virtual_display=display,
+            )
+            with self.subTest(display=display):
+                with self.assertRaisesRegex(ValueError, "possibly physical"):
+                    blastem_display.configure_display(args)
 
-        args.desktop_display = True
+        args = argparse.Namespace(desktop_display=True, virtual_display=":0")
         with patch.dict(
             os.environ,
             {

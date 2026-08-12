@@ -237,6 +237,27 @@ def normalized_korean_range(
             )
         relative = offset - start
         normalized[relative : relative + hook_size] = source_value
+    offset = builder.JOIN_CLASS_CHOICE_OWNERSHIP_HOOK
+    hook_size = len(builder.JOIN_CLASS_CHOICE_OWNERSHIP_HOOK_ORIGINAL)
+    if start <= offset < end:
+        if offset + hook_size > end:
+            raise ValueError(
+                f"join ownership hook at 0x{offset:06X} crosses range boundary"
+            )
+        source_value = source[offset : offset + hook_size]
+        if source_value != builder.JOIN_CLASS_CHOICE_OWNERSHIP_HOOK_ORIGINAL:
+            raise ValueError(
+                f"source join ownership hook changed at 0x{offset:06X}"
+            )
+        declared_value = builder.join_class_choice_ownership_hook_bytes()
+        korean_value = korean[offset : offset + hook_size]
+        if korean_value not in (source_value, declared_value):
+            raise ValueError(
+                f"unexpected join ownership hook at 0x{offset:06X}: "
+                f"{korean_value.hex().upper()}"
+            )
+        relative = offset - start
+        normalized[relative : relative + hook_size] = source_value
     return bytes(normalized)
 
 
@@ -278,6 +299,7 @@ def verify_semantic_anchors(source: bytes) -> dict[str, object]:
     anchors = {
         0x01480C: bytes.fromhex("41 F9 00 FF 60 3C"),
         0x014812: bytes.fromhex("43 F9 00 05 ED DC"),
+        0x014B2C: builder.JOIN_CLASS_CHOICE_OWNERSHIP_HOOK_ORIGINAL,
         0x014B3A: bytes.fromhex("45 F9 00 08 25 3A"),
         0x014C36: bytes.fromhex("11 40 00 00"),
         0x014C3A: bytes.fromhex("11 7C 00 01 00 2E"),
@@ -304,6 +326,11 @@ def verify_semantic_anchors(source: bytes) -> dict[str, object]:
         "class_record_table": "0x05EDDC",
         "commander_chain_pointer_table": "0x08253A",
         "selected_class_write": "0x014C36",
+        "stock_ownership_filter": "0x014B2C",
+        "lester_result_ownership_guard": f"0x{builder.JOIN_CLASS_CHOICE_OWNERSHIP_GUARD:06X}",
+        "lester_result_guard_contract": (
+            "commander 9, active Scenario 10, outer result callback 0xCEC4"
+        ),
         "runtime_to_roster_call": "0x00CEC4",
         "semantic_anchor_count": len(anchors),
     }
@@ -508,8 +535,9 @@ def markdown_report(result: dict[str, object]) -> str:
     lines.extend(
         [
             "",
-            "The production comparison normalizes only the declared "
-            "`+0x200000` SRAM absolute-address relocation. Every other byte "
+            "The production comparison normalizes the declared `+0x200000` "
+            "SRAM relocation, join visibility/fixed-raw-EXP hooks, and the "
+            "Scenario 10 result-only Lester ownership hook. Every other byte "
             "in these ranges must match the Japanese source.",
             "",
             "The stock handler reads commander ID and current class from the "

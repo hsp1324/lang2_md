@@ -25,21 +25,21 @@
 *.log
 
 # Superseded AI sprite drafts and intermediate generation boards. The current
-# rebuild inputs remain tracked under docs/assets/ai-class-source.
-/docs/assets/ai-class-source/archive/
-/docs/assets/ai-class-source/*-head-ratio-guides-*/
-/docs/assets/ai-class-source/logical16-v3-guides/
-/docs/assets/ai-class-source/elwin-native16-v[2-9]/
-/docs/assets/ai-class-source/elwin-native16-v1[0-5]/
-/docs/assets/ai-class-source/sherry-native16-v1/
-/docs/assets/ai-class-source/class-template-masters/
-/docs/assets/ai-class-source/commanders/
-/docs/assets/ai-class-source/identity-locked-class-boards/
-/docs/assets/ai-class-source/pixellab-elwin-trial/
-/docs/assets/ai-class-source/latest/sample-class-variants-v1/
-/docs/assets/ai-class-source/latest/sample-class-variants-v2-ten/
-/docs/assets/ai-class-source/latest/sample-class-variants-v3-rom-reference-ten/
-/docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/
+# rebuild inputs remain tracked under assets/class-sprites/source.
+/assets/class-sprites/source/archive/
+/assets/class-sprites/source/*-head-ratio-guides-*/
+/assets/class-sprites/source/logical16-v3-guides/
+/assets/class-sprites/source/elwin-native16-v[2-9]/
+/assets/class-sprites/source/elwin-native16-v1[0-5]/
+/assets/class-sprites/source/sherry-native16-v1/
+/assets/class-sprites/source/class-template-masters/
+/assets/class-sprites/source/commanders/
+/assets/class-sprites/source/identity-locked-class-boards/
+/assets/class-sprites/source/pixellab-elwin-trial/
+/assets/class-sprites/source/latest/sample-class-variants-v1/
+/assets/class-sprites/source/latest/sample-class-variants-v2-ten/
+/assets/class-sprites/source/latest/sample-class-variants-v3-rom-reference-ten/
+/assets/class-sprites/source/latest/sample-class-variants-v4-free-five/
 
 # Python/runtime cache.
 /__pycache__/

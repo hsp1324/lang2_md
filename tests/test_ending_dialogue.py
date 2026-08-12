@@ -9,6 +9,12 @@ ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / builder.IN_ROM
 KO_ROM = ROOT / builder.OUT_ROM
 
+NARROW_ENDING_RECORD_PAGES = {
+    0x0954E2: 4,
+    0x095D7C: 4,
+    0x096518: 7,
+}
+
 
 def record_words(data: bytes, start: int) -> list[int]:
     words = []
@@ -129,6 +135,33 @@ class EndingDialogueTests(unittest.TestCase):
                         len(visible),
                         24,
                         f"{row['address']} line is too wide: {visible!r}",
+                    )
+
+    def test_reported_ending_records_fit_narrow_runtime_window_without_orphans(self):
+        selected = {
+            int(row["address_int"]): row
+            for row in self.rows
+            if int(row["address_int"]) in NARROW_ENDING_RECORD_PAGES
+        }
+        self.assertEqual(set(selected), set(NARROW_ENDING_RECORD_PAGES))
+
+        for address, expected_pages in NARROW_ENDING_RECORD_PAGES.items():
+            pages = str(selected[address]["text"]).split("\f")
+            self.assertEqual(len(pages), expected_pages, f"0x{address:06X}")
+            for page_number, page in enumerate(pages, 1):
+                lines = page.splitlines()
+                self.assertGreaterEqual(
+                    len(lines),
+                    2,
+                    f"0x{address:06X} page {page_number} is an orphan page",
+                )
+                self.assertLessEqual(len(lines), 3, f"0x{address:06X} page {page_number}")
+                for line in lines:
+                    visible = builder.EVENT_NAME_CONTROL_RE.sub("이름", line)
+                    self.assertLessEqual(
+                        len(visible),
+                        15,
+                        f"0x{address:06X} page {page_number} is too wide: {visible!r}",
                     )
 
 

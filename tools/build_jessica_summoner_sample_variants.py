@@ -12,19 +12,26 @@ from __future__ import annotations
 from collections import Counter, deque
 import json
 from pathlib import Path
+import sys
 
 from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sample-class-variants-v1/"
+    / "assets/class-sprites/source/latest/sample-class-variants-v1/"
     / "jessica-summoner"
 )
 FRESH_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     / "jessica-zarvera-summoner-ai-v1-fresh"
 )
 ORIGINAL = FRESH_ROOT / "references/10-28-summoner-rom-original.png"
@@ -282,7 +289,7 @@ def connected_components(image: Image.Image) -> list[int]:
 
 
 def visible_palette(image: Image.Image) -> list[str]:
-    counts = Counter(color for color in image.get_flattened_data() if color[3])
+    counts = Counter(color for color in flattened_image_data(image) if color[3])
     return [
         "#{:02x}{:02x}{:02x}".format(*color[:3])
         for color, _ in counts.most_common()
@@ -409,7 +416,7 @@ def build() -> dict[str, object]:
             x for x in range(16)
             if not any(image.getpixel((x, y))[3] for y in range(16))
         ]
-        pixels = tuple(image.get_flattened_data())
+        pixels = tuple(flattened_image_data(image))
         pure_black = (0, 0, 0, 255) in pixels
         magenta = any(
             color[3] and color[0] > 200 and color[2] > 200 and color[1] < 80

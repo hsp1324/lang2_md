@@ -8,7 +8,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INPUT = ROOT / "localization/runtime_verification.json"
 OUTPUT = ROOT / "docs/runtime_verification_inventory.md"
+SUPPLEMENTS = ROOT / "localization/runtime_verification_supplements.json"
 SCENARIO_COUNT = 31
+
+
+def load_supplements(path: Path = SUPPLEMENTS) -> dict[int, str]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    result = {int(scenario): note for scenario, note in raw.items()}
+    if any(
+        scenario < 1
+        or scenario > SCENARIO_COUNT
+        or not isinstance(note, str)
+        or not note.strip()
+        for scenario, note in result.items()
+    ):
+        raise ValueError("runtime verification supplements are invalid")
+    return result
 
 
 def load_inventory(path: Path = INPUT) -> dict[str, object]:
@@ -69,6 +84,7 @@ def render_markdown(data: dict[str, object]) -> str:
         "verified_current": "current",
         "verified_probe": "probe",
     }
+    supplements = load_supplements()
     lines = [
         "# Runtime Verification Inventory",
         "",
@@ -95,12 +111,16 @@ def render_markdown(data: dict[str, object]) -> str:
     for entry in scenarios:
         captures = entry.get("captures", [])
         note = entry.get("note")
-        if not captures and not note:
+        supplement = supplements.get(entry["scenario"])
+        if not captures and not note and not supplement:
             continue
         lines.append(f"### Scenario {entry['scenario']}")
         if note:
             lines.append("")
             lines.append(str(note))
+        if supplement:
+            lines.append("")
+            lines.append(supplement)
         if captures:
             lines.append("")
             lines.extend(f"- `{capture}`" for capture in captures)

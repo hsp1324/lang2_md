@@ -20,14 +20,14 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     / "jessica-zarvera-summoner-ai-v1-fresh"
 )
 ROM_SPRITE_DIR = ROOT / "editor/static/class-sprites/commanders/10"
 EDITOR_MASKS = ROOT / "editor/ai_identity_masks.json"
 RESOLVED_MASKS = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined/"
+    / "assets/class-sprites/source/latest/shared-new-classes-v2-refined/"
     / "identity-masks.json"
 )
 

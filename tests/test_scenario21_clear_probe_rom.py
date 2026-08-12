@@ -451,7 +451,7 @@ class Scenario21ClearProbeTests(unittest.TestCase):
         protagonist_death = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0xD571,
+            0xA033,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -459,7 +459,7 @@ class Scenario21ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x70AE,
+            0x3B70,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -467,7 +467,7 @@ class Scenario21ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x4B91,
+            0x1653,
         )
 
     def test_rejects_non_source_fixed_record(self):

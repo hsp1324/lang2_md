@@ -148,6 +148,13 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
         save_menu = output / "save/save_menu.png"
         shutil.copy2(save_source, save_menu)
         save_gst = recorder.save_gst("states/save_menu.gst")
+        saved_scenario = matrix.manual_slot_scenario_from_gst(save_gst)
+        expected_saved_scenario = probe_builder.SCENARIO_NUMBER + 1
+        if saved_scenario != expected_saved_scenario:
+            raise RuntimeError(
+                f"Scenario {probe_builder.SCENARIO_NUMBER} save transition "
+                f"is {saved_scenario}, expected {expected_saved_scenario}"
+            )
 
         report = {
             "schema_version": 1,
@@ -176,6 +183,8 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
             "save_menu_frame": save_frame,
             "save_menu_gst": shared.relative(save_gst),
             "save_menu_gst_sha256": shared.sha256(save_gst),
+            "saved_scenario": saved_scenario,
+            "expected_saved_scenario": expected_saved_scenario,
             "elapsed_seconds": round(time.monotonic() - started, 3),
             "captures": recorder.captures,
             "actions": recorder.actions,
@@ -222,7 +231,9 @@ def run_capture(args: argparse.Namespace) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("normal", "hard"), required=True)
+    parser.add_argument(
+        "--profile", choices=("pure", "normal", "hard"), required=True
+    )
     parser.add_argument("--rom", type=Path, required=True)
     parser.add_argument("--seed-gst", type=Path, default=matrix.DEFAULT_SEED_GST)
     parser.add_argument("--display", default=matrix.DEFAULT_DISPLAY)

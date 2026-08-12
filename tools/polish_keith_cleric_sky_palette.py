@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """Give Keith Healer and Priest the approved royal/sky-blue class palette."""
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ if str(ROOT) not in sys.path:
 
 from tools.build_refined_recent_class_variants import write_contact
 from tools.build_shared_hein_class_variants import write_comparison
+from tools.pillow_compat import flattened_image_data
 
 
 LIVE_ROOT = ROOT / "editor/static/ai-class-sprites"
@@ -26,10 +28,10 @@ ASSET_VERSION = "liana-lana-healer-shared-v106"
 
 HEALER_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined"
+    / "assets/class-sprites/source/latest/shared-new-classes-v2-refined"
 )
 PRIEST_ROOT = (
-    ROOT / "docs/assets/ai-class-source/latest/shared-hein-classes-v1"
+    ROOT / "assets/class-sprites/source/latest/shared-hein-classes-v1"
 )
 
 TARGETS = {
@@ -54,7 +56,7 @@ TARGETS = {
 
 def palette(image: Image.Image) -> list[str]:
     counts = Counter(
-        color for color in image.get_flattened_data() if color[3]
+        color for color in flattened_image_data(image) if color[3]
     )
     return [
         "#{:02x}{:02x}{:02x}".format(*color[:3])
@@ -140,7 +142,7 @@ def main() -> int:
         if changed == 0 and not {
             (73, 109, 255, 255),
             (109, 219, 255, 255),
-        }.issubset(set(result.get_flattened_data())):
+        }.issubset(set(flattened_image_data(result))):
             raise ValueError(f"07-{class_id:02X}: no cleric colors changed")
         if len(colors) > 15:
             raise ValueError(

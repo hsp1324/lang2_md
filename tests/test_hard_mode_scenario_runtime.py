@@ -117,22 +117,36 @@ class HardModeScenarioRuntimeTests(unittest.TestCase):
             self.assertIn(3, results["coverage"]["missing_scenarios"])
 
     def test_seed_selection_avoids_future_roster_data_in_early_scenarios(self):
-        self.assertEqual(
-            scenario_runtime.seed_for_scenario(10),
-            scenario_runtime.EARLYGAME_SEED,
-        )
-        self.assertEqual(
-            scenario_runtime.seed_for_scenario(11),
-            scenario_runtime.MIDGAME_SEED,
-        )
-        self.assertEqual(
-            scenario_runtime.seed_for_scenario(24),
-            scenario_runtime.MIDGAME_SEED,
-        )
-        self.assertEqual(
-            scenario_runtime.seed_for_scenario(25),
-            scenario_runtime.LATEGAME_SEED,
-        )
+        with mock.patch.object(Path, "is_file", return_value=True):
+            self.assertEqual(
+                scenario_runtime.seed_for_scenario(10),
+                scenario_runtime.EARLYGAME_SEED,
+            )
+            self.assertEqual(
+                scenario_runtime.seed_for_scenario(11),
+                scenario_runtime.MIDGAME_SEED,
+            )
+            self.assertEqual(
+                scenario_runtime.seed_for_scenario(24),
+                scenario_runtime.MIDGAME_SEED,
+            )
+            self.assertEqual(
+                scenario_runtime.seed_for_scenario(25),
+                scenario_runtime.LATEGAME_SEED,
+            )
+
+    def test_seed_selection_falls_back_when_historical_band_seed_was_removed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "removed-midgame.gst"
+            with mock.patch.object(scenario_runtime, "MIDGAME_SEED", missing):
+                self.assertEqual(
+                    scenario_runtime.seed_for_scenario(11),
+                    scenario_runtime.EARLYGAME_SEED,
+                )
+                self.assertEqual(
+                    scenario_runtime.seed_for_scenario(24),
+                    scenario_runtime.EARLYGAME_SEED,
+                )
 
     def test_scenario_ten_lester_stock_roster_rewrite_is_explicit(self):
         gst = runtime_evidence.SCENARIO_TEN_GST.read_bytes()

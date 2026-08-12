@@ -28,12 +28,13 @@ from tools.build_ten_sample_class_campaign import (
     COMMANDERS,
     campaign_groups,
 )
+from tools.pillow_compat import flattened_image_data
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     / "sample-class-variants-v3-rom-reference-ten"
 )
 STATIC_ROOT = ROOT / "editor/static/sample-class-sprites"
@@ -504,7 +505,7 @@ def ingest_board(group_id: str, source: Path) -> None:
     if group_id == "10-jessica-26-zarvera":
         preserved_root = (
             ROOT
-            / "docs/assets/ai-class-source/latest/"
+            / "assets/class-sprites/source/latest/"
             / "sample-class-variants-v2-ten/10-jessica-26-zarvera"
         )
         shutil.copy2(preserved_root / "ai/01.png", root / "ai/01.png")
@@ -567,8 +568,12 @@ def publish() -> None:
                 for point in identities
             )
             delta = bbox_delta(logical, original)
-            opaque = sum(1 for color in logical.get_flattened_data() if color[3])
-            original_opaque = sum(1 for color in original.get_flattened_data() if color[3])
+            opaque = sum(
+                1 for color in flattened_image_data(logical) if color[3]
+            )
+            original_opaque = sum(
+                1 for color in flattened_image_data(original) if color[3]
+            )
             report = {
                 "group": group["id"],
                 "sample": sample_id,

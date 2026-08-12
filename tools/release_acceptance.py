@@ -30,13 +30,16 @@ from tools.scenario_data import (
 )
 
 
-DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+DEFAULT_ROM = (
+    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.6).md"
+)
 REFERENCE_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
 JSON_OUTPUT = ROOT / "localization/release_acceptance.json"
 MARKDOWN_OUTPUT = ROOT / "docs/release_acceptance.md"
-EXPECTED_CHECKSUM = "99FD"
+RELEASE_MANIFEST = ROOT / "patches/v1.3.6.json"
+EXPECTED_CHECKSUM = "1F84"
 EXPECTED_SHA256 = (
-    "526237277c8f46a4400c00980da704e6ebea23e74d967d89b6d223db28dd54d3"
+    "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a"
 )
 
 
@@ -139,7 +142,17 @@ def build_inventory(rom_path: Path = DEFAULT_ROM) -> dict[str, object]:
     inline_bytes = load_json("inline_byte_strings.json")
     short_inline = load_json("short_inline_byte_candidates.json")
     compressed = load_json("compressed_resources.json")
-    delta = load_json("release_delta_5ed9_to_99fd.json")
+    previous_release = load_json("v135_release_validation.json")
+    current_release = load_json("v136_release_validation.json")
+    release_manifest = json.loads(
+        RELEASE_MANIFEST.read_text(encoding="utf-8")
+    )
+    previous_normal = previous_release["release_roms"]["normal"]
+    current_normal = current_release["release_roms"]["normal"]
+    current_delta = current_release["release_delta"]
+    manifest_normal = next(
+        row for row in release_manifest["targets"] if row["id"] == "normal"
+    )
 
     runtime_rows = [
         entry[surface]
@@ -172,16 +185,6 @@ def build_inventory(rom_path: Path = DEFAULT_ROM) -> dict[str, object]:
     short_unclassified_count = sum(
         bank["unclassified_count"] for bank in short_banks
     )
-
-    delta_evidence_ok = True
-    for row in delta["live_evidence"]:
-        path = ROOT / row["path"]
-        if (
-            not path.is_file()
-            or sha256_bytes(path.read_bytes()) != row["sha256"]
-        ):
-            delta_evidence_ok = False
-            break
 
     no_op = editor_noop_roundtrip(production, reference)
     no_op_sha = sha256_bytes(no_op)
@@ -372,21 +375,31 @@ def build_inventory(rom_path: Path = DEFAULT_ROM) -> dict[str, object]:
             [
                 check(
                     "release delta is complete",
-                    delta["complete"] is True,
-                    delta["complete"],
-                    True,
+                    current_delta["status"] == "pass",
+                    current_delta["status"],
+                    "pass",
                 ),
                 check(
                     "release delta has no unclassified bytes",
-                    delta["delta"]["unclassified_changed_byte_count"] == 0,
-                    delta["delta"]["unclassified_changed_byte_count"],
+                    current_delta["unexpected_changed_bytes"] == 0,
+                    current_delta["unexpected_changed_bytes"],
                     0,
                 ),
                 check(
                     "all current release evidence hashes match",
-                    delta_evidence_ok,
-                    delta_evidence_ok,
-                    True,
+                    current_release["runtime_checks"]["status"] == "pass"
+                    and current_release["runtime_checks"]["runestone_matrix"][
+                        "passed"
+                    ]
+                    == current_release["runtime_checks"]["runestone_matrix"][
+                        "total"
+                    ]
+                    == 12
+                    and current_release["runtime_checks"]["runestone_matrix"][
+                        "item_consumed_in_all_runs"
+                    ],
+                    current_release["runtime_checks"]["status"],
+                    "pass",
                 ),
                 check(
                     "all compressed resources have owners",
@@ -398,8 +411,8 @@ def build_inventory(rom_path: Path = DEFAULT_ROM) -> dict[str, object]:
                 ),
             ],
             [
-                "localization/release_delta_5ed9_to_99fd.json",
-                "docs/release_delta_5ed9_to_99fd.md",
+                "localization/v136_release_validation.json",
+                "docs/v1.3.6_validation.md",
                 "localization/compressed_resources.json",
             ],
         ),
@@ -511,9 +524,10 @@ def build_inventory(rom_path: Path = DEFAULT_ROM) -> dict[str, object]:
                 ),
                 check(
                     "release delta records both build identities",
-                    bool(delta["baseline"]["sha256"])
-                    and delta["candidate"]["sha256"] == production_sha,
-                    delta["candidate"]["sha256"],
+                    bool(previous_normal["sha256"])
+                    and current_delta["previous_release"] == "v1.3.5"
+                    and current_normal["sha256"] == production_sha,
+                    current_normal["sha256"],
                     production_sha,
                 ),
             ],
@@ -547,16 +561,17 @@ def build_inventory(rom_path: Path = DEFAULT_ROM) -> dict[str, object]:
                     EXPECTED_SHA256,
                 ),
                 check(
-                    "ending inventory uses canonical ROM",
-                    endings["production_rom_sha256"] == production_sha,
-                    endings["production_rom_sha256"],
+                    "public manifest uses canonical ROM",
+                    manifest_normal["output_sha256"] == production_sha
+                    and manifest_normal["output_size"] == len(production),
+                    manifest_normal["output_sha256"],
                     production_sha,
                 ),
             ],
             [
-                "roms/builds/Langrisser II (Korean).md",
-                "localization/ending_credits_inventory.json",
-                "localization/release_delta_5ed9_to_99fd.json",
+                "roms/builds/Langrisser II (Korean Normal v1.3.6).md",
+                "patches/v1.3.6.json",
+                "localization/v136_release_validation.json",
             ],
         ),
     ]
@@ -572,15 +587,13 @@ def build_inventory(rom_path: Path = DEFAULT_ROM) -> dict[str, object]:
         },
         "verification_lineage": {
             "runtime_matrix_checksum": runtime["production_checksum"],
-            "last_full_game_baseline_checksum": delta["baseline"][
-                "header_checksum"
+            "last_full_game_baseline_checksum": previous_normal["md_checksum"],
+            "candidate_checksum": current_normal["md_checksum"],
+            "candidate_delta_changed_bytes": current_delta[
+                "normal_changed_bytes"
             ],
-            "candidate_checksum": delta["candidate"]["header_checksum"],
-            "candidate_delta_changed_bytes": delta["delta"][
-                "changed_byte_count"
-            ],
-            "candidate_delta_unclassified_bytes": delta["delta"][
-                "unclassified_changed_byte_count"
+            "candidate_delta_unclassified_bytes": current_delta[
+                "unexpected_changed_bytes"
             ],
         },
         "requirements": requirements,

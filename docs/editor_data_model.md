@@ -330,12 +330,12 @@ NPC 전용 확장 그림은 민병대 `99`가 `0x53B7`, 해적 `9A`가 `0x53B8`,
 뭉갰으므로 폐기했다.
 
 `tools/build_ai_class_sprite_assets.py`는
-`docs/assets/ai-class-source/references/01-original.png`부터
+`assets/class-sprites/source/references/01-original.png`부터
 `10-original.png`까지의 실제 ROM 5프레임을 얼굴·머리 정체성
 레퍼런스로 사용한다. 이전
 `identity-locked-class-boards`는 얼굴 크기와 머리 길이가 원작과 다른
 경우가 있어 최종 입력에서 제외했다. 새 원화는 지휘관별
-`docs/assets/ai-class-source/character-ai-v3/<character>` 폴더에
+`assets/class-sprites/source/character-ai-v3/<character>` 폴더에
 보존한다.
 
 각 새 시트는 5×3, 5×2, 4×2, 3×3의 고정 격자와 클래스 ID 순서를
@@ -377,7 +377,7 @@ NPC 전용 확장 그림은 민병대 `99`가 `0x53B7`, 해적 `9A`가 `0x53B8`,
 원본을 유지한다.
 
 엘윈의 주력 보병 계열은 사용자가 선택한
-`docs/assets/direct_16x16_01_elwin.png` 5단계 합본을 사용한다.
+`assets/class-sprites/reference/direct_16x16_01_elwin.png` 5단계 합본을 사용한다.
 1단계 파이터는 참고만 하고 ROM 원본을 유지하며, 2~5단계를 각각 로드,
 하이로드, 소드마스터, 히어로에 연결한다. 하이랜더·비숍·메이지·
 아크메이지·나이트마스터·실버나이트는 클래스 성격이 다르므로 별도

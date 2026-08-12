@@ -2,7 +2,7 @@
   "schema_version": 1,
   "package_type": "langrisser2-korean-rom-update",
   "save_format": "lang2-ko-sram-v1",
-  "current_release": "ko-1.0.0",
+  "current_release": "ko-normal-1.3.6",
   "releases": [
     {
       "release_id": "ko-99fd",
@@ -20,6 +20,16 @@
       "size": 4194304,
       "md_checksum": "2979",
       "sha256": "0936a2e9658158445adbded3dddf4ed61974f5297db631900c193d07ec188c6e",
+      "sram_descriptor": "5241F8200040000100403FFF",
+      "save_format": "lang2-ko-sram-v1",
+      "status": "previous"
+    },
+    {
+      "release_id": "ko-normal-1.3.6",
+      "rom_path": "roms/builds/Langrisser II (Korean Normal v1.3.6).md",
+      "size": 4194304,
+      "md_checksum": "1F84",
+      "sha256": "b74359800a697eea5e85d7942ac712b74360bbd8b43ff2082b88d009e94a370a",
       "sram_descriptor": "5241F8200040000100403FFF",
       "save_format": "lang2-ko-sram-v1",
       "status": "current"

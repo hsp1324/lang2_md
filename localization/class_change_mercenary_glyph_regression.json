@@ -59,42 +59,42 @@
     "normal": [
       {
         "candidate": "그랑나이트",
-        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/glyph-lifetime-current_candidate1.png",
-        "sha256": "f6623214bbc25fe5bfc76951c93925e688e5175c28f1af9b98398625032b1340"
+        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/lookup_candidate1.png",
+        "sha256": "21b455b22a8012f25f127dad11255c1d5917ed74f62b22507b1b0df1a9d97400"
       },
       {
         "candidate": "실버나이트",
-        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/glyph-lifetime-current_candidate2.png",
-        "sha256": "6fa07b83b92fe577bc58f967412d710ae33e7ace9aacacd4c4c728a27f9dacc1"
+        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/lookup_candidate2.png",
+        "sha256": "7dd5a7d760d360415fe69964e3ac28f23ff8c07d4dfee1f267b43e3237153f60"
       },
       {
         "candidate": "아크메이지",
-        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/glyph-lifetime-current_candidate3.png",
-        "sha256": "bee19fcdc5844b92f75af34b4fb3f22553c945076323a5e6ad6c72e66dae24a4"
+        "path": "captures/run/preparation_class_change_surface/normal/c1_s13/lookup_candidate3.png",
+        "sha256": "9e32401e04d2e79af9716795dc0b679ddf2505311257a65a43e37c7ede48254a"
       }
     ],
     "hard": [
       {
         "candidate": "그랑나이트",
-        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/glyph-lifetime-current_candidate1.png",
-        "sha256": "f6623214bbc25fe5bfc76951c93925e688e5175c28f1af9b98398625032b1340"
+        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/lookup_candidate1.png",
+        "sha256": "21b455b22a8012f25f127dad11255c1d5917ed74f62b22507b1b0df1a9d97400"
       },
       {
         "candidate": "실버나이트",
-        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/glyph-lifetime-current_candidate2.png",
-        "sha256": "6fa07b83b92fe577bc58f967412d710ae33e7ace9aacacd4c4c728a27f9dacc1"
+        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/lookup_candidate2.png",
+        "sha256": "7dd5a7d760d360415fe69964e3ac28f23ff8c07d4dfee1f267b43e3237153f60"
       },
       {
         "candidate": "아크메이지",
-        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/glyph-lifetime-current_candidate3.png",
-        "sha256": "bee19fcdc5844b92f75af34b4fb3f22553c945076323a5e6ad6c72e66dae24a4"
+        "path": "captures/run/preparation_class_change_surface/hard/c1_s13/lookup_candidate3.png",
+        "sha256": "9e32401e04d2e79af9716795dc0b679ddf2505311257a65a43e37c7ede48254a"
       }
     ],
     "normal_hard_pairs_byte_identical": true,
     "review": "All three candidate rows, class sprites, stats, magic rows, 팔랑크스, and 발리스타 are visually intact in both profiles."
   },
   "validation": {
-    "focused_tests": "114/114 passed on the current glyph-lifetime candidates, including full H-scroll matrix, first-draw GST delta, and enemy ordinary-mercenary cache-reuse gates",
+    "focused_tests": "114/114 passed on the retained lookup candidates, including full H-scroll matrix, first-draw GST delta, and enemy ordinary-mercenary cache-reuse gates",
     "full_suite": "not rerun for this non-release candidate",
     "new_failures": 0
   }

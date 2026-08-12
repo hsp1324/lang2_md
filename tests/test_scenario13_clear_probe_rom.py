@@ -325,7 +325,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
         )
         self.assertEqual(data[vargas + FIELD_OFFSETS["df"]], 0)
 
-    def test_completion_layout_installs_identity_guarded_vargas_hp_wrapper(self):
+    def test_completion_layout_installs_identity_guarded_actor_hp_wrapper(self):
         data = self.patched(completion_layout=True)
         wrapper = probe_builder.completion_hp_wrapper_code()
         self.assertEqual(
@@ -342,13 +342,40 @@ class Scenario13ClearProbeTests(unittest.TestCase):
             ],
             wrapper,
         )
-        self.assertIn(
-            (probe_builder.VARGAS_RUNTIME_RECORD + 1).to_bytes(4, "big"),
-            wrapper,
-        )
-        self.assertIn(
-            (probe_builder.VARGAS_RUNTIME_RECORD + 3).to_bytes(4, "big"),
-            wrapper,
+        for record, name_id in (
+            (
+                probe_builder.ZORUM_RUNTIME_RECORD,
+                probe_builder.ZORUM_NAME_ID,
+            ),
+            (
+                probe_builder.VARGAS_RUNTIME_RECORD,
+                probe_builder.VARGAS_NAME_ID,
+            ),
+        ):
+            with self.subTest(name_id=name_id):
+                self.assertIn(name_id.to_bytes(2, "big"), wrapper)
+                self.assertIn((record + 1).to_bytes(4, "big"), wrapper)
+                self.assertIn((record + 2).to_bytes(4, "big"), wrapper)
+                self.assertIn((record + 3).to_bytes(4, "big"), wrapper)
+                self.assertIn((record + 6).to_bytes(4, "big"), wrapper)
+
+    def test_actor_hp_wrapper_changes_only_a_matching_live_record(self):
+        record = probe_builder.ZORUM_RUNTIME_RECORD
+        self.assertEqual(
+            probe_builder.identity_guarded_hp_one_code(
+                record,
+                probe_builder.ZORUM_NAME_ID,
+            ),
+            bytes.fromhex("0C 39 00 13")
+            + (record + 1).to_bytes(4, "big")
+            + bytes.fromhex("66 24 08 39 00 07")
+            + (record + 2).to_bytes(4, "big")
+            + bytes.fromhex("66 1A 4A 39")
+            + (record + 3).to_bytes(4, "big")
+            + bytes.fromhex("67 12 0C 39 00 FF")
+            + (record + 6).to_bytes(4, "big")
+            + bytes.fromhex("67 08 13 FC 00 01")
+            + (record + 3).to_bytes(4, "big"),
         )
 
     def test_completion_continuation_hooks_stock_entry_and_replays_prologue(self):
@@ -379,6 +406,22 @@ class Scenario13ClearProbeTests(unittest.TestCase):
             + probe_builder.START_MENU_ENTRY_PATCH_SIZE
         ]
         self.assertIn(displaced, wrapper)
+        for record, name_id in (
+            (
+                probe_builder.ZORUM_RUNTIME_RECORD,
+                probe_builder.ZORUM_NAME_ID,
+            ),
+            (
+                probe_builder.VARGAS_RUNTIME_RECORD,
+                probe_builder.VARGAS_NAME_ID,
+            ),
+        ):
+            with self.subTest(name_id=name_id):
+                self.assertIn(name_id.to_bytes(2, "big"), wrapper)
+                self.assertIn((record + 1).to_bytes(4, "big"), wrapper)
+                self.assertIn((record + 2).to_bytes(4, "big"), wrapper)
+                self.assertIn((record + 3).to_bytes(4, "big"), wrapper)
+                self.assertIn((record + 6).to_bytes(4, "big"), wrapper)
         self.assertEqual(
             wrapper[-6:],
             bytes.fromhex("4E F9")
@@ -391,9 +434,10 @@ class Scenario13ClearProbeTests(unittest.TestCase):
     def test_default_and_completion_checksums_are_locked(self):
         default = bytearray(self.production)
         completion = bytearray(self.production)
+        continuation = bytearray(self.production)
         self.assertEqual(
             probe_builder.patch_probe(default, self.source),
-            0x3FD0,
+            0x0A92,
         )
         self.assertEqual(
             probe_builder.patch_probe(
@@ -401,7 +445,16 @@ class Scenario13ClearProbeTests(unittest.TestCase):
                 self.source,
                 completion_layout=True,
             ),
-            0x20D3,
+            0xCB3F,
+        )
+        self.assertEqual(
+            probe_builder.patch_probe(
+                continuation,
+                self.source,
+                completion_layout=True,
+                completion_continuation=True,
+            ),
+            0xD845,
         )
         death = bytearray(self.production)
         self.assertEqual(
@@ -410,7 +463,7 @@ class Scenario13ClearProbeTests(unittest.TestCase):
                 self.source,
                 protagonist_death=True,
             ),
-            0x4B91,
+            0x1653,
         )
 
     def test_completion_layout_rejects_changed_start_entry(self):

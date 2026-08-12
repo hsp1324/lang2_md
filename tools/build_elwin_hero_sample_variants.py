@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/sample-class-variants-v1/elwin-hero"
+    / "assets/class-sprites/source/latest/sample-class-variants-v1/elwin-hero"
 )
 AI_DIR = OUTPUT / "ai"
 LOGICAL_DIR = OUTPUT / "logical16"
@@ -630,8 +630,8 @@ def build() -> dict[str, object]:
         "version": 1,
         "generation_mode": "built-in image_gen; five independent calls",
         "first_generation_inputs": [
-            "docs/assets/ai-class-source/latest/elwin-hero-ai-v7-anatomy/references/elwin-hero-rom-original-neutral-32x.png",
-            "docs/assets/ai-class-source/latest/elwin-hero-ai-v7-anatomy/references/elwin-hero-identity-73px-neutral-32x.png",
+            "assets/class-sprites/source/latest/elwin-hero-ai-v7-anatomy/references/elwin-hero-rom-original-neutral-32x.png",
+            "assets/class-sprites/source/latest/elwin-hero-ai-v7-anatomy/references/elwin-hero-identity-73px-neutral-32x.png",
         ],
         "previous_ai_used": False,
         "native_method": "designer repixel at 16x16 + exact 73-point ROM identity restore",

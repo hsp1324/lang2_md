@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """Apply the approved purple Elwin Hero sample to the live editor asset."""
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.build_ai_class_sprite_assets import ASSET_VERSION
+from tools.pillow_compat import flattened_image_data
 from tools.rework_king_hero_and_archmage_magic_samples import (
     HERO_HEAD_ORNAMENT_POINTS,
 )
@@ -24,7 +26,7 @@ from tools.rework_king_hero_and_archmage_magic_samples import (
 
 SAMPLE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "sample-class-variants-v4-free-five/01-elwin-22-hero"
 )
 SOURCE = SAMPLE_ROOT / "logical16/04.png"
@@ -38,11 +40,11 @@ ARCHIVE = SAMPLE_ROOT / "archive/01-22-before-purple-sample-04.png"
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.get_flattened_data()]
+    return [list(color) for color in flattened_image_data(image)]
 
 
 def palette(image: Image.Image, limit: int | None = None) -> list[str]:
-    counts = Counter(color for color in image.get_flattened_data() if color[3])
+    counts = Counter(color for color in flattened_image_data(image) if color[3])
     return [
         "#%02x%02x%02x" % color[:3]
         for color, _ in counts.most_common(limit)
@@ -54,7 +56,7 @@ def main() -> int:
     before = Image.open(LIVE).convert("RGBA")
     if source.size != (16, 16):
         raise ValueError("Elwin Hero sample must be native 16x16")
-    colors = {color for color in source.get_flattened_data() if color[3]}
+    colors = {color for color in flattened_image_data(source) if color[3]}
     if len(colors) > 15:
         raise ValueError("Elwin Hero sample exceeds the 15-color limit")
     if (0, 0, 0, 255) in colors or (255, 0, 255, 255) in colors:
@@ -107,7 +109,8 @@ def main() -> int:
     )
     row["ai_source_position"] = (
         "latest/sample-class-variants-v4-free-five/"
-        "01-elwin-22-hero/logical16/04.png"
+        "01-elwin-22-hero/ai/04.png + "
+        "editor/ai_class_design_overrides.json · 1:22"
     )
     row["source_palette"] = palette(source, 6)
     row["pixel_palette"] = palette(source, 6)

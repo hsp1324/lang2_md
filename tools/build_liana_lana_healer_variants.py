@@ -7,15 +7,22 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/shared-liana-lana-healer-v1"
+    / "assets/class-sprites/source/latest/shared-liana-lana-healer-v1"
 )
 LIVE_ROOT = ROOT / "editor/static/ai-class-sprites"
 MANIFEST = LIVE_ROOT / "manifest.json"
@@ -30,7 +37,7 @@ RED_TO_BLUE = {
 
 def palette(image: Image.Image) -> list[str]:
     counts = Counter(
-        color for color in image.get_flattened_data() if color[3]
+        color for color in flattened_image_data(image) if color[3]
     )
     return [
         "#{:02x}{:02x}{:02x}".format(*color[:3])
@@ -39,8 +46,8 @@ def palette(image: Image.Image) -> list[str]:
 
 
 def same_pixels(first: Image.Image, second: Image.Image) -> bool:
-    return list(first.get_flattened_data()) == list(
-        second.get_flattened_data()
+    return list(flattened_image_data(first)) == list(
+        flattened_image_data(second)
     )
 
 
@@ -101,7 +108,7 @@ def main() -> int:
     for source, archive_name in (
         (
             ROOT
-            / "docs/assets/ai-class-source/latest/"
+            / "assets/class-sprites/source/latest/"
             "shared-new-classes-v2-refined/logical16/02-08.png",
             "02-08-before-latest-user-edit.png",
         ),

@@ -8,13 +8,20 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/shared-high-priest-aaron-v1"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
+OUTPUT = ROOT / "assets/class-sprites/source/latest/shared-high-priest-aaron-v1"
 MASTER = OUTPUT / "master/08-16-user-edited.png"
 LIVE = ROOT / "editor/static/ai-class-sprites"
 MANIFEST = LIVE / "manifest.json"
@@ -73,12 +80,17 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.convert("RGBA").get_flattened_data()]
+    return [
+        list(color)
+        for color in flattened_image_data(image.convert("RGBA"))
+    ]
 
 
 def palette(image: Image.Image) -> list[str]:
     counts = Counter(
-        color for color in image.convert("RGBA").get_flattened_data() if color[3]
+        color
+        for color in flattened_image_data(image.convert("RGBA"))
+        if color[3]
     )
     return ["#%02x%02x%02x" % color[:3] for color, _ in counts.most_common()]
 

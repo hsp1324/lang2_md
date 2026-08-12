@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools import verify_hard_mode_runtime_evidence as runtime_evidence
+from tools import verify_hard_mode_runtime_evidence as runtime_evidence  # noqa: E402
 
 
 DEFAULT_ROM = (
@@ -41,6 +41,14 @@ RETAINED_ENTRY_ROOT = ROOT / "captures/analysis"
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def relative(path: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        return str(resolved)
 
 
 def seed_for_scenario(scenario_number: int) -> Path:
@@ -139,7 +147,7 @@ def load_results(path: Path, rom: Path) -> dict:
             "scenarios": [],
         }
     results["hard_rom"] = {
-        "path": str(rom.relative_to(ROOT)),
+        "path": relative(rom),
         "sha256": sha256(rom),
     }
     return results
@@ -276,6 +284,16 @@ def verify_scenario(
         if verify_hard_runtime
         else None
     )
+    protected_npc_groups = (
+        runtime_evidence.verify_protected_npc_scenario(
+            gst_bytes,
+            rom.read_bytes(),
+            scenario_number,
+            player_group_count,
+        )
+        if verify_hard_runtime
+        else ()
+    )
     retained_gst = retain_entry_gst(
         scenario_number,
         gst_bytes,
@@ -302,14 +320,15 @@ def verify_scenario(
         ),
         "runtime_exception_record_count": len(exception_indexes),
         "runtime_exception_indexes": exception_indexes,
+        "protected_npc_runtime_count": len(protected_npc_groups),
         "runtime_group_range": None,
-        "seed": str(seed.relative_to(ROOT)),
+        "seed": relative(seed),
         "seed_sha256": sha256(seed),
-        "gst": str(retained_gst.relative_to(ROOT)),
+        "gst": relative(retained_gst),
         "gst_sha256": hashlib.sha256(gst_bytes).hexdigest(),
-        "runtime_gst": str(gst.relative_to(ROOT)),
+        "runtime_gst": relative(gst),
         "runtime_name": runtime_name,
-        "capture": str(capture.relative_to(ROOT)),
+        "capture": relative(capture),
         "capture_sha256": sha256(capture),
     }
     if verify_hard_runtime:

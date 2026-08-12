@@ -7,13 +7,20 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/shared-keith-wizard-new-classes-v1"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
+OUTPUT = ROOT / "assets/class-sprites/source/latest/shared-keith-wizard-new-classes-v1"
 MASTER_LIVE = ROOT / "editor/static/ai-class-sprites/7/15.png"
 LIVE = ROOT / "editor/static/ai-class-sprites"
 MASK_FILE = ROOT / "editor/ai_identity_masks.json"
@@ -71,11 +78,14 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.convert("RGBA").get_flattened_data()]
+    return [
+        list(color)
+        for color in flattened_image_data(image.convert("RGBA"))
+    ]
 
 
 def palette(image: Image.Image) -> list[str]:
-    counts = Counter(color for color in image.get_flattened_data() if color[3])
+    counts = Counter(color for color in flattened_image_data(image) if color[3])
     return ["#%02x%02x%02x" % color[:3] for color, _ in counts.most_common()]
 
 
@@ -151,7 +161,7 @@ def build_variant(
 
     # A large identity palette can leave fewer than three free equipment slots.
     # Compress only equipment pixels while keeping every visible target point exact.
-    visible = {color for color in result.get_flattened_data() if color[3]}
+    visible = {color for color in flattened_image_data(result) if color[3]}
     if len(visible) > 15:
         locked = {
             identity.getpixel(point)
@@ -237,8 +247,8 @@ def main() -> None:
         accepted = (
             matches == len(visible_points)
             and len(colors) <= 15
-            and (0, 0, 0, 255) not in result.get_flattened_data()
-            and (255, 0, 255, 255) not in result.get_flattened_data()
+            and (0, 0, 0, 255) not in flattened_image_data(result)
+            and (255, 0, 255, 255) not in flattened_image_data(result)
             and not empty_rows
             and not empty_columns
         )

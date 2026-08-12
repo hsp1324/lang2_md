@@ -195,7 +195,7 @@ def sync() -> None:
         for source in source_images
         if source
         != (
-            "docs/assets/ai-class-source/latest/hein/raw/"
+            "assets/class-sprites/source/latest/hein/raw/"
             "09-sorcerer.png"
         )
     ]

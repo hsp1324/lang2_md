@@ -15,6 +15,7 @@ from tools.jp_compressed_resource_inventory import (
     direct_load_calls,
     resource_pointers,
 )
+from tools.pillow_compat import text_bbox
 
 
 DEFAULT_PALETTE = tuple(
@@ -122,7 +123,7 @@ def render_atlas(
     padding = 6
     measuring_draw = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
     label_widths = [
-        measuring_draw.textbbox((0, 0), label)[2]
+        text_bbox(measuring_draw, (0, 0), label)[2]
         for _, _, label, _ in panels
     ]
     cell_width = max(

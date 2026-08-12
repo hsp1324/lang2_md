@@ -73,10 +73,10 @@ def stream_hex(values: list[int]) -> str:
 
 def pointer_targets() -> dict[str, list[object]]:
     return {
-        # The pointer table has one final preparation-UI record after the 31
-        # scenario condition records. Keep it visible in inventory without
-        # assigning a translation target.
-        "conditions": [*CONDITION_SCREENS, None],
+        # The table has 31 scenario condition records plus the Scenario 10
+        # TURN 3 alternative condition record. CONDITION_SCREENS already
+        # contains all 32 translation targets.
+        "conditions": list(CONDITION_SCREENS),
         "scenario_descriptions": load_scenario_texts(),
         "item_names": ITEM_NAME_PATCHES,
         "item_descriptions": ITEM_DESCRIPTION_PATCHES,
@@ -217,7 +217,7 @@ def markdown_report(result: dict[str, object]) -> str:
             "",
             "## Notes",
             "",
-            "- Conditions use 32 records: the builder patches Scenario 1-31 and preserves the final preparation-UI record.",
+            "- Conditions use 32 records: the builder patches Scenario 1-31 plus the Scenario 10 TURN 3 alternative condition.",
             "- Summoned creatures are class-table IDs and are tracked in `localization/global_strings.json`.",
             "- `mercenary_battle_names` is a separate direct-word path from the shared byte class table.",
             "- Detailed pointers, original tokens, targets, and explicit review flags are in",

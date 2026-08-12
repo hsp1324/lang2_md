@@ -210,7 +210,7 @@ def inventory(japanese: bytes, korean: bytes) -> dict[str, object]:
                 builder.INLINE_DISCARD_PROMPT_RENDER_HOOK + len(hook)
             ] == hook,
             "live_verified": True,
-            "evidence": "captures/run/94db_discard_reused_state.png",
+            "evidence": "captures/run/ede6_discard_selection_page1.png",
         },
         "sound_test": {
             "table": f"0x{SOUND_TEST_TABLE:06X}",

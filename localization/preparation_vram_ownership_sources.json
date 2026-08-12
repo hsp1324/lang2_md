@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "scope": "current_v137_preparation_vram_ownership_source_lock",
+  "release_generation": "cold-warm-load-context-gate-20260812",
+  "release_rom_sha256": {
+    "pure": "2d475a96f5f5ee26352bef6c3c392a77aafa283a2c0f260a6d1cb8603b3610ac",
+    "normal": "92e90c0e00df03c1c3264bc6ff7702c5356c2ba2b65d5f2281177066f329c7d8",
+    "hard": "ca7750c207382023636acb37901242437861a8b83f4b39477c1405c8dd1ee6eb"
+  },
+  "families": [
+    {
+      "id": "current_candidate_first_turn_matrix",
+      "classification": "exact_current_release",
+      "preparation_surface": false,
+      "path_template": "captures/analysis/v137-final-frozen-20260811-02-{profile}-first-turn-{scenario:02d}-{phase}.gst",
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
+      "scenarios": "1-31",
+      "phases": [
+        "loader_s{scenario:02d}_entry_turn1_entry",
+        "first-turn_s{scenario:02d}_endpoint"
+      ],
+      "expected_state_count": 186,
+      "path_hash_aggregate_sha256": "86dc9fd8c4a7d7606371834b3a34f5b5c0cb163d3c959af0a6f9061c1d344a38"
+    },
+    {
+      "id": "fresh_s1_preparation",
+      "classification": "exact_current_release",
+      "preparation_surface": true,
+      "path_template": "captures/run/v137-s13-cache-formal/fresh-seeds/{profile}/v137-s13-cache-current-20260812/fresh_s1_preparation.gst",
+      "profiles": [
+        "pure",
+        "normal",
+        "hard"
+      ],
+      "expected_state_count": 3,
+      "path_hash_aggregate_sha256": "117a0770233953b8114104a353ff5b1261d84ea4584548565abaef00e7382587"
+    },
+    {
+      "id": "pure_s19_preparation_roundtrip",
+      "classification": "exact_current_release",
+      "preparation_surface": true,
+      "paths": [
+        "captures/run/preparation_surface_matrix/pure/s19/v137-frozen-current-prefix-20260812/briefing/attempt_1/scenario_identity.gst",
+        "captures/run/preparation_surface_matrix/pure/s19/v137-frozen-current-prefix-20260812/states/pre_shop.gst",
+        "captures/run/preparation_surface_matrix/pure/s19/v137-frozen-current-prefix-20260812/states/shop_item_list.gst",
+        "captures/run/preparation_surface_matrix/pure/s19/v137-frozen-current-prefix-20260812/states/shop_returned.gst",
+        "captures/run/preparation_surface_matrix/pure/s19/v137-frozen-current-prefix-20260812/states/post_shop.gst"
+      ],
+      "expected_state_count": 5,
+      "path_hash_aggregate_sha256": "5d716be5c39e5965178a4c142b0aaa49da5918ff6bf1834a68d8239bc091069a"
+    },
+    {
+      "id": "exact_release_s13_s16_battle_cache",
+      "classification": "exact_current_release",
+      "preparation_surface": false,
+      "path_template": "captures/run/v137-s13-cache-formal/hover/{case}/states/{phase}.gst",
+      "cases": [
+        "stock-pure-s13-74-current-20260812-01",
+        "stock-normal-s13-74-current-20260812-01",
+        "stock-hard-s13-74-current-20260812-01",
+        "stock-hard-s13-63-current-20260812-01",
+        "stock-pure-s16-73-current-20260812-01",
+        "stock-normal-s16-73-current-20260812-01"
+      ],
+      "phases": [
+        "before_hover",
+        "command_open",
+        "target_hover"
+      ],
+      "expected_state_count": 18,
+      "path_hash_aggregate_sha256": "5f59a45e7c1d36f03c951ef800b3a10d5391527496f2e0d338051eb37931ec1f"
+    }
+  ],
+  "expected_state_count": 212,
+  "path_hash_aggregate_sha256": "09ec760e0d66efd7f1b0fb09c37744a446e32f949cc63de1b16c22d368fa2853",
+  "claim_boundary": "The source lock audits current candidate VDP ownership only; it is not final gameplay acceptance and does not replace missing S27, name-entry, or Scenario 11 evidence."
+}

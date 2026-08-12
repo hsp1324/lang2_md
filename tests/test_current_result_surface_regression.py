@@ -29,7 +29,7 @@ class CurrentResultSurfaceRegressionTests(unittest.TestCase):
         )
         self.assertEqual(
             verifier.evidence_path(root, "hard", 12),
-            root / "s12/hard/current-source-20260802-20/evidence.json",
+            root / "hard/s12/current-source-20260802-20/evidence.json",
         )
         self.assertEqual(
             verifier.evidence_path(root, "normal", 18),

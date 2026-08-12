@@ -28,7 +28,7 @@ from tools.scenario_data import KOREAN_NAME_BY_ID, class_names
 
 
 DEFAULT_OUTPUT = ROOT / "editor/static/test-class-sprites"
-CONCEPT_SHEET = ROOT / "docs/assets/allied_class_redesign_concept.png"
+CONCEPT_SHEET = ROOT / "assets/class-sprites/reference/allied_class_redesign_concept.png"
 
 RULER_CLASSES = {0x01, 0x04, 0x0B, 0x1A, 0x20, 0x21, 0x22, 0x23}
 MAGE_CLASSES = {0x03, 0x09, 0x0A, 0x13, 0x14, 0x15, 0x26, 0x28}

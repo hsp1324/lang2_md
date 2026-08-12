@@ -15,14 +15,21 @@ from collections import Counter
 import colorsys
 import json
 from pathlib import Path
+import sys
 
 from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest"
+    / "assets/class-sprites/source/latest"
     / "sample-class-variants-v4-free-five"
 )
 AI_ROOT = ROOT / "editor/static/ai-class-sprites"
@@ -579,7 +586,9 @@ def rework_magic_groups() -> list[dict]:
                     "accent": "#%02x%02x%02x" % accent[:3],
                     "visible_colors": len(colors),
                     "opaque_pixels": sum(
-                        1 for color in logical.get_flattened_data() if color[3]
+                        1
+                        for color in flattened_image_data(logical)
+                        if color[3]
                     ),
                 }
             )

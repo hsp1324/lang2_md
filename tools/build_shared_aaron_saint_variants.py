@@ -28,7 +28,7 @@ CLASS_ID = 0x17
 SOURCE_COMMANDER = 8
 TARGETS = (1, 2, 3, 4, 5, 6, 7, 8, 10)
 SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/shared-saint-aaron-v1"
+    ROOT / "assets/class-sprites/source/latest/shared-saint-aaron-v1"
 )
 ROM_SPRITE_DIR = ROOT / "editor/static/class-sprites/commanders"
 TRANSPARENT = (0, 0, 0, 0)

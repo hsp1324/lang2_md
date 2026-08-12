@@ -21,7 +21,7 @@ from tools.build_ai_class_sprite_assets import (
 
 
 SOURCE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/shared-hein-classes-v1"
+    ROOT / "assets/class-sprites/source/latest/shared-hein-classes-v1"
 )
 MANIFEST_PATH = ROOT / "editor/static/ai-class-sprites/manifest.json"
 SPRITE_DIR = ROOT / "editor/static/class-sprites/commanders"

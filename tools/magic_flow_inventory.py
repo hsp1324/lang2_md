@@ -102,6 +102,14 @@ SOURCE_RANGES = (
     ),
 )
 
+# v1.3.6 deliberately installs two named tier-2 aliases.  Their complete
+# class records must remain byte-for-byte copies of the declared Japanese
+# source classes; every other byte in the class table remains locked to the
+# same class record in the Japanese ROM.
+DECLARED_CLASS_RECORD_ALIASES = dict(
+    builder.JOIN_CLASS_CHOICE_CUSTOM_CLASS_SOURCES
+)
+
 SEMANTIC_ANCHORS = {
     0x01494A: bytes.fromhex("18 31 10 16"),
     0x014952: bytes.fromhex("49 F9 00 08 29 CC"),
@@ -150,11 +158,34 @@ def verify_source_ranges(
                 f"{name} source range changed: {actual_sha256} "
                 f"!= {expected_sha256}"
             )
-        if korean[start:end] != source_data:
+        aliases: list[dict[str, object]] = []
+        expected_production = source_data
+        if name == "class_records":
+            expected = bytearray(source_data)
+            for custom_class, source_class in sorted(
+                DECLARED_CLASS_RECORD_ALIASES.items()
+            ):
+                custom_relative = custom_class * CLASS_RECORD_SIZE
+                source_offset = (
+                    CLASS_RECORD_TABLE + source_class * CLASS_RECORD_SIZE
+                )
+                expected[custom_relative : custom_relative + CLASS_RECORD_SIZE] = (
+                    source[source_offset : source_offset + CLASS_RECORD_SIZE]
+                )
+                aliases.append(
+                    {
+                        "class_id": custom_class,
+                        "source_class_id": source_class,
+                        "offset": f"0x{start + custom_relative:06X}",
+                        "size": CLASS_RECORD_SIZE,
+                    }
+                )
+            expected_production = bytes(expected)
+        if korean[start:end] != expected_production:
             mismatch = next(
                 index
                 for index, (old, new) in enumerate(
-                    zip(source_data, korean[start:end])
+                    zip(expected_production, korean[start:end])
                 )
                 if old != new
             )
@@ -169,7 +200,9 @@ def verify_source_ranges(
                 "end": f"0x{end:06X}",
                 "size": end - start,
                 "source_sha256": actual_sha256,
-                "production_source_equivalent": True,
+                "production_source_equivalent": not aliases,
+                "production_matches_declared_policy": True,
+                "declared_class_record_aliases": aliases,
             }
         )
     return rows
@@ -490,7 +523,10 @@ def inventory(
             "trees and all fixed scenario records. Every ID still shares the "
             "source-locked production list, selection, parameter, and "
             "application path and has retained diagnostic application "
-            "evidence. This is structural coverage, not a claim that every "
+            "evidence. The v1.3.6 Hawk Lord and Croco Lord class records are "
+            "bounded aliases of their declared Japanese mounted source "
+            "records; every other class-record byte remains source-locked. "
+            "This is structural coverage, not a claim that every "
             "commander/class ownership combination was naturally played."
         ),
         "source_locked_ranges": ranges,
@@ -530,9 +566,29 @@ def markdown_report(result: dict[str, object]) -> str:
         "| --- | --- | ---: | --- |",
     ]
     for row in result["source_locked_ranges"]:
+        aliases = row["declared_class_record_aliases"]
+        if aliases:
+            production = "declared aliases; all other records source-equivalent"
+        else:
+            production = "source-equivalent"
         lines.append(
             f"| {row['name']} | `{row['start']}..{row['end']}` | "
-            f"{row['size']} | source-equivalent |"
+            f"{row['size']} | {production} |"
+        )
+    aliases = result["source_locked_ranges"][0][
+        "declared_class_record_aliases"
+    ]
+    if aliases:
+        lines.extend(
+            [
+                "",
+                "Declared v1.3.6 class-record aliases: "
+                + ", ".join(
+                    f"`{row['class_id']:02X}` <- `{row['source_class_id']:02X}`"
+                    for row in aliases
+                )
+                + ".",
+            ]
         )
 
     lines.extend(

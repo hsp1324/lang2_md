@@ -51,6 +51,13 @@ class ClassChangeFlowInventoryTests(unittest.TestCase):
         self.assertEqual(
             self.result["control_flow"]["persistent_commander_count"], 10
         )
+        self.assertEqual(
+            self.result["control_flow"]["stock_ownership_filter"], "0x014B2C"
+        )
+        self.assertEqual(
+            self.result["control_flow"]["lester_result_ownership_guard"],
+            "0x31E380",
+        )
 
     def test_complete_roster_is_owned_by_manual_save_descriptor(self):
         descriptor = self.result["manual_save_descriptor"]
@@ -113,6 +120,15 @@ class ClassChangeFlowInventoryTests(unittest.TestCase):
         with self.assertRaisesRegex(
             ValueError,
             "unexpected join visibility hook",
+        ):
+            inventory(self.jp, bytes(mutated))
+
+    def test_join_ownership_hook_accepts_only_the_declared_guard(self):
+        mutated = bytearray(self.ko)
+        mutated[0x014B2C + 7] ^= 1
+        with self.assertRaisesRegex(
+            ValueError,
+            "unexpected join ownership hook",
         ):
             inventory(self.jp, bytes(mutated))
 

@@ -41,11 +41,12 @@ from tools.build_rom_anchored_sample_campaign import (  # noqa: E402
     transparent_nearest,
     write_json,
 )
+from tools.pillow_compat import flattened_image_data  # noqa: E402
 
 
 SOURCE_ROOT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     / "sample-class-variants-v4-free-five"
 )
 STATIC_ROOT = ROOT / "editor/static/sample-class-sprites"
@@ -437,7 +438,9 @@ def publish() -> None:
                         and logical.getpixel(point) == expected_rgba
                     )
             center = center_rows[sample_id]
-            opaque = sum(1 for color in logical.get_flattened_data() if color[3])
+            opaque = sum(
+                1 for color in flattened_image_data(logical) if color[3]
+            )
             report = {
                 "group": group["id"],
                 "sample": sample_id,

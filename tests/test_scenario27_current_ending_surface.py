@@ -1,13 +1,18 @@
+import json
 from pathlib import Path
 from unittest import mock
-import subprocess
-import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
 
+from PIL import Image, ImageDraw
+
+from tools import build_scenario27_ending_probe_rom as probe_builder
 from tools import run_scenario27_ending_surface as runner
+from tools import run_v137_final_gate as final_gate
 from tools import verify_scenario27_current_ending_surface as verifier
+from tools.rom_update import bps_apply
+from tools.scenario_data import FIELD_OFFSETS, FIXED_RECORD_SIZE, scenario_layout
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,7 +21,12 @@ ROOT = Path(__file__).resolve().parents[1]
 class Scenario27CurrentEndingSurfaceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.report = verifier.build_report()
+        # The large historical frame/GST corpus is intentionally no longer
+        # tracked.  Keep its reviewed, hash-locked report as an archive and
+        # leave current exact-ROM runtime acceptance to run_v137_final_gate.
+        cls.report = json.loads(
+            verifier.DEFAULT_OUTPUT.read_text(encoding="utf-8")
+        )
 
     def test_report_passes_without_release_or_acceptance_promotion(self):
         self.assertEqual(self.report["status"], "pass")
@@ -26,7 +36,7 @@ class Scenario27CurrentEndingSurfaceTests(unittest.TestCase):
     def test_runner_bound_covers_the_observed_final_timed_epilogue(self):
         self.assertGreaterEqual(runner.DEFAULT_MAX_ENDING_FRAMES, 3400)
 
-    def test_runner_retries_stock_combat_variance_from_retained_quicksave(self):
+    def test_runner_can_retry_from_the_retained_one_hp_quicksave(self):
         self.assertGreaterEqual(runner.DEFAULT_ATTACK_ATTEMPTS, 4)
         self.assertGreater(runner.DEFAULT_RETRY_RNG_DELAY, 0)
         with tempfile.TemporaryDirectory() as temporary:
@@ -98,15 +108,276 @@ class Scenario27CurrentEndingSurfaceTests(unittest.TestCase):
         self.assertEqual(len(checkpoints), 3)
         self.assertEqual(checkpoint, checkpoints[-1])
 
-    def test_checked_report_is_current(self):
-        subprocess.check_call(
-            [
-                sys.executable,
-                str(ROOT / "tools/verify_scenario27_current_ending_surface.py"),
-                "--check",
-            ],
-            cwd=ROOT,
+    def test_runner_requires_the_probe_start_wrapper_one_hp_state(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "pre-attack.gst"
+            payload = bytearray(runner.GST_WORK_RAM_OFFSET + runner.WORK_RAM_BYTES)
+            record = (
+                runner.GST_WORK_RAM_OFFSET
+                + (runner.RUNTIME_GROUP_BASE & 0xFFFF)
+                + runner.BERNHARDT_RUNTIME_GROUP * runner.RUNTIME_GROUP_SIZE
+            )
+            payload[record] = 0x4E
+            payload[record + 1] = 0x0E
+            payload[record + runner.RUNTIME_HP_OFFSET] = 1
+            payload[record + runner.RUNTIME_X_OFFSET] = 15
+            payload[record + runner.RUNTIME_X_OFFSET + 1] = 15
+            path.write_bytes(payload)
+
+            state = runner.require_staged_bernhardt(path)
+            self.assertEqual(state["hp"], 1)
+            payload[record + runner.RUNTIME_HP_OFFSET] = 10
+            path.write_bytes(payload)
+            with self.assertRaisesRegex(RuntimeError, "Start wrapper"):
+                runner.require_staged_bernhardt(path)
+
+    def test_runner_explicitly_triggers_start_wrapper_before_attack(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+
+            def gst(name, hp):
+                path = root / name
+                payload = bytearray(
+                    runner.GST_WORK_RAM_OFFSET + runner.WORK_RAM_BYTES
+                )
+                record = (
+                    runner.GST_WORK_RAM_OFFSET
+                    + (runner.RUNTIME_GROUP_BASE & 0xFFFF)
+                    + runner.BERNHARDT_RUNTIME_GROUP
+                    * runner.RUNTIME_GROUP_SIZE
+                )
+                payload[record] = 0x4E
+                payload[record + 1] = 0x0E
+                payload[record + runner.RUNTIME_HP_OFFSET] = hp
+                payload[record + runner.RUNTIME_X_OFFSET] = 15
+                payload[record + runner.RUNTIME_X_OFFSET + 1] = 15
+                path.write_bytes(payload)
+                return path
+
+            states = [
+                gst("before.gst", 10),
+                gst("staged.gst", 1),
+                gst("pre-attack.gst", 1),
+            ]
+            actions = []
+            captures = []
+
+            class Recorder:
+                def save_gst(self, relative):
+                    return states.pop(0)
+
+                def send(self, keys, delay):
+                    actions.append((keys, delay))
+
+                def capture(self, relative):
+                    path = root / relative
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(b"capture")
+                    captures.append(relative)
+                    return path
+
+            with mock.patch.object(
+                runner.first_turn,
+                "start_menu_cursor_row",
+                return_value=0,
+            ), mock.patch.object(
+                runner.sequence,
+                "battle_command_menu_visible",
+                return_value=True,
+            ):
+                result = runner.trigger_and_verify_start_wrapper(Recorder())
+
+            self.assertEqual(
+                actions,
+                [
+                    (["b"], 0.8),
+                    (["start"], 1.0),
+                    (["b"], 0.8),
+                    (["c"], 0.8),
+                ],
+            )
+            self.assertEqual(
+                captures,
+                [
+                    "battle/start_wrapper_menu.png",
+                    "battle/turn1_command_staged.png",
+                ],
+            )
+            self.assertEqual(result["action_sequence"], ["b", "start", "b", "c"])
+            self.assertEqual(
+                result["changed_record_offsets"],
+                [runner.RUNTIME_HP_OFFSET],
+            )
+            self.assertEqual(result["before_state"]["hp"], 10)
+            self.assertEqual(result["pre_attack_state"]["hp"], 1)
+
+    def test_runner_rejects_a_no_wrapper_rom_after_the_start_action(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+
+            def gst(name):
+                path = root / name
+                payload = bytearray(
+                    runner.GST_WORK_RAM_OFFSET + runner.WORK_RAM_BYTES
+                )
+                record = (
+                    runner.GST_WORK_RAM_OFFSET
+                    + (runner.RUNTIME_GROUP_BASE & 0xFFFF)
+                    + runner.BERNHARDT_RUNTIME_GROUP
+                    * runner.RUNTIME_GROUP_SIZE
+                )
+                payload[record] = 0x4E
+                payload[record + 1] = 0x0E
+                payload[record + runner.RUNTIME_HP_OFFSET] = 10
+                payload[record + runner.RUNTIME_X_OFFSET] = 15
+                payload[record + runner.RUNTIME_X_OFFSET + 1] = 15
+                path.write_bytes(payload)
+                return path
+
+            states = [gst("before.gst"), gst("still-ten.gst")]
+            actions = []
+
+            class Recorder:
+                def save_gst(self, relative):
+                    return states.pop(0)
+
+                def send(self, keys, delay):
+                    actions.append(keys)
+
+                def capture(self, relative):
+                    path = root / "start-menu.png"
+                    path.write_bytes(b"capture")
+                    return path
+
+            with mock.patch.object(
+                runner.first_turn,
+                "start_menu_cursor_row",
+                return_value=0,
+            ), self.assertRaisesRegex(RuntimeError, "Start wrapper"):
+                runner.trigger_and_verify_start_wrapper(Recorder())
+
+            self.assertEqual(actions, [["b"], ["start"]])
+
+    def test_archived_report_is_complete_but_not_the_current_release_gate(self):
+        self.assertEqual(self.report["schema_version"], 1)
+        self.assertEqual(self.report["scenario"], 27)
+        self.assertEqual(set(self.report["profiles"]), {"normal", "hard"})
+        for profile in ("normal", "hard"):
+            row = self.report["profiles"][profile]
+            self.assertEqual(
+                row["candidate"]["expected_sha256"],
+                verifier.CANDIDATES[profile]["sha256"],
+            )
+            self.assertEqual(
+                row["diagnostic_probe"]["expected_sha256"],
+                verifier.PROBES[profile]["sha256"],
+            )
+            self.assertEqual(
+                row["evidence_json"]["expected_sha256"],
+                verifier.RUNS[profile]["evidence_sha256"],
+            )
+
+        phase = final_gate.PHASE_BY_ID["scenario27_final_and_ending"]
+        self.assertEqual(phase.expected_pass_count, 36)
+        self.assertEqual(
+            phase.acceptance_units,
+            {
+                "ending_to_fin": 3,
+                "final_enemy_fixed_record": 30,
+                "x4_to_s27_save_transition": 3,
+            },
         )
+        self.assertEqual(final_gate.FULL_ROUTE_ORDER[-2:], (31, 27))
+        self.assertEqual(final_gate.NEXT_SCENARIO[31], 27)
+
+    def test_exact_v137_scenario27_probes_are_reproducible_and_identity_safe(self):
+        source = final_gate.DEFAULT_SOURCE_ROM.read_bytes()
+        manifest = json.loads(
+            (ROOT / "patches/v1.3.7.json").read_text(encoding="utf-8")
+        )
+        expected_profiles = {"pure", "normal", "hard"}
+        self.assertEqual(
+            {row["id"] for row in manifest["targets"]},
+            expected_profiles,
+        )
+        source_layout = scenario_layout(source, 27)
+        self.assertEqual(source_layout.record_count, 10)
+        bernhardt = (
+            source_layout.records_offset
+            + probe_builder.BERNHARDT_RECORD_INDEX * FIXED_RECORD_SIZE
+        )
+        allowed = {
+            0x18E,
+            0x18F,
+            *range(
+                probe_builder.START_MENU_ENTRY_OPERAND,
+                probe_builder.START_MENU_ENTRY_OPERAND + 4,
+            ),
+            *range(
+                probe_builder.RUNTIME_WRAPPER,
+                probe_builder.RUNTIME_WRAPPER
+                + len(probe_builder.completion_hp_wrapper_code()),
+            ),
+            bernhardt + FIELD_OFFSETS["at"],
+            bernhardt + FIELD_OFFSETS["df"],
+            bernhardt + FIELD_OFFSETS["x"],
+            bernhardt + FIELD_OFFSETS["y"],
+            *(
+                bernhardt + FIELD_OFFSETS["mercenaries"] + index
+                for index in range(6)
+            ),
+        }
+        already_adjacent_x = bernhardt + FIELD_OFFSETS["x"]
+        unchanged_start_operand = probe_builder.START_MENU_ENTRY_OPERAND
+        unchanged_wrapper_bytes = {
+            probe_builder.RUNTIME_WRAPPER + index
+            for index, value in enumerate(
+                probe_builder.completion_hp_wrapper_code()
+            )
+            if value == 0xFF
+        }
+        expected_changed = allowed - {
+            already_adjacent_x,
+            unchanged_start_operand,
+            *unchanged_wrapper_bytes,
+        }
+        for row in manifest["targets"]:
+            profile = row["id"]
+            release = bps_apply(
+                (ROOT / "patches" / row["patch_filename"]).read_bytes(),
+                source,
+            )
+            probe = bytearray(release)
+            probe_builder.patch_probe(
+                probe,
+                source,
+                allow_balanced_input=profile == "hard",
+            )
+            changed = {
+                offset
+                for offset, (before, after) in enumerate(zip(release, probe))
+                if before != after
+            }
+            with self.subTest(profile=profile):
+                # Stock Bernhardt is already at X=15. The high byte of both
+                # Start operands and FF bytes embedded in the wrapper are also
+                # intentional no-ops; every other declared byte changes.
+                self.assertEqual(changed, expected_changed)
+                self.assertEqual(scenario_layout(probe, 27), source_layout)
+                for index in range(source_layout.record_count):
+                    start = source_layout.records_offset + index * FIXED_RECORD_SIZE
+                    protected = {
+                        relative
+                        for relative in range(FIXED_RECORD_SIZE)
+                        if start + relative not in allowed
+                    }
+                    self.assertTrue(
+                        all(
+                            probe[start + relative]
+                            == release[start + relative]
+                            for relative in protected
+                        )
+                    )
 
     def test_both_profiles_are_exact_focused_candidate_derivatives(self):
         for profile in ("normal", "hard"):
@@ -172,18 +443,36 @@ class Scenario27CurrentEndingSurfaceTests(unittest.TestCase):
         self.assertTrue(cross["fin_pixel_identical"])
 
     def test_fin_and_caption_detectors_do_not_confuse_title_or_epilogue(self):
-        old_fin = ROOT / "captures/run/e93e_s27_ending_watch/875.png"
-        current_fin = ROOT / "captures/run/current_s27_ending/hard/runtime01/ending/advance_2960.png"
-        caption = ROOT / "captures/run/current_s27_ending/normal/runtime08/ending/advance_0154.png"
-        title = ROOT / "captures/run/c7ab_s27_title.png"
-        epilogue = ROOT / "captures/run/current_s27_ending/hard/runtime01/ending/advance_2360.png"
-        self.assertTrue(runner.fin_visible(old_fin))
-        self.assertTrue(runner.fin_visible(current_fin))
-        self.assertFalse(runner.fin_visible(title))
-        self.assertFalse(runner.fin_visible(epilogue))
-        self.assertTrue(runner.ending_caption_visible(caption))
-        self.assertFalse(runner.ending_caption_visible(current_fin))
-        self.assertFalse(runner.ending_caption_visible(epilogue))
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            fin = root / "fin.png"
+            fin.write_bytes(b"fresh exact-runtime Fin frame")
+            with mock.patch.object(
+                runner.shared,
+                "sha256",
+                return_value=runner.FIN_SHA256,
+            ):
+                self.assertTrue(runner.fin_visible(fin))
+            with mock.patch.object(
+                runner.shared,
+                "sha256",
+                return_value="0" * 64,
+            ):
+                self.assertFalse(runner.fin_visible(fin))
+
+            caption = Image.new("RGB", (320, 240), "black")
+            draw = ImageDraw.Draw(caption)
+            draw.rectangle((20, 190, 45, 198), fill="white")
+            caption_path = root / "caption.png"
+            caption.save(caption_path)
+            self.assertTrue(runner.ending_caption_visible(caption_path))
+
+            title = Image.new("RGB", (320, 240), "black")
+            draw = ImageDraw.Draw(title)
+            draw.rectangle((20, 20, 300, 35), fill="white")
+            title_path = root / "title.png"
+            title.save(title_path)
+            self.assertFalse(runner.ending_caption_visible(title_path))
 
     def test_moving_cinematic_caption_match_is_not_confirmed(self):
         for stable_frames in range(runner.STATIC_CAPTION_CONFIRM_FRAMES):

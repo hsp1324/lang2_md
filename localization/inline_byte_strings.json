@@ -31,7 +31,7 @@
     "target_korean": "버릴 아이템",
     "hook_installed": true,
     "live_verified": true,
-    "evidence": "captures/run/94db_discard_reused_state.png"
+    "evidence": "captures/run/ede6_discard_selection_page1.png"
   },
   "sound_test": {
     "table": "0x05E040",

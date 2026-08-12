@@ -27,7 +27,7 @@ from tools.build_ai_class_sprite_assets import (
 RESAMPLING = getattr(Image, "Resampling", Image)
 MAGENTA = (255, 0, 255, 255)
 GUIDE_DIR = (
-    ROOT / "docs/assets/ai-class-source/latest/elwin-mounted-v2/guides"
+    ROOT / "assets/class-sprites/source/latest/elwin-mounted-v2/guides"
 )
 CLASS_FILES = {
     0x0C: "0C-highlander.png",
@@ -214,7 +214,7 @@ def main() -> int:
         type=Path,
         default=(
             ROOT
-            / "docs/assets/ai-class-source/latest/elwin-mounted-v2"
+            / "assets/class-sprites/source/latest/elwin-mounted-v2"
         ),
     )
     parser.add_argument(

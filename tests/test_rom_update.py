@@ -388,7 +388,7 @@ class ReleaseRegistryTests(unittest.TestCase):
         registry = json.loads(
             RELEASE_REGISTRY.read_text(encoding="utf-8")
         )
-        self.assertEqual(registry["current_release"], "ko-1.0.0")
+        self.assertEqual(registry["current_release"], "ko-normal-1.3.6")
         record = next(
             row
             for row in registry["releases"]

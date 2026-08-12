@@ -5,6 +5,7 @@ from argparse import Namespace
 
 from tools.run_blastem_sequence import (
     BLASTEM,
+    blastem_log_path,
     blastem_command,
     detection_capture_path,
     disable_host_gamepad_bindings,
@@ -36,6 +37,12 @@ class BlastEmProbeRuntimeTests(unittest.TestCase):
         self.assertEqual(probe.parent, ROOT / "captures/run")
         self.assertTrue(probe.name.startswith("battle_command_probe_"))
         self.assertEqual(probe.suffix, ".png")
+
+    def test_emulator_logs_are_isolated_by_runtime_home(self):
+        first = blastem_log_path(Path("tmp/runtime-a"), "scenario-select")
+        second = blastem_log_path(Path("tmp/runtime-b"), "scenario-select")
+        self.assertNotEqual(first, second)
+        self.assertEqual(first, Path("tmp/runtime-a/blastem_scenario-select.log"))
 
     def test_software_renderer_flag_precedes_rom_path(self):
         rom = ROOT / "roms/builds/Langrisser II (Korean).md"

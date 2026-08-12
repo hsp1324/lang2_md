@@ -2,6 +2,7 @@ from pathlib import Path
 import subprocess
 import sys
 import unittest
+from unittest import mock
 
 from tools import run_preparation_surface_parallel as parallel
 
@@ -20,7 +21,10 @@ class PreparationSurfaceParallelTests(unittest.TestCase):
             parallel.parse_scenarios("32")
 
     def test_plan_assigns_distinct_isolated_displays(self) -> None:
-        rom = ROOT / "roms/releases/Langrisser II (Korean Hard T1.0.1 B1.0.3).md"
+        rom = ROOT / (
+            "roms/builds/"
+            "Langrisser II (Korean Hard v1.3.7).md"
+        )
         output = subprocess.check_output(
             [
                 sys.executable,
@@ -30,6 +34,7 @@ class PreparationSurfaceParallelTests(unittest.TestCase):
                 "--rom", str(rom),
                 "--scenarios", "1-8",
                 "--workers", "4",
+                "--attempts", "3",
                 "--display-base", "130",
                 "--run-id", "parallel-plan-test",
             ],
@@ -37,8 +42,22 @@ class PreparationSurfaceParallelTests(unittest.TestCase):
             text=True,
         )
         self.assertIn('"displays": [', output)
+        self.assertIn('"attempts": 3', output)
         for display in (":130", ":131", ":132", ":133"):
             self.assertIn(f'"{display}"', output)
+
+    def test_xvfb_launcher_rejects_physical_or_ambiguous_displays(self) -> None:
+        for display in (":0", ":1", ":99", ":104.0", "localhost:104"):
+            with self.subTest(display=display):
+                with self.assertRaises(ValueError):
+                    parallel.display_number(display)
+        self.assertEqual(parallel.display_number(":100"), 100)
+
+    def test_xvfb_process_is_never_spawned_before_display_validation(self) -> None:
+        with mock.patch.object(parallel.subprocess, "Popen") as popen:
+            with self.assertRaisesRegex(ValueError, "possibly physical"):
+                parallel.start_xvfb(Path("/tmp/Xvfb"), Path("/tmp/lib"), ":0")
+        popen.assert_not_called()
 
 
 if __name__ == "__main__":

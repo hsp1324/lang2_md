@@ -25,7 +25,7 @@ from tools.build_shared_new_class_variants import resolve_identity_points
 
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/keith-lester-tier1-mounted-v1"
+    / "assets/class-sprites/source/latest/keith-lester-tier1-mounted-v1"
 )
 RESAMPLING = getattr(Image, "Resampling", Image)
 

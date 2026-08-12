@@ -49,6 +49,23 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             all(len(line) <= 14 for line in text_by_address["0x19D87C"].splitlines())
         )
         self.assertEqual(
+            text_by_address["0x19D5E2"],
+            "하루빨리 대륙을 통일해\n전쟁 없는 세상을 만들겠다.",
+        )
+        self.assertTrue(
+            all(len(line) <= 15 for line in text_by_address["0x19D5E2"].splitlines())
+        )
+        self.assertEqual(
+            text_by_address["0x19EF3E"],
+            "야망을 꺾기 위해\n랑그릿사의 가호 아래\n싸워 {0002}를 구해 내자!",
+        )
+        self.assertTrue(
+            all(
+                len(builder.EVENT_NAME_CONTROL_RE.sub("이름", line)) <= 14
+                for line in text_by_address["0x19EF3E"].splitlines()
+            )
+        )
+        self.assertEqual(
             text_by_address["0x19E31C"],
             "랑그릿사를 얻었다!",
         )
@@ -986,6 +1003,84 @@ class ReviewedEventDialogueTests(unittest.TestCase):
                 )
             ],
         )
+
+    def test_arca_179646819_confirmed_dialogue_corrections(self):
+        text_by_address = {row["address"]: row["text"] for row in self.rows}
+        expected = {
+            "0x1851B2": "외곽을 뚫고 {001C}을 직접 치겠습니다.",
+            "0x18568C": "{000D}님, {0025}이 왔습니다!",
+            "0x18905C": "건방진 놈들! 이 조름님의 전술을 비웃다니! 잔머리를 굴려 봐야 헛수고다!",
+            "0x18A614": "그렇다면 순순히 죽어 주십시오…",
+            "0x18B642": "술법을 건 {0016}을 쓰러뜨리면 {0002}도 돌아올 거야.",
+            "0x18B68E": "알았어! {0016}을 쓰러뜨리면 돼!",
+            "0x18BD66": "알았어. 그럼 서둘러 {0016}을 쫓자.",
+            "0x18C7BC": "하지만 서둘러 쓰러뜨리지 않으면 {0016}을 놓쳐.",
+            "0x18C94C": "시간 없어. {0016}을 쫓자.",
+            "0x18CA5E": "모두 서둘러! 여기서 지체하면 {0016}을 놓친다!",
+            "0x18EBAE": "{0008}은 내 검술 스승이야",
+            "0x18FD7A": "그렇군! 그럼 {0005}이 슬라임을 맡아 줘.",
+            "0x192986": "맡기십시오",
+            "0x194B48": "사제님!",
+            "0x194ED2": "그렇습니다. 하지만 문서에는 다크로드의 위치가 적혀 있지 않습니다.",
+            "0x195FCE": "대체 뭐지? 왜 마물들이 우리를 노리는 거야?",
+            "0x1960D4": "{003E}는 물속에서 상대하지 마! 육지로 유인해!",
+            "0x196408": "이 망할 마물들! 내가 상대해 주마!",
+            "0x19690E": "죽여라! 한 명도 살려 보내지 마라!",
+            "0x196ADC": "너희, 제법인데? 그래서 어디로 가려던 거지?",
+            "0x196DB2": "갈 곳을 알아?",
+            "0x196DE4": "모르긴 뭘 몰라. 난 {000A}님의 제자 {0009}다.",
+            "0x196E1E": "수상한 자들이 {000A}님께 접근하지 못하게 지키는 게 내 일이지.",
+            "0x196E6E": "솔직히 말하지. 제국의 암흑검 부활을 막으려면 그 대마술사의 힘이 필요해.",
+            "0x196F1E": "좋아, 내게 맡겨. 너희가 마음에 들었다!",
+            "0x19B2A6": "비행 부대는 괜찮아. {0005}도 참, 거짓말을 가르치면 안 되지!",
+            "0x19BE5E": "레아드, 기사단을 이끌고 그 성을 찾아라! 난 엘리자에게 알린 뒤 곧 합류하겠다.",
+            "0x19EF02": "어떻게 해서든\n알하자드의 봉인을\n풀게 둘 순 없다!",
+            "0x1A4FDA": "{0010}님 앞을 막는 자는 누구도 살려 두지 않겠다!",
+            "0x1A6A40": "{000D}님도 지금은 참으라 하셨다. {000D}님은 사욕을 위해 힘을 쓰실 분이 아니다!",
+            "0x1A719A": "네가 죽으면 {000D}님을 뵐 면목이 없으니까.",
+            "0x1A82F6": "{0060}과 바다에서 싸우지 마! 배 위로 유인해!",
+            "0x1A87F0": "좋아! 그대로 {0060}을 배 위로 유인하자.",
+            "0x1ACD0C": "언니! {0003} 언니!",
+            "0x1ACD3E": "{0003} 언니, 못 볼 줄 알았어…",
+            "0x1B0A98": "이건 나와 {0001}의 싸움이다.",
+            "0x1B117E": "제국이든 {0001}이든, 힘 있는 자가 대륙을 평화로 이끌 것이다.",
+            "0x1B1632": "여긴… 못 지나간다…",
+            "0x1B1652": "크윽…",
+            "0x1B1872": "건강하십시오… 제국을 부탁드립니다.",
+            "0x1B3726": "{0010} 때문에 스승과 헤어져서까지 목적을 이루어야 했다니, 참 슬픈 운명이군요…",
+            "0x1B498C": "{000D}을 이겼다고 자만하지 마라.",
+            "0x1B5140": "폐하! 마지막 길을 함께하게 해 주십시오!",
+        }
+        self.assertEqual(
+            {address: text_by_address[address] for address in expected},
+            expected,
+        )
+
+    def test_arca_179646819_wrong_particles_and_meanings_do_not_regress(self):
+        text_by_address = {row["address"]: row["text"] for row in self.rows}
+        forbidden = {
+            "0x18568C": ("{0025}가",),
+            "0x18B642": ("{0016}를",),
+            "0x18B68E": ("{0016}를",),
+            "0x18BD66": ("{0016}를",),
+            "0x18EBAE": ("{0008}는",),
+            "0x194ED2": ("있는 곳도 적혀",),
+            "0x19690E": ("혼자 살려",),
+            "0x196DE4": ("님의 동생", "모르겠는데"),
+            "0x196E6E": ("암흑검을 부활시켜", "대마술사를 만나야"),
+            "0x196F1E": ("안내하지", "따라와"),
+            "0x19B2A6": ("책사 흉내", "군사를 따라"),
+            "0x19BE5E": ("레온, 넌 병력을",),
+            "0x1A6A40": ("우리를 위해 힘을 쓰실 분이 아니다", "배신하실 리 없다"),
+            "0x1ACD0C": ("누나",),
+            "0x1ACD3E": ("누나",),
+            "0x1B1632": ("보낼 순", "지나가게"),
+            "0x1B1652": ("안돼", "없다"),
+            "0x1B5140": ("전하",),
+        }
+        for address, fragments in forbidden.items():
+            for fragment in fragments:
+                self.assertNotIn(fragment, text_by_address[address], address)
 
     def test_dynamic_name_controls_and_terminators_are_preserved(self):
         for row in self.rows:

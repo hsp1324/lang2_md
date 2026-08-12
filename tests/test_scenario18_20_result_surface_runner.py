@@ -7,22 +7,31 @@ from tools import run_scenario18_20_result_surface as runner
 
 
 class Scenario18To20ResultSurfaceRunnerTests(unittest.TestCase):
-    def test_checked_continuation_identities_are_current(self) -> None:
-        for scenario in runner.SCENARIOS:
-            for profile in ("normal", "hard"):
-                seed = runner.default_seed(scenario, profile)
-                self.assertTrue(seed.is_file())
-                self.assertEqual(
-                    runner.sha256(seed),
-                    runner.expected_seed_sha256(scenario, profile),
-                )
+    def test_deprecated_external_gst_restore_fails_before_recorder_use(self) -> None:
+        class Recorder:
+            @property
+            def display(self):
+                raise AssertionError("deprecated runner touched the recorder")
+
+        with self.assertRaisesRegex(
+            runner.UnsupportedStateRestoreError,
+            "does not bind the historical 'load' key alias",
+        ):
+            runner.launch_continuation(
+                Recorder(),
+                rom=Path("unused.bin"),
+                seed_gst=Path("unused.gst"),
+                runtime_name="unused",
+                initial_delay=0,
+                load_delay=0,
+            )
 
     def test_scenario19_both_profiles_use_one_hp_continuation(self) -> None:
         normal = runner.default_seed(19, "normal")
         hard = runner.default_seed(19, "hard")
         self.assertEqual(normal, hard)
-        self.assertEqual(runner.runtime_group(normal, 10)["hp"], 1)
-        self.assertEqual(runner.runtime_group(hard, 10)["hp"], 1)
+        self.assertEqual(runner.expected_seed_sha256(19, "normal"),
+                         runner.expected_seed_sha256(19, "hard"))
 
     def test_runtime_group_reads_boss_record(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -49,21 +58,6 @@ class Scenario18To20ResultSurfaceRunnerTests(unittest.TestCase):
                     "y": 23,
                 },
             )
-
-    def test_every_boss_identity_matches_its_seed(self) -> None:
-        for scenario, definition in runner.SCENARIOS.items():
-            for profile in ("normal", "hard"):
-                state = runner.runtime_group(
-                    runner.default_seed(scenario, profile),
-                    int(definition["boss_group"]),
-                )
-                self.assertEqual(state["class_id"], definition["boss_class"])
-                self.assertEqual(state["name_id"], definition["boss_name"])
-                self.assertEqual(state["hp"], definition["initial_hp"][profile])
-                self.assertEqual(
-                    (state["x"], state["y"]),
-                    tuple(definition["boss_position"]),
-                )
 
     def test_scenario20_reenters_elwin_attack_before_target_confirm(self) -> None:
         calls = []

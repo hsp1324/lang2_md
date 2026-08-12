@@ -17,6 +17,7 @@
   },
   "implementation_policy": {
     "normal_release_immutable": true,
+    "original_release_immutable": true,
     "commander_stats": "fixed scenario records",
     "enemy_soldier_corrections": "expanded-ROM per-record table and loader hook",
     "shared_class_records_modified": false,
@@ -27,6 +28,7 @@
     "summon_units_applied": true,
     "summon_policy": "Scenario 26 keeps the original formation; Scenario 27 record 0x18321A slots 4-5 replace Vampire Bat 87 with White Dragon 8F after fixed loading, ordinary movement, direct attack, and first-turn event verification",
     "fixed_summon_natural_magic_required": false,
+    "npc_survival_protection": "Hard only: loss-condition NPC commander DF offsets the scenario enemy commander AT delta, and NPC soldier D+ offsets the enemy soldier A+ delta",
     "runtime_exception_manifest": "localization/hard_mode_runtime_exceptions.json",
     "runestone_expectation": {
       "scenarios_1_15": "룬스톤 재육성 없이도 진행 가능",
@@ -49,7 +51,747 @@
     "commander_change_record_count": 300,
     "soldier_correction_record_count": 300,
     "mercenary_replacement_slot_count": 302,
-    "summon_replacement_slot_count": 2
+    "summon_replacement_slot_count": 2,
+    "npc_survival_protection_record_count": 19
+  },
+  "npc_survival_protection": {
+    "schema_version": 1,
+    "status": "authorized_hard_only_balance_bugfix",
+    "source_report": {
+      "url": "https://arca.live/b/langrisser/179646819",
+      "summary": "하드판의 강화된 적 CPU 공격 때문에 공성전·마을의 NPC가 쉽게 전멸하여 일부 장의 진행 난도가 과도해짐"
+    },
+    "scope": "패배 조건에 사망 또는 전멸이 직접 연결된 고정 side-03 NPC",
+    "profile_impact": {
+      "original": "byte_identical",
+      "normal": "byte_identical",
+      "hard": "defense_compensation_only"
+    },
+    "policy": {
+      "commander_df": "원본 DF + 같은 장의 하드 적 지휘관 AT 강화분",
+      "soldier_df_correction": "원본 D+ + 같은 장의 하드 적 병사 A+ 강화분",
+      "unchanged": [
+        "commander_at",
+        "soldier_at_correction",
+        "name",
+        "class",
+        "level",
+        "ai",
+        "placement",
+        "mercenaries"
+      ]
+    },
+    "scenario_count": 9,
+    "record_count": 19,
+    "scenarios": [
+      {
+        "number": 1,
+        "loss_condition": "리아나 사망",
+        "enemy_attack_offset": {
+          "commander_at_delta": 2,
+          "soldier_at_correction_delta": 1
+        },
+        "record_count": 1,
+        "records": [
+          {
+            "index": 1,
+            "offset": "0x1801DC",
+            "side_id": "03",
+            "name_id": "02",
+            "name_korean": "리아나",
+            "class_id": "02",
+            "class_korean": "클레릭",
+            "level": 1,
+            "x": 4,
+            "y": 3,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 19
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "loss_condition": "리아나 사망",
+        "enemy_attack_offset": {
+          "commander_at_delta": 2,
+          "soldier_at_correction_delta": 1
+        },
+        "record_count": 1,
+        "records": [
+          {
+            "index": 3,
+            "offset": "0x1803FC",
+            "side_id": "03",
+            "name_id": "02",
+            "name_korean": "리아나",
+            "class_id": "02",
+            "class_korean": "클레릭",
+            "level": 1,
+            "x": 8,
+            "y": 18,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 19
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "loss_condition": "리아나 사망",
+        "enemy_attack_offset": {
+          "commander_at_delta": 2,
+          "soldier_at_correction_delta": 1
+        },
+        "record_count": 1,
+        "records": [
+          {
+            "index": 0,
+            "offset": "0x180520",
+            "side_id": "03",
+            "name_id": "02",
+            "name_korean": "리아나",
+            "class_id": "02",
+            "class_korean": "클레릭",
+            "level": 1,
+            "x": 17,
+            "y": 18,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 19
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              109,
+              109,
+              109,
+              109,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      {
+        "number": 4,
+        "loss_condition": "리아나 사망 또는 사제 전멸",
+        "enemy_attack_offset": {
+          "commander_at_delta": 2,
+          "soldier_at_correction_delta": 1
+        },
+        "record_count": 4,
+        "records": [
+          {
+            "index": 0,
+            "offset": "0x1806B0",
+            "side_id": "03",
+            "name_id": "02",
+            "name_korean": "리아나",
+            "class_id": "02",
+            "class_korean": "클레릭",
+            "level": 1,
+            "x": 7,
+            "y": 42,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 19
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              109,
+              109,
+              109,
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 1,
+            "offset": "0x1806D4",
+            "side_id": "03",
+            "name_id": "70",
+            "name_korean": "신관",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 6,
+            "x": 9,
+            "y": 10,
+            "commander_at": 21,
+            "commander_df": {
+              "original": 18,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              109,
+              109,
+              109,
+              109,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 2,
+            "offset": "0x1806F8",
+            "side_id": "03",
+            "name_id": "71",
+            "name_korean": "신관",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 6,
+            "x": 6,
+            "y": 10,
+            "commander_at": 21,
+            "commander_df": {
+              "original": 18,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              109,
+              109,
+              109,
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 3,
+            "offset": "0x18071C",
+            "side_id": "03",
+            "name_id": "1F",
+            "name_korean": "사제",
+            "class_id": "9C",
+            "class_korean": "프리스트",
+            "level": 2,
+            "x": 7,
+            "y": 5,
+            "commander_at": 26,
+            "commander_df": {
+              "original": 25,
+              "planned": 27
+            },
+            "soldier_correction": {
+              "at": 4,
+              "df": {
+                "original": 6,
+                "planned": 7
+              }
+            },
+            "mercenaries": [
+              109,
+              109,
+              109,
+              109,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      {
+        "number": 6,
+        "loss_condition": "주민 전멸",
+        "enemy_attack_offset": {
+          "commander_at_delta": 3,
+          "soldier_at_correction_delta": 1
+        },
+        "record_count": 3,
+        "records": [
+          {
+            "index": 1,
+            "offset": "0x180A0C",
+            "side_id": "03",
+            "name_id": "20",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 3,
+            "x": 5,
+            "y": 5,
+            "commander_at": 21,
+            "commander_df": {
+              "original": 17,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 2,
+            "offset": "0x180A30",
+            "side_id": "03",
+            "name_id": "21",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 3,
+            "x": 14,
+            "y": 4,
+            "commander_at": 21,
+            "commander_df": {
+              "original": 17,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 3,
+            "offset": "0x180A54",
+            "side_id": "03",
+            "name_id": "22",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 2,
+            "x": 22,
+            "y": 5,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      {
+        "number": 7,
+        "loss_condition": "주민 전멸",
+        "enemy_attack_offset": {
+          "commander_at_delta": 3,
+          "soldier_at_correction_delta": 1
+        },
+        "record_count": 3,
+        "records": [
+          {
+            "index": 0,
+            "offset": "0x180BF6",
+            "side_id": "03",
+            "name_id": "22",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 2,
+            "x": 4,
+            "y": 17,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 1,
+            "offset": "0x180C1A",
+            "side_id": "03",
+            "name_id": "20",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 2,
+            "x": 22,
+            "y": 26,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 2,
+            "offset": "0x180C3E",
+            "side_id": "03",
+            "name_id": "21",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 2,
+            "x": 21,
+            "y": 19,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 20
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      {
+        "number": 9,
+        "loss_condition": "NPC 지휘관 전멸",
+        "enemy_attack_offset": {
+          "commander_at_delta": 3,
+          "soldier_at_correction_delta": 1
+        },
+        "record_count": 3,
+        "records": [
+          {
+            "index": 0,
+            "offset": "0x180FB2",
+            "side_id": "03",
+            "name_id": "1C",
+            "name_korean": "지휘관",
+            "class_id": "96",
+            "class_korean": "파이터",
+            "level": 7,
+            "x": 19,
+            "y": 8,
+            "commander_at": 22,
+            "commander_df": {
+              "original": 19,
+              "planned": 22
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 2,
+                "planned": 3
+              }
+            },
+            "mercenaries": [
+              100,
+              100,
+              100,
+              100,
+              100,
+              100
+            ]
+          },
+          {
+            "index": 1,
+            "offset": "0x180FD6",
+            "side_id": "03",
+            "name_id": "1D",
+            "name_korean": "지휘관",
+            "class_id": "99",
+            "class_korean": "로드",
+            "level": 1,
+            "x": 16,
+            "y": 5,
+            "commander_at": 22,
+            "commander_df": {
+              "original": 20,
+              "planned": 23
+            },
+            "soldier_correction": {
+              "at": 2,
+              "df": {
+                "original": 4,
+                "planned": 5
+              }
+            },
+            "mercenaries": [
+              100,
+              100,
+              100,
+              100,
+              100,
+              100
+            ]
+          },
+          {
+            "index": 2,
+            "offset": "0x180FFA",
+            "side_id": "03",
+            "name_id": "1E",
+            "name_korean": "지휘관",
+            "class_id": "96",
+            "class_korean": "파이터",
+            "level": 7,
+            "x": 12,
+            "y": 8,
+            "commander_at": 22,
+            "commander_df": {
+              "original": 19,
+              "planned": 22
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 2,
+                "planned": 3
+              }
+            },
+            "mercenaries": [
+              100,
+              100,
+              100,
+              100,
+              100,
+              100
+            ]
+          }
+        ]
+      },
+      {
+        "number": 11,
+        "loss_condition": "제시카 사망",
+        "enemy_attack_offset": {
+          "commander_at_delta": 5,
+          "soldier_at_correction_delta": 2
+        },
+        "record_count": 1,
+        "records": [
+          {
+            "index": 0,
+            "offset": "0x1813C8",
+            "side_id": "03",
+            "name_id": "0A",
+            "name_korean": "제시카",
+            "class_id": "09",
+            "class_korean": "소서러",
+            "level": 7,
+            "x": 18,
+            "y": 6,
+            "commander_at": 30,
+            "commander_df": {
+              "original": 17,
+              "planned": 22
+            },
+            "soldier_correction": {
+              "at": 5,
+              "df": {
+                "original": 4,
+                "planned": 6
+              }
+            },
+            "mercenaries": [
+              100,
+              100,
+              100,
+              100,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      {
+        "number": 18,
+        "loss_condition": "주민 전멸",
+        "enemy_attack_offset": {
+          "commander_at_delta": 8,
+          "soldier_at_correction_delta": 4
+        },
+        "record_count": 2,
+        "records": [
+          {
+            "index": 0,
+            "offset": "0x1820B6",
+            "side_id": "03",
+            "name_id": "20",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 2,
+            "x": 15,
+            "y": 20,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 25
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 8
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          },
+          {
+            "index": 1,
+            "offset": "0x1820DA",
+            "side_id": "03",
+            "name_id": "21",
+            "name_korean": "주민",
+            "class_id": "97",
+            "class_korean": "클레릭",
+            "level": 2,
+            "x": 11,
+            "y": 20,
+            "commander_at": 20,
+            "commander_df": {
+              "original": 17,
+              "planned": 25
+            },
+            "soldier_correction": {
+              "at": 0,
+              "df": {
+                "original": 4,
+                "planned": 8
+              }
+            },
+            "mercenaries": [
+              113,
+              113,
+              113,
+              113,
+              255,
+              255
+            ]
+          }
+        ]
+      }
+    ]
   },
   "automatic_exclusions": [
     {

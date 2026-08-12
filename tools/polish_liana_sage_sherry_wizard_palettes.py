@@ -7,19 +7,26 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 LIVE = ROOT / "editor/static/ai-class-sprites"
 MANIFEST = LIVE / "manifest.json"
 OVERRIDES = ROOT / "editor/ai_class_design_overrides.json"
 MASKS = ROOT / "editor/ai_identity_masks.json"
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "liana-sage-sherry-wizard-palette-v1"
 )
 MASTER = OUTPUT / "master"
@@ -85,11 +92,11 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def flat_pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.get_flattened_data()]
+    return [list(color) for color in flattened_image_data(image)]
 
 
 def palette(image: Image.Image, limit: int | None = None) -> list[str]:
-    counts = Counter(color for color in image.get_flattened_data() if color[3])
+    counts = Counter(color for color in flattened_image_data(image) if color[3])
     return [
         "#%02x%02x%02x" % color[:3]
         for color, _ in counts.most_common(limit)
@@ -144,12 +151,16 @@ def build() -> dict[str, object]:
         shape_match = sum(
             bool(a[3]) == bool(b[3])
             for a, b in zip(
-                result.get_flattened_data(), base.get_flattened_data()
+                flattened_image_data(result), flattened_image_data(base)
             )
         )
         colors = palette(result)
-        dark_before = sum(color == DARK for color in base.get_flattened_data())
-        dark_after = sum(color == DARK for color in result.get_flattened_data())
+        dark_before = sum(
+            color == DARK for color in flattened_image_data(base)
+        )
+        dark_after = sum(
+            color == DARK for color in flattened_image_data(result)
+        )
         empty_rows = [
             y for y in range(16)
             if not any(result.getpixel((x, y))[3] for x in range(16))
@@ -166,7 +177,7 @@ def build() -> dict[str, object]:
             and len(colors) <= 15
             and not empty_rows
             and not empty_columns
-            and (0, 0, 0, 255) not in result.get_flattened_data()
+            and (0, 0, 0, 255) not in flattened_image_data(result)
         )
         output = LOGICAL / f"{commander_id:02d}-{class_id:02X}.png"
         result.save(output, optimize=True)

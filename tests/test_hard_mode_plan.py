@@ -17,6 +17,12 @@ NORMAL_ROM = ROOT / "roms/releases/Langrisser II (Korean v1.0.0).md"
 class HardModePlanTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if not NORMAL_ROM.is_file():
+            raise unittest.SkipTest(
+                "ignored legacy v1.0.0 normal reference ROM is absent; "
+                "this suite audits the historical hard-mode plan, not the "
+                "current v1.3.7 candidate"
+            )
         cls.normal_before = NORMAL_ROM.read_bytes()
         cls.plan = hard_mode_plan.build_plan(SOURCE_ROM, NORMAL_ROM)
 

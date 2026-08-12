@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_AI_OUTPUT = ROOT / "editor/static/ai-class-sprites"
 CHARACTER_AI_ROOT = (
-    ROOT / "docs/assets/ai-class-source/character-ai-v3"
+    ROOT / "assets/class-sprites/source/character-ai-v3"
 )
 COMMANDER_SLUGS = {
     1: "elwin",

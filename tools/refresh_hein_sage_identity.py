@@ -7,11 +7,18 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 
 from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 COMMANDER_ID = 5
 CLASS_ID = 0x18
 KEY = "5:18"
@@ -19,8 +26,8 @@ LIVE = ROOT / "editor/static/ai-class-sprites/5/18.png"
 ROM = ROOT / "editor/static/class-sprites/commanders/5/18-p1.png"
 MASKS = ROOT / "editor/ai_identity_masks.json"
 MANIFEST = ROOT / "editor/static/ai-class-sprites/manifest.json"
-SOURCE = ROOT / "docs/assets/ai-class-source/latest/shared-new-classes-v2-refined"
-SAMPLE = ROOT / "docs/assets/ai-class-source/latest/sample-class-variants-v4-free-five/05-hein-18-sage"
+SOURCE = ROOT / "assets/class-sprites/source/latest/shared-new-classes-v2-refined"
+SAMPLE = ROOT / "assets/class-sprites/source/latest/sample-class-variants-v4-free-five/05-hein-18-sage"
 TRANSPARENT = (0, 0, 0, 0)
 
 
@@ -33,7 +40,7 @@ def luminance(color: tuple[int, int, int, int]) -> float:
 
 
 def palette(image: Image.Image) -> list[str]:
-    counts = Counter(c for c in image.get_flattened_data() if c[3])
+    counts = Counter(c for c in flattened_image_data(image) if c[3])
     return ["#%02x%02x%02x" % color[:3] for color, _ in counts.most_common()]
 
 
@@ -48,7 +55,7 @@ def limit_palette(
         for point in points
         if original.getpixel(point)[3]
     }
-    colors = {color for color in result.get_flattened_data() if color[3]}
+    colors = {color for color in flattened_image_data(result) if color[3]}
     if len(colors) <= 15:
         return result
     counts = Counter(

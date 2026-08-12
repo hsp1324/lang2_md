@@ -1,70 +1,72 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
 import unittest
 
-from PIL import Image
-
-
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE_ROOT = ROOT / (
-    "docs/assets/ai-class-source/latest/"
-    "shared-sherry-scott-keith-lord-aaron-lord-v1"
+from tools.build_ai_class_sprite_assets import (
+    ASSET_VERSION,
+    SHARED_CLASS_TEMPLATE_SOURCES,
 )
-AI_ROOT = ROOT / "editor/static/ai-class-sprites"
+from tools.pillow_compat import flattened_image_data
+
+from tests.ai_class_asset_contract import (
+    LIVE_ROOT,
+    compose_untranslated_shared_source,
+    design_overrides,
+    manifest,
+    manifest_row,
+    pixels,
+    rgba,
+)
+
+
+TARGETS = ((4, 0x04), (6, 0x04), (7, 0x04))
 
 
 class SherryScottKeithAaronLordTests(unittest.TestCase):
-    def test_targets_keep_identity_and_copy_aaron_equipment(self) -> None:
-        report = json.loads(
-            (SOURCE_ROOT / "validation-report.json").read_text(encoding="utf-8")
-        )
-        self.assertTrue(report["all_accepted"])
-        for commander_id in (4, 6, 7):
-            source = Image.open(
-                SOURCE_ROOT / f"logical16/{commander_id:02d}-04.png"
-            ).convert("RGBA")
-            live = Image.open(AI_ROOT / f"{commander_id}/04.png").convert("RGBA")
-            self.assertEqual(
-                list(source.get_flattened_data()),
-                list(live.get_flattened_data()),
-            )
-            row = next(
-                item for item in report["classes"]
-                if item["commander_id"] == commander_id
-            )
-            self.assertEqual(row["identity_match"], row["identity_pixel_count"])
-            self.assertEqual(
-                row["equipment_role_match"], row["equipment_pixel_count"]
-            )
+    def test_retained_aaron_equipment_identity_and_closure_are_live(self) -> None:
+        document = manifest()
+        self.assertEqual(document["asset_version"], ASSET_VERSION)
+        for key in TARGETS:
+            with self.subTest(commander_id=key[0]):
+                source_path, _ = SHARED_CLASS_TEMPLATE_SOURCES[key]
+                self.assertTrue(source_path.is_file())
+                self.assertIn(
+                    "shared-sherry-scott-keith-lord-aaron-lord-v1",
+                    str(source_path),
+                )
+                row = manifest_row(document, *key)
+                self.assertIn("최신 아론 사용자 편집 로드", row["ai_source_kind"])
+                expected = compose_untranslated_shared_source(
+                    key, document=document
+                )
+                live = rgba(LIVE_ROOT / f"{key[0]}/04.png")
+                self.assertEqual(pixels(expected), pixels(live))
 
-        sherry = Image.open(SOURCE_ROOT / "logical16/04-04.png").convert("RGBA")
-        scott = Image.open(SOURCE_ROOT / "logical16/06-04.png").convert("RGBA")
-        keith = Image.open(SOURCE_ROOT / "logical16/07-04.png").convert("RGBA")
-        sherry_colors = set(sherry.get_flattened_data())
-        scott_colors = set(scott.get_flattened_data())
-        keith_colors = set(keith.get_flattened_data())
-        self.assertIn((0, 109, 146, 255), sherry_colors)
-        self.assertIn((109, 219, 255, 255), sherry_colors)
-        self.assertIn((36, 182, 36, 255), scott_colors)
-        self.assertIn((36, 219, 36, 255), scott_colors)
-        self.assertIn((73, 109, 255, 255), keith_colors)
-        self.assertIn((109, 219, 255, 255), keith_colors)
+    def test_current_override_precedence_is_explicit(self) -> None:
+        document = manifest()
+        overrides = design_overrides()
+        for key in ((4, 0x04), (6, 0x04)):
+            row = manifest_row(document, *key)
+            self.assertTrue(row["design_override"])
+            self.assertEqual(row["design_revision"], overrides[key]["revision"])
+            self.assertFalse(row["design_override_superseded"])
+        keith = manifest_row(document, 7, 0x04)
+        self.assertFalse(keith["design_override"])
+        self.assertFalse(keith["design_override_superseded"])
 
-    def test_manifest_uses_new_sources_and_supersedes_scott_override(self) -> None:
-        manifest = json.loads(
-            (AI_ROOT / "manifest.json").read_text(encoding="utf-8")
+    def test_character_color_roles_remain_distinct(self) -> None:
+        sherry = set(flattened_image_data(rgba(LIVE_ROOT / "4/04.png")))
+        scott = set(flattened_image_data(rgba(LIVE_ROOT / "6/04.png")))
+        keith = set(flattened_image_data(rgba(LIVE_ROOT / "7/04.png")))
+        self.assertTrue(
+            {(0, 109, 146, 255), (109, 219, 255, 255)}.issubset(sherry)
         )
-        self.assertEqual(
-            manifest["asset_version"], "liana-lana-healer-shared-v106"
+        self.assertTrue(
+            {(36, 182, 36, 255), (36, 219, 36, 255)}.issubset(scott)
         )
-        for commander_id in (4, 6, 7):
-            row = manifest["commanders"][str(commander_id)]["classes"][str(4)]
-            self.assertIn("최신 아론 사용자 편집 로드", row["ai_source_kind"])
-        scott = manifest["commanders"]["6"]["classes"][str(4)]
-        self.assertFalse(scott["design_override"])
-        self.assertTrue(scott["design_override_superseded"])
+        self.assertTrue(
+            {(73, 109, 255, 255), (109, 219, 255, 255)}.issubset(keith)
+        )
 
 
 if __name__ == "__main__":

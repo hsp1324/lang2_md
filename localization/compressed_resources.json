@@ -7547,7 +7547,7 @@
           "class_id": 44,
           "class_id_hex": "0x2C",
           "class_jp": "ﾊﾞﾝﾊﾟｲｱ",
-          "class_ko": "뱀파이어",
+          "class_ko": "크로코로드",
           "raw_resource_id": "0x8096",
           "dynamic_loader_calls": [
             "0x01B47E",
@@ -7590,7 +7590,7 @@
           "class_id": 43,
           "class_id_hex": "0x2B",
           "class_jp": "ﾘｰﾀﾞｰ",
-          "class_ko": "라이더",
+          "class_ko": "호크로드",
           "raw_resource_id": "0x8097",
           "dynamic_loader_calls": [
             "0x01B47E",

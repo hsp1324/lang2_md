@@ -23,10 +23,10 @@ from tools.build_ai_class_sprite_assets import (
 
 SOURCE = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-high-master-elwin-swordmaster-v1/logical16/04-23.png"
 )
-SOURCE_DIR = ROOT / "docs/assets/ai-class-source/latest/sherry-ranger-v3"
+SOURCE_DIR = ROOT / "assets/class-sprites/source/latest/sherry-ranger-v3"
 ORIGINAL = ROOT / "editor/static/class-sprites/commanders/4/21-p1.png"
 CLASS_ID = 0x21
 COMMANDER_ID = 4

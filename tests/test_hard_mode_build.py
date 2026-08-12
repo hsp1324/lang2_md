@@ -64,14 +64,7 @@ class HardModeBuildTests(unittest.TestCase):
         )
 
     def test_build_applies_every_planned_record(self):
-        pairs = sorted({
-            (
-                int(record["enemy_soldier_correction"]["at"]["planned"]),
-                int(record["enemy_soldier_correction"]["df"]["planned"]),
-            )
-            for scenario in self.plan["scenarios"]
-            for record in scenario["records"]
-        })
+        pairs = hard_builder._correction_pairs(self.plan)
         for scenario in self.plan["scenarios"]:
             for record in scenario["records"]:
                 offset = int(record["offset"], 16)
@@ -147,7 +140,48 @@ class HardModeBuildTests(unittest.TestCase):
         )
         self.assertEqual(
             self.manifest["implementation"]["correction_pair_count"],
-            67,
+            72,
+        )
+        dynamic_hook = hard_builder.dynamic_npc_correction_hook()
+        dynamic_routine = hard_builder.dynamic_npc_correction_routine()
+        dynamic_table = hard_builder._dynamic_npc_delta_table(
+            self.plan
+        )
+        self.assertEqual(
+            self.hard[
+                hard_builder.DYNAMIC_NPC_CORRECTION_HOOK:
+                hard_builder.DYNAMIC_NPC_CORRECTION_HOOK
+                + len(dynamic_hook)
+            ],
+            dynamic_hook,
+        )
+        self.assertEqual(
+            self.hard[
+                hard_builder.DYNAMIC_NPC_CORRECTION_ROUTINE:
+                hard_builder.DYNAMIC_NPC_CORRECTION_ROUTINE
+                + len(dynamic_routine)
+            ],
+            dynamic_routine,
+        )
+        self.assertEqual(
+            self.hard[
+                hard_builder.DYNAMIC_NPC_CORRECTION_TABLE:
+                hard_builder.DYNAMIC_NPC_CORRECTION_TABLE
+                + len(dynamic_table)
+            ],
+            dynamic_table,
+        )
+        nonzero_deltas = {
+            index: tuple(dynamic_table[index * 2:index * 2 + 2])
+            for index in range(len(dynamic_table) // 2)
+            if dynamic_table[index * 2:index * 2 + 2] != b"\x00\x00"
+        }
+        self.assertEqual(nonzero_deltas, {1: (2, 1), 15: (5, 2)})
+        self.assertEqual(
+            self.manifest["implementation"][
+                "dynamic_npc_delta_record_count"
+            ],
+            2,
         )
         self.assertFalse(
             self.manifest["implementation"]["shared_class_records_modified"]
@@ -178,6 +212,26 @@ class HardModeBuildTests(unittest.TestCase):
                 hard_builder.SOLDIER_CORRECTION_TABLE + pair_bytes,
             )
         )
+        allowed.update(
+            range(
+                hard_builder.DYNAMIC_NPC_CORRECTION_HOOK,
+                hard_builder.DYNAMIC_NPC_CORRECTION_HOOK
+                + len(hard_builder.dynamic_npc_correction_hook()),
+            )
+        )
+        allowed.update(
+            range(
+                hard_builder.DYNAMIC_NPC_CORRECTION_ROUTINE,
+                hard_builder.DYNAMIC_NPC_CORRECTION_ROUTINE
+                + len(hard_builder.dynamic_npc_correction_routine()),
+            )
+        )
+        allowed.update(
+            range(
+                hard_builder.DYNAMIC_NPC_CORRECTION_TABLE,
+                hard_builder.DYNAMIC_NPC_CORRECTION_TABLE + pair_bytes,
+            )
+        )
         for scenario in self.plan["scenarios"]:
             for record in scenario["records"]:
                 offset = int(record["offset"], 16)
@@ -192,6 +246,12 @@ class HardModeBuildTests(unittest.TestCase):
                         offset + hard_builder.FIXED_RECORD_SIZE,
                     )
                 )
+        for _, record in hard_builder._npc_protection_records(self.plan):
+            offset = int(record["offset"], 16)
+            allowed.update({
+                offset + hard_builder.COMMANDER_DF_OFFSET,
+                offset + hard_builder.HARD_CORRECTION_INDEX_OFFSET,
+            })
         changed = {
             index
             for index, (before, after) in enumerate(
@@ -256,7 +316,7 @@ class HardModeBuildTests(unittest.TestCase):
             UPDATE_REGISTRY.read_text(encoding="utf-8")
         )
         history = registry["candidate_history"]
-        self.assertEqual(len(history), 9)
+        self.assertEqual(len(history), 12)
         for predecessor, successor in zip(history, history[1:]):
             self.assertEqual(predecessor["superseded_by"], successor["sha256"])
         self.assertEqual(

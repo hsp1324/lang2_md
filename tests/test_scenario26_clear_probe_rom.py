@@ -496,7 +496,7 @@ class Scenario26ClearProbeTests(unittest.TestCase):
     def test_current_protagonist_death_checksum_is_locked(self):
         self.assertEqual(
             self.protagonist_death_patched()[0x18E:0x190],
-            bytes.fromhex("4B 91"),
+            bytes.fromhex("16 53"),
         )
 
     def test_runtime_clear_preserves_fixed_data_and_targets_only_hostiles(self):

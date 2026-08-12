@@ -7,12 +7,25 @@ from tools import run_scenario13_result_surface as runner
 
 
 class Scenario13ResultSurfaceRunnerTests(unittest.TestCase):
-    def test_checked_continuation_identity_is_current(self) -> None:
-        self.assertTrue(runner.DEFAULT_CONTINUATION_GST.is_file())
-        self.assertEqual(
-            runner.shared.sha256(runner.DEFAULT_CONTINUATION_GST),
-            runner.EXPECTED_CONTINUATION_SHA256,
-        )
+    def test_deprecated_external_gst_restore_fails_before_recorder_use(self) -> None:
+        class Recorder:
+            @property
+            def display(self):
+                raise AssertionError("deprecated runner touched the recorder")
+
+        with self.assertRaisesRegex(
+            runner.UnsupportedStateRestoreError,
+            "does not bind the historical 'load' key alias",
+        ):
+            runner.launch_continuation(
+                Recorder(),
+                rom=Path("unused.bin"),
+                continuation_gst=Path("unused.gst"),
+                runtime_name="unused",
+                attempt=1,
+                initial_delay=0,
+                load_delay=0,
+            )
 
     def test_runtime_group_reads_vargas_record(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

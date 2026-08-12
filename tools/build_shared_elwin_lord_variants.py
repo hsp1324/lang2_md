@@ -22,7 +22,7 @@ from tools.build_ai_class_sprite_assets import (
 
 SOURCE_DIR = (
     ROOT
-    / "docs/assets/ai-class-source/latest/"
+    / "assets/class-sprites/source/latest/"
     "shared-lord-elwin-high-lord-v1"
 )
 MASTER_PATH = (

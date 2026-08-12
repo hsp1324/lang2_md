@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/elwin-hero-ai-v5-fresh"
+OUTPUT = ROOT / "assets/class-sprites/source/latest/elwin-hero-ai-v5-fresh"
 CANDIDATE = OUTPUT / "candidates/hero-from-rom-and-mask-only-v2.png"
 MASK_FILE = ROOT / "editor/ai_identity_masks.json"
 ROM_SPRITE = ROOT / "editor/static/class-sprites/commanders/1/22-p1.png"

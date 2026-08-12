@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build current-source normal/hard result probes for Scenarios 1..31."""
+"""Build current-source pure/normal/hard result probes for Scenarios 1..31."""
 
 from __future__ import annotations
 
@@ -47,12 +47,18 @@ from tools import build_scenario28_clear_probe_rom as scenario28
 from tools import build_scenario29_clear_probe_rom as scenario29
 from tools import build_scenario30_clear_probe_rom as scenario30
 from tools import build_scenario31_clear_probe_rom as scenario31
-
-
-DEFAULT_NORMAL_ROM = (
-    ROOT / "roms/builds/Langrisser II (Korean Normal v1.3.6).md"
+from tools.v137_release_identity import (  # noqa: E402
+    JAPANESE_SOURCE_ROM_BYTES,
+    JAPANESE_SOURCE_ROM_SHA256,
+    RELEASE_ROM_PATHS,
+    RELEASE_ROM_SHA256,
 )
-DEFAULT_HARD_ROM = ROOT / "roms/builds/Langrisser II (Korean Hard v1.3.6).md"
+
+
+DEFAULT_PURE_ROM = RELEASE_ROM_PATHS["pure"]
+DEFAULT_NORMAL_ROM = RELEASE_ROM_PATHS["normal"]
+DEFAULT_HARD_ROM = RELEASE_ROM_PATHS["hard"]
+DEFAULT_ROM_SHA256 = dict(RELEASE_ROM_SHA256)
 DEFAULT_OUTPUT_ROOT = ROOT / "tmp/current-source-result-probes"
 DEFAULT_SOURCE_ROM = ROOT / korean_builder.IN_ROM
 
@@ -235,7 +241,11 @@ def md_checksum(data: bytes | bytearray) -> int:
     ) & 0xFFFF
 
 
-def require_valid_rom(data: bytes | bytearray, label: str) -> None:
+def require_valid_rom(
+    data: bytes | bytearray,
+    label: str,
+    expected_sha256: str | None = None,
+) -> None:
     if len(data) != 0x400000:
         raise ValueError(f"{label} must be a 4 MiB ROM")
     header = int.from_bytes(data[0x18E:0x190], "big")
@@ -244,6 +254,71 @@ def require_valid_rom(data: bytes | bytearray, label: str) -> None:
         raise ValueError(
             f"{label} checksum mismatch: header {header:04X}, computed {computed:04X}"
         )
+    actual_sha256 = sha256_bytes(data)
+    if expected_sha256 is not None and actual_sha256 != expected_sha256:
+        raise ValueError(
+            f"{label} SHA-256 mismatch: {actual_sha256} != {expected_sha256}"
+        )
+
+
+def require_canonical_source(data: bytes | bytearray) -> None:
+    if len(data) != JAPANESE_SOURCE_ROM_BYTES:
+        raise ValueError(
+            "Japanese source ROM length mismatch: "
+            f"{len(data)} != {JAPANESE_SOURCE_ROM_BYTES}"
+        )
+    actual_sha256 = sha256_bytes(data)
+    if actual_sha256 != JAPANESE_SOURCE_ROM_SHA256:
+        raise ValueError(
+            "Japanese source ROM SHA-256 mismatch: "
+            f"{actual_sha256} != {JAPANESE_SOURCE_ROM_SHA256}"
+        )
+
+
+def diagnostic_delta_report(
+    candidate: bytes | bytearray,
+    probe: bytes | bytearray,
+) -> dict[str, object]:
+    if len(candidate) != len(probe):
+        raise ValueError("diagnostic candidate/probe lengths differ")
+    changed = [
+        offset
+        for offset, (before, after) in enumerate(zip(candidate, probe, strict=True))
+        if before != after
+    ]
+    return {
+        "changed_byte_count": len(changed),
+        "payload_changed_byte_count": len(set(changed) - CHECKSUM_OFFSETS),
+        "changed_offsets": [f"0x{offset:06X}" for offset in changed],
+    }
+
+
+def patch_direct(
+    scenario: int,
+    candidate: bytes,
+    source: bytes,
+    profile: str,
+) -> bytearray:
+    definition = PROBE_DEFINITIONS[scenario]
+    module = definition["module"]
+    if not isinstance(module, ModuleType):
+        raise TypeError(f"Scenario {scenario} probe module is invalid")
+    probe = bytearray(candidate)
+    kwargs = dict(definition["kwargs"])
+    if scenario == 10:
+        module.patch_probe(probe, **kwargs)
+    else:
+        module.patch_probe(probe, source, **kwargs)
+    require_valid_rom(probe, f"Scenario {scenario} {profile} probe")
+    return probe
+
+
+def patch_pure(
+    scenario: int,
+    pure: bytes,
+    source: bytes,
+) -> bytearray:
+    return patch_direct(scenario, pure, source, "pure")
 
 
 def patch_normal(
@@ -251,18 +326,7 @@ def patch_normal(
     normal: bytes,
     source: bytes,
 ) -> bytearray:
-    definition = PROBE_DEFINITIONS[scenario]
-    module = definition["module"]
-    if not isinstance(module, ModuleType):
-        raise TypeError(f"Scenario {scenario} probe module is invalid")
-    probe = bytearray(normal)
-    kwargs = dict(definition["kwargs"])
-    if scenario == 10:
-        module.patch_probe(probe, **kwargs)
-    else:
-        module.patch_probe(probe, source, **kwargs)
-    require_valid_rom(probe, f"Scenario {scenario} normal probe")
-    return probe
+    return patch_direct(scenario, normal, source, "normal")
 
 
 def overlay_hard(
@@ -297,26 +361,41 @@ def rom_report(path: Path, data: bytes | bytearray) -> dict[str, object]:
 
 
 def build_matrix(args: argparse.Namespace) -> dict[str, object]:
+    pure_rom_path = getattr(args, "pure_rom", DEFAULT_PURE_ROM)
+    pure = pure_rom_path.read_bytes()
     normal = args.normal_rom.read_bytes()
     hard = args.hard_rom.read_bytes()
     source = args.source_rom.read_bytes()
-    require_valid_rom(normal, "normal candidate")
-    require_valid_rom(hard, "hard candidate")
+    expected_hashes = getattr(args, "expected_rom_sha256", DEFAULT_ROM_SHA256)
+    require_valid_rom(pure, "pure candidate", expected_hashes.get("pure"))
+    require_valid_rom(normal, "normal candidate", expected_hashes.get("normal"))
+    require_valid_rom(hard, "hard candidate", expected_hashes.get("hard"))
+    require_canonical_source(source)
     if args.output_root.exists():
         raise FileExistsError(f"output root already exists: {args.output_root}")
 
+    pure_root = args.output_root / "pure"
     normal_root = args.output_root / "normal"
     hard_root = args.output_root / "hard"
+    pure_root.mkdir(parents=True)
     normal_root.mkdir(parents=True)
     hard_root.mkdir(parents=True)
     rows = []
     for scenario in args.scenarios:
         definition = PROBE_DEFINITIONS[scenario]
         filename = str(definition["filename"])
+        pure_probe = patch_pure(scenario, pure, source)
         normal_probe = patch_normal(scenario, normal, source)
         hard_probe, delta, conflicts = overlay_hard(normal, normal_probe, hard)
+        pure_delta = {
+            offset
+            for offset, (before, after) in enumerate(zip(pure, pure_probe))
+            if before != after
+        }
+        pure_probe_path = pure_root / filename
         normal_path = normal_root / filename
         hard_path = hard_root / filename
+        pure_probe_path.write_bytes(pure_probe)
         normal_path.write_bytes(normal_probe)
         hard_path.write_bytes(hard_probe)
         rows.append(
@@ -325,8 +404,22 @@ def build_matrix(args: argparse.Namespace) -> dict[str, object]:
                 "status": "pass",
                 "builder_module": definition["module"].__name__,
                 "builder_kwargs": definition["kwargs"],
+                "diagnostic_delta": {
+                    "pure": diagnostic_delta_report(pure, pure_probe),
+                    "normal": diagnostic_delta_report(normal, normal_probe),
+                    "hard": diagnostic_delta_report(hard, hard_probe),
+                },
+                "pure": rom_report(pure_probe_path, pure_probe),
                 "normal": rom_report(normal_path, normal_probe),
                 "hard": rom_report(hard_path, hard_probe),
+                "pure_diagnostic_changed_bytes": len(pure_delta),
+                "pure_diagnostic_payload_changed_bytes": len(
+                    pure_delta - CHECKSUM_OFFSETS
+                ),
+                "pure_method": (
+                    "apply the scenario diagnostic builder directly to the "
+                    "pure candidate, then validate the Mega Drive checksum"
+                ),
                 "normal_diagnostic_changed_bytes": len(delta),
                 "normal_diagnostic_payload_changed_bytes": len(
                     delta - CHECKSUM_OFFSETS
@@ -343,17 +436,22 @@ def build_matrix(args: argparse.Namespace) -> dict[str, object]:
         "schema_version": 1,
         "status": "pass",
         "scope": "current_source_result_probe_matrix",
+        "run_id": getattr(args, "run_id", None),
         "candidate_roms": {
+            "pure": rom_report(pure_rom_path, pure),
             "normal": rom_report(args.normal_rom, normal),
             "hard": rom_report(args.hard_rom, hard),
         },
         "source_rom": {
             "path": relative(args.source_rom),
             "sha256": sha256_bytes(source),
+            "expected_sha256": JAPANESE_SOURCE_ROM_SHA256,
             "bytes": len(source),
+            "expected_bytes": JAPANESE_SOURCE_ROM_BYTES,
+            "hash_locked": True,
         },
         "scenarios": list(args.scenarios),
-        "probe_count": len(rows) * 2,
+        "probe_count": len(rows) * 3,
         "release_promoted": False,
         "version_bumped": False,
         "probes": rows,
@@ -376,22 +474,60 @@ def parse_scenarios(value: str) -> tuple[int, ...]:
     return scenarios
 
 
+def valid_run_id(value: str) -> str:
+    if (
+        not value
+        or Path(value).name != value
+        or any(not (character.isalnum() or character in "-_") for character in value)
+    ):
+        raise argparse.ArgumentTypeError("run ID must be one safe directory name")
+    return value
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--pure-rom", type=Path, default=DEFAULT_PURE_ROM)
     parser.add_argument("--normal-rom", type=Path, default=DEFAULT_NORMAL_ROM)
     parser.add_argument("--hard-rom", type=Path, default=DEFAULT_HARD_ROM)
+    parser.add_argument(
+        "--expected-pure-sha256", default=DEFAULT_ROM_SHA256["pure"]
+    )
+    parser.add_argument(
+        "--expected-normal-sha256", default=DEFAULT_ROM_SHA256["normal"]
+    )
+    parser.add_argument(
+        "--expected-hard-sha256", default=DEFAULT_ROM_SHA256["hard"]
+    )
     parser.add_argument("--source-rom", type=Path, default=DEFAULT_SOURCE_ROM)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT_ROOT)
+    parser.add_argument("--run-id", type=valid_run_id)
     parser.add_argument(
         "--scenarios",
         type=parse_scenarios,
         default=SCENARIOS,
-        help="comma-separated subset of 1..27",
+        help="comma-separated subset of 1..31",
     )
     args = parser.parse_args()
-    for name in ("normal_rom", "hard_rom", "source_rom", "output_root"):
+    for name in (
+        "pure_rom",
+        "normal_rom",
+        "hard_rom",
+        "source_rom",
+        "output_root",
+    ):
         setattr(args, name, getattr(args, name).resolve())
+    args.expected_rom_sha256 = {
+        "pure": args.expected_pure_sha256.lower(),
+        "normal": args.expected_normal_sha256.lower(),
+        "hard": args.expected_hard_sha256.lower(),
+    }
+    for profile, digest in args.expected_rom_sha256.items():
+        if len(digest) != 64 or any(
+            character not in "0123456789abcdef" for character in digest
+        ):
+            parser.error(f"--expected-{profile}-sha256 must be 64 hex characters")
     for label, path in (
+        ("pure ROM", args.pure_rom),
         ("normal ROM", args.normal_rom),
         ("hard ROM", args.hard_rom),
         ("source ROM", args.source_rom),

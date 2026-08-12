@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import platform
 import signal
@@ -37,7 +38,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools import blastem_display
+from tools import blastem_display  # noqa: E402
 
 
 DEFAULT_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
@@ -46,6 +47,11 @@ SEND_KEYS = ROOT / "tools/send_blastem_keys.py"
 CAPTURE_WINDOW = ROOT / "tools/capture_blastem_window.py"
 RUNTIME_ROOT = ROOT / "captures/runtime"
 LOG_ROOT = ROOT / "captures/run"
+
+
+def blastem_log_path(runtime_home: Path, sequence_name: str) -> Path:
+    """Keep concurrent emulator logs inside their isolated runtime homes."""
+    return runtime_home / f"blastem_{sequence_name}.log"
 
 MANUAL_SLOT_BASES = (0x194E, 0x1AF6, 0x1C9E, 0x1E46)
 MANUAL_SLOT_CHECKSUM_DATA_SIZE = 0x1A6
@@ -331,7 +337,265 @@ def running_blastem_pids(
     return sorted(pids)
 
 
-def dismiss_virtual_software_renderer_notice(timeout: float = 2.0) -> bool:
+def blastem_exact_savestate_command(
+    rom: Path,
+    gst: Path,
+    *,
+    width: int = 320,
+    height: int = 240,
+    software_renderer: bool = True,
+) -> list[str]:
+    """Build BlastEm's documented ``-s FILE`` GST restore command."""
+    if not rom.is_file():
+        raise FileNotFoundError(rom)
+    if not gst.is_file():
+        raise FileNotFoundError(gst)
+    if width < 1 or height < 1:
+        raise ValueError("BlastEm relaunch dimensions must be positive")
+    command = [str(BLASTEM)]
+    if software_renderer:
+        command.append("-g")
+    command.extend(
+        [
+            "-s",
+            str(gst.resolve()),
+            str(rom.resolve()),
+            str(width),
+            str(height),
+        ]
+    )
+    return command
+
+
+def bundled_load_state_shortcut_report(
+    config_path: Path = BLASTEM.parent / "default.cfg",
+) -> dict[str, object]:
+    """Report whether the bundled config actually binds ``ui.load_state``.
+
+    Sending an invented ``load`` key through the input helper is not a state
+    restore.  The bundled config currently has only ``ui.save_state``; callers
+    must use BlastEm's documented ``-s FILE`` command-line option instead.
+    """
+    if not config_path.is_file():
+        raise FileNotFoundError(config_path)
+    payload = config_path.read_bytes()
+    lines = payload.decode("utf-8").splitlines()
+    binding_lines = [
+        line.strip()
+        for line in lines
+        if line.strip()
+        and not line.lstrip().startswith("#")
+        and "ui.load_state" in line.split()
+    ]
+    return {
+        "config_path": str(config_path.resolve()),
+        "config_sha256": hashlib.sha256(payload).hexdigest(),
+        "action": "ui.load_state",
+        "binding_lines": binding_lines,
+        "bound": bool(binding_lines),
+        "unsupported_key_restore_rejected": not binding_lines,
+        "required_restore_method": "blastem_cli_-s_FILE",
+    }
+
+
+def _process_argv(pid: int) -> list[str]:
+    payload = Path(f"/proc/{pid}/cmdline").read_bytes().rstrip(b"\0")
+    return [
+        part.decode("utf-8", errors="replace")
+        for part in payload.split(b"\0")
+    ]
+
+
+def _process_environment_value(pid: int, name: str) -> str | None:
+    prefix = name.encode("ascii") + b"="
+    payload = Path(f"/proc/{pid}/environ").read_bytes()
+    for entry in payload.split(b"\0"):
+        if entry.startswith(prefix):
+            return entry[len(prefix) :].decode("utf-8", errors="replace")
+    return None
+
+
+def _process_is_live_non_zombie(pid: int) -> bool:
+    try:
+        stat = Path(f"/proc/{pid}/stat").read_text(encoding="ascii")
+    except (FileNotFoundError, PermissionError, ProcessLookupError):
+        return False
+    closing_parenthesis = stat.rfind(")")
+    return (
+        closing_parenthesis >= 0
+        and len(stat) > closing_parenthesis + 2
+        and stat[closing_parenthesis + 2] != "Z"
+    )
+
+
+def relaunch_blastem_from_gst(
+    *,
+    rom: Path,
+    gst: Path,
+    runtime_home: Path,
+    display: str,
+    log_path: Path,
+    environment: dict[str, str] | None = None,
+    width: int = 320,
+    height: int = 240,
+    software_renderer: bool = True,
+    expected_old_pids: int = 1,
+    notice_timeout: float = 2.5,
+    startup_delay: float = 1.25,
+) -> tuple[subprocess.Popen[bytes], dict[str, object]]:
+    """Relaunch one isolated BlastEm runtime from an external GST.
+
+    The previous emulator on ``display`` is stopped first and proven gone.
+    The replacement retains the same isolated HOME and Xvfb display, and its
+    live PID/argv/environment are checked before returning.  The caller owns
+    the returned process and should stop it (normally by display) during its
+    existing cleanup path.
+    """
+    normalized_display = blastem_display.normalize_display(display)
+    display_number = int(normalized_display[1:].partition(".")[0])
+    if display_number < blastem_display.MIN_ISOLATED_DISPLAY_NUMBER:
+        raise ValueError(
+            "refusing exact-state relaunch on a low-numbered/possibly "
+            f"physical display: {normalized_display}"
+        )
+    if expected_old_pids < 0:
+        raise ValueError("expected_old_pids must not be negative")
+    if notice_timeout < 0 or startup_delay < 0:
+        raise ValueError("relaunch delays must not be negative")
+    runtime_home = runtime_home.resolve()
+    if not runtime_home.is_dir():
+        raise FileNotFoundError(runtime_home)
+    command = blastem_exact_savestate_command(
+        rom,
+        gst,
+        width=width,
+        height=height,
+        software_renderer=software_renderer,
+    )
+    input_hashes = {
+        "rom_sha256": hashlib.sha256(rom.read_bytes()).hexdigest(),
+        "gst_sha256": hashlib.sha256(gst.read_bytes()).hexdigest(),
+    }
+    old_pids = running_blastem_pids(display=normalized_display)
+    if len(old_pids) != expected_old_pids:
+        raise RuntimeError(
+            "isolated display must contain exactly "
+            f"{expected_old_pids} source BlastEm PID(s), found {old_pids}"
+        )
+    terminate_blastem_processes(display=normalized_display)
+    remaining = running_blastem_pids(display=normalized_display)
+    if remaining or any(_process_is_live_non_zombie(pid) for pid in old_pids):
+        raise RuntimeError(
+            "source BlastEm PID survived exact-state relaunch stop: "
+            f"old={old_pids}, remaining={remaining}"
+        )
+
+    launch_environment = (
+        os.environ.copy() if environment is None else environment.copy()
+    )
+    launch_environment["LD_LIBRARY_PATH"] = str(BLASTEM.parent / "lib")
+    launch_environment["HOME"] = str(runtime_home)
+    launch_environment["DISPLAY"] = normalized_display
+    launch_environment["BLASTEM_VIRTUAL_DISPLAY"] = normalized_display
+    launch_environment["SDL_VIDEODRIVER"] = "x11"
+    launch_environment.pop("WAYLAND_DISPLAY", None)
+    log_path = log_path.resolve()
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    process: subprocess.Popen[bytes] | None = None
+    try:
+        with log_path.open("w", encoding="utf-8") as log_file:
+            process = subprocess.Popen(
+                command,
+                cwd=BLASTEM.parent,
+                env=launch_environment,
+                stdin=subprocess.DEVNULL,
+                stdout=log_file,
+                stderr=subprocess.STDOUT,
+                start_new_session=True,
+            )
+        time.sleep(0.25)
+        notice_dismissed = False
+        if software_renderer:
+            notice_dismissed = dismiss_virtual_software_renderer_notice(
+                timeout=notice_timeout,
+                display_name=normalized_display,
+            )
+        time.sleep(startup_delay)
+        if process.poll() is not None:
+            log_tail = log_path.read_text(
+                encoding="utf-8", errors="replace"
+            )[-4000:]
+            raise RuntimeError(
+                "BlastEm exact-state relaunch exited with status "
+                f"{process.returncode}: {log_tail}"
+            )
+        new_pids = running_blastem_pids(display=normalized_display)
+        if new_pids != [process.pid]:
+            raise RuntimeError(
+                f"exact-state relaunch PID set {new_pids} != [{process.pid}]"
+            )
+        observed_argv = _process_argv(process.pid)
+        if observed_argv != command:
+            raise RuntimeError(
+                f"exact-state relaunch argv {observed_argv} != {command}"
+            )
+        observed_home = _process_environment_value(process.pid, "HOME")
+        observed_display = _process_environment_value(process.pid, "DISPLAY")
+        if observed_home != str(runtime_home):
+            raise RuntimeError(
+                "exact-state relaunch did not retain isolated HOME: "
+                f"{observed_home!r} != {str(runtime_home)!r}"
+            )
+        if (
+            blastem_display.normalize_display(observed_display or "")
+            != normalized_display
+        ):
+            raise RuntimeError(
+                "exact-state relaunch did not retain isolated DISPLAY: "
+                f"{observed_display!r} != {normalized_display!r}"
+            )
+        output_hashes = {
+            "rom_sha256": hashlib.sha256(rom.read_bytes()).hexdigest(),
+            "gst_sha256": hashlib.sha256(gst.read_bytes()).hexdigest(),
+        }
+        if output_hashes != input_hashes:
+            raise RuntimeError(
+                "ROM or external GST changed during exact-state relaunch"
+            )
+        return process, {
+            "method": "official_blastem_cli_s_same_rom_isolated_relaunch",
+            "source_process_pids": old_pids,
+            "source_processes_fully_terminated": True,
+            "relaunch_pid": process.pid,
+            "relaunch_argv": observed_argv,
+            "same_isolated_runtime_home": str(runtime_home),
+            "same_isolated_display": normalized_display,
+            "observed_home": observed_home,
+            "observed_display": observed_display,
+            "software_renderer": software_renderer,
+            "software_renderer_notice_dismissed": notice_dismissed,
+            "keyboard_capture_attempted": False,
+            "keyboard_capture_verified": False,
+            "keyboard_capture_verification": (
+                "ui.toggle_keyboard_captured is an emulated-keyboard action, "
+                "not proof that Genesis gamepad input is focused; caller "
+                "must prove XTest game input changed state"
+            ),
+            "log_path": str(log_path),
+            "input_hashes": input_hashes,
+            "inputs_unchanged_after_launch": output_hashes == input_hashes,
+        }
+    except BaseException:
+        if process is not None and process.poll() is None:
+            terminate_blastem_processes(display=normalized_display)
+        raise
+
+
+def dismiss_virtual_software_renderer_notice(
+    timeout: float = 2.0,
+    *,
+    display_name: str | None = None,
+) -> bool:
     """Dismiss BlastEm's software-vsync notice on the isolated Xvfb.
 
     The bundled SDL renderer opens a modal ``BlastEm Info`` window before
@@ -344,7 +608,7 @@ def dismiss_virtual_software_renderer_notice(timeout: float = 2.0) -> bool:
     from Xlib.protocol import event
 
     deadline = time.monotonic() + timeout
-    display = Display()
+    display = Display(display_name)
     try:
         root = display.screen().root
         while time.monotonic() <= deadline:
@@ -956,10 +1220,13 @@ def battle_command_menu_visible(path: Path) -> bool:
         and command_right_border_gold_pixels
         > command_right_border.width * command_right_border.height * 0.05
         # The ornate status-bar frame occupies a little over half of this
-        # crop on some maps; 45% still distinguishes it from dialogue views.
+        # crop on some maps.  A real Scenario 12 Lester four-row command menu
+        # measured 44.875% (SHA-256 14a2a5abd1184c6b0abd5f47bb8259300d
+        # 5918fa23fcb8da15ad62eabac61d28), so retain that exact boundary while
+        # the panel geometry and upper cap distinguish dialogue/preparation.
         # Preparation/hire screens fill more of the same crop with solid blue
         # (about 52%), so cap the ratio as well as enforcing the lower bound.
-        and status_blue_pixels > status.width * status.height * 0.45
+        and status_blue_pixels >= status.width * status.height * 0.44
         and status_blue_pixels < status.width * status.height * 0.505
     )
 
@@ -1632,7 +1899,7 @@ def main() -> int:
         )
         (config_dir / "blastem.cfg").write_text(test_config, encoding="utf-8")
         LOG_ROOT.mkdir(parents=True, exist_ok=True)
-        log_path = LOG_ROOT / f"blastem_{args.sequence}.log"
+        log_path = blastem_log_path(runtime_home, args.sequence)
 
         env = os.environ.copy()
         env["LD_LIBRARY_PATH"] = str(ROOT / "tools/blastem/lib")

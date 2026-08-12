@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cross-platform GUI and CLI patcher for Langrisser II Korean v1.3.6."""
+"""Cross-platform GUI and CLI patcher for Langrisser II Korean v1.3.7."""
 
 from __future__ import annotations
 
@@ -8,11 +8,12 @@ from dataclasses import dataclass
 import json
 import os
 from pathlib import Path, PurePath
-import shutil
+import struct
 import sys
 import tempfile
 from typing import Callable
 import zipfile
+import zlib
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,9 +29,9 @@ from tools.rom_update import (
 )
 
 
-APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.6"
-MANIFEST_FILENAME = "v1.3.6.json"
-PATCHER_RELEASE = "v1.3.6"
+APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.7"
+MANIFEST_FILENAME = "v1.3.7.json"
+PATCHER_RELEASE = "v1.3.7"
 ROM_SUFFIXES = frozenset({".md", ".bin", ".gen", ".smd", ".zip"})
 
 
@@ -157,6 +158,118 @@ def _safe_asset_name(value: object, label: str) -> str:
     return value
 
 
+def _inspect_bps_asset(patch: bytes) -> dict[str, int]:
+    """Validate the packaged BPS container without needing copyrighted ROM data."""
+    footer_size = 12
+    if len(patch) < 4 + footer_size or patch[:4] != b"BPS1":
+        raise UpdateError("내장 패치가 올바른 BPS1 파일이 아닙니다")
+    footer_start = len(patch) - footer_size
+    source_crc32, target_crc32, expected_patch_crc32 = struct.unpack(
+        "<III", patch[footer_start:]
+    )
+    actual_patch_crc32 = zlib.crc32(patch[:-4]) & 0xFFFFFFFF
+    if actual_patch_crc32 != expected_patch_crc32:
+        raise UpdateError("내장 BPS 패치 체크섬이 다릅니다")
+
+    def decode(offset: int) -> tuple[int, int]:
+        value = 0
+        shift = 1
+        while True:
+            if offset >= footer_start:
+                raise UpdateError("내장 BPS 헤더가 잘렸습니다")
+            byte = patch[offset]
+            offset += 1
+            value += (byte & 0x7F) * shift
+            if byte & 0x80:
+                return value, offset
+            shift <<= 7
+            value += shift
+            if shift > (1 << 63):
+                raise UpdateError("내장 BPS 헤더 값이 너무 큽니다")
+
+    source_size, offset = decode(4)
+    target_size, offset = decode(offset)
+    metadata_size, offset = decode(offset)
+    if offset + metadata_size > footer_start:
+        raise UpdateError("내장 BPS 메타데이터가 잘렸습니다")
+    return {
+        "source_size": source_size,
+        "target_size": target_size,
+        "source_crc32": source_crc32,
+        "target_crc32": target_crc32,
+        "patch_crc32": expected_patch_crc32,
+    }
+
+
+def verify_embedded_assets(
+    source_payload: bytes | None = None,
+) -> dict[str, object]:
+    """Hash every embedded patch and optionally apply all three end to end."""
+    manifest = load_release_manifest()
+    source = manifest["source"]
+    targets = manifest["targets"]
+    assert isinstance(source, dict)
+    assert isinstance(targets, list)
+    normalized_source = (
+        _normalize_source(source_payload, source)
+        if source_payload is not None
+        else None
+    )
+    seen_patch_names: set[str] = set()
+    seen_output_names: set[str] = set()
+    records: list[dict[str, object]] = []
+    for value in targets:
+        if not isinstance(value, dict):
+            raise UpdateError("패치 대상 manifest가 잘못되었습니다")
+        patch_name = _safe_asset_name(value.get("patch_filename"), "패치")
+        output_name = _safe_asset_name(value.get("output_filename"), "출력")
+        if patch_name in seen_patch_names or output_name in seen_output_names:
+            raise UpdateError("패처 manifest에 중복 파일명이 있습니다")
+        seen_patch_names.add(patch_name)
+        seen_output_names.add(output_name)
+        try:
+            patch = (_asset_dir() / patch_name).read_bytes()
+        except OSError as exc:
+            raise UpdateError(f"내장 패치를 읽을 수 없습니다: {patch_name}") from exc
+        if len(patch) != int(value["patch_size"]):
+            raise UpdateError(f"내장 패치 크기가 다릅니다: {patch_name}")
+        if sha256_bytes(patch) != str(value["patch_sha256"]):
+            raise UpdateError(f"내장 패치 해시가 다릅니다: {patch_name}")
+        bps = _inspect_bps_asset(patch)
+        if bps["source_size"] != int(source["size"]):
+            raise UpdateError(f"내장 패치 원본 크기가 다릅니다: {patch_name}")
+        if bps["target_size"] != int(value["output_size"]):
+            raise UpdateError(f"내장 패치 결과 크기가 다릅니다: {patch_name}")
+        applied = False
+        if normalized_source is not None:
+            target = bps_apply(patch, normalized_source)
+            if len(target) != int(value["output_size"]):
+                raise UpdateError(f"{value['label_ko']} 결과 크기가 다릅니다")
+            if sha256_bytes(target) != str(value["output_sha256"]):
+                raise UpdateError(f"{value['label_ko']} 결과 해시가 다릅니다")
+            validate_md_rom(target, str(value["label_ko"]))
+            applied = True
+        records.append(
+            {
+                "id": str(value["id"]),
+                "patch_filename": patch_name,
+                "patch_sha256": str(value["patch_sha256"]),
+                "output_filename": output_name,
+                "output_sha256": str(value["output_sha256"]),
+                "bps_container_verified": True,
+                "application_verified": applied,
+            }
+        )
+    return {
+        "release": PATCHER_RELEASE,
+        "asset_directory": str(_asset_dir()),
+        "embedded_manifest_verified": True,
+        "all_patches_hashed": True,
+        "all_patches_applied": normalized_source is not None,
+        "targets": records,
+    }
+
+
 def _next_backup_path(path: Path) -> Path:
     candidate = path.with_name(f"{path.name}.before-{PATCHER_RELEASE}.bak")
     sequence = 2
@@ -168,7 +281,7 @@ def _next_backup_path(path: Path) -> Path:
     return candidate
 
 
-def _atomic_write(path: Path, payload: bytes) -> None:
+def _stage_payload(path: Path, payload: bytes) -> Path:
     descriptor, name = tempfile.mkstemp(
         prefix=f".{path.name}.patch-", suffix=".tmp", dir=path.parent
     )
@@ -180,11 +293,27 @@ def _atomic_write(path: Path, payload: bytes) -> None:
             os.fsync(handle.fileno())
         if sha256_bytes(temp_path.read_bytes()) != sha256_bytes(payload):
             raise UpdateError("임시 ROM 검증에 실패했습니다")
+        return temp_path
+    except Exception:
+        temp_path.unlink(missing_ok=True)
+        raise
+
+
+def _atomic_write(path: Path, payload: bytes) -> None:
+    temp_path = _stage_payload(path, payload)
+    try:
         os.replace(temp_path, path)
         if sha256_bytes(path.read_bytes()) != sha256_bytes(payload):
             raise UpdateError("생성된 ROM 검증에 실패했습니다")
     finally:
         temp_path.unlink(missing_ok=True)
+
+
+def _same_existing_file(first: Path, second: Path) -> bool:
+    try:
+        return os.path.samefile(first, second)
+    except (FileNotFoundError, OSError):
+        return first.resolve() == second.resolve()
 
 
 def apply_release(
@@ -193,7 +322,8 @@ def apply_release(
     output_dir: Path | None = None,
     confirm_overwrite: Callable[[Path], bool] | None = None,
 ) -> list[PatchResult]:
-    source_rom = read_source_rom(source_path)
+    source_file = source_path.expanduser().resolve()
+    source_rom = read_source_rom(source_file)
     if output_dir is None:
         output_dir = source_rom.output_dir
     output_dir = output_dir.expanduser().resolve()
@@ -226,14 +356,28 @@ def apply_release(
         output_path = output_dir / output_name
         prepared.append((value, output_path, target, expected_hash))
 
+    output_paths = [output_path for _, output_path, _, _ in prepared]
+    if len(output_paths) != len(set(output_paths)):
+        raise UpdateError("패처 manifest의 결과 파일명이 중복되었습니다")
+    for output_path in output_paths:
+        if _same_existing_file(source_file, output_path):
+            raise UpdateError(
+                "원본 ROM과 결과 ROM 경로가 같습니다. "
+                "원본을 보존할 다른 결과 폴더를 선택하세요: "
+                f"{output_path}"
+            )
+
     decisions: dict[Path, str] = {}
+    original_hashes: dict[Path, str] = {}
     for _, output_path, _, expected_hash in prepared:
         if not output_path.exists():
             decisions[output_path] = "create"
             continue
         if not output_path.is_file():
             raise UpdateError(f"출력 경로가 파일이 아닙니다: {output_path}")
-        if sha256_bytes(output_path.read_bytes()) == expected_hash:
+        existing_hash = sha256_bytes(output_path.read_bytes())
+        original_hashes[output_path] = existing_hash
+        if existing_hash == expected_hash:
             decisions[output_path] = "current"
             continue
         if confirm_overwrite is None or not confirm_overwrite(output_path):
@@ -242,30 +386,87 @@ def apply_release(
             )
         decisions[output_path] = "replace"
 
-    results: list[PatchResult] = []
-    for value, output_path, target, expected_hash in prepared:
-        decision = decisions[output_path]
-        backup_path: Path | None = None
-        if decision == "current":
-            status = "already_current"
-        else:
+    mutable = [
+        row for row in prepared if decisions[row[1]] in {"create", "replace"}
+    ]
+    staged: dict[Path, Path] = {}
+    backup_paths: dict[Path, Path] = {}
+    committed: list[tuple[Path, str]] = []
+    try:
+        # No visible result changes occur until all three target payloads have
+        # been written to verified sibling staging files.
+        for _, output_path, target, _ in mutable:
+            staged[output_path] = _stage_payload(output_path, target)
+
+        for _, output_path, _, expected_hash in mutable:
+            decision = decisions[output_path]
             if decision == "replace":
                 backup_path = _next_backup_path(output_path)
-                shutil.copy2(output_path, backup_path)
-                if sha256_bytes(backup_path.read_bytes()) != sha256_bytes(
-                    output_path.read_bytes()
+                backup_paths[output_path] = backup_path
+                os.replace(output_path, backup_path)
+            os.replace(staged[output_path], output_path)
+            committed.append((output_path, decision))
+            if sha256_bytes(output_path.read_bytes()) != expected_hash:
+                raise UpdateError(f"생성된 ROM 검증에 실패했습니다: {output_path}")
+    except Exception as exc:
+        rollback_errors: list[str] = []
+        committed_paths = {path for path, _ in committed}
+        for output_path, decision in reversed(committed):
+            try:
+                if decision == "replace":
+                    backup_path = backup_paths[output_path]
+                    if not backup_path.is_file():
+                        raise OSError(f"rollback backup is missing: {backup_path}")
+                    os.replace(backup_path, output_path)
+                    if (
+                        sha256_bytes(output_path.read_bytes())
+                        != original_hashes[output_path]
+                    ):
+                        raise OSError(f"rollback hash mismatch: {output_path}")
+                else:
+                    output_path.unlink(missing_ok=True)
+            except Exception as rollback_exc:
+                rollback_errors.append(str(rollback_exc))
+        # A replacement may fail after its original was renamed but before
+        # its staged target was committed; restore that in-flight file too.
+        for output_path, backup_path in backup_paths.items():
+            if output_path in committed_paths or not backup_path.exists():
+                continue
+            try:
+                os.replace(backup_path, output_path)
+                if (
+                    sha256_bytes(output_path.read_bytes())
+                    != original_hashes[output_path]
                 ):
-                    backup_path.unlink(missing_ok=True)
-                    raise UpdateError("기존 결과 ROM 백업 검증에 실패했습니다")
-            _atomic_write(output_path, target)
-            status = "replaced" if decision == "replace" else "created"
+                    raise OSError(f"rollback hash mismatch: {output_path}")
+            except Exception as rollback_exc:
+                rollback_errors.append(str(rollback_exc))
+        if rollback_errors:
+            raise UpdateError(
+                "결과 ROM 생성 실패 후 되돌리기도 실패했습니다: "
+                + "; ".join(rollback_errors)
+            ) from exc
+        raise UpdateError(
+            f"세 결과 ROM 생성을 취소하고 모두 되돌렸습니다: {exc}"
+        ) from exc
+    finally:
+        for temp_path in staged.values():
+            temp_path.unlink(missing_ok=True)
+
+    results: list[PatchResult] = []
+    for value, output_path, _, expected_hash in prepared:
+        decision = decisions[output_path]
         results.append(
             PatchResult(
                 target_id=str(value["id"]),
                 output_path=output_path,
-                status=status,
+                status=(
+                    "already_current"
+                    if decision == "current"
+                    else "replaced" if decision == "replace" else "created"
+                ),
                 sha256=expected_hash,
-                backup_path=backup_path,
+                backup_path=backup_paths.get(output_path),
             )
         )
     return results
@@ -273,7 +474,12 @@ def apply_release(
 
 def _application_dir() -> Path:
     if getattr(sys, "frozen", False):
-        return Path(sys.executable).resolve().parent
+        executable = Path(sys.executable).resolve()
+        if sys.platform == "darwin":
+            for parent in executable.parents:
+                if parent.suffix.lower() == ".app":
+                    return parent.parent
+        return executable.parent
     return Path.cwd()
 
 
@@ -420,6 +626,14 @@ def run_gui() -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=APP_TITLE)
     parser.add_argument("--rom", type=Path)
+    parser.add_argument(
+        "--self-test",
+        action="store_true",
+        help=(
+            "내장 manifest와 세 BPS 파일의 크기·해시·BPS 체크섬을 검사합니다; "
+            "--rom을 함께 주면 실제 적용 결과 해시까지 검사합니다"
+        ),
+    )
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--save", type=Path)
     parser.add_argument(
@@ -433,6 +647,27 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.self_test:
+        try:
+            source_payload = (
+                read_source_rom(args.rom).payload
+                if args.rom is not None
+                else None
+            )
+            report = verify_embedded_assets(source_payload)
+            for target in report["targets"]:
+                assert isinstance(target, dict)
+                mode = (
+                    "BPS 적용·결과 해시 확인"
+                    if target["application_verified"]
+                    else "내장 크기·해시·BPS 체크섬 확인"
+                )
+                print(f"{target['id']}: {mode}")
+            print(f"self-test 통과: {report['release']}")
+        except (OSError, UpdateError, zipfile.BadZipFile) as exc:
+            print(f"self-test 오류: {exc}", file=sys.stderr)
+            return 2
+        return 0
     if args.rom is None:
         return run_gui()
     try:

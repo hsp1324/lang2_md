@@ -7,18 +7,25 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 
 from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
 LIVE = ROOT / "editor/static/ai-class-sprites"
 MASKS = ROOT / "editor/ai_mount_masks.json"
 IDENTITY_MASKS = ROOT / "editor/ai_identity_masks.json"
 MANIFEST = LIVE / "manifest.json"
 OUTPUT = (
     ROOT
-    / "docs/assets/ai-class-source/latest/lester-cavalry-tier-colors-v1"
+    / "assets/class-sprites/source/latest/lester-cavalry-tier-colors-v1"
 )
 MASTER = OUTPUT / "master"
 LOGICAL = OUTPUT / "logical16"
@@ -54,7 +61,7 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def palette(image: Image.Image, limit: int | None = None) -> list[str]:
-    counts = Counter(color for color in image.get_flattened_data() if color[3])
+    counts = Counter(color for color in flattened_image_data(image) if color[3])
     return [
         "#%02x%02x%02x" % color[:3]
         for color, _ in counts.most_common(limit)
@@ -138,7 +145,7 @@ def build() -> dict[str, object]:
             and len(colors) <= 15
             and not empty_rows
             and not empty_columns
-            and (0, 0, 0, 255) not in result.get_flattened_data()
+            and (0, 0, 0, 255) not in flattened_image_data(result)
         )
         reports.append(
             {

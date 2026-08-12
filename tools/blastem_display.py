@@ -8,6 +8,7 @@ import re
 
 DEFAULT_VIRTUAL_DISPLAY = os.environ.get("BLASTEM_VIRTUAL_DISPLAY", ":104")
 DISPLAY_PATTERN = re.compile(r"^:\d+(?:\.\d+)?$")
+MIN_ISOLATED_DISPLAY_NUMBER = 100
 
 
 def normalize_display(display: str) -> str:
@@ -45,10 +46,12 @@ def configure_display(args: argparse.Namespace) -> bool:
     if args.desktop_display:
         return False
     display = normalize_display(args.virtual_display)
-    if display == ":0":
+    server_number = int(display[1:].partition(".")[0])
+    if server_number < MIN_ISOLATED_DISPLAY_NUMBER:
         raise ValueError(
-            "refusing virtual-display :0; pass --desktop-display to opt in "
-            "to the physical desktop"
+            "refusing a low-numbered/possibly physical virtual display; use "
+            f":{MIN_ISOLATED_DISPLAY_NUMBER} or higher, or pass "
+            "--desktop-display to opt in explicitly"
         )
     os.environ["DISPLAY"] = display
     # Nested capture helpers parse their own --virtual-display default from

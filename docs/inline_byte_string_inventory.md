@@ -35,7 +35,7 @@ This conservative scan covers maximal half-width-Japanese and uppercase-ASCII FF
   `0x01804C` loads it directly and draws exactly 13 cells. Production now
   redirects that path to `0x2B8400` and renders `버릴 아이템`
   through the full byte-UI tile table. Page navigation, confirmation, and stable
-  return are live-verified in `captures/run/94db_discard_reused_state.png`.
+  return are live-verified in `captures/run/ede6_discard_selection_page1.png`.
 - `0x05E040..0x05E510` is a 77-row hidden sound-test label table.
   39 rows contain half-width Japanese. It is a real
   structured UI/debug surface, not an item, class, summon, or compressed asset.

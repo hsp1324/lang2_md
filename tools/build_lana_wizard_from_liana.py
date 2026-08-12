@@ -7,13 +7,20 @@ from collections import Counter
 import json
 from pathlib import Path
 import shutil
+import sys
 import time
 
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "docs/assets/ai-class-source/latest/lana-wizard-liana-template-v1"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.pillow_compat import flattened_image_data  # noqa: E402
+
+
+OUTPUT = ROOT / "assets/class-sprites/source/latest/lana-wizard-liana-template-v1"
 LIVE = ROOT / "editor/static/ai-class-sprites"
 LIANA = LIVE / "2/15.png"
 LANA = LIVE / "3/15.png"
@@ -36,12 +43,12 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def palette(image: Image.Image) -> list[str]:
-    counts = Counter(c for c in image.get_flattened_data() if c[3])
+    counts = Counter(c for c in flattened_image_data(image) if c[3])
     return ["#%02x%02x%02x" % color[:3] for color, _ in counts.most_common()]
 
 
 def pixels(image: Image.Image) -> list[list[int]]:
-    return [list(color) for color in image.get_flattened_data()]
+    return [list(color) for color in flattened_image_data(image)]
 
 
 def limit_palette(
@@ -50,7 +57,7 @@ def limit_palette(
     points: set[tuple[int, int]],
 ) -> Image.Image:
     result = image.copy().convert("RGBA")
-    colors = {color for color in result.get_flattened_data() if color[3]}
+    colors = {color for color in flattened_image_data(result) if color[3]}
     if len(colors) <= 15:
         return result
     locked = {original.getpixel(point) for point in points if original.getpixel(point)[3]}
