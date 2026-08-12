@@ -149,7 +149,7 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
             with self.subTest(profile=profile_name):
                 self.assertEqual(
                     len(changed),
-                    {"pure": 9502, "normal": 9502, "hard": 10163}[
+                    {"pure": 11148, "normal": 11148, "hard": 11809}[
                         profile_name
                     ],
                 )
@@ -311,16 +311,15 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
                 self.assertIn("patches/hard-v1.3.7.bps", workflow)
                 self.assertNotIn("v1.3.6", workflow)
 
-    def test_public_readme_does_not_link_unpublished_v137_assets(self):
+    def test_public_readme_links_published_v137_assets(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("/releases/download/v1.3.6/", readme)
-        self.assertNotIn("/releases/download/v1.3.7/", readme)
+        self.assertIn("/releases/download/v1.3.7/", readme)
 
-    def test_validation_draft_keeps_exact_runtime_status_pending(self):
+    def test_validation_records_reissued_release_status(self):
         validation = (ROOT / "docs/v1.3.7_validation.md").read_text(
             encoding="utf-8"
         )
-        self.assertIn("final exact-runtime validation pending", validation)
+        self.assertIn("reissued with the Scenario 1 dialogue follow-up", validation)
         for topic in (
             "LV10",
             "LV11",

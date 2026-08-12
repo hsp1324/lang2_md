@@ -101,6 +101,25 @@ class ReviewedEventDialogueTests(unittest.TestCase):
             text_by_address["0x1848C0"],
             "{0005}, 마을 어귀는 네 소꿉친구가 사는 곳 아니야?",
         )
+        self.assertEqual(text_by_address["0x185162"], "{000D}님을 따라라!")
+        self.assertEqual(
+            text_by_address["0x1851B2"],
+            "파상공세로 {001C}을 직접 치겠습니다.",
+        )
+        self.assertEqual(text_by_address["0x1851DE"], "흠…")
+        self.assertEqual(
+            text_by_address["0x185212"],
+            "파이크병이라도 우리 기사단을 막을 순 없다!",
+        )
+        self.assertEqual(
+            text_by_address["0x18568C"],
+            "{000D}님, {0025}이 왔습니다!",
+        )
+        self.assertEqual(
+            text_by_address["0x185E50"],
+            "그럼 지금부터 {0012}님의 퇴로를 확보합니다!",
+        )
+        self.assertEqual(text_by_address["0x185E80"], "이번 임무가 처음이지?")
 
     def test_scenario_2_has_all_reviewed_physical_pages(self):
         rows = [row for row in self.rows if row["scenario"] == 2]
@@ -1007,7 +1026,7 @@ class ReviewedEventDialogueTests(unittest.TestCase):
     def test_arca_179646819_confirmed_dialogue_corrections(self):
         text_by_address = {row["address"]: row["text"] for row in self.rows}
         expected = {
-            "0x1851B2": "외곽을 뚫고 {001C}을 직접 치겠습니다.",
+            "0x1851B2": "파상공세로 {001C}을 직접 치겠습니다.",
             "0x18568C": "{000D}님, {0025}이 왔습니다!",
             "0x18905C": "건방진 놈들! 이 조름님의 전술을 비웃다니! 잔머리를 굴려 봐야 헛수고다!",
             "0x18A614": "그렇다면 순순히 죽어 주십시오…",

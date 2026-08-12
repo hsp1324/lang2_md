@@ -47,12 +47,12 @@ _INVALIDATED_PRE_WARM_LOAD_CONTEXT_GATE_SHA256 = {
 # Final fixed-raw-EXP/pending-marker candidate, rebuilt twice from the same
 # Japanese source with byte-identical outputs before this identity was frozen.
 RELEASE_ROM_SHA256 = {
-    "pure": "66b4bc9b04e06b7e18f7d7f341d59ad5cfab02e480b3ff0949d277ba04a6f5a9",
-    "normal": "3f7de8fd1b4695c62e764fef5ed06bf4c96d1974f1296863c46f903ac21d69f5",
-    "hard": "6646c1ce86e960ea33228f6ef41e7b1b3cd1b39f9fa8779a3172d6c75c65a878",
+    "pure": "604d022080ae701a8b2ff0dd9f6906143e1483a74be5ac4ba9f8a2cffa051bff",
+    "normal": "c10ef6a6487c7b6a49ce47cce1792e89521698818cc13ce7590c97794ced4580",
+    "hard": "7d0c528c10d86367460792d06b95402d92557904ab62aea093ddda9d52081a4a",
 }
 RELEASE_IDENTITY_FINALIZED = True
-RELEASE_IDENTITY_GENERATION = "arca-179646819-dialogue-npc-balance-20260812"
+RELEASE_IDENTITY_GENERATION = "scenario1-dialogue-followup-20260812"
 INVALIDATED_RELEASE_SHA256 = frozenset(
     (*_INVALIDATED_PRE_PENDING_MARKER_SHA256.values(),
      *_INVALIDATED_PRE_COLD_LOAD_SCENARIO_FALLBACK_SHA256.values(),
@@ -60,7 +60,10 @@ INVALIDATED_RELEASE_SHA256 = frozenset(
      "2d475a96f5f5ee26352bef6c3c392a77aafa283a2c0f260a6d1cb8603b3610ac",
      "92e90c0e00df03c1c3264bc6ff7702c5356c2ba2b65d5f2281177066f329c7d8",
      "ca7750c207382023636acb37901242437861a8b83f4b39477c1405c8dd1ee6eb",
-     "3ee7431b5a3d062ce739463e89cdffce9543d0383ba7ccacb29f514e38c32b55")
+     "3ee7431b5a3d062ce739463e89cdffce9543d0383ba7ccacb29f514e38c32b55",
+     "66b4bc9b04e06b7e18f7d7f341d59ad5cfab02e480b3ff0949d277ba04a6f5a9",
+     "3f7de8fd1b4695c62e764fef5ed06bf4c96d1974f1296863c46f903ac21d69f5",
+     "6646c1ce86e960ea33228f6ef41e7b1b3cd1b39f9fa8779a3172d6c75c65a878")
 )
 
 # These generated/dated records must be refreshed from the same central values.

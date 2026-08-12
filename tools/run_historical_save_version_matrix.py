@@ -207,23 +207,23 @@ HISTORICAL_TARGETS = (
 
 
 FINAL_MANIFEST_SHA256 = (
-    "c01f72b2d6de3e1cd143a49ec11ade864ac57a7f1a45378d07a003b1cc9d7d73"
+    "6eddb0fb48579da8907136015b7ff08a73d9228e297b959617d4200857911999"
 )
 FINAL_PATCH_IDENTITIES = {
     "pure": {
         "filename": "original-v1.3.7.bps",
-        "sha256": "2f44c40131b7ba6c7b6f9478179043a047d776c0081acf80f04224c913662049",
-        "bytes": 2286140,
+        "sha256": "a12cb6434312e4ba330e0e2d89be3ae9f8f9892f87518b0a64a49d0eb5d1261a",
+        "bytes": 2286139,
     },
     "normal": {
         "filename": "normal-v1.3.7.bps",
-        "sha256": "fa8b6eebadc9432cdc95c4aea5f5c1f35cfdf7f475836e049c280a654e1e6006",
-        "bytes": 2286587,
+        "sha256": "c17d2b86af34eccd019eea23a430982d08f04cde95ac0b714766ec48db90a658",
+        "bytes": 2286586,
     },
     "hard": {
         "filename": "hard-v1.3.7.bps",
-        "sha256": "9017c48aae94a8e58ddffb6ab4e8fb119f61ce94906f2388a261e53590f41d66",
-        "bytes": 2289088,
+        "sha256": "2c13a6ea841ce99825c2b1ab281a02d442f2333fe78cf0f69ebd1fd8518eaed3",
+        "bytes": 2289214,
     },
 }
 
