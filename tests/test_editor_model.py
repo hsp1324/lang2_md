@@ -3,9 +3,10 @@ import unittest
 
 from editor.model import class_change_editor_model, item_editor_model
 from tools.build_item_icon_assets import icon_crop
+from tools.v138_release_identity import RELEASE_ROM_PATHS
 ROOT = Path(__file__).resolve().parents[1]
 JP_ROM = ROOT / "roms/original/Langrisser II (Japan).md"
-KO_ROM = ROOT / "roms/builds/Langrisser II (Korean).md"
+KO_ROM = RELEASE_ROM_PATHS["normal"]
 
 
 class EditorModelTests(unittest.TestCase):
