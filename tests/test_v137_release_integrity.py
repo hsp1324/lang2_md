@@ -9,8 +9,7 @@ from tools.build_hard_mode_rom import (
     load_applied_plan,
     verify_applied_hard_mode,
 )
-from tools.build_v136_release_patches import build as build_v136
-from tools.build_v137_release_patches import (
+from tools.build_v138_release_patches import (
     MANIFEST_PATH,
     SOURCE_PATH,
     TARGETS,
@@ -23,10 +22,10 @@ from patcher import langrisser_ii_korean_patcher as patcher
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PREVIOUS_MANIFEST = ROOT / "patches/v1.3.6.json"
+PREVIOUS_MANIFEST = ROOT / "patches/v1.3.7.json"
 
 
-class V137ReleaseIntegrityTests(unittest.TestCase):
+class V138ReleaseIntegrityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if not SOURCE_PATH.is_file():
@@ -52,7 +51,7 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
     def test_manifest_and_bps_assets_are_reproducible(self):
         generated = build(check=True)
         self.assertEqual(generated, self.manifest)
-        self.assertEqual(self.manifest["release"], "v1.3.7")
+        self.assertEqual(self.manifest["release"], "v1.3.8")
         self.assertEqual(
             {row["id"] for row in self.manifest["targets"]},
             {"pure", "normal", "hard"},
@@ -79,49 +78,33 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
                     bytes.fromhex("5241F8200040000100403FFF"),
                 )
 
-    def test_v136_historical_patch_assets_remain_reproducible(self):
-        historical = build_v136(check=True)
-        self.assertEqual(historical["release"], "v1.3.6")
-
     def test_profile_lineage_and_hard_balance_version_are_explicit(self):
         expected = {
-            "pure": ("ko-original-1.3.7", None, "ko-original-1.3.6"),
-            "normal": ("ko-normal-1.3.7", None, "ko-normal-1.3.6"),
-            "hard": ("ko-hard-1.3.7", "1.3.7", "ko-hard-1.3.6"),
+            "pure": ("ko-original-1.3.8", None, "ko-original-1.3.7"),
+            "normal": ("ko-normal-1.3.8", None, "ko-normal-1.3.7"),
+            "hard": ("ko-hard-1.3.8", "1.3.8", "ko-hard-1.3.7"),
         }
         for profile_name, values in expected.items():
             profile = get_profile(profile_name)
             with self.subTest(profile=profile_name):
                 self.assertEqual(profile["release_id"], values[0])
-                self.assertEqual(profile["translation_version"], "1.3.7")
+                self.assertEqual(profile["translation_version"], "1.3.8")
                 self.assertEqual(profile["balance_version"], values[1])
                 self.assertEqual(profile["base_release"], values[2])
 
-    def test_v136_delta_contains_the_reviewed_v137_regions(self):
+    def test_v137_delta_keeps_only_reviewed_v138_regions(self):
         version_offsets = {
-            "pure": (0x016F, 0x2B7EEA),
-            "normal": (0x016A, 0x2B7EEA),
-            "hard": (0x016A, 0x2B8A12),
+            "pure": {0x016F, 0x018E, 0x2B7EEA},
+            "normal": {0x016A, 0x018E, 0x018F, 0x2B7EEA},
+            "hard": {0x016A, 0x0171, 0x018E, 0x018F, 0x2B8A12, 0x2B8A32},
         }
-        hook = builder.JOIN_CLASS_CHOICE_OWNERSHIP_HOOK
-        hook_bytes = builder.join_class_choice_ownership_hook_bytes()
-        reviewed_regions = (
-            (
-                builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER,
-                builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER_LIMIT,
-                builder.build_join_class_choice_level_wrapper(),
-            ),
-            (
-                builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD,
-                builder.JOIN_CLASS_CHOICE_VISIBILITY_GUARD_LIMIT,
-                builder.build_join_class_choice_visibility_guard(),
-            ),
-            (
-                builder.JOIN_CLASS_CHOICE_OWNERSHIP_GUARD,
-                builder.JOIN_CLASS_CHOICE_OWNERSHIP_GUARD_LIMIT,
-                builder.build_join_class_choice_ownership_guard(),
-            ),
-        )
+        loren_sprite_bytes = {
+            offset
+            for offset in range(0x310000, 0x316000)
+            if self.previous_targets["normal"][offset]
+            != self.targets["normal"][offset]
+        }
+        self.assertEqual(len(loren_sprite_bytes), 75)
 
         for profile_name, current in self.targets.items():
             previous = self.previous_targets[profile_name]
@@ -130,42 +113,24 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
                 for offset, (before, after) in enumerate(zip(previous, current))
                 if before != after
             }
-            expected_changed = {
-                0x018E,
-                0x018F,
-                *version_offsets[profile_name],
-            }
-            for offset, value in enumerate(hook_bytes, hook):
-                if previous[offset] != value:
-                    expected_changed.add(offset)
-            for start, limit, routine in reviewed_regions:
-                expected_region = routine + b"\xFF" * (
-                    limit - start - len(routine)
-                )
-                for offset, value in enumerate(expected_region, start):
-                    if previous[offset] != value:
-                        expected_changed.add(offset)
+            expected_changed = set(version_offsets[profile_name])
+            if profile_name in {"normal", "hard"}:
+                expected_changed |= loren_sprite_bytes
 
             with self.subTest(profile=profile_name):
                 self.assertEqual(
                     len(changed),
-                    {"pure": 11148, "normal": 11223, "hard": 11884}[
+                    {"pure": 3, "normal": 79, "hard": 81}[
                         profile_name
                     ],
                 )
-                self.assertLessEqual(expected_changed, changed)
-                self.assertEqual(current[hook:hook + len(hook_bytes)], hook_bytes)
-                for start, limit, routine in reviewed_regions:
-                    expected_region = routine + b"\xFF" * (
-                        limit - start - len(routine)
-                    )
-                    self.assertEqual(current[start:limit], expected_region)
+                self.assertEqual(changed, expected_changed)
 
-    def test_hard_output_retains_the_approved_v136_balance_layer(self):
+    def test_hard_output_retains_the_approved_balance_layer(self):
         verify_applied_hard_mode(self.targets["hard"])
 
     def test_all_340_fixed_records_retain_reviewed_structural_identity(self):
-        """Lock the exact final ROMs, not only the v1.3.6 inheritance chain."""
+        """Lock the exact final ROMs, not only the v1.3.7 inheritance chain."""
 
         changed_identity = builder.SCENARIO31_DEMON_LORD_NAME_OFFSET
         hard_plan = load_applied_plan()
@@ -296,38 +261,29 @@ class V137ReleaseIntegrityTests(unittest.TestCase):
                             {0x13, 0x1D} if index in {1, 2, 3} else set(),
                         )
 
-    def test_patcher_and_platform_workflows_package_only_v137_assets(self):
-        self.assertEqual(patcher.PATCHER_RELEASE, "v1.3.7")
-        self.assertEqual(patcher.MANIFEST_FILENAME, "v1.3.7.json")
+    def test_patcher_and_platform_workflows_package_only_v138_assets(self):
+        self.assertEqual(patcher.PATCHER_RELEASE, "v1.3.8")
+        self.assertEqual(patcher.MANIFEST_FILENAME, "v1.3.8.json")
         for relative_path in (
             ".github/workflows/build-v1.3-patcher.yml",
             ".github/workflows/build-v1.3-patcher-platforms.yml",
         ):
             workflow = (ROOT / relative_path).read_text(encoding="utf-8")
             with self.subTest(workflow=relative_path):
-                self.assertIn("patches/v1.3.7.json", workflow)
-                self.assertIn("patches/original-v1.3.7.bps", workflow)
-                self.assertIn("patches/normal-v1.3.7.bps", workflow)
-                self.assertIn("patches/hard-v1.3.7.bps", workflow)
-                self.assertNotIn("v1.3.6", workflow)
+                self.assertIn("patches/v1.3.8.json", workflow)
+                self.assertIn("patches/original-v1.3.8.bps", workflow)
+                self.assertIn("patches/normal-v1.3.8.bps", workflow)
+                self.assertIn("patches/hard-v1.3.8.bps", workflow)
 
-    def test_public_readme_links_published_v137_assets(self):
+    def test_public_readme_links_published_v138_assets(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("/releases/download/v1.3.7/", readme)
+        self.assertIn("/releases/download/v1.3.8/", readme)
 
-    def test_validation_records_reissued_release_status(self):
-        validation = (ROOT / "docs/v1.3.7_validation.md").read_text(
+    def test_validation_records_targeted_scenario2_color_check(self):
+        validation = (ROOT / "docs/v1.3.8_validation.md").read_text(
             encoding="utf-8"
         )
-        self.assertIn("reissued with the Loren lavender-palette follow-up", validation)
-        for topic in (
-            "LV10",
-            "LV11",
-            "LV12",
-            "Rune Stone",
-            "Hawk Lord",
-            "Croco Lord",
-        ):
+        for topic in ("시나리오 2", "(219, 0, 0)", "(109, 0, 0)"):
             with self.subTest(topic=topic):
                 self.assertIn(topic, validation)
 

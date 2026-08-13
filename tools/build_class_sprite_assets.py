@@ -70,10 +70,10 @@ REPRESENTATIVE_PALETTE_OVERRIDES = {
         0xE: 0x248,  # deepest armor shade -> warm brown
     },
     # Loren keeps the same stock silhouette and protected equipment, but uses
-    # Shaman's lavender and deep-mauve ramp so the two read as a matched pair.
+    # a warm crimson-to-deep-red armor gradient that matches the live map.
     0x9B: {
-        0x1: 0xA8A,  # gray armor shade -> soft lavender
-        0xE: 0x646,  # deepest armor shade -> deep mauve
+        0x1: 0x46E,  # gray armor shade -> bright warm red
+        0xE: 0x008,  # deepest armor shade -> deep red
     },
     # Sorcerer 0x09, Shaman 0x0A, and NPC Priest 0x9C all share sprite 0x1D.
     # Keep Sorcerer blue, make Shaman violet above, and give only the Priest
@@ -99,7 +99,7 @@ REPRESENTATIVE_RGBA_OVERRIDES = {
         0x3: (240, 250, 255, 255),  # white armor -> barely icy sky blue
     },
     0x9B: {
-        0x3: (247, 240, 255, 255),  # white helmet -> barely pale lavender
+        0x3: (255, 242, 238, 255),  # white helmet -> warm red highlight
     },
     0x9C: {
         0x3: (255, 251, 234, 255),  # white hood -> barely warm ivory

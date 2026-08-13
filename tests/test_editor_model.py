@@ -347,15 +347,15 @@ class EditorModelTests(unittest.TestCase):
             )
             self.assertEqual(
                 loren.getpixel((10, 2)),
-                (247, 240, 255, 255),
+                (255, 242, 238, 255),
             )
             self.assertEqual(
                 loren.getpixel((6, 0)),
-                (182, 146, 182, 255),
+                (255, 109, 73, 255),
             )
             self.assertEqual(
                 loren.getpixel((5, 0)),
-                (109, 73, 109, 255),
+                (146, 0, 0, 255),
             )
             for coords in sprite_assets.LOREN_BLADE_COORDS:
                 self.assertEqual(
@@ -392,13 +392,17 @@ class EditorModelTests(unittest.TestCase):
                     (219, 182, 109, 255),
                     (146, 73, 36, 255),
                 }
+                crimson_ramp = {
+                    (255, 109, 73, 255),
+                    (146, 0, 0, 255),
+                }
                 violet_ramp = {
                     (182, 146, 182, 255),
                     (109, 73, 109, 255),
                 }
                 self.assertTrue(ivory_ramp.issubset(set(militia.getdata())))
                 self.assertTrue(ivory_ramp.issubset(set(priest.getdata())))
-                self.assertTrue(violet_ramp.issubset(set(loren.getdata())))
+                self.assertTrue(crimson_ramp.issubset(set(loren.getdata())))
                 self.assertTrue(violet_ramp.issubset(set(shaman.getdata())))
 
     def test_pirates_use_sky_blue_naval_palette_and_preserve_equipment(

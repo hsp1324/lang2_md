@@ -4,7 +4,7 @@
 
 프로젝트 개발자: **hsp1324**
 
-> 최신 공개 버전은 `v1.3.7`입니다. 세 가지 완성판은
+> 최신 공개 버전은 `v1.3.8`입니다. 세 가지 완성판은
 > GitHub Releases의 Windows·Linux·macOS 패처로 일본판 ROM에 적용해 사용합니다.
 > 동작은 `RetroArch`(Genesis Plus GX 기준) 환경에서 검증되었으므로 우선적으로
 > `RetroArch` 사용을 권장합니다.
@@ -13,15 +13,20 @@
 
 사용 중인 운영체제와 CPU에 맞는 패처를 받아 일본판 ROM에 적용합니다.
 
-- **Windows**: [Langrisser-II-Korean-Patcher-v1.3.7.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.7/Langrisser-II-Korean-Patcher-v1.3.7.exe)
-- **Linux x86_64**: [Langrisser-II-Korean-Patcher-v1.3.7-linux-x86_64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.7/Langrisser-II-Korean-Patcher-v1.3.7-linux-x86_64.tar.gz)
-- **Linux ARM64**: [Langrisser-II-Korean-Patcher-v1.3.7-linux-arm64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.7/Langrisser-II-Korean-Patcher-v1.3.7-linux-arm64.tar.gz)
-- **macOS Apple Silicon**: [Langrisser-II-Korean-Patcher-v1.3.7-macos-arm64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.7/Langrisser-II-Korean-Patcher-v1.3.7-macos-arm64.app.zip)
-- **macOS Intel**: [Langrisser-II-Korean-Patcher-v1.3.7-macos-x86_64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.7/Langrisser-II-Korean-Patcher-v1.3.7-macos-x86_64.app.zip)
+- **Windows**: [Langrisser-II-Korean-Patcher-v1.3.8.exe](https://github.com/hsp1324/lang2_md/releases/download/v1.3.8/Langrisser-II-Korean-Patcher-v1.3.8.exe)
+- **Linux x86_64**: [Langrisser-II-Korean-Patcher-v1.3.8-linux-x86_64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.8/Langrisser-II-Korean-Patcher-v1.3.8-linux-x86_64.tar.gz)
+- **Linux ARM64**: [Langrisser-II-Korean-Patcher-v1.3.8-linux-arm64.tar.gz](https://github.com/hsp1324/lang2_md/releases/download/v1.3.8/Langrisser-II-Korean-Patcher-v1.3.8-linux-arm64.tar.gz)
+- **macOS Apple Silicon**: [Langrisser-II-Korean-Patcher-v1.3.8-macos-arm64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.8/Langrisser-II-Korean-Patcher-v1.3.8-macos-arm64.app.zip)
+- **macOS Intel**: [Langrisser-II-Korean-Patcher-v1.3.8-macos-x86_64.app.zip](https://github.com/hsp1324/lang2_md/releases/download/v1.3.8/Langrisser-II-Korean-Patcher-v1.3.8-macos-x86_64.app.zip)
 
-검증값은 [v1.3.7 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.7)에서 확인할 수 있습니다.
+검증값은 [v1.3.8 Release](https://github.com/hsp1324/lang2_md/releases/tag/v1.3.8)에서 확인할 수 있습니다.
 
-### v1.3.7 변경 사항
+### v1.3.8 변경 사항
+
+- 최신 디자인 일반판과 하드판의 로렌 하이로드 맵 외형을 연보라가 아닌
+  **밝은 빨강 → 짙은 빨강** 두 단계 그라데이션으로 변경했습니다. 방패·장식·
+  검·원작 디자인판은 건드리지 않았습니다. 에디터의 로렌 미리보기도 같은
+  빨강 명암과 따뜻한 하이라이트로 맞췄습니다.
 
 - 키스·레스터·제시카가 아군으로 합류할 때 목표 레벨을 강제로 맞추는 대신
   원작 2단계 레벨에 해당하는 고정 경험치량을 한 번만 받도록 수정했습니다.
@@ -39,8 +44,8 @@
   교정했습니다. `자경단가` 조사는 `자경단이`로 표시됩니다.
 - Original·Normal·Hard를 각각 1장부터 비밀 시나리오를 포함한 마지막 27장과
   Fin 화면까지 연속 저장 진행해 총 93개 장별 진행을 확인했습니다. 더 확장된
-  재검증은 계속합니다. 2026-08-13 재배포본은 이 검증본의 게임 로직을 유지하고
-  위 시나리오 1 대사와 로렌의 연보라 맵 팔레트를 교정했습니다.
+  재검증은 계속합니다. 1.3.8은 이 검증본의 게임 로직을 유지하고 로렌의
+  최신 디자인 맵 팔레트만 빨간색 명암으로 교정했습니다.
 
 ### v1.3.6에서 포함된 수정
 
@@ -68,9 +73,9 @@
 패처는 일본판 ROM 또는 ZIP 하나를 고르면 위 세 ROM을 모두 생성합니다.
 
 ```text
-Langrisser II (Korean Original v1.3.7).md
-Langrisser II (Korean Normal v1.3.7).md
-Langrisser II (Korean Hard v1.3.7).md
+Langrisser II (Korean Original v1.3.8).md
+Langrisser II (Korean Normal v1.3.8).md
+Langrisser II (Korean Hard v1.3.8).md
 ```
 
 ## Windows에서 패치하기
@@ -86,26 +91,26 @@ EXE를 실행하고 일본판 ROM 또는 ZIP, 결과 폴더를 고른 뒤 `패�
 실행합니다.
 
 ```bash
-tar -xzf Langrisser-II-Korean-Patcher-v1.3.7-linux-x86_64.tar.gz
-chmod +x Langrisser-II-Korean-Patcher-v1.3.7-linux-x86_64
-./Langrisser-II-Korean-Patcher-v1.3.7-linux-x86_64
+tar -xzf Langrisser-II-Korean-Patcher-v1.3.8-linux-x86_64.tar.gz
+chmod +x Langrisser-II-Korean-Patcher-v1.3.8-linux-x86_64
+./Langrisser-II-Korean-Patcher-v1.3.8-linux-x86_64
 ```
 
 화면 없이 명령줄로도 실행할 수 있습니다.
 
 ```bash
-./Langrisser-II-Korean-Patcher-v1.3.7-linux-x86_64 \
+./Langrisser-II-Korean-Patcher-v1.3.8-linux-x86_64 \
   --rom "/path/to/Langrisser II (Japan).md" \
   --output-dir "/path/to/output"
 ```
 
-ARM64에서는 명령의 파일명을 `Langrisser-II-Korean-Patcher-v1.3.7-linux-arm64`로
+ARM64에서는 명령의 파일명을 `Langrisser-II-Korean-Patcher-v1.3.8-linux-arm64`로
 바꿉니다.
 
 ## macOS에서 패치하기
 
 M1 이후 Mac은 `macos-arm64.app.zip`, Intel Mac은 `macos-x86_64.app.zip`을
-받습니다. ZIP을 풀고 `Langrisser II Korean Patcher v1.3.7.app`을 실행합니다.
+받습니다. ZIP을 풀고 `Langrisser II Korean Patcher v1.3.8.app`을 실행합니다.
 이 패처는 Apple Developer ID로 공증되지 않았으므로 처음 한 번은 Finder에서
 앱을 오른쪽 클릭한 뒤 `열기`를 선택해야 할 수 있습니다. macOS 보안을
 전체적으로 끄지는 마세요.
@@ -113,7 +118,7 @@ M1 이후 Mac은 `macos-arm64.app.zip`, Intel Mac은 `macos-x86_64.app.zip`을
 터미널에서 실행하려면 앱 내부 실행 파일을 사용합니다.
 
 ```bash
-"./Langrisser II Korean Patcher v1.3.7.app/Contents/MacOS/Langrisser II Korean Patcher v1.3.7" \
+"./Langrisser II Korean Patcher v1.3.8.app/Contents/MacOS/Langrisser II Korean Patcher v1.3.8" \
   --rom "/path/to/Langrisser II (Japan).zip" \
   --output-dir "/path/to/output" \
   --save "/path/to/old-save.srm" \
@@ -199,11 +204,11 @@ roms/builds/Langrisser II (Korean Editor Edit).md
 4. 복사본의 기본 파일명을 새 ROM과 똑같이 맞춥니다.
 5. 새 ROM을 실행하고 게임 안의 `불러오기`로 저장을 엽니다.
 
-예를 들어 새 ROM이 `Langrisser II (Korean Normal v1.3.7).md`이면 다음 저장
+예를 들어 새 ROM이 `Langrisser II (Korean Normal v1.3.8).md`이면 다음 저장
 파일이 생성됩니다.
 
 ```text
-Langrisser II (Korean Normal v1.3.7).srm
+Langrisser II (Korean Normal v1.3.8).srm
 ```
 
 에뮬레이터의 상태 저장 파일(`.state`, `.state*`, `.gst`)은 ROM 내부 코드와 실행 중 메모리를 포함하므로 다른 빌드와의 호환을 보장하지 않습니다. 업데이트 후 문제가 보이면 상태 저장 대신 게임 내 저장인 `.srm`으로 다시 시작해 주세요.
@@ -221,7 +226,8 @@ Langrisser II (Korean Normal v1.3.7).srm
 
 ## 문서
 
-- [v1.3.7 상세 검증 기록](docs/v1.3.7_validation.md)
+- [v1.3.8 상세 검증 기록](docs/v1.3.8_validation.md)
+- [v1.3.8 패치 배포 안내](docs/player_patch_distribution_v1.3.8.md)
 - [세이브를 유지하는 업데이트 안내](docs/save_preserving_rom_updates.md)
 - [게임 데이터 편집기 구조](docs/editor_data_model.md)
 - [개발·빌드·분석·검증 상세 문서](docs/development_guide.md)

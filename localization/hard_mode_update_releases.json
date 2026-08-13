@@ -2,19 +2,19 @@
   "schema_version": 1,
   "package_type": "langrisser2-korean-rom-update",
   "save_format": "lang2-ko-sram-v1",
-  "current_release": "ko-hard-1.3.7",
+  "current_release": "ko-hard-1.3.8",
   "version_policy": {
     "keep_candidate_version_until_user_declares_release": true,
-    "candidate_translation_version": "1.3.7",
-    "candidate_balance_version": "1.3.7"
+    "candidate_translation_version": "1.3.8",
+    "candidate_balance_version": "1.3.8"
   },
   "releases": [
     {
-      "release_id": "ko-hard-1.3.7",
-      "rom_path": "roms/builds/Langrisser II (Korean Hard v1.3.7).md",
+      "release_id": "ko-hard-1.3.8",
+      "rom_path": "roms/builds/Langrisser II (Korean Hard v1.3.8).md",
       "size": 4194304,
-      "md_checksum": "0068",
-      "sha256": "1b5735c1b1b0620f8131c3291208f605d95a7e5293e63de36627b83f3a9001bd",
+      "md_checksum": "08F8",
+      "sha256": "eebc790c6068832708c2f1d13de5bd009066e1d49f8692fd3fe9272b19974f9c",
       "sram_descriptor": "5241F8200040000100403FFF",
       "save_format": "lang2-ko-sram-v1",
       "status": "release_candidate"

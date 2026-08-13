@@ -1,4 +1,4 @@
-name: Build v1.3.7 Windows patcher
+name: Build v1.3.8 Windows patcher
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
   windows-patcher:
     if: >-
       ${{ github.event_name == 'workflow_dispatch' ||
-          github.event.release.tag_name == 'v1.3.7' }}
+          github.event.release.tag_name == 'v1.3.8' }}
     runs-on: windows-latest
     steps:
       - name: Check out source
@@ -32,17 +32,17 @@ jobs:
         run: >-
           python -c "from patcher.langrisser_ii_korean_patcher import
           load_release_manifest; m=load_release_manifest();
-          assert m['release']=='v1.3.7'; assert len(m['targets'])==3"
+          assert m['release']=='v1.3.8'; assert len(m['targets'])==3"
 
       - name: Build single-file Windows patcher
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force "package-patches" | Out-Null
           $assets = @(
-            "patches/v1.3.7.json"
-            "patches/original-v1.3.7.bps"
-            "patches/normal-v1.3.7.bps"
-            "patches/hard-v1.3.7.bps"
+            "patches/v1.3.8.json"
+            "patches/original-v1.3.8.bps"
+            "patches/normal-v1.3.8.bps"
+            "patches/hard-v1.3.8.bps"
           )
           Copy-Item -Path $assets -Destination "package-patches"
           pyinstaller `
@@ -51,7 +51,7 @@ jobs:
             --onefile `
             --console `
             --hide-console hide-early `
-            --name "Langrisser-II-Korean-Patcher-v1.3.7" `
+            --name "Langrisser-II-Korean-Patcher-v1.3.8" `
             --paths "." `
             --add-data "package-patches;patches" `
             "patcher/langrisser_ii_korean_patcher.py"
@@ -59,7 +59,7 @@ jobs:
       - name: Verify executable and write checksum
         shell: pwsh
         run: |
-          $exe = "dist/Langrisser-II-Korean-Patcher-v1.3.7.exe"
+          $exe = "dist/Langrisser-II-Korean-Patcher-v1.3.8.exe"
           if (-not (Test-Path $exe)) { throw "Patcher executable is missing" }
           & $exe --self-test
           if ($LASTEXITCODE -ne 0) { throw "Embedded patch self-test failed" }
@@ -71,7 +71,7 @@ jobs:
           from pathlib import Path
           import pefile
 
-          path = Path("dist/Langrisser-II-Korean-Patcher-v1.3.7.exe")
+          path = Path("dist/Langrisser-II-Korean-Patcher-v1.3.8.exe")
           pe = pefile.PE(str(path), fast_load=True)
           if pe.FILE_HEADER.Machine != 0x8664:
               raise SystemExit(
@@ -99,7 +99,7 @@ jobs:
           )
           '@ | python -
           $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
-          $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.3.7.exe`n"
+          $checksum = "$hash  Langrisser-II-Korean-Patcher-v1.3.8.exe`n"
           [System.IO.File]::WriteAllText(
             "dist/SHA256SUMS.txt",
             $checksum,
@@ -111,10 +111,10 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
-          name: Langrisser-II-Korean-Patcher-v1.3.7
+          name: Langrisser-II-Korean-Patcher-v1.3.8
           if-no-files-found: error
           path: |
-            dist/Langrisser-II-Korean-Patcher-v1.3.7.exe
+            dist/Langrisser-II-Korean-Patcher-v1.3.8.exe
             dist/SHA256SUMS.txt
 
       - name: Publish Windows patcher to the triggering release
@@ -124,4 +124,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: >-
           gh release upload "${{ github.event.release.tag_name }}"
-          "dist/Langrisser-II-Korean-Patcher-v1.3.7.exe" --clobber
+          "dist/Langrisser-II-Korean-Patcher-v1.3.8.exe" --clobber
