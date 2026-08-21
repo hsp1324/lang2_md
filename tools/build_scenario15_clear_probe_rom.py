@@ -46,6 +46,12 @@ FIRST_ENEMY_RECORD_INDEX = 1
 LAST_ENEMY_RECORD_INDEX = 11
 IMELDA_RECORD_INDEX = 3
 HIDDEN_ENEMY_RECORD_INDEXES = (8, 9, 10, 11)
+VISIBLE_ENEMY_RECORD_INDEXES = tuple(
+    index
+    for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1)
+    if index not in HIDDEN_ENEMY_RECORD_INDEXES
+)
+ENEMY_DEFEAT_TARGET_POSITION = (3, 3)
 ESCAPE_BOUNDS = (1, 21, 46, 22)
 COMPLETION_ELWIN_POSITION = (3, 20)
 ESCAPE_TARGET = (3, 21)
@@ -359,9 +365,17 @@ def patch_probe(
     protagonist_death: bool = False,
     turn_event: int | None = None,
     turn_event_branch: str = "stock",
+    enemy_defeat_record: int | None = None,
 ) -> int:
     validate_layout(probe, source)
-    if sum((completion_layout, protagonist_death, turn_event is not None)) > 1:
+    if sum(
+        (
+            completion_layout,
+            protagonist_death,
+            turn_event is not None,
+            enemy_defeat_record is not None,
+        )
+    ) > 1:
         raise ValueError("Scenario 15 diagnostic modes conflict")
     if turn_event is not None and turn_event not in TURN_EVENT_COUNTER_VALUES:
         raise ValueError(
@@ -376,6 +390,14 @@ def patch_probe(
     if turn_event_branch != "stock" and turn_event != 3:
         raise ValueError(
             "Scenario 15 non-stock turn-event branch requires --turn-event 3"
+        )
+    if (
+        enemy_defeat_record is not None
+        and enemy_defeat_record not in VISIBLE_ENEMY_RECORD_INDEXES
+    ):
+        raise ValueError(
+            "Scenario 15 enemy-defeat record must be one of "
+            + ", ".join(str(index) for index in VISIBLE_ENEMY_RECORD_INDEXES)
         )
     if protagonist_death:
         install_start_wrapper(
@@ -397,6 +419,15 @@ def patch_probe(
         )
         return builder.update_md_checksum(probe)
     layout = scenario_layout(source, SCENARIO_NUMBER)
+    if enemy_defeat_record is not None:
+        base = layout.records_offset + enemy_defeat_record * FIXED_RECORD_SIZE
+        probe[base + FIELD_OFFSETS["at"]] = PROBE_AT
+        probe[base + FIELD_OFFSETS["df"]] = PROBE_DF
+        mercenary_offset = base + FIELD_OFFSETS["mercenaries"]
+        probe[mercenary_offset : mercenary_offset + 6] = b"\xFF" * 6
+        probe[base + FIELD_OFFSETS["x"]] = ENEMY_DEFEAT_TARGET_POSITION[0]
+        probe[base + FIELD_OFFSETS["y"]] = ENEMY_DEFEAT_TARGET_POSITION[1]
+        return builder.update_md_checksum(probe)
     for index in range(FIRST_ENEMY_RECORD_INDEX, LAST_ENEMY_RECORD_INDEX + 1):
         base = layout.records_offset + index * FIXED_RECORD_SIZE
         probe[base + FIELD_OFFSETS["at"]] = PROBE_AT
@@ -458,6 +489,16 @@ def parse_args() -> argparse.Namespace:
             "soldier fallback dialogue body"
         ),
     )
+    parser.add_argument(
+        "--enemy-defeat-record",
+        type=int,
+        choices=VISIBLE_ENEMY_RECORD_INDEXES,
+        help=(
+            "preserve all events and other fixed records, then move only the "
+            "selected visible enemy commander next to Elwin with AT/DF 0 and "
+            "no mercenaries for a normal-combat defeat replay"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -472,6 +513,7 @@ def main() -> int:
         protagonist_death=args.protagonist_death,
         turn_event=args.turn_event,
         turn_event_branch=args.turn_event_branch,
+        enemy_defeat_record=args.enemy_defeat_record,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -497,12 +539,26 @@ def main() -> int:
             f"{TURN_EVENT_PROTECTED_RUNTIME_GROUPS[-1]} and raises the "
             f"turn counter only to {TURN_EVENT_COUNTER_VALUES[args.turn_event]}"
         )
+    elif args.enemy_defeat_record is not None:
+        print(
+            f"enemy-defeat record {args.enemy_defeat_record}: moved only that "
+            f"commander to {ENEMY_DEFEAT_TARGET_POSITION}, AT 0, DF 0, no "
+            "mercenaries"
+        )
+        print(
+            "all other Scenario 15 fixed records, deployments, scheduled "
+            "events, and event handlers preserved"
+        )
     else:
         print("Scenario 15 enemy records 1..11: AT 0, DF 0, no mercenaries")
     if args.completion_layout:
         print("completion layout: Elwin moved from (3,2) to (3,20)")
         print("escape region X 1..46 / Y 21..22 and handlers preserved")
-    elif not args.protagonist_death and args.turn_event is None:
+    elif (
+        not args.protagonist_death
+        and args.turn_event is None
+        and args.enemy_defeat_record is None
+    ):
         print(
             "allied Scott, stock deployments, identities, classes, levels, "
             "hidden events, and handlers preserved"

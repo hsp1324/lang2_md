@@ -53,26 +53,20 @@ class ItemShopResourceTests(unittest.TestCase):
                 max(tokens), len(glyphs), f"item {item_index} name exceeds loader"
             )
 
-    def test_item_name_overflow_follows_the_compact_description_bank(self):
+    def test_item_name_overflow_is_reloaded_after_the_compact_description_bank(self):
         glyphs = builder.read_word_list(
             self.data, builder.ITEM_NAME_GLYPH_LIST_RELOC_BASE
         )
         overflow_count = len(glyphs) - builder.ITEM_NAME_GLYPH_PRIMARY_COUNT
         self.assertGreater(overflow_count, 0)
-        self.assertLessEqual(overflow_count, builder.ITEM_NAME_OVERFLOW_CAPACITY)
+        self.assertLessEqual(
+            overflow_count,
+            builder.ITEM_NAME_EQUIPMENT_OVERFLOW_CAPACITY,
+        )
         self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_BASE, 0xA700)
         self.assertEqual(builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT, 0xB400)
         self.assertEqual(builder.ITEM_NAME_OVERFLOW_CAPACITY, 26)
-        self.assertLessEqual(
-            builder.ITEM_NAME_OVERFLOW_VRAM_BASE
-            + overflow_count * builder.ITEM_GLYPH_VRAM_BYTES,
-            builder.ITEM_NAME_OVERFLOW_VRAM_LIMIT,
-        )
-        self.assertLess(
-            builder.ITEM_NAME_OVERFLOW_VRAM_BASE
-            + overflow_count * builder.ITEM_GLYPH_VRAM_BYTES,
-            0xB600,
-        )
+        self.assertEqual(overflow_count, 22)
 
         hook_end = (
             builder.ITEM_NAME_GLYPH_LOAD_HOOK
@@ -94,6 +88,25 @@ class ItemShopResourceTests(unittest.TestCase):
             ],
             expected_routine,
         )
+        shop_hook_end = (
+            builder.ITEM_NAME_SHOP_RELOAD_HOOK
+            + len(builder.ITEM_NAME_SHOP_RELOAD_HOOK_ORIGINAL)
+        )
+        self.assertEqual(
+            self.data[builder.ITEM_NAME_SHOP_RELOAD_HOOK:shop_hook_end],
+            bytes.fromhex("4E B9")
+            + builder.ITEM_NAME_SHOP_RELOAD_ROUTINE.to_bytes(4, "big"),
+        )
+        shop_reload = builder._build_item_name_shop_reload_routine()
+        self.assertEqual(
+            self.data[
+                builder.ITEM_NAME_SHOP_RELOAD_ROUTINE:
+                builder.ITEM_NAME_SHOP_RELOAD_ROUTINE + len(shop_reload)
+            ],
+            shop_reload,
+        )
+        for live_vram in (0xB400, 0xB700, 0xB800):
+            self.assertNotIn(live_vram.to_bytes(4, "big"), expected_routine)
 
     def test_shop_item_renderers_select_the_overflow_vram_bank(self):
         popup_hook_end = (
@@ -275,7 +288,7 @@ class ItemShopResourceTests(unittest.TestCase):
         self.assertEqual(
             builder.ITEM_DESCRIPTION_VRAM_BASE
             + runtime_count * builder.ITEM_GLYPH_VRAM_BYTES,
-            builder.ITEM_NAME_OVERFLOW_VRAM_BASE,
+            0xA700,
         )
 
     def test_necklace_cluster_glyph_no_longer_uses_shop_arrow_vram(self):

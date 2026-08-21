@@ -188,8 +188,9 @@ class TranslationTargetResidueTests(unittest.TestCase):
         self.assertIn("둘은 오랜 친구처럼 가까워졌다", scenario_text)
         self.assertIn("소꿉친구 리아나", scenario_text)
         self.assertIn("위험에 처한 이는", scenario_text)
-        self.assertIn("소꿉친구 리아나였다", scenario_text)
-        self.assertIn("검을 들었다", scenario_text)
+        self.assertIn("위험에 처한 이는 헤인의 소꿉친구 리아나였다", scenario_text)
+        self.assertIn("은 리아나를 구하기 위해 검을 들었다.", scenario_text)
+        self.assertNotIn("위험에 처한 이는 {0002}의", scenario_text)
         self.assertNotIn("적장은 발드였다", scenario_text)
         self.assertNotIn("훗날 대륙의 운명", scenario_text)
 

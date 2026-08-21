@@ -19,8 +19,35 @@
     "description_glyph_count": 166,
     "description_vram": "0x5400..0xA6FF",
     "item_name_overflow_vram": "0xA700..0xB3FF",
+    "shop_reload_hook": "0x0272D2",
+    "shop_reload_timing": "Reload the A700 item-name tail immediately after the compact 0x5400..0xA6FF description DMA.",
+    "forbidden_live_shop_vram": ["0xB400", "0xB700", "0xB800"],
+    "withdrawn_v139_failure": "The split B400/B700/B800 bank overwrote live Dagger/icon and right-hand AT/DF panel tiles while the shop was visible.",
     "new_cluster_vram": "0xA900",
-    "shop_graphics_start": "0xB400"
+    "shop_page_arrow_vram": "0xB600"
+  },
+  "v139_clean_runtime_evidence": {
+    "display": ":121",
+    "renderer": "BlastEm software renderer with Xlib capture",
+    "normal_rom_md_checksum": "2E0A",
+    "normal_rom_sha256": "36a857eeef644032eedcdaa2168e81ac1fa39c1dd429f6ec38dcd51aa7b50c71",
+    "all_item_ids_reviewed": "1..37",
+    "representative_capture_sha256": {
+      "item_01_dagger": "6c0955fe0d80919a355c62bb1c47b8fc1f61428adb36e2ad9c3d5ffed0c0feec",
+      "item_31_crown": "0040e053298fc804199699b7f47753172502a2525e6226813fd573c7a994d818",
+      "item_33_angel_wings": "e242b6ead42b72ed4a9fd6e90e07332420fe5c268970f9d53376780d19efbec5",
+      "item_35_gleipnir": "2c7a24024a68212f0e03229c265a67336a60968aa7212babadb4b44d973a14a3",
+      "item_37_mirage_robe": "f90e5270c71a0879f5b2c75c55f36b85a2303f06eaf1e10d7780d13949ca6f36",
+      "dagger_buy_sell": "c7a90b87c44584b075e0b7aebde91829e9a215e4119503e2cabdb4e8c9cdf73a",
+      "shop_return": "dd6a436b859409cc927d04e96780304b7baf1c46571fd6c22f04d8fb0c795265"
+    },
+    "preparation_pre_post_pixel_equal_pairs": 14,
+    "rejected_symptoms_absent": [
+      "extra symbol beside Dagger",
+      "니 beside AT/DF",
+      "cursor ghost after shop return"
+    ],
+    "review": "pass"
   },
   "runtime_evidence": [
     {

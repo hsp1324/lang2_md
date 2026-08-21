@@ -316,7 +316,8 @@ class HardModeBuildTests(unittest.TestCase):
             UPDATE_REGISTRY.read_text(encoding="utf-8")
         )
         history = registry["candidate_history"]
-        self.assertEqual(len(history), 12)
+        # Candidate history is append-only as a released hard ROM is replaced.
+        self.assertGreaterEqual(len(history), 15)
         for predecessor, successor in zip(history, history[1:]):
             self.assertEqual(predecessor["superseded_by"], successor["sha256"])
         self.assertEqual(

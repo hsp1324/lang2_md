@@ -244,6 +244,27 @@ def test_empire_common_ui_subset_is_fingerprinted_and_localization_only(
             reverse_glyph[jp_builder.be16(data, offset + index * 2)]
             for index in range(count)
         ) == expected
+
+    order_rows = tuple(
+        "".join(
+            reverse_glyph[
+                jp_builder.be16(
+                    data,
+                    EMPIRE_BATTLE_COMMAND_GLYPH_LIST
+                    + jp_builder.be16(
+                        data,
+                        jp_builder.ORDER_SUBMENU_TOKEN_STREAM
+                        + row * 6
+                        + index * 2,
+                    )
+                    * 2,
+                )
+            ]
+            for index in range(2)
+        )
+        for row in range(4)
+    )
+    assert order_rows == ("이동", "공격", "방어", "수동")
     for source_offset, (renderer_count, text) in (
         EMPIRE_OPENING_TEXT_LIST_PATCHES.items()
     ):

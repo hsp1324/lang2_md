@@ -264,9 +264,9 @@
     {
       "local_index": "0x21",
       "char": "프",
-      "vram_tile": "0x004A",
-      "allocation": "base_byte_code",
-      "byte_code": "0x4A"
+      "vram_tile": "0x03F7",
+      "allocation": "escape_code",
+      "byte_code": "0xF7"
     },
     {
       "local_index": "0x22",
@@ -453,9 +453,9 @@
     {
       "local_index": "0x3C",
       "char": "린",
-      "vram_tile": "0x03A9",
-      "allocation": "extension",
-      "byte_code": null
+      "vram_tile": "0x03F8",
+      "allocation": "escape_code",
+      "byte_code": "0xF8"
     },
     {
       "local_index": "0x3D",
@@ -1402,9 +1402,9 @@
     },
     {
       "vram_tile": "0x03A9",
-      "status": "active",
+      "status": "retired_unsafe",
       "char": "린",
-      "reason": "ordered extension allocation"
+      "reason": "magic-miss overlay owns this original result glyph tile"
     },
     {
       "vram_tile": "0x03AA",

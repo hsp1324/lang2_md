@@ -475,9 +475,10 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(primary[-1]["address"], "0x1A0A6E")
         # The English project grouped 598..704 under Scenario 15 and the two
         # final Rayguard-castle lines 705/706 under Scenario 16. The Japanese
-        # event block proves that all 109 records belong to this scenario;
-        # duplicate short Japanese battle reactions reuse their closest
-        # semantic English reference.
+        # event block proves that all 109 records belong to this scenario.
+        # Its early Imelda branch splits a few battle reactions differently,
+        # so those physical pages follow the Japanese source meaning instead
+        # of forcing the adjacent English record number.
         self.assertEqual(primary[0]["english_record"], 598)
         self.assertEqual(primary[-2]["english_record"], 705)
         self.assertEqual(primary[-1]["english_record"], 706)
@@ -487,11 +488,12 @@ class ReviewedEventDialogueTests(unittest.TestCase):
         self.assertEqual(by_address["0x19FF78"], "뭔 짓이야!")
         self.assertEqual(
             by_address["0x1A012A"],
-            "{0015}님은 부하를 조금도 안 아끼나?",
+            "{0015}님에게 한 발자국도 못 간다!",
         )
+        self.assertEqual(by_address["0x1A00AA"], "어서 임무로 돌아가!")
         self.assertEqual(
             by_address["0x1A01A0"],
-            "각오하세요, {0015}님!",
+            "으윽… {0015}님…!",
         )
         self.assertEqual(
             by_address["0x1A03F0"],

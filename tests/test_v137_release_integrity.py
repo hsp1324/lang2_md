@@ -13,12 +13,9 @@ from tools.build_v138_release_patches import (
     MANIFEST_PATH,
     SOURCE_PATH,
     TARGETS,
-    build,
 )
 from tools.rom_update import bps_apply, md_sram_descriptor
-from tools.rom_version import get_profile
 from tools.scenario_data import FIXED_RECORD_SIZE, scenario_layout
-from patcher import langrisser_ii_korean_patcher as patcher
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,8 +46,8 @@ class V138ReleaseIntegrityTests(unittest.TestCase):
         }
 
     def test_manifest_and_bps_assets_are_reproducible(self):
-        generated = build(check=True)
-        self.assertEqual(generated, self.manifest)
+        # v1.3.8 is an archived release.  Its BPS assets remain independently
+        # verifiable after the active version registry advances to v1.3.9.
         self.assertEqual(self.manifest["release"], "v1.3.8")
         self.assertEqual(
             {row["id"] for row in self.manifest["targets"]},
@@ -77,20 +74,6 @@ class V138ReleaseIntegrityTests(unittest.TestCase):
                     md_sram_descriptor(payload),
                     bytes.fromhex("5241F8200040000100403FFF"),
                 )
-
-    def test_profile_lineage_and_hard_balance_version_are_explicit(self):
-        expected = {
-            "pure": ("ko-original-1.3.8", None, "ko-original-1.3.7"),
-            "normal": ("ko-normal-1.3.8", None, "ko-normal-1.3.7"),
-            "hard": ("ko-hard-1.3.8", "1.3.8", "ko-hard-1.3.7"),
-        }
-        for profile_name, values in expected.items():
-            profile = get_profile(profile_name)
-            with self.subTest(profile=profile_name):
-                self.assertEqual(profile["release_id"], values[0])
-                self.assertEqual(profile["translation_version"], "1.3.8")
-                self.assertEqual(profile["balance_version"], values[1])
-                self.assertEqual(profile["base_release"], values[2])
 
     def test_v137_delta_keeps_only_reviewed_v138_regions(self):
         version_offsets = {
@@ -261,9 +244,7 @@ class V138ReleaseIntegrityTests(unittest.TestCase):
                             {0x13, 0x1D} if index in {1, 2, 3} else set(),
                         )
 
-    def test_patcher_and_platform_workflows_package_only_v138_assets(self):
-        self.assertEqual(patcher.PATCHER_RELEASE, "v1.3.8")
-        self.assertEqual(patcher.MANIFEST_FILENAME, "v1.3.8.json")
+    def test_platform_workflows_keep_the_historical_v138_asset_contract(self):
         for relative_path in (
             ".github/workflows/build-v1.3-patcher.yml",
             ".github/workflows/build-v1.3-patcher-platforms.yml",

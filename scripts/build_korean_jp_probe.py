@@ -645,13 +645,20 @@ ITEM_NAME_GLYPH_LOAD_HOOK = 0x21C6C
 ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL = bytes.fromhex(
     "41 F9 00 0A 14 AC 70 40 22 3C 00 00 20 00 4E B9 00 02 C2 C4"
 )
-ITEM_NAME_GLYPH_LOAD_ROUTINE = 0x2B8440
+# Keep the item-name loader in a dedicated blank extension region instead of
+# overlapping the popup stream at 0x2B8480.  The shop-specific wrapper below
+# reloads this same bank after the description DMA has completed.
+ITEM_NAME_GLYPH_LOAD_ROUTINE = 0x2BBC00
+ITEM_NAME_SHOP_RELOAD_HOOK = 0x0272D2
+ITEM_NAME_SHOP_RELOAD_HOOK_ORIGINAL = bytes.fromhex("31 FC 80 00 E3 90")
+ITEM_NAME_SHOP_RELOAD_ROUTINE = 0x2BBB00
+ITEM_NAME_SHOP_RELOAD_ROUTINE_LIMIT = 0x2BBB40
 ITEM_NAME_POPUP_BUILD_HOOK = 0x278F0
 ITEM_NAME_POPUP_BUILD_HOOK_ORIGINAL = bytes.fromhex("41 F9 00 0A 19 02")
-ITEM_NAME_POPUP_BUILD_ROUTINE = 0x2B8480
+ITEM_NAME_POPUP_BUILD_ROUTINE = 0x2BBC60
 ITEM_NAME_LIST_RENDER_HOOKS = (
-    (0x26FB8, 0x27044, 0x26FCE, 0x2B8500),
-    (0x279DE, 0x27A1C, 0x279F4, 0x2B8540),
+    (0x26FB8, 0x27044, 0x26FCE, 0x2BBD00),
+    (0x279DE, 0x27A1C, 0x279F4, 0x2BBD80),
 )
 ITEM_NAME_LIST_RENDER_HOOK_ORIGINAL = bytes.fromhex("30 18 0C 40 FF FF")
 ITEM_NAME_EQUIPMENT_RELOAD_HOOK = 0x026F04
@@ -670,23 +677,30 @@ ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_OFFSET = 0x0272C2
 ITEM_DESCRIPTION_GLYPH_LOAD_COUNT_SOURCE = 0x000000C0
 # The stock description loader reserves 192 glyphs at 0x5400..0xB3FF even
 # though the compact Korean description bank uses only 166. Load only the
-# actual bank, then keep item-name overflow in the newly free tail below
-# 0xB400. The former 0xB400..0xBEFF allocation collided at 0xB600 with the
-# green shop page-arrow graphics: in the Cross/Necklace list it replaced only
-# the "클" in "넥클리스" while the preceding "크로스" remained intact.
+# actual bank. The ordinary preparation redraw overwrites the item-name copy
+# in the free 0xA700 tail, so the shop reloads it immediately after loading the
+# compact description bank at 0x0272D2.  Do not move this data into B400,
+# B700, or B800: those ranges contain live shop arrows, item/icon fragments,
+# and right-hand status tiles.  The withdrawn v1.3.9 build did so and produced
+# an extra symbol beside Dagger and a visible `니` beside the AT/DF numbers.
 ITEM_NAME_OVERFLOW_VRAM_BASE = 0xA700
 ITEM_NAME_OVERFLOW_VRAM_LIMIT = 0xB400
 # The equipment screen loads commander/category graphics over 0xA700 after
 # the shared preparation font pass. Keep a second copy of the same overflow
 # glyphs in the otherwise shop-description-only 0x5400 bank. The equipment
-# list renderer selects this copy; the shop list and purchase popup continue
-# to use 0xA700, where they coexist with the compact description bank.
+# list renderer selects this copy; the shop list and purchase popup use the
+# shop-entry-restored 0xA700 bank.
 ITEM_NAME_EQUIPMENT_OVERFLOW_VRAM_BASE = ITEM_DESCRIPTION_VRAM_BASE
 ITEM_GLYPH_VRAM_BYTES = 0x80
 ITEM_NAME_OVERFLOW_CAPACITY = (
     ITEM_NAME_OVERFLOW_VRAM_LIMIT - ITEM_NAME_OVERFLOW_VRAM_BASE
 ) // ITEM_GLYPH_VRAM_BYTES
-ITEM_NAME_GLYPH_LOAD_MAX = ITEM_NAME_GLYPH_PRIMARY_COUNT + ITEM_NAME_OVERFLOW_CAPACITY
+ITEM_NAME_GLYPH_LOAD_MAX = (
+    ITEM_NAME_GLYPH_PRIMARY_COUNT + ITEM_NAME_OVERFLOW_CAPACITY
+)
+ITEM_NAME_EQUIPMENT_OVERFLOW_CAPACITY = (
+    ITEM_NAME_GLYPH_LOAD_MAX - ITEM_NAME_GLYPH_PRIMARY_COUNT
+)
 ITEM_DESCRIPTION_GLYPH_LIST_BASE = 0xA152E
 ITEM_DESCRIPTION_GLYPH_LIST_REF = 0x272BC
 ITEM_DESCRIPTION_POINTER_TABLE = 0xA1D7C
@@ -1024,6 +1038,12 @@ BYTE_UI_BATTLE_STABLE_FULL_EXT_TILE_BY_CHAR = {
 # class/name tile (notably `렌`) byte-identical.
 BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR = {
     "비": 0x039C,
+    # The magic-resist result draws its second original MISS glyph at 0x03A9.
+    # `린` had occupied that otherwise normal full-font slot, turning the
+    # short-lived result label into a misleading Korean fragment. Keep the
+    # allocation position reserved but route 린 through the ordinary escape
+    # bank instead, so the magic effect owns 0x03A9 again.
+    "린": 0x03A9,
     "럴": 0x0443,
     "가": 0x0444,
     "슬": 0x0499,
@@ -1031,6 +1051,7 @@ BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR = {
 }
 BYTE_UI_RETIRED_FULL_EXT_TILE_REASON = {
     0x039C: "battle animation graphics overwrite the former 비 tile",
+    0x03A9: "magic-miss overlay owns this original result glyph tile",
     0x0443: "Scenario 8 reinforcement animation overwrites the former 럴 tile",
     0x0444: "Scenario 8 reinforcement animation overwrites the former 가 tile",
     0x0499: "battle animation graphics overwrite the former 슬 tile",
@@ -1190,6 +1211,12 @@ BYTE_UI_STABLE_CODE_BY_CHAR = {
     # A1/A2 become icon fragments in the full commander panel.
     "레": 0xD1,
     "온": 0xD2,
+    # Retain the long-standing private-ASCII assignments after 프 moves out
+    # of J (0x4A) for the magic-MISS overlay.
+    "소": 0x51,
+    "마": 0x57,
+    "호": 0x59,
+    "금": 0x5A,
 }
 # F0-FE remain untouched in the original 256-tile byte font because those
 # tiles contain live status graphics. In localized FF-terminated name strings
@@ -1203,6 +1230,10 @@ BYTE_UI_EXT_CODE_BY_CHAR = {
     "코": 0xF4,
     "키": 0xF5,
     "록": 0xF6,
+    # Keep the original base-font tile 0x4A for the first magic-MISS glyph.
+    # F7/F8 are unused escape-bank codes and load at 0x03F7/0x03F8.
+    "프": 0xF7,
+    "린": 0xF8,
 }
 BYTE_UI_RESULT_LOCAL_CHARS = ("적",)
 BYTE_UI_EXT_CODE_FIRST = 0xF0
@@ -1706,7 +1737,10 @@ ENDING_STATUS_EXPECTED_GLYPHS = (
 ORDER_SUBMENU_GLYPH_SLOTS = {
     22: "방",
     23: "어",
-    24: "자",
+    # The fourth order row is the direct-control command (手動 in the
+    # Japanese UI), not automatic control. The token stream reuses slot 1
+    # (`동`), so this slot must carry `수` to render `수동`.
+    24: "수",
 }
 ORDER_SUBMENU_TOKEN_STREAM = 0x9768C
 
@@ -2925,8 +2959,10 @@ PREP_MENU_LOADED_BLANK_TILE = 0x0540
 # Screen-local glyph loader for the two route-menu rows that do not use the
 # direct strings above. The original list at 0xA2BAC is:
 #   移 動 順 変 更 自
-# The row scripts reuse 動 for 自動, so six Korean glyphs cover both
-# "이동순변경" and the "자동" prefix without changing the global JP font.
+# This is the separate commander-arrangement route menu. Its last row really
+# is automatic arrangement (自動), so it must remain `자동`. v1.3.9 initially
+# changed this unrelated list while leaving the battle `명령` submenu above
+# untouched.
 ARRANGE_MENU_GLYPH_LIST_PATCHES = {
     0xA2BAC: "이동순변경자",
 }
@@ -3079,9 +3115,9 @@ SCENARIO0_BODY_SEGMENTS = (
     "이었다. 여행길에 오른 그는 살라스 영지의 한 마을에서 여독을 풀고 있었다. 붙임성 "
     "좋은 그는 며칠 새 주민들과 친해졌다. 그중 어린 마법사 헤인은 ",
     "을 잘 따랐고 둘은 오랜 친구처럼 가까워졌다. 그러던 어느 날 헤인은 ",
-    "이 머무는 여관으로 숨을 몰아쉬며 뛰어들었다. 헤인의 얼굴은 창백했다. 제국 기사단이 "
-    "마을 외곽에 쳐들어왔다며 다급히 말했다. 위험에 처한 이는 ",
-    "의 소꿉친구 리아나였다. 그는 검을 들었다",
+    "이 머무는 여관으로 뛰어들었다. 제국 기사단이 마을 외곽에 쳐들어왔다며 그는 매우 다급히 "
+    "말했다. 위험에 처한 이는 헤인의 소꿉친구 리아나였다. ",
+    "은 리아나를 구하기 위해 검을 들었다.",
 )
 SCENARIO0_BODY = "".join(SCENARIO0_BODY_SEGMENTS)
 DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_TEXT = "".join(
@@ -6694,18 +6730,38 @@ def patch_join_class_choice_class_data(
             -1,
             ClassTransition(custom, promoted_candidates),
         )
+        if commander_id == 9:
+            # Lester's class/sprite data contains Arch Mage -> Zarvera, but
+            # the relocated v1.3.8 chain omitted the actual transition.  Keep
+            # it before the true Serpent Lord terminal so the stock scan sees
+            # both routes. A one-choice nonterminal row is rendered only up
+            # to its first 0xFFFF candidate sentinel.
+            source_transitions.insert(-1, ClassTransition(0x14, (0x26,)))
 
         chain_payload = bytearray()
         for transition in source_transitions[:-1]:
-            chain_payload.extend(
-                b"".join(
-                    value.to_bytes(2, "big")
-                    for value in (
-                        transition.current_class,
-                        *transition.candidates,
+            if len(transition.candidates) == 1:
+                chain_payload.extend(
+                    transition.current_class.to_bytes(2, "big")
+                    + transition.candidates[0].to_bytes(2, "big")
+                    + b"\xFF\xFF\xFF\xFF"
+                )
+            else:
+                if len(transition.candidates) != 3:
+                    raise ValueError(
+                        f"commander {commander_id} relocated transition "
+                        f"0x{transition.current_class:02X} has an invalid "
+                        "candidate count"
+                    )
+                chain_payload.extend(
+                    b"".join(
+                        value.to_bytes(2, "big")
+                        for value in (
+                            transition.current_class,
+                            *transition.candidates,
+                        )
                     )
                 )
-            )
         terminal = source_transitions[-1]
         chain_payload.extend(
             terminal.current_class.to_bytes(2, "big")
@@ -8257,7 +8313,7 @@ def patch_item_names(
     if len(item_glyphs) > ITEM_NAME_GLYPH_LOAD_MAX:
         raise ValueError(
             f"item name glyph list needs {len(item_glyphs)} slots, "
-            f"split VRAM loader supports {ITEM_NAME_GLYPH_LOAD_MAX}"
+            f"VRAM loader supports {ITEM_NAME_GLYPH_LOAD_MAX}"
         )
     end = write_word_list_exact(data, ITEM_NAME_GLYPH_LIST_RELOC_BASE, item_glyphs)
     if end >= ITEM_DESCRIPTION_GLYPH_LIST_RELOC_BASE:
@@ -8270,6 +8326,7 @@ def patch_item_names(
     loader = _build_item_name_glyph_load_routine(
         len(item_glyphs), glyph_load_target=glyph_load_target
     )
+    shop_reloader = _build_item_name_shop_reload_routine()
     popup_builder = _build_item_name_popup_stream_routine(
         pointer_table=pointer_table,
         return_target=popup_return_target,
@@ -8300,6 +8357,7 @@ def patch_item_names(
         return_target=equipment_reload_resume,
     )
     for offset, payload in (
+        (ITEM_NAME_SHOP_RELOAD_ROUTINE, shop_reloader),
         (ITEM_NAME_GLYPH_LOAD_ROUTINE, loader),
         (ITEM_NAME_POPUP_BUILD_ROUTINE, popup_builder),
         *list_renderers,
@@ -8310,6 +8368,11 @@ def patch_item_names(
         ),
         (ITEM_DISCARD_LIST_RENDER_ROUTINE, discard_list_renderer),
     ):
+        if (
+            offset == ITEM_NAME_SHOP_RELOAD_ROUTINE
+            and offset + len(payload) > ITEM_NAME_SHOP_RELOAD_ROUTINE_LIMIT
+        ):
+            raise ValueError("item-name shop reload wrapper exceeds reserved bank")
         if (
             offset == ITEM_DISCARD_LIST_RENDER_ROUTINE
             and offset + len(payload) > ITEM_DISCARD_LIST_RENDER_ROUTINE_LIMIT
@@ -8336,6 +8399,19 @@ def patch_item_names(
     if len(load_hook) != len(glyph_load_hook_original):
         raise AssertionError("item name glyph-load hook size changed")
     data[glyph_load_hook:load_hook_end] = load_hook
+
+    shop_reload_hook_end = (
+        ITEM_NAME_SHOP_RELOAD_HOOK + len(ITEM_NAME_SHOP_RELOAD_HOOK_ORIGINAL)
+    )
+    if (
+        bytes(data[ITEM_NAME_SHOP_RELOAD_HOOK:shop_reload_hook_end])
+        != ITEM_NAME_SHOP_RELOAD_HOOK_ORIGINAL
+    ):
+        raise ValueError("item-name shop reload hook changed")
+    data[ITEM_NAME_SHOP_RELOAD_HOOK:shop_reload_hook_end] = (
+        bytes.fromhex("4E B9")
+        + ITEM_NAME_SHOP_RELOAD_ROUTINE.to_bytes(4, "big")
+    )
 
     popup_build_hook_original = (
         bytes.fromhex("41 F9") + pointer_table.to_bytes(4, "big")
@@ -8645,7 +8721,7 @@ def _build_item_name_glyph_load_routine(
     glyph_load_target: int = 0x02C2C4,
 ) -> bytes:
     if not ITEM_NAME_GLYPH_PRIMARY_COUNT < glyph_count <= ITEM_NAME_GLYPH_LOAD_MAX:
-        raise ValueError(f"item name glyph count cannot use split VRAM loader: {glyph_count}")
+        raise ValueError(f"item name glyph count cannot use VRAM loader: {glyph_count}")
     overflow_count = glyph_count - ITEM_NAME_GLYPH_PRIMARY_COUNT
     return (
         bytes.fromhex("41 F9")
@@ -8666,13 +8742,31 @@ def _build_item_name_glyph_load_routine(
     )
 
 
+def _build_item_name_shop_reload_routine() -> bytes:
+    """Reload item names after the shop description DMA, preserving callers."""
+    payload = (
+        bytes.fromhex("48 E7 FF FE")
+        + bytes.fromhex("4E B9")
+        + ITEM_NAME_GLYPH_LOAD_ROUTINE.to_bytes(4, "big")
+        + bytes.fromhex("4C DF 7F FF")
+        + ITEM_NAME_SHOP_RELOAD_HOOK_ORIGINAL
+        + bytes.fromhex("4E 75")
+    )
+    if (
+        ITEM_NAME_SHOP_RELOAD_ROUTINE + len(payload)
+        > ITEM_NAME_SHOP_RELOAD_ROUTINE_LIMIT
+    ):
+        raise ValueError("item-name shop reload wrapper exceeds reserved bank")
+    return payload
+
+
 def _build_item_name_equipment_reload_routine(
     overflow_count: int,
     *,
     glyph_load_target: int = 0x02C2C4,
     return_target: int = ITEM_NAME_EQUIPMENT_RELOAD_RESUME,
 ) -> bytes:
-    if not 0 < overflow_count <= ITEM_NAME_OVERFLOW_CAPACITY:
+    if not 0 < overflow_count <= ITEM_NAME_EQUIPMENT_OVERFLOW_CAPACITY:
         raise ValueError(
             f"equipment item-name overflow count is invalid: {overflow_count}"
         )
@@ -9655,6 +9749,14 @@ def build_byte_ui_local_mapping(
                 if BYTE_UI_EXT_CODE_FIRST <= code <= BYTE_UI_EXT_CODE_LAST
                 else code
             )
+            retired_tile = BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR.get(char)
+            if retired_tile is not None:
+                consumed_tile = next(next_extension)
+                if consumed_tile != retired_tile:
+                    raise ValueError(
+                        f"retired full byte UI tile for {char!r} changed: "
+                        f"0x{consumed_tile:04X} != 0x{retired_tile:04X}"
+                    )
         else:
             try:
                 tile = next(next_extension)

@@ -9,6 +9,12 @@ COMMANDER_COUNT = 10
 REGULAR_TRANSITION_COUNT = 9
 MAX_TRANSITION_COUNT = 32
 CLASS_COUNT = 157
+# A normal row has three candidates. Relocated chains can additionally encode
+# a one-candidate row before their true terminal as
+# [current, candidate, FFFF, FFFF]. The stock selector copies candidates only
+# until the first FFFF, while its chain scanner terminates only on a FFFF
+# *current-class* word in the following record.
+INTERMEDIATE_SINGLE_CANDIDATE_SENTINEL = 0xFFFF
 
 
 @dataclass(frozen=True)
@@ -115,9 +121,25 @@ def read_class_change_chain(
                     f"commander {commander_id} terminal transition {index} "
                     "contains an invalid class ID"
                 )
-            transitions.append(
-                ClassTransition(current_class, (first_candidate,))
+            third_candidate = be16(source, offset + 6)
+            next_current = (
+                be16(source, offset + 8)
+                if offset + 10 <= len(source)
+                else INTERMEDIATE_SINGLE_CANDIDATE_SENTINEL
             )
+            if (
+                # Original six-byte terminal records are packed directly
+                # beside unrelated data, which may also look like a valid
+                # following class ID.  The explicit padded form is reserved
+                # for expanded-ROM relocation space only.
+                pointer >= 0x300000
+                and
+                third_candidate == INTERMEDIATE_SINGLE_CANDIDATE_SENTINEL
+                and next_current != INTERMEDIATE_SINGLE_CANDIDATE_SENTINEL
+            ):
+                transitions.append(ClassTransition(current_class, (first_candidate,)))
+                continue
+            transitions.append(ClassTransition(current_class, (first_candidate,)))
             break
 
         third_candidate = be16(source, offset + 6)

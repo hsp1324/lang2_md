@@ -911,6 +911,7 @@ class NameEntryResourceTests(unittest.TestCase):
             builder.BYTE_UI_RETIRED_FULL_EXT_TILE_BY_STABLE_CHAR,
             {
                 "비": 0x39C,
+                "린": 0x3A9,
                 "럴": 0x443,
                 "가": 0x444,
                 "슬": 0x499,

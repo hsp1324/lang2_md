@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
 
 from scripts import build_korean_jp_probe as builder
 from tools import build_scenario1_clear_probe_rom as clear_probe_builder
+from tools.class_hire_data import CLASS_RECORD_SIZE, CLASS_RECORD_TABLE
 from tools.scenario_data import FIELD_OFFSETS
 
 
@@ -29,6 +30,8 @@ MAGIC_MP_BRANCH_SOURCE = bytes.fromhex("66 00 00 D2")
 MAGIC_MP_BRANCH_PATCH = bytes.fromhex("60 00 00 D2")
 TARGET_BALD_X = 13
 TARGET_BALD_Y = 19
+BALD_CLASS_ID = 0x2E
+CLASS_MAGIC_RESISTANCE_OFFSET = 0x11
 
 
 def place_bald_by_hein(probe: bytearray, source: bytes) -> None:
@@ -43,6 +46,7 @@ def patch_probe(
     source: bytes,
     place_target: bool = False,
     enable_all_magic: bool = True,
+    target_magic_resistance: int | None = None,
 ) -> int:
     if place_target:
         place_bald_by_hein(probe, source)
@@ -67,6 +71,15 @@ def patch_probe(
             raise ValueError(f"input {label} changed")
         if enable_all_magic:
             probe[offset : offset + len(replacement)] = replacement
+    if target_magic_resistance is not None:
+        if not 0 <= target_magic_resistance <= 0xFF:
+            raise ValueError("target magic resistance must be 0..255")
+        resistance_offset = (
+            CLASS_RECORD_TABLE
+            + BALD_CLASS_ID * CLASS_RECORD_SIZE
+            + CLASS_MAGIC_RESISTANCE_OFFSET
+        )
+        probe[resistance_offset] = target_magic_resistance
     return builder.update_md_checksum(probe)
 
 
@@ -94,6 +107,15 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="leave both magic branches stock; useful for Hein's natural Magic Arrow",
     )
+    parser.add_argument(
+        "--target-magic-resistance",
+        type=int,
+        metavar="0_TO_255",
+        help=(
+            "diagnostic only: override Bald's class magic-resistance byte so "
+            "a magic-result overlay can be sampled deterministically"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -106,6 +128,7 @@ def main() -> int:
         source,
         place_target=args.place_bald_by_hein,
         enable_all_magic=not args.stock_magic,
+        target_magic_resistance=args.target_magic_resistance,
     )
     args.output_rom.parent.mkdir(parents=True, exist_ok=True)
     args.output_rom.write_bytes(probe)
@@ -115,6 +138,8 @@ def main() -> int:
         print("all 22 magic IDs enabled; MP rejection bypassed for diagnostics")
     if args.place_bald_by_hein:
         print(f"unguarded Bald placed at ({TARGET_BALD_X},{TARGET_BALD_Y})")
+    if args.target_magic_resistance is not None:
+        print(f"Bald magic resistance: {args.target_magic_resistance}")
     print(f"checksum: {checksum:04X}")
     print(args.output_rom)
     return 0

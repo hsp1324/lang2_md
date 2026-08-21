@@ -325,6 +325,30 @@ def parse_args() -> argparse.Namespace:
         help="seconds to keep BlastEm focused after the final confirmation",
     )
     parser.add_argument(
+        "--effect-sample-count",
+        type=int,
+        default=0,
+        help=(
+            "capture this many evenly spaced frames immediately after the final "
+            "target confirmation; useful for short-lived success/miss overlays"
+        ),
+    )
+    parser.add_argument(
+        "--effect-sample-interval",
+        type=float,
+        default=0.15,
+        help="seconds between --effect-sample-count transient-effect captures",
+    )
+    parser.add_argument(
+        "--effect-first-sample-delay",
+        type=float,
+        default=0.8,
+        help=(
+            "delay after the final target confirmation before the first transient "
+            "effect capture; lower it only when auditing a one-frame overlay"
+        ),
+    )
+    parser.add_argument(
         "--dialogue-delay",
         type=float,
         default=DEFAULT_DIALOGUE_DELAY,
@@ -459,11 +483,22 @@ def main() -> int:
                 return 0
             if args.final_confirmations < 1:
                 raise ValueError("final confirmations must be at least one")
+            if args.effect_sample_count < 0:
+                raise ValueError("effect sample count must not be negative")
+            if args.effect_sample_interval <= 0:
+                raise ValueError("effect sample interval must be positive")
+            if args.effect_first_sample_delay < 0:
+                raise ValueError("effect first sample delay must not be negative")
             for index in range(args.final_confirmations):
+                is_final_confirmation = index + 1 == args.final_confirmations
                 delay = (
                     args.effect_delay
-                    if index + 1 == args.final_confirmations
-                    else 0.8
+                    if is_final_confirmation and not args.effect_sample_count
+                    else (
+                        args.effect_first_sample_delay
+                        if is_final_confirmation
+                        else 0.8
+                    )
                 )
                 send_keys(f"c@0.12:{delay}")
                 if index + 1 < args.final_confirmations:
@@ -478,6 +513,15 @@ def main() -> int:
                             confirmed_state,
                             args.confirmed_gst_output,
                         )
+
+            if args.effect_sample_count:
+                for sample_index in range(args.effect_sample_count):
+                    capture(Path(f"{prefix}_effect_{sample_index + 1:02d}.png"))
+                    if sample_index + 1 < args.effect_sample_count:
+                        time.sleep(args.effect_sample_interval)
+                elapsed = args.effect_sample_count * args.effect_sample_interval
+                if args.effect_delay > elapsed:
+                    time.sleep(args.effect_delay - elapsed)
 
         state, current_mp, max_mp = save_and_read_mp(runtime_name)
         if current_mp >= max_mp:

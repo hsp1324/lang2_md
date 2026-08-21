@@ -18,6 +18,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
         protagonist_death: bool = False,
         turn_event: int | None = None,
         turn_event_branch: str = "stock",
+        enemy_defeat_record: int | None = None,
     ) -> bytearray:
         data = bytearray(self.production)
         probe_builder.patch_probe(
@@ -27,6 +28,7 @@ class Scenario15ClearProbeTests(unittest.TestCase):
             protagonist_death=protagonist_death,
             turn_event=turn_event,
             turn_event_branch=turn_event_branch,
+            enemy_defeat_record=enemy_defeat_record,
         )
         return data
 
@@ -303,6 +305,67 @@ class Scenario15ClearProbeTests(unittest.TestCase):
                     bytes.fromhex("4E F9")
                     + probe_builder.START_MENU_ENTRY.to_bytes(4, "big"),
                 )
+
+    def test_enemy_defeat_mode_changes_only_selected_commander_combat_fields(self):
+        layout = scenario_layout(self.source, probe_builder.SCENARIO_NUMBER)
+        for index in probe_builder.VISIBLE_ENEMY_RECORD_INDEXES:
+            with self.subTest(index=index):
+                data = self.patched(enemy_defeat_record=index)
+                base = layout.records_offset + index * FIXED_RECORD_SIZE
+                expected_changes = {
+                    0x18E,
+                    0x18F,
+                    base + FIELD_OFFSETS["at"],
+                    base + FIELD_OFFSETS["df"],
+                    base + FIELD_OFFSETS["x"],
+                    base + FIELD_OFFSETS["y"],
+                    *(
+                        base + FIELD_OFFSETS["mercenaries"] + slot
+                        for slot in range(6)
+                    ),
+                }
+                changed = {
+                    offset
+                    for offset, (before, after) in enumerate(
+                        zip(self.production, data)
+                    )
+                    if before != after
+                }
+                self.assertLessEqual(changed, expected_changes)
+                self.assertEqual(data[base + FIELD_OFFSETS["at"]], 0)
+                self.assertEqual(data[base + FIELD_OFFSETS["df"]], 0)
+                self.assertEqual(
+                    (
+                        data[base + FIELD_OFFSETS["x"]],
+                        data[base + FIELD_OFFSETS["y"]],
+                    ),
+                    probe_builder.ENEMY_DEFEAT_TARGET_POSITION,
+                )
+                mercenaries = base + FIELD_OFFSETS["mercenaries"]
+                self.assertEqual(
+                    data[mercenaries : mercenaries + 6], b"\xFF" * 6
+                )
+                for other in range(layout.record_count):
+                    if other == index:
+                        continue
+                    other_base = layout.records_offset + other * FIXED_RECORD_SIZE
+                    self.assertEqual(
+                        data[other_base : other_base + FIXED_RECORD_SIZE],
+                        self.source[other_base : other_base + FIXED_RECORD_SIZE],
+                    )
+
+    def test_enemy_defeat_mode_rejects_hidden_or_conflicting_records(self):
+        for index in (0, *probe_builder.HIDDEN_ENEMY_RECORD_INDEXES, 12):
+            with self.subTest(index=index):
+                with self.assertRaisesRegex(ValueError, "enemy-defeat record"):
+                    self.patched(enemy_defeat_record=index)
+        with self.assertRaisesRegex(ValueError, "diagnostic modes conflict"):
+            probe_builder.patch_probe(
+                bytearray(self.production),
+                self.source,
+                completion_layout=True,
+                enemy_defeat_record=1,
+            )
 
     def test_source_locks_event_pointer_table_scheduled_table_and_handlers(self):
         self.assertEqual(

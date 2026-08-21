@@ -171,7 +171,10 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                 patched_chain = read_class_change_chain(
                     patched, commander_id
                 )
-                self.assertEqual(len(patched_chain), len(source_chain) + 1)
+                self.assertEqual(
+                    len(patched_chain),
+                    len(source_chain) + (1 if commander_id == 7 else 2),
+                )
                 self.assertEqual(
                     transition_for_class(patched, commander_id, 0x01).candidates,
                     (
@@ -187,6 +190,15 @@ class JoinClassChoiceProgressionTests(unittest.TestCase):
                 self.assertEqual(
                     builder.be32(patched, pointer_offset), relocation
                 )
+                if commander_id == 9:
+                    self.assertEqual(
+                        transition_for_class(patched, 9, 0x14).candidates,
+                        (0x26,),
+                    )
+                    self.assertEqual(
+                        transition_for_class(patched, 9, 0x1F).candidates,
+                        (0x2A,),
+                    )
 
                 fighter_sprite = builder.commander_sprite_record_offset(
                     patched, commander_id, 0x01

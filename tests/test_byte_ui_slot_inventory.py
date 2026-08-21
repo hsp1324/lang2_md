@@ -49,10 +49,12 @@ class ByteUiSlotInventoryTests(unittest.TestCase):
         }
         self.assertEqual(
             set(retired),
-            {"0x039C", "0x0443", "0x0444", "0x0499", "0x049A"},
+            {"0x039C", "0x03A9", "0x0443", "0x0444", "0x0499", "0x049A"},
         )
         self.assertEqual(retired["0x039C"][0], "비")
         self.assertIn("battle animation", retired["0x039C"][1])
+        self.assertEqual(retired["0x03A9"][0], "린")
+        self.assertIn("magic-miss", retired["0x03A9"][1])
 
     def test_heavy_horseman_uses_battle_stable_bi_tile(self):
         by_char = {
@@ -63,6 +65,16 @@ class ByteUiSlotInventoryTests(unittest.TestCase):
         self.assertEqual(by_char["비"]["allocation"], "battle_stable")
         self.assertEqual(by_char["적"]["vram_tile"], "0x00A6")
         self.assertEqual(by_char["적"]["allocation"], "dynamic_scratch")
+
+    def test_magic_miss_keeps_its_two_original_font_tiles(self):
+        by_char = {
+            entry["char"]: entry
+            for entry in self.inventory["local_indexes"]
+        }
+        self.assertEqual(by_char["프"]["byte_code"], "0xF7")
+        self.assertEqual(by_char["프"]["vram_tile"], "0x03F7")
+        self.assertEqual(by_char["린"]["byte_code"], "0xF8")
+        self.assertEqual(by_char["린"]["vram_tile"], "0x03F8")
 
 
 if __name__ == "__main__":
