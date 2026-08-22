@@ -1,8 +1,7 @@
 # v1.4.0 일반 사용자용 패치 배포
 
-> 상태: **v1.4.0 브랜치 배포**. GitHub Release에는 운영체제별 패처 5개만
-> 올리고 ROM과 BPS 파일은 별도로 배포하지 않습니다. `main` 병합은 사용자
-> 검증 뒤 수동으로 진행합니다.
+> 상태: **v1.4.0 정식 배포**. GitHub Release에는 운영체제별 패처 5개만
+> 올리고 ROM과 BPS 파일은 별도로 배포하지 않습니다.
 
 일본판 `Langrisser II (Japan)` ROM 또는 그 ROM이 들어 있는 ZIP을 패처에서
 고르면 Original·Normal·Hard ROM 세 개가 생성됩니다.
@@ -24,9 +23,9 @@ SHA-256: a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b
 
 | 판 | MD 체크섬 | SHA-256 |
 | --- | --- | --- |
-| Original | `9591` | `b676900e948e8dcc4ae9857924a4a4edcd07a6798cf176978b6451f7d2ebb9bf` |
-| Normal | `3635` | `9fc10c646cbfb705992adce4664e53afb527f2a0feae1b5155b630f904d66052` |
-| Hard | `D3E0` | `9783eeb9ee639a153f5fd49839ea0535e46c57336952da81bca62cde6c2db05a` |
+| Original | `070E` | `27bf66ae23b98dbb3460c20e899566bf5e55f83f080fe5b1ee72e053845e1418` |
+| Normal | `A7B2` | `6ee6b5e4a2829dd190e07d348d69dc170d2485ab3370968fe4446c5db137a1af` |
+| Hard | `455D` | `df24cae24fded4e10626f016ecba71e63eb304494a5102c7703f8ee0315b8230` |
 
 ## 공개 Release 자산 계약
 

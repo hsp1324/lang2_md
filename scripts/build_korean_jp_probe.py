@@ -3130,11 +3130,13 @@ SCENARIO0_BODY_SEGMENTS = (
     "홀로 여행을 떠난 젊은이의 이름은 ",
     "이었다. 여행길에 오른 그는 살라스 영지의 한 마을에서 여독을 풀고 있었다. 붙임성 "
     "좋은 그는 며칠 새 주민들과 친해졌다. 그중 어린 마법사 헤인은 ",
-    "을 잘 따랐고 둘은 오랜 친구처럼 가까워졌다. 그러던 어느 날 헤인은 ",
+    "을 잘 따랐고 둘은 오랜 친구처럼 가까워졌다. 평온하던\n어느 날 헤인은 ",
     "이 머무는 여관으로 뛰어들었다. 제국 기사단이 마을 외곽에 쳐들어왔다며 그는 매우 다급히 "
     "말했다. 위험에 처한 이는 헤인의 소꿉친구 리아나였다. ",
     "은 리아나를 구하기 위해 검을 들었다.",
 )
+SCENARIO0_BODY_FIRST_NEWLINE_TOKEN = 164
+SCENARIO0_BODY_SECOND_LINE_START_TOKEN = 165
 SCENARIO0_BODY = "".join(SCENARIO0_BODY_SEGMENTS)
 DEFERRED_SCENARIO0_DESCRIPTION_GLYPH_TEXT = "".join(
     dict.fromkeys(
@@ -6159,6 +6161,12 @@ def make_scenario0_record(
     fill_span(1, 14, SCENARIO0_TITLE, center=True)
     fill_span(15, 26, SCENARIO0_SUBTITLE, center=True)
 
+    # The Japanese record places this newline one cell too late for the Korean
+    # phrase, splitting `어느 날` as `어` / `느 날`. Move only that newline
+    # one token earlier; the following cell becomes ordinary body text, so the
+    # record length and every dynamic-name control position remain unchanged.
+    tokens[SCENARIO0_BODY_FIRST_NEWLINE_TOKEN] = 0xFFFE
+
     control_param_positions = {
         pos
         for pos, token in enumerate(tokens[:-1])
@@ -6167,7 +6175,11 @@ def make_scenario0_record(
     }
     body_positions = [
         pos
-        for pos in [*range(28, 165), *range(166, 256), *range(257, 283)]
+        for pos in [
+            *range(28, SCENARIO0_BODY_FIRST_NEWLINE_TOKEN),
+            *range(SCENARIO0_BODY_SECOND_LINE_START_TOKEN, 256),
+            *range(257, 283),
+        ]
         if pos not in control_param_positions
     ]
     body_name_controls = [
@@ -6182,14 +6194,14 @@ def make_scenario0_record(
     expected_name_offsets: list[int] = []
     body_cursor = 0
     for segment in SCENARIO0_BODY_SEGMENTS[:-1]:
-        body_cursor += len(segment)
+        body_cursor += len(segment.replace("\n", ""))
         expected_name_offsets.append(body_cursor)
     if actual_name_offsets != expected_name_offsets:
         raise ValueError(
             "scenario 0 dynamic-name boundaries changed: "
             f"{actual_name_offsets!r} != {expected_name_offsets!r}"
         )
-    body_text = SCENARIO0_BODY.replace("\n", " ")
+    body_text = SCENARIO0_BODY.replace("\n", "")
     if len(body_text) < len(body_positions) - 2:
         raise ValueError(
             "scenario 0 body is too short and would leave name-control pages blank "

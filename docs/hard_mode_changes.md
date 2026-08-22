@@ -16,8 +16,8 @@
 - 원작 디자인판 수정: 없음
 - 일반판 수정: 없음
 - 하드 후보 ROM: `roms/builds/Langrisser II (Korean Hard v1.4.0).md`
-- 하드 체크섬: `D3E0`
-- 하드 SHA-256: `9783eeb9ee639a153f5fd49839ea0535e46c57336952da81bca62cde6c2db05a`
+- 하드 체크섬: `455D`
+- 하드 SHA-256: `df24cae24fded4e10626f016ecba71e63eb304494a5102c7703f8ee0315b8230`
 
 ## 승인·적용 요약
 
