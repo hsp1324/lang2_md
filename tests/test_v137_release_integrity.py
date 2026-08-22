@@ -256,9 +256,9 @@ class V138ReleaseIntegrityTests(unittest.TestCase):
                 self.assertIn("patches/normal-v1.3.8.bps", workflow)
                 self.assertIn("patches/hard-v1.3.8.bps", workflow)
 
-    def test_public_readme_links_published_v138_assets(self):
+    def test_public_readme_links_current_release_assets(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("/releases/download/v1.3.8/", readme)
+        self.assertIn("/releases/download/v1.3.9/", readme)
 
     def test_validation_records_targeted_scenario2_color_check(self):
         validation = (ROOT / "docs/v1.3.8_validation.md").read_text(

@@ -1,8 +1,7 @@
 # v1.3.9 일반 사용자용 패치 배포
 
-> 상태: **v1.3.9 비공개 검증 중**. 공개 전까지 GitHub Release와 태그를 만들지
-> 않습니다. 검증이 끝나면 운영체제별 패처 5개만 올리고 ROM과 BPS 파일은
-> 별도로 배포하지 않습니다.
+> 상태: **v1.3.9 공개 배포 완료**. GitHub Release에는 운영체제별 패처 5개만
+> 올리고 ROM과 BPS 파일은 별도로 배포하지 않습니다.
 
 일본판 `Langrisser II (Japan)` ROM 또는 그 ROM이 들어 있는 ZIP을 패처에서
 고르면 Original·Normal·Hard ROM 세 개가 생성됩니다. 원본 ROM과 기존 SRAM은

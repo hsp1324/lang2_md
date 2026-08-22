@@ -12,7 +12,7 @@ DISTRIBUTION_DOC = ROOT / "docs/player_patch_distribution_v1.3.9.md"
 
 
 class V139ReleaseAssetContractTests(unittest.TestCase):
-    def test_candidate_has_exactly_five_unique_platform_assets(self):
+    def test_release_has_exactly_five_unique_platform_assets(self):
         self.assertEqual(assets.RELEASE_TAG, "v1.3.9")
         self.assertEqual(assets.RELEASE_TITLE, "v1.3.9")
         self.assertEqual(len(assets.PATCHER_ASSET_FILENAMES), 5)
@@ -34,7 +34,7 @@ class V139ReleaseAssetContractTests(unittest.TestCase):
                 self.assertIn("--clobber", workflow)
                 self.assertIn("--self-test", workflow)
 
-    def test_distribution_draft_and_readme_keep_a_non_404_contract(self):
+    def test_distribution_and_readme_keep_a_non_404_contract(self):
         document = DISTRIBUTION_DOC.read_text(encoding="utf-8")
         release_section = document.split(
             "v1.3.9 Release에는 다음 플랫폼 패처를 정확히 5개만 올립니다.",
@@ -45,8 +45,8 @@ class V139ReleaseAssetContractTests(unittest.TestCase):
             tuple(line for line in asset_block.splitlines() if line),
             assets.PATCHER_ASSET_FILENAMES,
         )
-        self.assertIn("상태: **v1.3.9 비공개 검증 중**", document)
+        self.assertIn("상태: **v1.3.9 공개 배포 완료**", document)
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         links = re.findall(r"/releases/download/(v\d+\.\d+\.\d+)/", readme)
-        self.assertEqual(set(links), {"v1.3.8"})
-        self.assertIn("404가 됩니다", readme)
+        self.assertEqual(set(links), {"v1.3.9"})
+        self.assertNotIn("아직 공개하지 않았으므로", readme)

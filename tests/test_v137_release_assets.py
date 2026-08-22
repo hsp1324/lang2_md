@@ -3,6 +3,7 @@ import re
 import unittest
 
 from tools import v138_release_assets as assets
+from tools import v139_release_assets as current_assets
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -94,9 +95,10 @@ class V138ReleaseAssetContractTests(unittest.TestCase):
         tags = {tag for tag, _ in links}
         self.assertEqual(len(tags), 1)
         public_tag = tags.pop()
+        self.assertEqual(public_tag, current_assets.RELEASE_TAG)
         self.assertEqual(
             {filename for _, filename in links},
-            set(assets.filenames_for_release(public_tag)),
+            set(current_assets.PATCHER_ASSET_FILENAMES),
         )
 
 
