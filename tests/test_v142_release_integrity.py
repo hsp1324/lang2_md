@@ -3,16 +3,18 @@ import json
 from pathlib import Path
 import unittest
 
+from patcher import langrisser_ii_korean_patcher as patcher
 from scripts import build_korean_jp_probe as builder
 from tools.build_hard_mode_rom import verify_applied_hard_mode
-from tools.build_v141_release_patches import MANIFEST_PATH, SOURCE_PATH, TARGETS, build
+from tools.build_v142_release_patches import MANIFEST_PATH, SOURCE_PATH, TARGETS, build
 from tools.rom_update import bps_apply, md_sram_descriptor
+from tools.rom_version import get_profile
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-class V141ReleaseIntegrityTests(unittest.TestCase):
+class V142ReleaseIntegrityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         if not SOURCE_PATH.is_file():
@@ -29,7 +31,7 @@ class V141ReleaseIntegrityTests(unittest.TestCase):
 
     def test_manifest_bps_and_release_roms_are_reproducible(self):
         self.assertEqual(build(check=True), self.manifest)
-        self.assertEqual(self.manifest["release"], "v1.4.1")
+        self.assertEqual(self.manifest["release"], "v1.4.2")
         specs = {str(spec["id"]): spec for spec in TARGETS}
         for row in self.manifest["targets"]:
             target = self.targets[row["id"]]
@@ -47,18 +49,21 @@ class V141ReleaseIntegrityTests(unittest.TestCase):
                 )
         verify_applied_hard_mode(self.targets["hard"])
 
-    def test_historical_manifest_keeps_the_v141_filename_contract(self):
-        self.assertEqual(
-            {
-                row["id"]: row["output_filename"]
-                for row in self.manifest["targets"]
-            },
-            {
-                "pure": "Langrisser II (Korean Original v1.4.1).md",
-                "normal": "Langrisser II (Korean Normal v1.4.1).md",
-                "hard": "Langrisser II (Korean Hard v1.4.1).md",
-            },
-        )
+    def test_profiles_and_patcher_name_the_same_release(self):
+        expected = {
+            "pure": ("ko-original-1.4.2", None, "ko-original-1.4.1"),
+            "normal": ("ko-normal-1.4.2", None, "ko-normal-1.4.1"),
+            "hard": ("ko-hard-1.4.2", "1.4.2", "ko-hard-1.4.1"),
+        }
+        for profile_name, values in expected.items():
+            profile = get_profile(profile_name)
+            with self.subTest(profile=profile_name):
+                self.assertEqual(profile["release_id"], values[0])
+                self.assertEqual(profile["translation_version"], "1.4.2")
+                self.assertEqual(profile["balance_version"], values[1])
+                self.assertEqual(profile["base_release"], values[2])
+        self.assertEqual(patcher.PATCHER_RELEASE, "v1.4.2")
+        self.assertEqual(patcher.MANIFEST_FILENAME, "v1.4.2.json")
 
     def test_original_uses_stock_tier_two_join_records(self):
         pure = self.targets["pure"]
@@ -122,9 +127,9 @@ class V141ReleaseIntegrityTests(unittest.TestCase):
                     0x07EB,
                 )
 
-    def test_v140_delta_is_only_version_checksum_and_hire_glyph_slots(self):
+    def test_v141_delta_is_only_version_checksum_and_x4_requirements(self):
         previous_manifest = json.loads(
-            (ROOT / "patches/v1.4.0.json").read_text(encoding="utf-8")
+            (ROOT / "patches/v1.4.1.json").read_text(encoding="utf-8")
         )
         previous = {
             row["id"]: bps_apply(
@@ -137,28 +142,23 @@ class V141ReleaseIntegrityTests(unittest.TestCase):
             "pure": {
                 0x00016F,
                 0x00018E,
-                0x00018F,
                 0x2B7EEA,
-                0x2BE9E1,
-                0x2BEA08,
             },
             "normal": {
                 0x00016A,
                 0x00018E,
-                0x00018F,
+                0x017391,
+                0x01739F,
                 0x2B7EEA,
-                0x2BE9E1,
-                0x2BEA08,
             },
             "hard": {
                 0x00016A,
                 0x000171,
                 0x00018E,
-                0x00018F,
+                0x017391,
+                0x01739F,
                 0x2B8A12,
                 0x2B8A32,
-                0x2BE9E1,
-                0x2BEA08,
             },
         }
         for profile_name, target in self.targets.items():
@@ -171,5 +171,14 @@ class V141ReleaseIntegrityTests(unittest.TestCase):
             }
             with self.subTest(profile=profile_name):
                 self.assertEqual(changed, expected[profile_name])
-                self.assertEqual(target[0x2BE9E1], 24)
-                self.assertEqual(target[0x2BEA08], 25)
+                requirement = target[
+                    builder.SCENARIO26_DEATH_TOWER_REQUIREMENT_ROUTINE:
+                    builder.SCENARIO26_DEATH_TOWER_REQUIREMENT_ROUTINE
+                    + len(builder.SCENARIO26_DEATH_TOWER_REQUIREMENT_SOURCE)
+                ]
+                self.assertEqual(
+                    requirement,
+                    builder.SCENARIO26_DEATH_TOWER_REQUIREMENT_SOURCE
+                    if profile_name == "pure"
+                    else builder.SCENARIO26_DEATH_TOWER_REQUIREMENT_NATURAL,
+                )

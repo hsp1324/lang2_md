@@ -3,7 +3,7 @@ import re
 import unittest
 
 from tools import v138_release_assets as assets
-from tools import v141_release_assets as current_assets
+from tools import v142_release_assets as current_assets
 
 
 ROOT = Path(__file__).resolve().parents[1]

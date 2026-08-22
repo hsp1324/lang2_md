@@ -8,7 +8,7 @@ from unittest import mock
 import zipfile
 
 from patcher import langrisser_ii_korean_patcher as patcher
-from tools.build_v141_release_patches import (
+from tools.build_v142_release_patches import (
     SOURCE_PATH,
     TARGETS,
     build,
@@ -26,7 +26,7 @@ class CurrentReleasePatcherTests(unittest.TestCase):
 
     def test_committed_bps_assets_are_reproducible(self):
         manifest = build(check=True)
-        self.assertEqual(manifest["release"], "v1.4.1")
+        self.assertEqual(manifest["release"], "v1.4.2")
         self.assertEqual(
             {record["id"] for record in manifest["targets"]},
             {"pure", "normal", "hard"},
@@ -80,9 +80,9 @@ class CurrentReleasePatcherTests(unittest.TestCase):
             self.assertEqual(
                 {result.output_path.name for result in results},
                 {
-                    "Langrisser II (Korean Original v1.4.1).md",
-                    "Langrisser II (Korean Normal v1.4.1).md",
-                    "Langrisser II (Korean Hard v1.4.1).md",
+                    "Langrisser II (Korean Original v1.4.2).md",
+                    "Langrisser II (Korean Normal v1.4.2).md",
+                    "Langrisser II (Korean Hard v1.4.2).md",
                 },
             )
             for spec in TARGETS:
@@ -210,8 +210,8 @@ class CurrentReleasePatcherTests(unittest.TestCase):
 
     def test_frozen_macos_defaults_next_to_app_bundle(self):
         executable = Path(
-            "/Users/player/Downloads/Langrisser II Korean Patcher v1.4.1.app/"
-            "Contents/MacOS/Langrisser II Korean Patcher v1.4.1"
+            "/Users/player/Downloads/Langrisser II Korean Patcher v1.4.2.app/"
+            "Contents/MacOS/Langrisser II Korean Patcher v1.4.2"
         )
         with (
             mock.patch.object(patcher.sys, "frozen", True, create=True),
