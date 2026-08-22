@@ -6937,6 +6937,25 @@ SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE = bytes.fromhex(
     "D8 AC 08 F0 00 00 05 04 07 04 00 18 D8 D8 FF FF"
 )
 
+# Scenario 26 dispatches event command 0x30 immediately before Egbert's
+# optional Death Tower challenge.  The stock command checks the clear-turn
+# ledger for Scenarios 1..26, skips Scenario 27, then checks X1..X3.  Because
+# the current Scenario 26 turn is recorded only after this event finishes, the
+# first natural clear can never pass the stock test.  Normal and Hard keep the
+# remaining completion/no-retreat checks but test only Scenarios 1..25 before
+# advancing two bytes to the X1 entry.
+SCENARIO26_DEATH_TOWER_REQUIREMENT_ROUTINE = 0x017386
+SCENARIO26_DEATH_TOWER_REQUIREMENT_SOURCE = bytes.fromhex(
+    "42 79 FF FF AA 2C 43 F8 A4 AA 70 19 4A 19 67 00 00 5E "
+    "51 C8 FF F8 D2 FC 00 01 70 02 4A 19 67 00 00 4E 51 C8 FF F8"
+)
+SCENARIO26_DEATH_TOWER_REQUIREMENT_NATURAL = bytes.fromhex(
+    "42 79 FF FF AA 2C 43 F8 A4 AA 70 18 4A 19 67 00 00 5E "
+    "51 C8 FF F8 D2 FC 00 02 70 02 4A 19 67 00 00 4E 51 C8 FF F8"
+)
+SCENARIO26_DEATH_TOWER_GATE = 0x1B23AE
+SCENARIO26_DEATH_TOWER_GATE_SOURCE = bytes.fromhex("30 FF 00 1B 24 06")
+
 # Scenario 31 fixed commander record 8 is the left-hand Demon Lord on the
 # upper floor.  The Japanese data accidentally repeats name ID 0x65 from
 # record 6, while the stock death-event table has a distinct, otherwise
@@ -6965,6 +6984,37 @@ def patch_scenario6_runestone_accessibility(
     if data[start:end] != SCENARIO6_RUNESTONE_TRIGGER_SOURCE:
         raise ValueError("input Scenario 6 Rune Stone trigger changed")
     data[start:end] = SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE
+
+
+def patch_scenario26_natural_death_tower_unlock(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    """Allow the first natural Scenario 26 clear to offer Death Tower.
+
+    Only the impossible current-Scenario-26 ledger requirement is removed.
+    Event command 0x30 continues to require nonzero clear records for
+    Scenarios 1..25 and X1..X3, living deployed player commanders, and zero
+    cumulative retreats across the persistent ten-commander roster.
+    """
+
+    start = SCENARIO26_DEATH_TOWER_REQUIREMENT_ROUTINE
+    end = start + len(SCENARIO26_DEATH_TOWER_REQUIREMENT_SOURCE)
+    gate = SCENARIO26_DEATH_TOWER_GATE
+    gate_end = gate + len(SCENARIO26_DEATH_TOWER_GATE_SOURCE)
+    for label, payload in (("Japanese", source), ("input", data)):
+        if (
+            payload[start:end]
+            != SCENARIO26_DEATH_TOWER_REQUIREMENT_SOURCE
+        ):
+            raise ValueError(
+                f"{label} Scenario 26 Death Tower requirement changed"
+            )
+        if payload[gate:gate_end] != SCENARIO26_DEATH_TOWER_GATE_SOURCE:
+            raise ValueError(
+                f"{label} Scenario 26 Death Tower event gate changed"
+            )
+    data[start:end] = SCENARIO26_DEATH_TOWER_REQUIREMENT_NATURAL
 
 
 def patch_scenario31_demon_lord_identity(
@@ -7089,6 +7139,7 @@ def patch_profile_user_customizations(
     patch_join_class_choice_ownership_guard(data, source)
     patch_join_class_choice_target_levels(data, source)
     patch_scenario6_runestone_accessibility(data, source)
+    patch_scenario26_natural_death_tower_unlock(data, source)
     patch_scenario31_demon_lord_identity(data, source)
     if profile_name == "hard":
         patch_hard_mode_shop_training_items(data, source)
