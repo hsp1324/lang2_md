@@ -45,6 +45,12 @@ DEFAULT_HARD_PLAN = ROOT / "localization/hard_mode_plan.json"
 DEFAULT_OUTPUT = ROOT / "tmp/preparation-glyph-conflicts.json"
 PLAYABLE_CLASS_FIRST = 0x01
 PLAYABLE_CLASS_LAST = 0x2A
+HIRE_SCREEN_CLASS_IDS = (
+    *range(PLAYABLE_CLASS_FIRST, PLAYABLE_CLASS_LAST + 1),
+    0x2B,  # custom Hawk Lord first-tier route
+    0x2C,  # custom Croco Lord first-tier route
+    0x4D,  # Royal Guard regression: 가 must not overwrite Gladiator's 디
+)
 ROSTER_PAGE_SIZE = 5
 HIRE_PAGE_SIZE = 3
 REGRESSION_PAIRS = (
@@ -53,6 +59,8 @@ REGRESSION_PAIRS = (
     ("니", "키"),  # 아니키
     ("랜", "쉐"),  # 하이랜더 / 쉐리 roster
     ("랜", "제"),  # 하이랜더 / 제시카 roster
+    ("가", "디"),  # 로얄가드 / 글래디에이터 hiring page
+    ("가", "엔"),  # 로얄가드 / 엔젤 hiring page
 )
 
 
@@ -162,7 +170,7 @@ def build_contexts(
         )
         for commander_id in commander_ids:
             selected_name = KOREAN_NAME_BY_ID[commander_id]
-            for class_id in range(PLAYABLE_CLASS_FIRST, PLAYABLE_CLASS_LAST + 1):
+            for class_id in HIRE_SCREEN_CLASS_IDS:
                 selected_class = KOREAN_CLASS_LABELS[class_id]
                 _append_context(
                     contexts,

@@ -1,0 +1,118 @@
+name: Build v1.4.1 Windows patcher
+
+on:
+  push:
+    branches: [v1.4.1]
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  windows-patcher:
+    if: >-
+      ${{ github.event_name == 'push' ||
+          github.event_name == 'workflow_dispatch' ||
+          github.event.release.tag_name == 'v1.4.1' }}
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install builder
+        run: >-
+          python -m pip install --disable-pip-version-check
+          pyinstaller==6.21.0 pefile==2024.8.26
+
+      - name: Verify packaged assets
+        run: >-
+          python -c "from patcher.langrisser_ii_korean_patcher import
+          load_release_manifest; m=load_release_manifest();
+          assert m['release']=='v1.4.1'; assert len(m['targets'])==3"
+
+      - name: Build single-file Windows patcher
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force "package-patches" | Out-Null
+          $assets = @(
+            "patches/v1.4.1.json"
+            "patches/original-v1.4.1.bps"
+            "patches/normal-v1.4.1.bps"
+            "patches/hard-v1.4.1.bps"
+          )
+          Copy-Item -Path $assets -Destination "package-patches"
+          pyinstaller `
+            --noconfirm `
+            --clean `
+            --onefile `
+            --console `
+            --hide-console hide-early `
+            --name "Langrisser-II-Korean-Patcher-v1.4.1" `
+            --paths "." `
+            --add-data "package-patches;patches" `
+            "patcher/langrisser_ii_korean_patcher.py"
+
+      - name: Verify executable and write checksum
+        shell: pwsh
+        run: |
+          $exe = "dist/Langrisser-II-Korean-Patcher-v1.4.1.exe"
+          if (-not (Test-Path $exe)) { throw "Patcher executable is missing" }
+          & $exe --self-test
+          if ($LASTEXITCODE -ne 0) { throw "Embedded patch self-test failed" }
+          $bytes = [System.IO.File]::ReadAllBytes($exe)
+          if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) {
+            throw "Patcher is not a Windows PE executable"
+          }
+          @'
+          from pathlib import Path
+          import pefile
+
+          path = Path("dist/Langrisser-II-Korean-Patcher-v1.4.1.exe")
+          pe = pefile.PE(str(path), fast_load=True)
+          if pe.FILE_HEADER.Machine != 0x8664:
+              raise SystemExit("Patcher PE Machine is not AMD64")
+          if pe.OPTIONAL_HEADER.Magic != 0x020B:
+              raise SystemExit("Patcher PE optional header is not PE32+")
+          pe.parse_data_directories(
+              directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_IMPORT"]]
+          )
+          imports = [
+              (entry.dll.decode("ascii", errors="replace").lower(), symbol.ordinal)
+              for entry in getattr(pe, "DIRECTORY_ENTRY_IMPORT", ())
+              for symbol in entry.imports
+          ]
+          if ("comctl32.dll", 380) in imports:
+              raise SystemExit("Unsafe PyInstaller windowed bootloader import detected")
+          '@ | python -
+          $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
+          [System.IO.File]::WriteAllText(
+            "dist/SHA256SUMS.txt",
+            "$hash  Langrisser-II-Korean-Patcher-v1.4.1.exe`n",
+            [System.Text.Encoding]::ASCII
+          )
+
+      - name: Upload Windows release asset
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Langrisser-II-Korean-Patcher-v1.4.1
+          if-no-files-found: error
+          path: |
+            dist/Langrisser-II-Korean-Patcher-v1.4.1.exe
+            dist/SHA256SUMS.txt
+
+      - name: Publish Windows patcher to the triggering release
+        if: github.event_name == 'release'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit "${{ github.event.release.tag_name }}" --title "v1.4.1"
+          gh release upload "${{ github.event.release.tag_name }}" "dist/Langrisser-II-Korean-Patcher-v1.4.1.exe" --clobber

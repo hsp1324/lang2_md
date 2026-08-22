@@ -943,7 +943,7 @@ BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS = (
     "곤록린멜서전킹히",
     "노멘비",
     "골라럴켈",
-    "가디몬엔커",
+    "디몬엔커",
     "데팔",
     "랑",
     "키",
@@ -958,8 +958,8 @@ BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS = (
     "더딘먼",
     "글",
     "숍실힐",
-    "화",
-    "헬",
+    "화프",
+    "가헬",
 )
 BYTE_UI_PREP_DYNAMIC_CHARS = tuple(
     char

@@ -5,26 +5,26 @@
   "profiles": {
     "pure": {
       "status": "release_candidate",
-      "release_id": "ko-original-1.4.0",
-      "translation_version": "1.4.0",
+      "release_id": "ko-original-1.4.1",
+      "translation_version": "1.4.1",
       "balance_version": null,
-      "base_release": "ko-original-1.3.9",
+      "base_release": "ko-original-1.4.0",
       "save_format": "lang2-ko-sram-v1"
     },
     "normal": {
       "status": "release_candidate",
-      "release_id": "ko-normal-1.4.0",
-      "translation_version": "1.4.0",
+      "release_id": "ko-normal-1.4.1",
+      "translation_version": "1.4.1",
       "balance_version": null,
-      "base_release": "ko-normal-1.3.9",
+      "base_release": "ko-normal-1.4.0",
       "save_format": "lang2-ko-sram-v1"
     },
     "hard": {
       "status": "release_candidate",
-      "release_id": "ko-hard-1.4.0",
-      "translation_version": "1.4.0",
-      "balance_version": "1.4.0",
-      "base_release": "ko-hard-1.3.9",
+      "release_id": "ko-hard-1.4.1",
+      "translation_version": "1.4.1",
+      "balance_version": "1.4.1",
+      "base_release": "ko-hard-1.4.0",
       "save_format": "lang2-ko-sram-v1"
     }
   }

@@ -19,7 +19,7 @@ class PreparationGlyphConflictTests(unittest.TestCase):
         cls.report = verifier.verify_contexts(cls.contexts)
 
     def test_all_normal_hard_and_synthetic_surfaces_are_collision_free(self) -> None:
-        self.assertEqual(self.report["surface_context_count"], 64890)
+        self.assertEqual(self.report["surface_context_count"], 69449)
         self.assertEqual(self.report["conflict_count"], 0)
         self.assertEqual(self.report["status"], "pass")
 

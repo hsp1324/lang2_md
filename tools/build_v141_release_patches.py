@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Rebuild and verify the v1.4.0 Japanese-ROM BPS patches."""
+"""Rebuild and verify the v1.4.1 Japanese-ROM BPS patches."""
 
 from __future__ import annotations
 
 import argparse
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 
@@ -15,10 +16,11 @@ if str(ROOT) not in sys.path:
 
 from tools.build_hard_mode_rom import verify_applied_hard_mode  # noqa: E402
 from tools.rom_update import bps_apply, bps_create, sha256_bytes  # noqa: E402
+from tools.rom_version import get_profile  # noqa: E402
 from tools.v138_release_identity import JAPANESE_SOURCE_ROM_SHA256  # noqa: E402
 
 
-VERSION = "v1.4.0"
+VERSION = "v1.4.1"
 SOURCE_PATH = ROOT / "roms/original/Langrisser II (Japan).md"
 SOURCE_SIZE = 2_097_152
 PATCH_DIR = ROOT / "patches"
@@ -40,24 +42,19 @@ TARGET_DESCRIPTIONS = {
         "전 상점 룬스톤·메사이어소드 적용"
     ),
 }
-TARGET_FILENAMES = {
-    "pure": "Langrisser II (Korean Original v1.4.0).md",
-    "normal": "Langrisser II (Korean Normal v1.4.0).md",
-    "hard": "Langrisser II (Korean Hard v1.4.0).md",
-}
 
 
 def target_specs() -> tuple[dict[str, object], ...]:
     records = []
     for profile_name in ("pure", "normal", "hard"):
-        filename = TARGET_FILENAMES[profile_name]
+        profile = get_profile(profile_name)
         records.append(
             {
                 "id": profile_name,
                 "label_ko": TARGET_LABELS[profile_name],
                 "description_ko": TARGET_DESCRIPTIONS[profile_name],
-                "rom_path": ROOT / "roms/builds" / filename,
-                "output_filename": filename,
+                "rom_path": ROOT / "roms/builds" / profile["rom_filename"],
+                "output_filename": profile["rom_filename"],
                 "patch_filename": (
                     f"{profile_name if profile_name != 'pure' else 'original'}"
                     f"-{VERSION}.bps"
@@ -70,6 +67,27 @@ def target_specs() -> tuple[dict[str, object], ...]:
 TARGETS = target_specs()
 
 
+def _verify_version_registry() -> None:
+    expected = {
+        "pure": ("ko-original-1.4.1", "1.4.1", None, "ko-original-1.4.0"),
+        "normal": ("ko-normal-1.4.1", "1.4.1", None, "ko-normal-1.4.0"),
+        "hard": ("ko-hard-1.4.1", "1.4.1", "1.4.1", "ko-hard-1.4.0"),
+    }
+    for profile_name, expected_values in expected.items():
+        profile = get_profile(profile_name)
+        actual = (
+            profile["release_id"],
+            profile["translation_version"],
+            profile["balance_version"],
+            profile["base_release"],
+        )
+        if actual != expected_values:
+            raise ValueError(
+                f"{profile_name} version registry mismatch: "
+                f"{actual!r} != {expected_values!r}"
+            )
+
+
 def _verified_payload(path: Path, size: int, label: str) -> bytes:
     payload = path.read_bytes()
     if len(payload) != size:
@@ -78,12 +96,49 @@ def _verified_payload(path: Path, size: int, label: str) -> bytes:
 
 
 def rebuild_roms() -> None:
-    raise RuntimeError(
-        "v1.4.0 is a historical release; rebuild it from the v1.4.0 tag"
+    _verify_version_registry()
+    specs = {str(spec["id"]): spec for spec in target_specs()}
+    for profile_name in ("pure", "normal"):
+        subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/build_korean_jp_probe.py"),
+                "--rom-profile",
+                profile_name,
+                "--out",
+                str(specs[profile_name]["rom_path"]),
+            ],
+            cwd=ROOT,
+            check=True,
+        )
+    # Keep the canonical development normal ROM in sync with the versioned
+    # Normal target; hard-mode verification and shared UI tests read it.
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/build_korean_jp_probe.py"),
+            "--rom-profile",
+            "normal",
+            "--out",
+            str(ROOT / "roms/builds/Langrisser II (Korean).md"),
+        ],
+        cwd=ROOT,
+        check=True,
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tools/build_hard_mode_rom.py"),
+            "--out",
+            str(specs["hard"]["rom_path"]),
+        ],
+        cwd=ROOT,
+        check=True,
     )
 
 
 def build(*, check: bool = False) -> dict[str, object]:
+    _verify_version_registry()
     source = _verified_payload(SOURCE_PATH, SOURCE_SIZE, "Japanese source")
     if sha256_bytes(source) != JAPANESE_SOURCE_ROM_SHA256:
         raise ValueError("Japanese source SHA-256 mismatch")

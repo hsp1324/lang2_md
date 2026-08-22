@@ -24,6 +24,19 @@ class AllMercenaryHireProbeTests(unittest.TestCase):
         self.assertEqual(probe.DEFAULT_CLASS_ID, 0x4D)
         self.assertIn("가", probe.matrix.KOREAN_CLASS_LABELS[probe.DEFAULT_CLASS_ID])
 
+    def test_royal_guard_does_not_overwrite_gladiator_or_angel(self) -> None:
+        slots = {
+            char: slot
+            for slot, group in enumerate(builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS)
+            for char in group
+        }
+        self.assertNotEqual(slots["가"], slots["디"])
+        self.assertNotEqual(slots["가"], slots["엔"])
+        self.assertEqual(
+            probe.matrix.KOREAN_CLASS_LABELS[0x65],
+            "글래디에이터",
+        )
+
     def test_dynamic_glyph_payload_inventory_is_nonempty(self) -> None:
         data = bytearray(
             b"\xFF" * builder.BYTE_UI_DYNAMIC_GLYPH_TABLE_LIMIT
@@ -48,6 +61,11 @@ class AllMercenaryHireProbeTests(unittest.TestCase):
         self.assertTrue(
             set(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS).isdisjoint(occupied)
         )
+
+    def test_elf_final_syllable_uses_a_preparation_scratch_tile(self) -> None:
+        self.assertIn("프", builder.BYTE_UI_PREP_DYNAMIC_CHARS)
+        self.assertIn("프", builder.BYTE_UI_PREP_DYNAMIC_SLOT_GROUPS[24])
+        self.assertEqual(builder.BYTE_UI_PREP_DYNAMIC_TILE_IDS[24], 0x07EB)
 
 
 if __name__ == "__main__":

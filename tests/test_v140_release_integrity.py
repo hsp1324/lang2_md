@@ -3,12 +3,10 @@ import json
 from pathlib import Path
 import unittest
 
-from patcher import langrisser_ii_korean_patcher as patcher
 from scripts import build_korean_jp_probe as builder
 from tools.build_hard_mode_rom import verify_applied_hard_mode
 from tools.build_v140_release_patches import MANIFEST_PATH, SOURCE_PATH, TARGETS, build
 from tools.rom_update import bps_apply, md_sram_descriptor
-from tools.rom_version import get_profile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,21 +47,15 @@ class V140ReleaseIntegrityTests(unittest.TestCase):
                 )
         verify_applied_hard_mode(self.targets["hard"])
 
-    def test_profiles_and_patcher_name_the_same_release(self):
-        expected = {
-            "pure": ("ko-original-1.4.0", None, "ko-original-1.3.9"),
-            "normal": ("ko-normal-1.4.0", None, "ko-normal-1.3.9"),
-            "hard": ("ko-hard-1.4.0", "1.4.0", "ko-hard-1.3.9"),
-        }
-        for profile_name, values in expected.items():
-            profile = get_profile(profile_name)
-            with self.subTest(profile=profile_name):
-                self.assertEqual(profile["release_id"], values[0])
-                self.assertEqual(profile["translation_version"], "1.4.0")
-                self.assertEqual(profile["balance_version"], values[1])
-                self.assertEqual(profile["base_release"], values[2])
-        self.assertEqual(patcher.PATCHER_RELEASE, "v1.4.0")
-        self.assertEqual(patcher.MANIFEST_FILENAME, "v1.4.0.json")
+    def test_historical_manifest_keeps_the_v140_filename_contract(self):
+        self.assertEqual(
+            {row["id"]: row["output_filename"] for row in self.manifest["targets"]},
+            {
+                "pure": "Langrisser II (Korean Original v1.4.0).md",
+                "normal": "Langrisser II (Korean Normal v1.4.0).md",
+                "hard": "Langrisser II (Korean Hard v1.4.0).md",
+            },
+        )
 
     def test_original_uses_stock_tier_two_join_records(self):
         pure = self.targets["pure"]

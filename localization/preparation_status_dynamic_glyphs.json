@@ -38,7 +38,7 @@
     ],
     "preparation_extra_slots": 10,
     "preparation_dynamic_slot_count": 26,
-    "preparation_dynamic_char_count": 121,
+    "preparation_dynamic_char_count": 122,
     "preparation_slot_groups": [
       "갈남녀대렌루릴새스안야언요웨의일주켄택템폴해",
       "거고끼문본빌슬울츠치큐크",
@@ -49,7 +49,7 @@
       "곤록린멜서전킹히",
       "노멘비",
       "골라럴켈",
-      "가디몬엔커",
+      "디몬엔커",
       "데팔",
       "랑",
       "키",
@@ -64,8 +64,8 @@
       "더딘먼",
       "글",
       "숍실힐",
-      "화",
-      "헬"
+      "화프",
+      "가헬"
     ],
     "preparation_extra_tiles": [
       "0x0796",

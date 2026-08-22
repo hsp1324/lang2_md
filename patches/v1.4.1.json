@@ -1,0 +1,46 @@
+{
+  "game": "Langrisser II",
+  "release": "v1.4.1",
+  "schema_version": 1,
+  "source": {
+    "headered_size": 2097664,
+    "label": "Langrisser II (Japan)",
+    "sha256": "a6e10e82b1e8fd32d8e4ae2ce76ab689cd789d93f854aa1788abc1e9795ddb3b",
+    "size": 2097152
+  },
+  "targets": [
+    {
+      "description_ko": "원작 디자인·밸런스·합류 클래스에 한국어화만 적용",
+      "id": "pure",
+      "label_ko": "원작 한국어판",
+      "output_filename": "Langrisser II (Korean Original v1.4.1).md",
+      "output_sha256": "25e3c8d3c97996f3c44e7058523a235946982fa9e51d8678cac369788d9b864a",
+      "output_size": 4194304,
+      "patch_filename": "original-v1.4.1.bps",
+      "patch_sha256": "82d39094be58c13d41c3766f498f03e3227a379026b7abbcad0ebd1aa29a9ca1",
+      "patch_size": 2285900
+    },
+    {
+      "description_ko": "최신 New 클래스 디자인과 한국어화, 키스·레스터·제시카의 1단 LV10 선택 합류 적용(지급 경험치는 원작과 동일)",
+      "id": "normal",
+      "label_ko": "최신 디자인 일반판",
+      "output_filename": "Langrisser II (Korean Normal v1.4.1).md",
+      "output_sha256": "d630325fd088810f264d50a902604063f2df7bd4bfa68f7827b6cf1c0cc63a9e",
+      "output_size": 4194304,
+      "patch_filename": "normal-v1.4.1.bps",
+      "patch_sha256": "35ad3da1cbcd62b9907de179268624ed8bc48e92eb87553545a29f833d506230",
+      "patch_size": 2286594
+    },
+    {
+      "description_ko": "최신 New 클래스 디자인·한국어화·하드 밸런스 및 전 상점 룬스톤·메사이어소드 적용",
+      "id": "hard",
+      "label_ko": "최신 디자인 하드판",
+      "output_filename": "Langrisser II (Korean Hard v1.4.1).md",
+      "output_sha256": "8626d19b6eb784f8f027fbd3bf47f660146ccbfef7bfdaf020033d6fb51f5a8a",
+      "output_size": 4194304,
+      "patch_filename": "hard-v1.4.1.bps",
+      "patch_sha256": "fcd953cae848ac4052a2e4d7248e6704f9274ac45bd18ed1aab3cde4dd9dde1e",
+      "patch_size": 2289357
+    }
+  ]
+}
