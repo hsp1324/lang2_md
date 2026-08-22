@@ -15,9 +15,9 @@
 - 필요한 승인 문구: `표준 하드로 해줘`
 - 원작 디자인판 수정: 없음
 - 일반판 수정: 없음
-- 하드 후보 ROM: `roms/builds/Langrisser II (Korean Hard T1.2.1 B1.2.1).md`
-- 하드 체크섬: `C9BA`
-- 하드 SHA-256: `7c955c09069a56260702104a3587b8e362eede5d4c7fc55bbad259e616f2f123`
+- 하드 후보 ROM: `roms/builds/Langrisser II (Korean Hard v1.4.0).md`
+- 하드 체크섬: `D3E0`
+- 하드 SHA-256: `9783eeb9ee639a153f5fd49839ea0535e46c57336952da81bca62cde6c2db05a`
 
 ## 승인·적용 요약
 

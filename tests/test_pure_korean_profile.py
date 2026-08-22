@@ -22,14 +22,14 @@ class PureKoreanProfileTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown ROM"):
             builder.profile_includes_user_patches("unexpected")
 
-    def test_pure_profile_includes_progression_and_accessibility_but_not_designs(self):
+    def test_pure_profile_restores_original_join_roster_and_map_designs(self):
         data = self.expanded_source()
         builder.patch_profile_user_customizations(
             data,
             self.source,
             profile_name="pure",
         )
-        self.assertNotEqual(
+        self.assertEqual(
             data[
                 builder.INITIAL_COMMANDER_ROSTER_TABLE:
                 builder.INITIAL_COMMANDER_ROSTER_TABLE
@@ -41,10 +41,26 @@ class PureKoreanProfileTests(unittest.TestCase):
                 + 10 * builder.INITIAL_COMMANDER_RECORD_SIZE
             ],
         )
-        start = builder.SCENARIO6_RUNESTONE_TRIGGER
-        end = start + len(builder.SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE)
         self.assertEqual(
-            data[start:end], builder.SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE
+            data[
+                builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER:
+                builder.JOIN_CLASS_CHOICE_COMBAT_RELOCATIONS[9]
+                + builder.JOIN_CLASS_CHOICE_COMBAT_RELOCATED_SIZE
+            ],
+            b"\xFF" * (
+                builder.JOIN_CLASS_CHOICE_COMBAT_RELOCATIONS[9]
+                + builder.JOIN_CLASS_CHOICE_COMBAT_RELOCATED_SIZE
+                - builder.JOIN_CLASS_CHOICE_LEVEL_WRAPPER
+            ),
+        )
+        start = builder.SCENARIO6_RUNESTONE_TRIGGER
+        end = start + len(builder.SCENARIO6_RUNESTONE_TRIGGER_SOURCE)
+        self.assertEqual(
+            data[start:end], builder.SCENARIO6_RUNESTONE_TRIGGER_SOURCE
+        )
+        self.assertEqual(
+            data[builder.SCENARIO31_DEMON_LORD_NAME_OFFSET],
+            builder.SCENARIO31_DEMON_LORD_SOURCE_NAME_ID,
         )
         self.assertEqual(
             builder.be16(
@@ -83,6 +99,53 @@ class PureKoreanProfileTests(unittest.TestCase):
                 builder.INITIAL_COMMANDER_ROSTER_TABLE
                 + 10 * builder.INITIAL_COMMANDER_RECORD_SIZE
             ],
+        )
+        start = builder.SCENARIO6_RUNESTONE_TRIGGER
+        end = start + len(builder.SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE)
+        self.assertEqual(
+            data[start:end], builder.SCENARIO6_RUNESTONE_TRIGGER_ACCESSIBLE
+        )
+        self.assertEqual(
+            data[builder.SCENARIO31_DEMON_LORD_NAME_OFFSET],
+            builder.SCENARIO31_DEMON_LORD_EVENT_NAME_ID,
+        )
+
+    def test_hard_profile_adds_training_items_to_every_shop_only(self):
+        normal = self.expanded_source()
+        builder.patch_profile_user_customizations(
+            normal,
+            self.source,
+            profile_name="normal",
+        )
+        hard = self.expanded_source()
+        builder.patch_profile_user_customizations(
+            hard,
+            self.source,
+            profile_name="hard",
+        )
+        for index in range(builder.SHOP_LIST_COUNT):
+            with self.subTest(index=index):
+                source_items = builder.read_shop_item_list(self.source, index)
+                self.assertEqual(
+                    builder.read_shop_item_list(normal, index), source_items
+                )
+                hard_items = builder.read_shop_item_list(hard, index)
+                self.assertEqual(
+                    hard_items[:len(source_items)], source_items
+                )
+                for item_id in builder.HARD_SHOP_REQUIRED_ITEM_IDS:
+                    self.assertIn(item_id, hard_items)
+                    self.assertEqual(hard_items.count(item_id), 1)
+
+        self.assertEqual(
+            normal[
+                builder.HARD_SHOP_LIST_RELOC_BASE:
+                builder.HARD_SHOP_LIST_RELOC_LIMIT
+            ],
+            b"\xFF" * (
+                builder.HARD_SHOP_LIST_RELOC_LIMIT
+                - builder.HARD_SHOP_LIST_RELOC_BASE
+            ),
         )
 
 

@@ -1,0 +1,151 @@
+name: Build v1.4.0 Linux and macOS patchers
+
+on:
+  push:
+    branches: [v1.4.0]
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  linux-patcher:
+    if: >-
+      ${{ github.event_name == 'push' ||
+          github.event_name == 'workflow_dispatch' ||
+          github.event.release.tag_name == 'v1.4.0' }}
+    name: Linux ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            arch: x86_64
+            executable: Langrisser-II-Korean-Patcher-v1.4.0-linux-x86_64
+            archive: Langrisser-II-Korean-Patcher-v1.4.0-linux-x86_64.tar.gz
+            checksum: SHA256SUMS-linux-x86_64.txt
+          - runner: ubuntu-22.04-arm
+            arch: arm64
+            executable: Langrisser-II-Korean-Patcher-v1.4.0-linux-arm64
+            archive: Langrisser-II-Korean-Patcher-v1.4.0-linux-arm64.tar.gz
+            checksum: SHA256SUMS-linux-arm64.txt
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: >-
+          python -m pip install --disable-pip-version-check pyinstaller==6.21.0
+      - name: Verify packaged assets
+        run: >-
+          python -c "from patcher.langrisser_ii_korean_patcher import
+          load_release_manifest; m=load_release_manifest();
+          assert m['release']=='v1.4.0'; assert len(m['targets'])==3"
+      - name: Build and smoke-test Linux patcher
+        shell: bash
+        env:
+          PATCHER_EXECUTABLE: ${{ matrix.executable }}
+          PATCHER_ARCHIVE: ${{ matrix.archive }}
+          PATCHER_CHECKSUM: ${{ matrix.checksum }}
+          PATCHER_ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          mkdir -p package-patches
+          cp patches/v1.4.0.json patches/original-v1.4.0.bps patches/normal-v1.4.0.bps patches/hard-v1.4.0.bps package-patches/
+          pyinstaller --noconfirm --clean --onefile --console --name "$PATCHER_EXECUTABLE" --paths "." --add-data "package-patches:patches" "patcher/langrisser_ii_korean_patcher.py"
+          binary="dist/$PATCHER_EXECUTABLE"
+          test -x "$binary"
+          "$binary" --self-test
+          description="$(file "$binary")"
+          if [[ "$PATCHER_ARCH" == "x86_64" ]]; then grep -q "x86-64" <<<"$description"; else grep -Eq "ARM aarch64|aarch64" <<<"$description"; fi
+          tar -C dist -czf "dist/$PATCHER_ARCHIVE" "$PATCHER_EXECUTABLE"
+          sha256sum "dist/$PATCHER_ARCHIVE" | sed 's#  dist/#  #' > "dist/$PATCHER_CHECKSUM"
+      - name: Upload Linux release asset
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Langrisser-II-Korean-Patcher-v1.4.0-linux-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/${{ matrix.archive }}
+            dist/${{ matrix.checksum }}
+      - name: Publish Linux patcher to the triggering release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit "${{ github.event.release.tag_name }}" --title "v1.4.0"
+          gh release upload "${{ github.event.release.tag_name }}" "dist/${{ matrix.archive }}" --clobber
+
+  macos-patcher:
+    if: >-
+      ${{ github.event_name == 'push' ||
+          github.event_name == 'workflow_dispatch' ||
+          github.event.release.tag_name == 'v1.4.0' }}
+    name: macOS ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-14
+            arch: arm64
+            archive: Langrisser-II-Korean-Patcher-v1.4.0-macos-arm64.app.zip
+            checksum: SHA256SUMS-macos-arm64.txt
+          - runner: macos-15-intel
+            arch: x86_64
+            archive: Langrisser-II-Korean-Patcher-v1.4.0-macos-x86_64.app.zip
+            checksum: SHA256SUMS-macos-x86_64.txt
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: >-
+          python -m pip install --disable-pip-version-check pyinstaller==6.21.0
+      - name: Verify packaged assets
+        run: >-
+          python -c "from patcher.langrisser_ii_korean_patcher import
+          load_release_manifest; m=load_release_manifest();
+          assert m['release']=='v1.4.0'; assert len(m['targets'])==3"
+      - name: Build and smoke-test macOS app
+        shell: bash
+        env:
+          PATCHER_ARCHIVE: ${{ matrix.archive }}
+          PATCHER_CHECKSUM: ${{ matrix.checksum }}
+          PATCHER_ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          app_name="Langrisser II Korean Patcher v1.4.0"
+          mkdir -p package-patches
+          cp patches/v1.4.0.json patches/original-v1.4.0.bps patches/normal-v1.4.0.bps patches/hard-v1.4.0.bps package-patches/
+          pyinstaller --noconfirm --clean --onefile --windowed --name "$app_name" --paths "." --add-data "package-patches:patches" "patcher/langrisser_ii_korean_patcher.py"
+          app="dist/$app_name.app"
+          binary="$app/Contents/MacOS/$app_name"
+          test -x "$binary"
+          "$binary" --self-test
+          codesign --verify --deep --strict "$app"
+          description="$(file "$binary")"
+          if [[ "$PATCHER_ARCH" == "arm64" ]]; then grep -q "arm64" <<<"$description"; else grep -q "x86_64" <<<"$description"; fi
+          ditto -c -k --sequesterRsrc --keepParent "$app" "dist/$PATCHER_ARCHIVE"
+          unzip -tq "dist/$PATCHER_ARCHIVE"
+          shasum -a 256 "dist/$PATCHER_ARCHIVE" | sed 's#  dist/#  #' > "dist/$PATCHER_CHECKSUM"
+      - name: Upload macOS release asset
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Langrisser-II-Korean-Patcher-v1.4.0-macos-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/${{ matrix.archive }}
+            dist/${{ matrix.checksum }}
+      - name: Publish macOS patcher to the triggering release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit "${{ github.event.release.tag_name }}" --title "v1.4.0"
+          gh release upload "${{ github.event.release.tag_name }}" "dist/${{ matrix.archive }}" --clobber

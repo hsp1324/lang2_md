@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cross-platform GUI and CLI patcher for Langrisser II Korean v1.3.9."""
+"""Cross-platform GUI and CLI patcher for Langrisser II Korean v1.4.0."""
 
 from __future__ import annotations
 
@@ -29,9 +29,9 @@ from tools.rom_update import (
 )
 
 
-APP_TITLE = "랑그릿사 II 한국어 패처 v1.3.9"
-MANIFEST_FILENAME = "v1.3.9.json"
-PATCHER_RELEASE = "v1.3.9"
+APP_TITLE = "랑그릿사 II 한국어 패처 v1.4.0"
+MANIFEST_FILENAME = "v1.4.0.json"
+PATCHER_RELEASE = "v1.4.0"
 ROM_SUFFIXES = frozenset({".md", ".bin", ".gen", ".smd", ".zip"})
 
 

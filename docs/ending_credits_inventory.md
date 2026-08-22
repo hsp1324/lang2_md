@@ -20,7 +20,7 @@ credit-group renderer. The terminal path is reachable only after all 16
 slots. The 16 source groups reference all 60 original credit records exactly
 once. Production changes only the two renderer `LEA` operands that point to
 the relocated sequence and string tables; the final group appends record 60,
-`한국어화 HSP1324`, after the original copyright record.
+`홍선표(hsp1324)`, after the original copyright record.
 
 Therefore the accepted Scenario 27 playback reaching `Fin` is evidence that
 all 16 credit groups ran, not merely a sample of the final group. The all-record

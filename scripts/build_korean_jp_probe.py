@@ -641,6 +641,22 @@ ITEM_GLYPH_LIST_REFS = (0x26924,)
 ITEM_NAME_POINTER_TABLE = 0xA1902
 ITEM_NAME_GLYPH_LIST_RELOC_BASE = 0x282000
 ITEM_NAME_GLYPH_PRIMARY_COUNT = 0x40
+# The stock game selects one of 33 terminated item-ID lists for ordinary and
+# hidden shops.  Hard mode keeps every original entry in every list and adds
+# the two requested training items.  Relocate the complete Hard-only table so
+# short source lists are never overwritten in place and Original/Normal keep
+# their source pointers byte-for-byte.
+SHOP_LIST_POINTER_TABLE = 0x0A1BB8
+SHOP_LIST_COUNT = 33
+SHOP_LIST_TERMINATOR = 0xFF
+HARD_SHOP_MESSIAH_SWORD_ITEM_ID = 10
+HARD_SHOP_RUNESTONE_ITEM_ID = 26
+HARD_SHOP_REQUIRED_ITEM_IDS = (
+    HARD_SHOP_RUNESTONE_ITEM_ID,
+    HARD_SHOP_MESSIAH_SWORD_ITEM_ID,
+)
+HARD_SHOP_LIST_RELOC_BASE = 0x31F000
+HARD_SHOP_LIST_RELOC_LIMIT = 0x320000
 ITEM_NAME_GLYPH_LOAD_HOOK = 0x21C6C
 ITEM_NAME_GLYPH_LOAD_HOOK_ORIGINAL = bytes.fromhex(
     "41 F9 00 0A 14 AC 70 40 22 3C 00 00 20 00 4E B9 00 02 C2 C4"
@@ -6963,12 +6979,79 @@ def patch_scenario31_demon_lord_identity(
     data[offset] = SCENARIO31_DEMON_LORD_EVENT_NAME_ID
 
 
+def read_shop_item_list(
+    data: bytes | bytearray,
+    index: int,
+) -> tuple[int, ...]:
+    """Read one stock shop item list with strict bounds and termination."""
+
+    if not 0 <= index < SHOP_LIST_COUNT:
+        raise ValueError(f"shop list index must be 0..{SHOP_LIST_COUNT - 1}")
+    pointer = be32(data, SHOP_LIST_POINTER_TABLE + index * 4)
+    if not 0 <= pointer < len(data):
+        raise ValueError(
+            f"shop list {index} pointer is outside ROM: 0x{pointer:08X}"
+        )
+    items: list[int] = []
+    cursor = pointer
+    while cursor < len(data) and data[cursor] != SHOP_LIST_TERMINATOR:
+        item_id = int(data[cursor])
+        if item_id == 0 or item_id > 37:
+            raise ValueError(
+                f"shop list {index} has invalid item ID {item_id} "
+                f"at 0x{cursor:06X}"
+            )
+        items.append(item_id)
+        cursor += 1
+    if cursor >= len(data):
+        raise ValueError(f"shop list {index} has no terminator")
+    return tuple(items)
+
+
+def patch_hard_mode_shop_training_items(
+    data: bytearray,
+    source: bytes,
+) -> None:
+    """Make Rune Stone and Messiah Sword available in every Hard shop."""
+
+    source_lists = tuple(
+        read_shop_item_list(source, index) for index in range(SHOP_LIST_COUNT)
+    )
+    for index, expected in enumerate(source_lists):
+        if read_shop_item_list(data, index) != expected:
+            raise ValueError(f"input shop list {index} changed")
+
+    payloads: list[bytes] = []
+    for items in source_lists:
+        merged = list(items)
+        for item_id in HARD_SHOP_REQUIRED_ITEM_IDS:
+            if item_id not in merged:
+                merged.append(item_id)
+        payloads.append(bytes((*merged, SHOP_LIST_TERMINATOR)))
+
+    required_bytes = sum(len(payload) for payload in payloads)
+    relocation_end = HARD_SHOP_LIST_RELOC_BASE + required_bytes
+    if relocation_end > HARD_SHOP_LIST_RELOC_LIMIT:
+        raise ValueError("Hard shop lists exceed their reserved ROM area")
+    if any(
+        value != 0xFF
+        for value in data[HARD_SHOP_LIST_RELOC_BASE:relocation_end]
+    ):
+        raise ValueError("Hard shop-list relocation area is occupied")
+
+    cursor = HARD_SHOP_LIST_RELOC_BASE
+    for index, payload in enumerate(payloads):
+        put32(data, SHOP_LIST_POINTER_TABLE + index * 4, cursor)
+        data[cursor:cursor + len(payload)] = payload
+        cursor += len(payload)
+
+
 def profile_includes_user_patches(profile_name: str) -> bool:
     """Return whether an edition includes the custom map-design layer.
 
-    ``pure`` retains the Japanese map designs while receiving the shared
-    Korean/gameplay corrections. ``normal`` uses the reviewed custom designs,
-    while ``hard`` layers balance changes on that same custom-design base.
+    ``pure`` retains the Japanese gameplay and map designs. ``normal`` uses
+    the reviewed custom progression/design layer, while ``hard`` adds balance
+    and shop changes on that same custom base.
     """
     if profile_name == "pure":
         return False
@@ -6985,6 +7068,9 @@ def patch_profile_user_customizations(
 ) -> None:
     if profile_name not in {"pure", "normal", "hard"}:
         raise ValueError(f"unknown ROM customization profile: {profile_name}")
+    includes_user_patches = profile_includes_user_patches(profile_name)
+    if not includes_user_patches:
+        return
     patch_join_class_choice_progression(data, source)
     patch_join_class_choice_class_data(data, source)
     patch_join_class_choice_visibility_guard(data, source)
@@ -6992,8 +7078,8 @@ def patch_profile_user_customizations(
     patch_join_class_choice_target_levels(data, source)
     patch_scenario6_runestone_accessibility(data, source)
     patch_scenario31_demon_lord_identity(data, source)
-    if not profile_includes_user_patches(profile_name):
-        return
+    if profile_name == "hard":
+        patch_hard_mode_shop_training_items(data, source)
     patch_bald_map_sprite(data)
     patch_shaman_map_sprite(data)
     patch_loren_map_sprite(data)

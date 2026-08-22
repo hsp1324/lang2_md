@@ -258,7 +258,7 @@ class V138ReleaseIntegrityTests(unittest.TestCase):
 
     def test_public_readme_links_current_release_assets(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("/releases/download/v1.3.9/", readme)
+        self.assertIn("/releases/download/v1.4.0/", readme)
 
     def test_validation_records_targeted_scenario2_color_check(self):
         validation = (ROOT / "docs/v1.3.8_validation.md").read_text(

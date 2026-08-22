@@ -46,7 +46,8 @@ class V139ReleaseAssetContractTests(unittest.TestCase):
             assets.PATCHER_ASSET_FILENAMES,
         )
         self.assertIn("상태: **v1.3.9 공개 배포 완료**", document)
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        links = re.findall(r"/releases/download/(v\d+\.\d+\.\d+)/", readme)
-        self.assertEqual(set(links), {"v1.3.9"})
-        self.assertNotIn("아직 공개하지 않았으므로", readme)
+        links = re.findall(
+            r"Langrisser-II-Korean-Patcher-v1\.3\.9[^\n]*",
+            document,
+        )
+        self.assertEqual(len(links), 5)
